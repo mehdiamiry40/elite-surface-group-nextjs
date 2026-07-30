@@ -1,5 +1,16 @@
 # Migration audit — elitesurfacegroup.com.au → Next.js
 
+> **Status: superseded by the component rebuild.**
+>
+> This document audited the first migration pass (commit `3b8b119`), which
+> wrapped a static mirror of the WordPress HTML in a Next.js shell. That
+> architecture has since been replaced by a real component rebuild, and all
+> but two of the findings below are resolved. See
+> [Resolution](#resolution) at the end for the item-by-item status.
+>
+> The findings are kept as written — they are the reasoning that motivated the
+> rebuild, and the two open items still need a decision.
+
 Audited commit `3b8b119` on `claude/elitesurfacegroup-migration-audit-8heq2y`.
 Next.js 16.2.12 / React 19.2.8 / Node 22.
 
@@ -384,3 +395,63 @@ npm run check     # typecheck + production build
 npm run start &   # smoke needs a live server
 npm run smoke     # 15 routes, 110 assets, legacy URLs, contact endpoint
 ```
+
+---
+
+## Resolution
+
+The architecture finding was addressed by rebuilding the site as React
+components: content moved into `src/content/site.ts` and `src/content/legal.ts`,
+the 845 KB HTML blob and the 937-line DOM-manipulation layer were deleted, and
+2.9 MB of Elementor CSS was replaced by a ~23 KB hand-written stylesheet. The
+four WordPress starter routes were dropped.
+
+| # | Finding | Status |
+| --- | --- | --- |
+| — | HTML mirror architecture | **Fixed** — real components, content in typed modules |
+| 1 | Placeholder `tel:` links | **Fixed** — one `business.phone` constant; smoke test enforces it |
+| 2 | Contact form silently sends nothing | **Fixed** — `prebuild` fails production builds without Resend vars; the fallback path now logs an error |
+| 3 | WordPress starter pages indexable | **Fixed** — routes deleted, 301 to `/`, out of the sitemap |
+| 4 | No security headers | **Fixed** — CSP, nosniff, Referrer-Policy, X-Frame-Options, HSTS, Permissions-Policy |
+| 5 | 308 redirect on every form post | **Fixed** — client posts to `/api/contact/` |
+| 6 | WebP data behind `.png`/`.jpg` | **Fixed** — all imagery normalised to `.webp`; 75 legacy URLs 301 to the new paths |
+| 7 | ~2.9 MB duplicated CSS | **Fixed** — single ~23 KB stylesheet |
+| 8 | Oversized images | **Fixed** — `next/image`; the 1.4 MB `cladding.png` is now a 127 KB WebP source |
+| 9 | `max-age=0` on static assets | **Fixed** — `/images/*` is `max-age=31536000, immutable` |
+| 10 | Rate limiter ineffective on serverless | **Partly fixed** — now bounded and evicts stale keys, and documented as best-effort. A shared store is still the real answer |
+| 11 | Three duplicate `<h1>` | **Fixed** — smoke test asserts exactly one per page |
+| 12 | Missing alt text | **Fixed** — every image has meaningful or explicitly empty alt; the projects gallery uses real `<img>` |
+| 13 | Empty meta descriptions | **Fixed** — every page has one; asserted in the smoke suite |
+| 14 | JSON-LD errors | **Fixed** — `en-AU`, dead `SearchAction` removed, `legalName` dropped |
+| 15 | Third-party Google Fonts | **Fixed** — `next/font` self-hosts PT Sans + Roboto Slab |
+| 16 | Bare 404 page | **Fixed** — full site chrome, nav and a call link |
+| 17 | No linting or tests | **Fixed** — ESLint wired into `npm run check`; smoke suite grown from 1 assertion to 175 |
+| 18 | Migration scaffolding | **Fixed** — snapshot script and mirror removed; `public/` 12 MB → 3.0 MB |
+
+### Measured effect
+
+Cold-cache transfer at 1440×900, measured the same way before and after:
+
+| Route | Before | After |
+| --- | --- | --- |
+| `/` | 2.66 MB | 0.61 MB |
+| `/about/` | 1.89 MB | 0.33 MB |
+| `/cladding/` | 2.32 MB | 0.20 MB |
+| `/projects/` | 1.72 MB | 0.23 MB |
+
+Request count rose (34 → 66 on `/`) because the App Router splits JavaScript
+into more chunks than the mirror's single bundle; they are small, cacheable and
+multiplexed over HTTP/2.
+
+`/contact-us/` went the other way — 0.06 MB → 0.24 MB — because the WordPress
+version of that page contained no form and no contact details at all, only a
+banner and the closing CTA. It now has both.
+
+### Still open
+
+- **#10 — hard rate limiting.** The throttle is per-instance by design. A real
+  limit needs Vercel KV or Upstash.
+- **The legal pages cite UK law** (Data Protection Act 1998; "the laws of
+  England, Northern Ireland, Scotland and Wales") on a South Australian
+  business. The text is preserved verbatim and needs review by someone
+  qualified — rewriting it is not a developer's call.
