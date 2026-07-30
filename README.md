@@ -54,9 +54,12 @@ Set the same three in the Vercel project settings.
 
 **Without them nothing is delivered.** The endpoint answers 503 and falls back
 to opening the visitor's mail client, which silently loses the enquiry for
-anyone without a configured mail app. `npm run prebuild` therefore fails a
-production build when they are missing — override deliberately with
-`ALLOW_UNCONFIGURED_CONTACT=1` if you really mean to.
+anyone without a configured mail app, and logs an error server-side for each one.
+
+`npm run prebuild` warns loudly about this but does not block the build — a
+rotated Resend key should not make the whole site undeployable. Once the site is
+serving real traffic, set `REQUIRE_CONTACT_DELIVERY=1` in Vercel to turn that
+warning into a hard failure.
 
 ## Checks
 
