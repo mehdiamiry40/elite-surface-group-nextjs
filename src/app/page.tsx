@@ -19,10 +19,12 @@ import {
   projects,
   whyChoose,
 } from "@/content/site";
+import { ReviewSchema } from "@/components/JsonLd";
 
 export default function HomePage() {
   return (
     <>
+      <ReviewSchema />
       <Hero />
 
       <ServiceCards />

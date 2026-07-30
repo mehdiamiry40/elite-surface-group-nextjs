@@ -4,6 +4,7 @@ import PageBanner from "@/components/PageBanner";
 import { CtaBand } from "@/components/sections";
 import { privacyPolicy } from "@/content/legal";
 import { bannerImages, business } from "@/content/site";
+import { BreadcrumbSchema } from "@/components/JsonLd";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
 export default function PrivacyPolicyPage() {
   return (
     <>
+      <BreadcrumbSchema trail={[{ label: "Privacy Policy", href: "/privacy-policy" }]} />
       <PageBanner
         title="Privacy Policy"
         image={bannerImages["/privacy-policy"]}

@@ -1,8 +1,18 @@
 /* ------------------------------------------------------------------ tokens */
 
 :root {
+  /*
+   * Brand orange, split in two for contrast.
+   *
+   * --orange is the Elementor brand value. At 3.13:1 against white it clears
+   * the 3:1 bar for non-text graphics (icon fills, borders, decorative
+   * surfaces) but not the 4.5:1 bar for text, and it misses even the large-text
+   * bar on the #f7f7f7 tint (2.93:1). So anything that is text, or a button
+   * carrying text, uses --orange-ink instead.
+   */
   --orange: #eb6c21;
-  --orange-dark: #cf5a15;
+  --orange-ink: #bd4f0c;
+  --orange-dark: #a8440a;
   --ink: #1a1919;
   --ink-soft: #54595f;
   --body: #6b7075;
@@ -89,7 +99,7 @@ dd {
 }
 
 a {
-  color: var(--orange);
+  color: var(--orange-ink);
   text-decoration: none;
 }
 
@@ -117,7 +127,7 @@ textarea {
 }
 
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {
-  outline: 3px solid var(--orange);
+  outline: 3px solid var(--orange-ink);
   outline-offset: 2px;
 }
 
@@ -140,7 +150,7 @@ textarea {
   left: 12px;
   z-index: 200;
   padding: 12px 18px;
-  background: var(--orange);
+  background: var(--orange-ink);
   color: var(--white);
   font-weight: 700;
 }
@@ -184,7 +194,7 @@ textarea {
 .eyebrow {
   display: block;
   margin-bottom: 6px;
-  color: var(--orange);
+  color: var(--orange-ink);
   font-family: var(--font-body), sans-serif;
   font-size: 15px;
   font-weight: 700;
@@ -204,7 +214,7 @@ h3 {
 }
 
 .accent {
-  color: var(--orange);
+  color: var(--orange-ink);
 }
 
 /* ---------------------------------------------------------------- button */
@@ -215,10 +225,10 @@ h3 {
   justify-content: center;
   gap: 9px;
   min-height: 44px;
-  border: 2px solid var(--orange);
+  border: 2px solid var(--orange-ink);
   border-radius: var(--radius);
   padding: 10px 24px;
-  background: var(--orange);
+  background: var(--orange-ink);
   color: var(--white);
   cursor: pointer;
   font-family: var(--font-body), sans-serif;
@@ -244,8 +254,8 @@ h3 {
 }
 
 .btn--ghost:hover {
-  background: var(--orange);
-  border-color: var(--orange);
+  background: var(--orange-ink);
+  border-color: var(--orange-ink);
 }
 
 .btn--dark {
@@ -309,7 +319,7 @@ h3 {
 }
 
 .header__phone:hover {
-  color: var(--orange);
+  color: var(--orange-ink);
   text-decoration: none;
 }
 
@@ -331,7 +341,7 @@ h3 {
 
 .nav__link:hover,
 .nav__link[aria-current="page"] {
-  color: var(--orange);
+  color: var(--orange-ink);
   text-decoration: none;
 }
 
@@ -355,7 +365,7 @@ h3 {
 .nav__toggle:hover,
 .nav__group:hover .nav__toggle,
 .nav__toggle[aria-expanded="true"] {
-  color: var(--orange);
+  color: var(--orange-ink);
 }
 
 .nav__chevron {
@@ -399,11 +409,27 @@ h3 {
 
 .nav__submenu a:hover {
   background: var(--tint);
-  color: var(--orange);
+  color: var(--orange-ink);
   text-decoration: none;
 }
 
 /* hamburger */
+
+.header__call {
+  display: none;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius);
+  background: var(--orange-ink);
+  color: var(--white);
+}
+
+.header__call:hover {
+  background: var(--orange-dark);
+  text-decoration: none;
+}
 
 .burger {
   display: none;
@@ -490,7 +516,7 @@ h3 {
 }
 
 .drawer a:hover {
-  color: var(--orange);
+  color: var(--orange-ink);
   text-decoration: none;
 }
 
@@ -582,16 +608,26 @@ h3 {
 }
 
 .hero__dots button {
-  width: 11px;
-  height: 11px;
-  border: 2px solid var(--white);
-  border-radius: 50%;
+  /* 11px dot, 24px hit area: the padding is the target, not the ink. */
+  width: 24px;
+  height: 24px;
+  border: 0;
   background: transparent;
   cursor: pointer;
   padding: 0;
 }
 
-.hero__dots button[aria-current="true"] {
+.hero__dots button::before {
+  content: "";
+  display: block;
+  width: 11px;
+  height: 11px;
+  margin: auto;
+  border: 2px solid var(--white);
+  border-radius: 50%;
+}
+
+.hero__dots button[aria-current="true"]::before {
   background: var(--orange);
   border-color: var(--orange);
 }
@@ -647,6 +683,12 @@ h3 {
 
 .crumbs li {
   display: inline;
+}
+
+.crumbs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
 }
 
 .crumbs li + li::before {
@@ -710,7 +752,7 @@ h3 {
 }
 
 .service-card__body h3 a:hover {
-  color: var(--orange);
+  color: var(--orange-ink);
   text-decoration: none;
 }
 
@@ -777,7 +819,7 @@ h3 {
 
 .ticks svg {
   margin-top: 5px;
-  color: var(--orange);
+  color: var(--orange-ink);
 }
 
 .steps {
@@ -908,6 +950,11 @@ h3 {
   color: var(--orange);
 }
 
+.footer__social a {
+  min-width: 36px;
+  min-height: 36px;
+}
+
 .quote h3 {
   margin-bottom: 4px;
   font-size: 17px;
@@ -966,8 +1013,8 @@ h3 {
 }
 
 .carousel__nav button:hover:not(:disabled) {
-  border-color: var(--orange);
-  background: var(--orange);
+  border-color: var(--orange-ink);
+  background: var(--orange-ink);
   color: var(--white);
 }
 
@@ -1053,7 +1100,7 @@ h3 {
 }
 
 .lightbox__btn:hover {
-  background: var(--orange);
+  background: var(--orange-ink);
 }
 
 .lightbox__close {
@@ -1121,7 +1168,7 @@ h3 {
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
-  border-color: var(--orange);
+  border-color: var(--orange-ink);
   outline-offset: 0;
 }
 
@@ -1182,15 +1229,16 @@ h3 {
   margin-top: 26px;
 }
 
-.contact-list > div {
+.contact-list__row {
   display: grid;
   grid-template-columns: 42px 1fr;
-  gap: 14px;
+  gap: 4px 14px;
   align-items: center;
 }
 
 .contact-list__icon {
   display: grid;
+  grid-row: span 2;
   place-items: center;
   width: 42px;
   height: 42px;
@@ -1211,11 +1259,14 @@ h3 {
 }
 
 .contact-list a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
   color: var(--body);
 }
 
 .contact-list a:hover {
-  color: var(--orange);
+  color: var(--orange-ink);
 }
 
 /* --------------------------------------------------------------- cta band */
@@ -1285,13 +1336,20 @@ h3 {
 }
 
 .footer a:hover {
-  color: var(--orange);
+  color: var(--orange-ink);
   text-decoration: none;
 }
 
 .footer__links {
   display: grid;
-  gap: 10px;
+  gap: 4px;
+}
+
+.footer__links a,
+.footer__bar ul a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
 }
 
 .footer__logo {
@@ -1313,7 +1371,7 @@ h3 {
 
 .footer__contact svg {
   margin-top: 5px;
-  color: var(--orange);
+  color: var(--orange-ink);
 }
 
 .footer__social {
@@ -1332,8 +1390,8 @@ h3 {
 }
 
 .footer__social a:hover {
-  border-color: var(--orange);
-  background: var(--orange);
+  border-color: var(--orange-ink);
+  background: var(--orange-ink);
   color: var(--white);
 }
 
@@ -1429,7 +1487,7 @@ h3 {
 
 .prose ul svg {
   margin-top: 6px;
-  color: var(--orange);
+  color: var(--orange-ink);
 }
 
 /* -------------------------------------------------------------- not-found */
@@ -1453,12 +1511,22 @@ h3 {
   }
 
   .nav,
-  .header__phone {
+  /* The quote CTA and full phone number both live in the drawer at this size;
+     the bar keeps only tap-to-call and the menu so nothing gets squeezed out. */
+  .header__actions {
     display: none;
+  }
+
+  .header__call {
+    display: grid;
   }
 
   .burger {
     display: block;
+  }
+
+  .header__inner {
+    gap: 12px;
   }
 
   .header__spacer {

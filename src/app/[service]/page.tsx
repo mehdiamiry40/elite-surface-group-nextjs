@@ -5,6 +5,7 @@ import ContactSection from "@/components/ContactSection";
 import PageBanner from "@/components/PageBanner";
 import { CtaBand, ServiceCards, TickList } from "@/components/sections";
 import { bannerImages, services, type Service } from "@/content/site";
+import { BreadcrumbSchema, ServiceSchema } from "@/components/JsonLd";
 
 type PageProps = {
   params: Promise<{ service: string }>;
@@ -47,6 +48,13 @@ export default async function ServicePage({ params }: PageProps) {
 
   return (
     <>
+      <ServiceSchema service={service} />
+      <BreadcrumbSchema
+        trail={[
+          { label: "Services", href: "/services" },
+          { label: service.name, href: `/${service.slug}` },
+        ]}
+      />
       <PageBanner
         title={service.bannerTitle}
         image={bannerImages[`/${service.slug}`]}

@@ -34,39 +34,36 @@ export default function ContactSection({
                 Prefer to speak to someone? Call or email and we will get
                 straight back to you.
               </p>
+              {/* A <dl> may only contain dt/dd (optionally wrapped in a single
+                  div per group), so the icon lives inside the group div rather
+                  than as a sibling of dt/dd. */}
               <dl className="contact-list">
-                <div>
-                  <span className="contact-list__icon">
+                <div className="contact-list__row">
+                  <span className="contact-list__icon" aria-hidden="true">
                     <PhoneIcon />
                   </span>
-                  <div>
-                    <dt>Phone</dt>
-                    <dd>
-                      <a href={`tel:${business.phone}`}>
-                        {business.phoneDisplay}
-                      </a>
-                    </dd>
-                  </div>
+                  <dt>Phone</dt>
+                  <dd>
+                    <a href={`tel:${business.phone}`}>
+                      {business.phoneDisplay}
+                    </a>
+                  </dd>
                 </div>
-                <div>
-                  <span className="contact-list__icon">
+                <div className="contact-list__row">
+                  <span className="contact-list__icon" aria-hidden="true">
                     <MailIcon />
                   </span>
-                  <div>
-                    <dt>Email</dt>
-                    <dd>
-                      <a href={`mailto:${business.email}`}>{business.email}</a>
-                    </dd>
-                  </div>
+                  <dt>Email</dt>
+                  <dd>
+                    <a href={`mailto:${business.email}`}>{business.email}</a>
+                  </dd>
                 </div>
-                <div>
-                  <span className="contact-list__icon">
+                <div className="contact-list__row">
+                  <span className="contact-list__icon" aria-hidden="true">
                     <PinIcon />
                   </span>
-                  <div>
-                    <dt>Service area</dt>
-                    <dd>{business.area}</dd>
-                  </div>
+                  <dt>Service area</dt>
+                  <dd>{business.area}</dd>
                 </div>
               </dl>
             </div>

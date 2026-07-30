@@ -3,6 +3,7 @@ import ContactSection from "@/components/ContactSection";
 import PageBanner from "@/components/PageBanner";
 import { CtaBand } from "@/components/sections";
 import { bannerImages, contactPage } from "@/content/site";
+import { BreadcrumbSchema } from "@/components/JsonLd";
 
 export const metadata: Metadata = {
   title: "Contact Us",
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
+      <BreadcrumbSchema trail={[{ label: "Contact Us", href: "/contact-us" }]} />
       <PageBanner
         title={contactPage.bannerTitle}
         image={bannerImages["/contact-us"]}
