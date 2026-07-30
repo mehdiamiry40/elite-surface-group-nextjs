@@ -147,6 +147,13 @@ Missing: `Content-Security-Policy`, `X-Content-Type-Options`,
 `Referrer-Policy`, `X-Frame-Options`/`frame-ancestors`,
 `Strict-Transport-Security`, `Permissions-Policy`.
 
+> **Do not spot-check this on a protected preview URL.** While Vercel
+> deployment protection is enabled, the SSO gateway injects its own
+> `strict-transport-security`, `x-frame-options: DENY` and
+> `x-robots-tag: noindex` *before* the request reaches the app — so the
+> deployment looks protected when the application sets nothing. Confirm
+> against the production domain, or a preview with protection disabled.
+
 `X-Content-Type-Options: nosniff` interacts with finding #6 — add it *after*
 fixing the MIME mismatch, or the images will break.
 
@@ -229,8 +236,14 @@ Point the markup at the existing size variants; longer term, serve through
 #### 9. Static assets are served with `Cache-Control: public, max-age=0`
 
 Both `/mirror/...` and the `/wp-content/...` rewrite return `max-age=0`, so all
-12 MB of content-addressable assets revalidate on every navigation. Add an
-immutable `Cache-Control` for `/mirror/*` via `headers()`.
+12 MB of content-addressable assets revalidate on every navigation.
+
+The project sets no `Cache-Control` for `/mirror/*`, so Next.js's `public/`
+default applies — measured against `next start` locally. Vercel's CDN adds edge
+caching on top, but the origin header still drives browser revalidation, and the
+fix is the same either way: add an explicit long-lived, immutable
+`Cache-Control` for `/mirror/*` via `headers()`. (Production headers could not
+be measured from the audit environment — see the note under finding #4.)
 
 #### 10. The rate limiter does not survive serverless
 
