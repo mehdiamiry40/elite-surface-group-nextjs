@@ -1,0 +1,343 @@
+:root {
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: #fff;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.esg-source-page {
+  min-height: 100vh;
+  overflow-x: clip;
+}
+
+.esg-source-page [data-elementor-type="popup"] {
+  display: none !important;
+}
+
+.esg-source-page [data-src]:not([src]),
+.esg-source-page [data-srcset]:not([srcset]) {
+  visibility: hidden;
+}
+
+.esg-source-page .esg-carousel-ready .swiper {
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.esg-source-page .esg-carousel-ready .swiper-wrapper {
+  display: flex !important;
+  transition: transform var(--esg-carousel-speed, 500ms) ease !important;
+  will-change: transform;
+}
+
+.esg-source-page .esg-carousel-ready .swiper-slide {
+  position: relative !important;
+  inset: auto;
+  flex: 0 0 var(--esg-slide-width, 100%) !important;
+  width: auto !important;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.esg-source-page #mg-wprm-wrap.esg-mobile-menu-open {
+  transform: translate3d(0, 0, 0) !important;
+}
+
+.esg-source-page #wprmenu_bar .hamburger {
+  touch-action: manipulation;
+}
+
+.esg-source-page
+  .elementor-widget-gallery
+  .elementor-gallery__container {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 20px !important;
+  height: auto !important;
+}
+
+.esg-source-page .elementor-widget-gallery .e-gallery-item {
+  position: relative !important;
+  inset: auto !important;
+  display: block !important;
+  width: auto !important;
+  padding-bottom: 66.6667% !important;
+  overflow: hidden;
+}
+
+.esg-source-page .elementor-widget-gallery .e-gallery-image {
+  position: absolute !important;
+  inset: 0 !important;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.esg-form-status {
+  display: none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 2px;
+  font-family: "PT Sans", sans-serif;
+  font-size: 15px;
+}
+
+.esg-form-status[data-visible="true"] {
+  display: block;
+}
+
+.esg-form-status[data-state="success"] {
+  background: #e9f7ee;
+  color: #1f6a38;
+}
+
+.esg-form-status[data-state="error"] {
+  background: #fff0ec;
+  color: #8a2c17;
+}
+
+.esg-lightbox {
+  position: fixed;
+  z-index: 100000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 28px;
+  background: rgb(0 0 0 / 92%);
+}
+
+.esg-lightbox[hidden] {
+  display: none;
+}
+
+.esg-lightbox img {
+  display: block;
+  max-width: min(1200px, 94vw);
+  max-height: 90vh;
+  object-fit: contain;
+}
+
+.esg-lightbox button {
+  position: absolute;
+  z-index: 1;
+  width: 46px !important;
+  height: 46px !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: rgb(0 0 0 / 42%) !important;
+  color: #fff !important;
+  cursor: pointer;
+  font-size: 32px !important;
+  line-height: 1;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+.esg-lightbox .esg-lightbox-close {
+  top: 16px;
+  right: 18px;
+}
+
+.esg-lightbox .esg-lightbox-nav {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.esg-lightbox .esg-lightbox-prev {
+  left: 18px;
+}
+
+.esg-lightbox .esg-lightbox-next {
+  right: 18px;
+}
+
+.esg-lightbox-counter {
+  position: absolute;
+  top: 26px;
+  left: 26px;
+  color: #fff;
+  font: 16px/1.2 "PT Sans", sans-serif;
+}
+
+.esg-modal-backdrop {
+  position: fixed;
+  z-index: 100001;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgb(0 0 0 / 80%);
+}
+
+.esg-modal-backdrop[hidden] {
+  display: none;
+}
+
+.esg-modal {
+  position: relative;
+  width: min(640px, calc(100vw - 40px));
+  max-height: 94vh;
+  overflow: auto;
+  padding: 40px 33px 24px 40px;
+  background: #fff;
+  color: #222;
+  box-shadow: 2px 8px 23px 3px rgb(0 0 0 / 20%);
+  font-family: "PT Sans", sans-serif;
+}
+
+.esg-modal h2 {
+  margin: 0 48px 24px;
+  color: #000;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 36px;
+  text-align: center;
+}
+
+.esg-modal button.esg-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 42px !important;
+  height: 42px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  color: #111 !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  font-size: 32px !important;
+  line-height: 1;
+}
+
+.esg-quote-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.esg-quote-field {
+  display: grid;
+  gap: 7px;
+}
+
+.esg-quote-field--full {
+  grid-column: 1 / -1;
+}
+
+.esg-quote-field label {
+  font-weight: 700;
+}
+
+.esg-quote-field input,
+.esg-quote-field select,
+.esg-quote-field textarea {
+  width: 100%;
+  border: 1px solid #bbb;
+  border-radius: 0;
+  padding: 12px 13px;
+  background: #fff;
+  color: #222;
+}
+
+.esg-modal button.esg-quote-submit {
+  grid-column: 1 / -1;
+  justify-self: end;
+  min-width: 94px;
+  height: 42px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 8px 24px !important;
+  background: #eb6c21 !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.esg-modal button.esg-quote-submit:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+body.esg-lock-scroll {
+  overflow: hidden;
+}
+
+@media (max-width: 767px) {
+  .esg-source-page
+    .elementor-widget-gallery
+    .elementor-gallery__container {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .esg-modal-backdrop {
+    padding: 22px 0;
+  }
+
+  .esg-modal {
+    width: 100vw;
+    max-height: calc(100vh - 44px);
+    padding: 40px 33px 24px 40px;
+  }
+
+  .esg-quote-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .esg-quote-field--full {
+    grid-column: auto;
+  }
+
+  .esg-modal button.esg-quote-submit {
+    grid-column: auto;
+    justify-self: end;
+  }
+
+  .esg-lightbox {
+    padding: 14px;
+  }
+
+  .esg-lightbox .esg-lightbox-prev {
+    left: 8px;
+  }
+
+  .esg-lightbox .esg-lightbox-next {
+    right: 8px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .esg-source-page
+    .elementor-widget-gallery
+    .elementor-gallery__container {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+}
