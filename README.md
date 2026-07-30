@@ -1,10 +1,7 @@
-# Elite Surface Group — Next.js migration
+# Elite Surface Group
 
-This repository contains the Next.js migration of
-[elitesurfacegroup.com.au](https://elitesurfacegroup.com.au/). It preserves the
-live site’s public pages, content, imagery, responsive presentation, navigation,
-quote popup, project lightbox behaviour, and contact forms while removing the
-WordPress runtime dependency.
+The [elitesurfacegroup.com.au](https://elitesurfacegroup.com.au/) website, built
+with Next.js 16 (App Router) and React 19.
 
 ## Local development
 
@@ -15,41 +12,83 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Refreshing the source snapshot
+## Editing content
 
-The migration includes an idempotent snapshot tool for authorised future
-refreshes from the source website:
+There is no CMS. All copy, imagery and navigation live in two typed modules:
 
-```bash
-npm run snapshot:source
+| File | Holds |
+| --- | --- |
+| `src/content/site.ts` | Business details, navigation, services, homepage sections, projects, testimonials, page metadata |
+| `src/content/legal.ts` | Privacy policy and terms of service |
+
+Change the text there and the change flows to every page that uses it. Phone
+numbers in particular are defined **once** — `business.phone` (E.164, used for
+every `tel:` href) and `business.phoneDisplay` (the human-readable form). Never
+hand-write a `tel:` link; the smoke suite fails the build if you do.
+
+Images live in `public/images/` as WebP. `next/image` handles resizing and
+format negotiation, so add the largest version you have and let the optimiser
+derive the rest.
+
+## Project layout
+
 ```
-
-It rebuilds `src/content/site-pages.json` and the first-party asset mirror in
-`public/mirror`.
+src/app/            routes (one directory per page; [service] covers the four service pages)
+src/app/api/contact route handler for enquiry submissions
+src/components/     UI components and hooks
+src/content/        all site copy
+public/images/      WebP imagery
+scripts/            env check and smoke suite
+```
 
 ## Contact-form delivery
 
-Without email credentials, submitted forms fall back to the visitor’s email
-application and address the message to Elite Surface Group. For direct delivery
-from the deployed site, copy `.env.example` to `.env.local` and set:
+Enquiries are emailed through [Resend](https://resend.com). Copy
+`.env.example` to `.env.local` and set:
 
 - `RESEND_API_KEY`
-- `CONTACT_FROM_EMAIL` (a sender on a verified domain)
-- `CONTACT_TO_EMAIL`
+- `CONTACT_FROM_EMAIL` — a sender on a domain verified with Resend
+- `CONTACT_TO_EMAIL` — where enquiries should land
 
-The same variables can be added to the Vercel project settings.
+Set the same three in the Vercel project settings.
 
-## Production checks
+**Without them nothing is delivered.** The endpoint answers 503 and falls back
+to opening the visitor's mail client, which silently loses the enquiry for
+anyone without a configured mail app. `npm run prebuild` therefore fails a
+production build when they are missing — override deliberately with
+`ALLOW_UNCONFIGURED_CONTACT=1` if you really mean to.
+
+## Checks
 
 ```bash
-npm run check
-npm run smoke
-npm audit
+npm run typecheck   # tsc
+npm run lint        # eslint
+npm run build       # production build (runs the env check first)
+npm run check       # all three
+
+npm run start &     # smoke needs a live server
+npm run smoke       # 175 checks
 ```
 
-Run `npm run smoke` while the local server is active. It checks every captured
-route and mirrored asset, legacy WordPress URL compatibility, sitemap endpoints,
-and the guarded contact endpoint.
+The smoke suite asserts what is easy to regress: every route returns 200, each
+page has exactly one `<h1>`, a meta description and a canonical link, every
+`tel:` link is the correct number, no page references `wp-content` or a
+third-party font, every image declares `alt`, security headers are present,
+images are immutably cached and served as `image/webp`, retired WordPress URLs
+still redirect, no orphaned images ship, and the contact endpoint rejects bad
+input without redirecting.
 
-The app is configured for Vercel and uses trailing-slash URLs to preserve the
-source website’s route structure.
+Point it at a deployment with `SMOKE_BASE_URL=https://… npm run smoke`.
+
+## Migration notes
+
+This replaced a WordPress/Elementor site. `docs/MIGRATION-AUDIT.md` records the
+audit of the first migration pass and which findings this rebuild resolved.
+
+Two things were deliberately left alone and still need a human decision:
+
+- **The legal pages cite UK law** (Data Protection Act 1998; "the laws of
+  England, Northern Ireland, Scotland and Wales") on an Australian business.
+  Preserved verbatim — rewriting legal text is not a developer's call.
+- **Social links point at Facebook and Instagram home pages**, not real
+  profiles; that is what the WordPress site linked to.

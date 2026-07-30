@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { business } from "@/content/site";
 
 export const runtime = "nodejs";
 
@@ -16,7 +17,32 @@ const MAX = {
 const MAX_BODY_BYTES = 16_384;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX = 6;
+
+/**
+ * Best-effort, per-instance throttle.
+ *
+ * This deliberately does NOT try to be a real rate limiter: on serverless each
+ * concurrent instance keeps its own map, so the effective ceiling is
+ * `RATE_LIMIT_MAX × instances` and it resets on cold start. It exists to blunt
+ * naive repeat submissions. For a hard limit, move this to a shared store
+ * (Vercel KV / Upstash) — see docs/MIGRATION-AUDIT.md.
+ */
+const RATE_LIMIT_MAX_KEYS = 5_000;
 const requestBuckets = new Map<string, number[]>();
+
+/** Drops expired buckets so the map cannot grow without bound. */
+function evictStaleBuckets(now: number) {
+  for (const [key, timestamps] of requestBuckets) {
+    const live = timestamps.filter(
+      (timestamp) => now - timestamp < RATE_LIMIT_WINDOW_MS,
+    );
+    if (live.length) {
+      requestBuckets.set(key, live);
+    } else {
+      requestBuckets.delete(key);
+    }
+  }
+}
 
 function text(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
@@ -68,6 +94,11 @@ function clientKey(request: NextRequest) {
 function rateLimit(request: NextRequest) {
   const now = Date.now();
   const key = clientKey(request);
+
+  if (requestBuckets.size >= RATE_LIMIT_MAX_KEYS) {
+    evictStaleBuckets(now);
+  }
+
   const active = (requestBuckets.get(key) ?? []).filter(
     (timestamp) => now - timestamp < RATE_LIMIT_WINDOW_MS,
   );
@@ -108,8 +139,7 @@ function mailtoUrl({
   service: string;
   message: string;
 }) {
-  const recipient =
-    process.env.CONTACT_TO_EMAIL || "info@elitesurfacegroup.com.au";
+  const recipient = process.env.CONTACT_TO_EMAIL || business.email;
   const subject = `Website enquiry${service ? ` — ${service}` : ""}`;
   const body = [
     `Name: ${name}`,
@@ -220,6 +250,13 @@ export async function POST(request: NextRequest) {
   const to = process.env.CONTACT_TO_EMAIL;
 
   if (!resendKey || !from || !to) {
+    // Loud on purpose: without these variables no enquiry is ever delivered,
+    // and the visitor-side mailto fallback is invisible to the site owner.
+    console.error(
+      "[contact] Enquiry NOT delivered — RESEND_API_KEY, CONTACT_FROM_EMAIL or " +
+        "CONTACT_TO_EMAIL is unset. Falling back to the visitor's mail client.",
+      { from: email, page: sourcePath || "unknown" },
+    );
     return NextResponse.json(
       {
         message:

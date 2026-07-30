@@ -1,6 +1,13 @@
 #!/usr/bin/env node
 
-import { readFile, readdir } from "node:fs/promises";
+/**
+ * Post-deploy smoke checks against a running server.
+ *
+ *   npm run start &   # or SMOKE_BASE_URL=https://… npm run smoke
+ *   npm run smoke
+ */
+
+import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -9,126 +16,290 @@ const projectRoot = path.resolve(
   "..",
 );
 const baseUrl = new URL(process.env.SMOKE_BASE_URL ?? "http://localhost:3000");
-const siteData = JSON.parse(
-  await readFile(
-    path.join(projectRoot, "src", "content", "site-pages.json"),
-    "utf8",
-  ),
-);
 
-const placeholderImage =
-  "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
-for (const [route, page] of Object.entries(siteData.routes)) {
-  const placeholderWithRealSource = new RegExp(
-    `src="${placeholderImage.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"[^>]+data-(?:lazy-)?src=`,
-  );
-  if (placeholderWithRealSource.test(page.html)) {
-    throw new Error(`${route} still contains an unmaterialized lazy image.`);
-  }
+const failures = [];
+let checks = 0;
 
-  const blockedElementorBackground =
-    /class="(?=[^"]*\be-con\b)(?=[^"]*\be-parent\b)(?![^"]*\be-lazyloaded\b)[^"]*"/;
-  if (blockedElementorBackground.test(page.html)) {
-    throw new Error(`${route} still contains a blocked Elementor background.`);
+function check(name, condition, detail = "") {
+  checks += 1;
+  if (!condition) {
+    failures.push(`${name}${detail ? ` — ${detail}` : ""}`);
   }
 }
 
-async function expectStatus(url, expected, init) {
-  const response = await fetch(new URL(url, baseUrl), init);
-  if (response.status !== expected) {
-    throw new Error(
-      `${url} returned ${response.status}; expected ${expected}`,
-    );
-  }
+async function get(pathname, init) {
+  const response = await fetch(new URL(pathname, baseUrl), init);
   return response;
 }
 
-async function filesBelow(directory, prefix = "") {
-  const entries = await readdir(directory, { withFileTypes: true });
-  const files = [];
+/* ------------------------------------------------------------------ routes */
 
-  for (const entry of entries) {
-    const relative = path.posix.join(prefix, entry.name);
-    if (entry.isDirectory()) {
-      files.push(
-        ...(await filesBelow(path.join(directory, entry.name), relative)),
-      );
-    } else if (entry.isFile()) {
-      files.push(relative);
-    }
-  }
+const ROUTES = [
+  "/",
+  "/about/",
+  "/services/",
+  "/cladding/",
+  "/render/",
+  "/hebel/",
+  "/walling/",
+  "/projects/",
+  "/contact-us/",
+  "/privacy-policy/",
+  "/terms-of-service/",
+];
 
-  return files;
+const pages = new Map();
+
+for (const route of ROUTES) {
+  const response = await get(route);
+  const html = await response.text();
+  pages.set(route, html);
+  check(`GET ${route}`, response.status === 200, `status ${response.status}`);
 }
 
-for (const route of Object.keys(siteData.routes)) {
-  await expectStatus(route, 200);
-}
-await expectStatus("/this-route-does-not-exist/", 404);
-await expectStatus("/sitemap.xml", 200);
-await expectStatus("/robots.txt", 200);
+/* -------------------------------------------------------------- retired WP */
 
-const legacySitemaps = [
+for (const retired of [
+  "/sample-page/",
+  "/2026/01/28/hello-world/",
+  "/category/uncategorized/",
+  "/author/admin/",
+]) {
+  const response = await get(retired, { redirect: "manual" });
+  check(
+    `retired ${retired} redirects`,
+    [301, 308].includes(response.status),
+    `status ${response.status}`,
+  );
+}
+
+for (const sitemap of [
   "/sitemap_index.xml",
   "/page-sitemap.xml",
   "/post-sitemap.xml",
   "/category-sitemap.xml",
   "/wp-sitemap.xml",
-];
-for (const sitemap of legacySitemaps) {
-  const response = await fetch(new URL(sitemap, baseUrl), {
-    redirect: "manual",
-  });
-  if (![307, 308].includes(response.status)) {
-    throw new Error(
-      `${sitemap} returned ${response.status}; expected a permanent redirect`,
-    );
-  }
-}
-
-const mirrorRoot = path.join(projectRoot, "public", "mirror");
-const mirrorFiles = await filesBelow(mirrorRoot);
-for (let index = 0; index < mirrorFiles.length; index += 12) {
-  await Promise.all(
-    mirrorFiles
-      .slice(index, index + 12)
-      .map((asset) => expectStatus(`/mirror/${asset}`, 200)),
+]) {
+  const response = await get(sitemap, { redirect: "manual" });
+  check(
+    `legacy ${sitemap} redirects`,
+    [301, 308].includes(response.status),
+    `status ${response.status}`,
   );
 }
 
-const legacyAsset = mirrorFiles.find((asset) =>
-  asset.startsWith("wp-content/"),
-);
-if (!legacyAsset) {
-  throw new Error("No WordPress asset was available for rewrite testing.");
-}
-await expectStatus(`/${legacyAsset}`, 200);
+/* ----------------------------------------------------- legacy asset URLs */
 
-await expectStatus("/api/contact", 415, {
+const legacyAssets = JSON.parse(
+  readFileSync(path.join(projectRoot, "src/content/legacy-assets.json"), "utf8"),
+);
+const legacySample = Object.keys(legacyAssets).slice(0, 8);
+for (const legacy of legacySample) {
+  const response = await get(legacy, { redirect: "manual" });
+  check(
+    `legacy asset ${legacy} redirects`,
+    [301, 308].includes(response.status),
+    `status ${response.status}`,
+  );
+}
+
+/* --------------------------------------------------------------- 404 + SEO */
+
+const notFound = await get("/this-route-does-not-exist/");
+check("unknown route 404s", notFound.status === 404, `status ${notFound.status}`);
+
+for (const endpoint of ["/sitemap.xml", "/robots.txt"]) {
+  const response = await get(endpoint);
+  check(`GET ${endpoint}`, response.status === 200, `status ${response.status}`);
+}
+
+const sitemapXml = await (await get("/sitemap.xml")).text();
+check(
+  "sitemap excludes retired WordPress pages",
+  !/sample-page|hello-world|uncategorized|author/.test(sitemapXml),
+);
+check(
+  "sitemap lists every route",
+  ROUTES.every((route) =>
+    sitemapXml.includes(route === "/" ? "elitesurfacegroup.com.au/" : route.replace(/\/$/, "")),
+  ),
+);
+
+/* ----------------------------------------------------------------- content */
+
+for (const [route, html] of pages) {
+  const h1Count = (html.match(/<h1[\s>]/g) ?? []).length;
+  check(`${route} has exactly one <h1>`, h1Count === 1, `found ${h1Count}`);
+
+  check(
+    `${route} has a meta description`,
+    /<meta name="description" content="[^"]{40,}"/.test(html),
+  );
+
+  check(
+    `${route} has a canonical link`,
+    /<link rel="canonical"/.test(html),
+  );
+
+  // Every tel: link must be the single E.164 number — no placeholders.
+  const telLinks = [...html.matchAll(/href="tel:([^"]+)"/g)].map((m) => m[1]);
+  check(`${route} has at least one tel: link`, telLinks.length > 0);
+  const badTel = telLinks.filter((value) => value !== "+61413844912");
+  check(
+    `${route} tel: links are all +61413844912`,
+    badTel.length === 0,
+    badTel.join(", "),
+  );
+
+  check(
+    `${route} references no wp-content asset`,
+    !/wp-content/.test(html),
+  );
+
+  check(
+    `${route} loads no third-party font or script`,
+    !/fonts\.googleapis\.com|fonts\.gstatic\.com|gravatar\.com/.test(html),
+  );
+
+  const imgTags = html.match(/<img[^>]*>/g) ?? [];
+  const missingAlt = imgTags.filter((tag) => !/\salt=/.test(tag));
+  check(
+    `${route} images all declare alt`,
+    missingAlt.length === 0,
+    `${missingAlt.length} without alt`,
+  );
+}
+
+/* ----------------------------------------------------------------- headers */
+
+const headerResponse = await get("/");
+for (const [header, expected] of [
+  ["content-security-policy", /default-src 'self'/],
+  ["x-content-type-options", /nosniff/],
+  ["referrer-policy", /strict-origin-when-cross-origin/],
+  ["x-frame-options", /DENY/],
+  ["strict-transport-security", /max-age=\d+/],
+  ["permissions-policy", /camera=\(\)/],
+]) {
+  const value = headerResponse.headers.get(header) ?? "";
+  check(`header ${header}`, expected.test(value), `got "${value}"`);
+}
+
+check(
+  "powered-by header is suppressed",
+  !headerResponse.headers.get("x-powered-by"),
+);
+
+const assetResponse = await get("/images/esg-logo-1.webp");
+check(
+  "GET /images/esg-logo-1.webp",
+  assetResponse.status === 200,
+  `status ${assetResponse.status}`,
+);
+check(
+  "images are immutably cached",
+  /max-age=31536000/.test(assetResponse.headers.get("cache-control") ?? ""),
+  assetResponse.headers.get("cache-control") ?? "",
+);
+check(
+  "images serve as image/webp",
+  assetResponse.headers.get("content-type") === "image/webp",
+  assetResponse.headers.get("content-type") ?? "",
+);
+
+/* ------------------------------------------------- every image is reachable */
+
+const imageDir = path.join(projectRoot, "public/images");
+const imageFiles = readdirSync(imageDir);
+check("image directory is not empty", imageFiles.length > 0);
+for (let index = 0; index < imageFiles.length; index += 12) {
+  const batch = imageFiles.slice(index, index + 12);
+  const results = await Promise.all(
+    batch.map(async (file) => [file, (await get(`/images/${file}`)).status]),
+  );
+  for (const [file, status] of results) {
+    check(`GET /images/${file}`, status === 200, `status ${status}`);
+  }
+}
+
+// Nothing should ship that no page references.
+const allHtml = [...pages.values()].join("");
+const orphans = imageFiles.filter(
+  (file) =>
+    !allHtml.includes(encodeURIComponent(`/images/${file}`)) &&
+    !allHtml.includes(`/images/${file}`) &&
+    !file.startsWith("cropped-esg-logo"),
+);
+check(
+  "no orphaned images are shipped",
+  orphans.length === 0,
+  orphans.join(", "),
+);
+
+/* ------------------------------------------------------- contact endpoint */
+
+const contactChecks = [
+  [
+    "rejects non-JSON",
+    415,
+    { method: "POST", headers: { "Content-Type": "text/plain" }, body: "{}" },
+  ],
+  [
+    "rejects cross-site origin",
+    403,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "https://example.invalid",
+        "Sec-Fetch-Site": "cross-site",
+      },
+      body: "{}",
+    },
+  ],
+  [
+    "rejects a malformed body",
+    400,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: baseUrl.origin,
+      },
+      body: "null",
+    },
+  ],
+];
+
+for (const [name, expected, init] of contactChecks) {
+  const response = await get("/api/contact/", init);
+  check(`contact endpoint ${name}`, response.status === expected, `status ${response.status}`);
+}
+
+// The client posts to the trailing-slash form; it must not redirect.
+const noRedirect = await get("/api/contact/", {
   method: "POST",
-  headers: { "Content-Type": "text/plain" },
-  body: "{}",
-});
-await expectStatus("/api/contact", 403, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    Origin: "https://example.invalid",
-    "Sec-Fetch-Site": "cross-site",
-  },
-  body: "{}",
-});
-await expectStatus("/api/contact", 400, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    Origin: baseUrl.origin,
-  },
+  headers: { "Content-Type": "application/json", Origin: baseUrl.origin },
   body: "null",
+  redirect: "manual",
 });
+check(
+  "contact endpoint does not redirect",
+  ![307, 308].includes(noRedirect.status),
+  `status ${noRedirect.status}`,
+);
+
+/* ------------------------------------------------------------------ report */
+
+if (failures.length) {
+  console.error(`\nSmoke test FAILED — ${failures.length} of ${checks} checks:\n`);
+  for (const failure of failures) {
+    console.error(`  ✗ ${failure}`);
+  }
+  process.exit(1);
+}
 
 console.log(
-  `Smoke test passed: ${Object.keys(siteData.routes).length} routes, ${
-    mirrorFiles.length
-  } assets, compatibility URLs, and guarded contact endpoint.`,
+  `Smoke test passed: ${checks} checks across ${ROUTES.length} routes, ` +
+    `${imageFiles.length} images, security headers, redirects and the contact endpoint.`,
 );
