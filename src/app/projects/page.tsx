@@ -3,6 +3,7 @@ import PageBanner from "@/components/PageBanner";
 import ProjectGallery from "@/components/ProjectGallery";
 import { CtaBand, SectionHead, Testimonials } from "@/components/sections";
 import { bannerImages, featuredProjects, projects, projectsPage } from "@/content/site";
+import { BreadcrumbSchema, ReviewSchema } from "@/components/JsonLd";
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -13,6 +14,8 @@ export const metadata: Metadata = {
 export default function ProjectsPage() {
   return (
     <>
+      <BreadcrumbSchema trail={[{ label: "Projects", href: "/projects" }]} />
+      <ReviewSchema />
       <PageBanner
         title={projectsPage.bannerTitle}
         image={bannerImages["/projects"]}

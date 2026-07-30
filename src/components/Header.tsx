@@ -126,6 +126,17 @@ export default function Header() {
           <QuoteButton />
         </div>
 
+        {/* Phone is the primary lead channel for this business, so the mobile
+            header keeps a tap-to-call button rather than burying the number
+            behind the menu. */}
+        <a
+          className="header__call"
+          href={`tel:${business.phone}`}
+          aria-label={`Call ${business.phoneDisplay}`}
+        >
+          <PhoneIcon size={18} />
+        </a>
+
         <button
           className="burger"
           type="button"

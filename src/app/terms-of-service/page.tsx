@@ -4,6 +4,7 @@ import PageBanner from "@/components/PageBanner";
 import { CtaBand } from "@/components/sections";
 import { termsOfService } from "@/content/legal";
 import { bannerImages, business } from "@/content/site";
+import { BreadcrumbSchema } from "@/components/JsonLd";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
 export default function TermsOfServicePage() {
   return (
     <>
+      <BreadcrumbSchema trail={[{ label: "Terms of Service", href: "/terms-of-service" }]} />
       <PageBanner
         title="Terms of Service"
         image={bannerImages["/terms-of-service"]}

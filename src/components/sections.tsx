@@ -130,7 +130,13 @@ export function Testimonials() {
         <Carousel label="testimonial">
           {testimonials.map((item) => (
             <figure className="quote" key={item.name}>
-              <div className="quote__stars" aria-label="Rated 5 out of 5">
+              {/* role="img" so the aria-label is permitted and the five
+                  decorative glyphs are announced as one rating. */}
+              <div
+                className="quote__stars"
+                role="img"
+                aria-label="Rated 5 out of 5"
+              >
                 {Array.from({ length: 5 }, (_, index) => (
                   <StarIcon key={index} />
                 ))}
