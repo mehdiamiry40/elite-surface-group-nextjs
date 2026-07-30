@@ -418,6 +418,36 @@ function rewriteSrcsetAttribute($, selector, attribute, baseUrl, kind) {
   });
 }
 
+function materializeLazyImages($) {
+  $(".e-con.e-parent").addClass("e-lazyloaded");
+
+  $("[data-src], [data-lazy-src]").each((_, element) => {
+    const source =
+      $(element).attr("data-src") ?? $(element).attr("data-lazy-src");
+    if (source) {
+      $(element).attr("src", source);
+    }
+    $(element).removeClass("lazyload lazy-loading").addClass("lazyloaded");
+  });
+
+  $("[data-srcset], [data-lazy-srcset]").each((_, element) => {
+    const sourceSet =
+      $(element).attr("data-srcset") ??
+      $(element).attr("data-lazy-srcset");
+    if (sourceSet) {
+      $(element).attr("srcset", sourceSet);
+    }
+  });
+
+  $("[data-sizes], [data-lazy-sizes]").each((_, element) => {
+    const sizes =
+      $(element).attr("data-sizes") ?? $(element).attr("data-lazy-sizes");
+    if (sizes) {
+      $(element).attr("sizes", sizes);
+    }
+  });
+}
+
 function rewriteBodyUrls($, pageUrl) {
   const resourceAttributes = [
     ["img[src]", "src", "image"],
@@ -449,6 +479,8 @@ function rewriteBodyUrls($, pageUrl) {
   for (const [selector, attribute] of srcsetAttributes) {
     rewriteSrcsetAttribute($, selector, attribute, pageUrl, "image");
   }
+
+  materializeLazyImages($);
 
   $("body [style]").each((_, element) => {
     const value = $(element).attr("style");

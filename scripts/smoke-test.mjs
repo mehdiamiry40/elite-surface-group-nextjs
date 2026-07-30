@@ -16,6 +16,23 @@ const siteData = JSON.parse(
   ),
 );
 
+const placeholderImage =
+  "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+for (const [route, page] of Object.entries(siteData.routes)) {
+  const placeholderWithRealSource = new RegExp(
+    `src="${placeholderImage.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"[^>]+data-(?:lazy-)?src=`,
+  );
+  if (placeholderWithRealSource.test(page.html)) {
+    throw new Error(`${route} still contains an unmaterialized lazy image.`);
+  }
+
+  const blockedElementorBackground =
+    /class="(?=[^"]*\be-con\b)(?=[^"]*\be-parent\b)(?![^"]*\be-lazyloaded\b)[^"]*"/;
+  if (blockedElementorBackground.test(page.html)) {
+    throw new Error(`${route} still contains a blocked Elementor background.`);
+  }
+}
+
 async function expectStatus(url, expected, init) {
   const response = await fetch(new URL(url, baseUrl), init);
   if (response.status !== expected) {

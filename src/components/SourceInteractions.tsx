@@ -201,22 +201,42 @@ export default function SourceInteractions({
       };
     }
 
-    sourceRoot.querySelectorAll<HTMLElement>("[data-src]").forEach((element) => {
-      const source = element.dataset.src;
-      if (source && !element.getAttribute("src")) {
-        element.setAttribute("src", source);
-      }
-      element.classList.remove("lazyload");
-      element.classList.add("lazyloaded");
-      element.style.visibility = "";
-    });
+    sourceRoot
+      .querySelectorAll<HTMLElement>(".e-con.e-parent")
+      .forEach((element) => element.classList.add("e-lazyloaded"));
 
     sourceRoot
-      .querySelectorAll<HTMLElement>("[data-srcset]")
+      .querySelectorAll<HTMLElement>("[data-src], [data-lazy-src]")
       .forEach((element) => {
-        const sourceSet = element.dataset.srcset;
-        if (sourceSet && !element.getAttribute("srcset")) {
+        const source = element.dataset.src ?? element.dataset.lazySrc;
+        if (source) {
+          // WordPress lazy loaders leave a 1×1 GIF in `src`; the data
+          // attribute is the authoritative image URL.
+          element.setAttribute("src", source);
+        }
+        element.classList.remove("lazyload", "lazy-loading");
+        element.classList.add("lazyloaded");
+        element.style.visibility = "";
+      });
+
+    sourceRoot
+      .querySelectorAll<HTMLElement>(
+        "[data-srcset], [data-lazy-srcset]",
+      )
+      .forEach((element) => {
+        const sourceSet =
+          element.dataset.srcset ?? element.dataset.lazySrcset;
+        if (sourceSet) {
           element.setAttribute("srcset", sourceSet);
+        }
+      });
+
+    sourceRoot
+      .querySelectorAll<HTMLElement>("[data-sizes], [data-lazy-sizes]")
+      .forEach((element) => {
+        const sizes = element.dataset.sizes ?? element.dataset.lazySizes;
+        if (sizes) {
+          element.setAttribute("sizes", sizes);
         }
       });
 
