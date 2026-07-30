@@ -9,6 +9,19 @@ import {
 } from "@/components/icons";
 import { business, footerBlurb, footerNav } from "@/content/site";
 
+const socialLinks = [
+  {
+    href: business.social.facebook,
+    label: `${business.name} on Facebook`,
+    Icon: FacebookIcon,
+  },
+  {
+    href: business.social.instagram,
+    label: `${business.name} on Instagram`,
+    Icon: InstagramIcon,
+  },
+].filter((link) => Boolean(link.href));
+
 export default function Footer() {
   return (
     <footer className="footer">
@@ -24,24 +37,21 @@ export default function Footer() {
               />
             </div>
             <p>{footerBlurb}</p>
-            <div className="footer__social">
-              <a
-                href={business.social.facebook}
-                aria-label={`${business.name} on Facebook`}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <FacebookIcon />
-              </a>
-              <a
-                href={business.social.instagram}
-                aria-label={`${business.name} on Instagram`}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <InstagramIcon />
-              </a>
-            </div>
+            {socialLinks.length ? (
+              <div className="footer__social">
+                {socialLinks.map(({ href, label, Icon }) => (
+                  <a
+                    key={href}
+                    href={href}
+                    aria-label={label}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    <Icon />
+                  </a>
+                ))}
+              </div>
+            ) : null}
           </div>
 
           <nav aria-labelledby="footer-quick-links">

@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit --incremental false",
     "smoke": "node scripts/smoke-test.mjs",
+    "a11y": "node scripts/a11y-test.mjs",
     "check": "npm run typecheck && npm run lint && npm run build"
   },
   "dependencies": {
@@ -22,8 +23,10 @@
     "@types/node": "^22.15.3",
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
+    "axe-core": "^4.11.0",
     "eslint": "^9.39.0",
     "eslint-config-next": "16.2.12",
+    "playwright": "^1.57.0",
     "typescript": "^5.9.3"
   },
   "overrides": {

@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { QuoteDialogProvider } from "@/components/QuoteDialogProvider";
 import { business } from "@/content/site";
+import { absoluteUrl, DEFAULT_OG_IMAGE, pageMetadata } from "@/lib/seo";
 import "./globals.css";
 
 // Self-hosted at build time, so the site makes no request to Google's CDN and
@@ -22,22 +23,37 @@ const heading = Roboto_Slab({
   variable: "--font-heading",
 });
 
+const homeMeta = pageMetadata({
+  description:
+    "Adelaide specialists in cladding, render, Hebel and complete walling installations. Over 10 years of experience across South Australia.",
+  path: "/",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(business.siteUrl),
   title: {
     default: `${business.name} — Cladding, Render & Hebel Specialists in Adelaide`,
     template: `%s — ${business.name}`,
   },
-  description:
-    "Adelaide specialists in cladding, render, Hebel and complete walling installations. Over 10 years of experience across South Australia.",
-  alternates: { canonical: "/" },
+  description: homeMeta.description,
+  alternates: homeMeta.alternates,
   openGraph: {
     type: "website",
     siteName: business.name,
     locale: "en_AU",
-    url: business.siteUrl,
+    images: [
+      {
+        url: absoluteUrl(DEFAULT_OG_IMAGE),
+        width: 1280,
+        height: 960,
+        alt: `${business.name} — walling and surface finishes in Adelaide`,
+      },
+    ],
   },
-  twitter: { card: "summary_large_image" },
+  twitter: {
+    card: "summary_large_image",
+    images: [absoluteUrl(DEFAULT_OG_IMAGE)],
+  },
   icons: {
     icon: [
       { url: "/images/cropped-esg-logo-1-32x32.webp", sizes: "32x32" },
@@ -55,11 +71,11 @@ const organisationSchema = {
   url: business.siteUrl,
   telephone: business.phone,
   email: business.email,
-  image: `${business.siteUrl}/images/esg-logo-1.webp`,
+  image: absoluteUrl("/images/esg-logo-1.webp"),
   logo: {
     "@type": "ImageObject",
     "@id": `${business.siteUrl}/#logo`,
-    url: `${business.siteUrl}/images/esg-logo-1.webp`,
+    url: absoluteUrl("/images/esg-logo-1.webp"),
     caption: business.name,
     inLanguage: "en-AU",
     width: "123",
@@ -68,6 +84,7 @@ const organisationSchema = {
   areaServed: { "@type": "AdministrativeArea", name: business.area },
   address: {
     "@type": "PostalAddress",
+    addressLocality: "Adelaide",
     addressRegion: "SA",
     addressCountry: "AU",
   },

@@ -6,6 +6,7 @@ import PageBanner from "@/components/PageBanner";
 import { CtaBand, ServiceCards, TickList } from "@/components/sections";
 import { bannerImages, services, type Service } from "@/content/site";
 import { BreadcrumbSchema, ServiceSchema } from "@/components/JsonLd";
+import { pageMetadata } from "@/lib/seo";
 
 type PageProps = {
   params: Promise<{ service: string }>;
@@ -31,11 +32,12 @@ export async function generateMetadata({
     return {};
   }
 
-  return {
+  return pageMetadata({
     title: service.metaTitle,
     description: service.metaDescription,
-    alternates: { canonical: `/${service.slug}` },
-  };
+    path: `/${service.slug}`,
+    image: service.image,
+  });
 }
 
 export default async function ServicePage({ params }: PageProps) {
@@ -100,7 +102,10 @@ export default async function ServicePage({ params }: PageProps) {
 
       <ServiceCards titleAccent="Other" currentSlug={service.slug} />
 
-      <ContactSection intro={`Tell us about your ${service.name.toLowerCase()} project and we will come back to you with an obligation-free quote.`} />
+      <ContactSection
+        defaultService={service.name}
+        intro={`Tell us about your ${service.name.toLowerCase()} project and we will come back to you with an obligation-free quote.`}
+      />
 
       <CtaBand />
     </>

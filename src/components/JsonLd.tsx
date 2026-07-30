@@ -1,4 +1,5 @@
-import { business, testimonials, type Service } from "@/content/site";
+import { absoluteUrl } from "@/lib/seo";
+import { business, type Service } from "@/content/site";
 
 /**
  * Structured data helpers.
@@ -15,8 +16,6 @@ function JsonLd({ data }: { data: object }) {
     />
   );
 }
-
-const absolute = (path: string) => new URL(path, business.siteUrl).toString();
 
 /**
  * Marks up the breadcrumb trail that `PageBanner` already renders visually.
@@ -37,44 +36,9 @@ export function BreadcrumbSchema({
             "@type": "ListItem",
             position: index + 1,
             name: crumb.label,
-            item: absolute(crumb.href),
+            item: absoluteUrl(crumb.href),
           }),
         ),
-      }}
-    />
-  );
-}
-
-/**
- * The five testimonials are already on the page; this makes them legible to
- * search engines as reviews of the business.
- */
-export function ReviewSchema() {
-  return (
-    <JsonLd
-      data={{
-        "@context": "https://schema.org",
-        "@type": "HomeAndConstructionBusiness",
-        "@id": `${business.siteUrl}/#organization`,
-        name: business.name,
-        aggregateRating: {
-          "@type": "AggregateRating",
-          ratingValue: "5",
-          bestRating: "5",
-          worstRating: "1",
-          reviewCount: testimonials.length,
-        },
-        review: testimonials.map((item) => ({
-          "@type": "Review",
-          author: { "@type": "Person", name: item.name },
-          reviewRating: {
-            "@type": "Rating",
-            ratingValue: "5",
-            bestRating: "5",
-            worstRating: "1",
-          },
-          reviewBody: item.quote,
-        })),
       }}
     />
   );
@@ -87,12 +51,12 @@ export function ServiceSchema({ service }: { service: Service }) {
       data={{
         "@context": "https://schema.org",
         "@type": "Service",
-        "@id": absolute(`/${service.slug}#service`),
+        "@id": `${absoluteUrl(`/${service.slug}`)}#service`,
         name: `${service.name} — ${business.name}`,
         serviceType: service.name,
         description: service.metaDescription,
-        url: absolute(`/${service.slug}`),
-        image: absolute(service.image),
+        url: absoluteUrl(`/${service.slug}`),
+        image: absoluteUrl(service.image),
         provider: { "@id": `${business.siteUrl}/#organization` },
         areaServed: { "@type": "AdministrativeArea", name: business.area },
       }}

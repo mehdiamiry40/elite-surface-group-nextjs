@@ -9,11 +9,14 @@ type ContactSectionProps = {
   /** Renders the contact details column beside the form. */
   withDetails?: boolean;
   intro?: string;
+  /** Prefills the service dropdown on service pages. */
+  defaultService?: string;
 };
 
 export default function ContactSection({
   withDetails = false,
   intro = contactSection.intro,
+  defaultService,
 }: ContactSectionProps) {
   const { submit, pending, status } = useEnquiryForm();
 
@@ -79,6 +82,7 @@ export default function ContactSection({
                 idPrefix="contact"
                 pending={pending}
                 status={status}
+                defaultService={defaultService}
               />
             </form>
           </div>

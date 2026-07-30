@@ -19,12 +19,17 @@ import {
   projects,
   whyChoose,
 } from "@/content/site";
-import { ReviewSchema } from "@/components/JsonLd";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  description:
+    "Adelaide specialists in cladding, render, Hebel and complete walling installations. Over 10 years of experience across South Australia.",
+  path: "/",
+});
 
 export default function HomePage() {
   return (
     <>
-      <ReviewSchema />
       <Hero />
 
       <ServiceCards />

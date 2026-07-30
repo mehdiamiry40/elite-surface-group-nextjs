@@ -1,8 +1,10 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import EnquiryFields from "@/components/EnquiryFields";
 import { useDialog } from "@/components/useDialog";
 import { useEnquiryForm } from "@/components/useEnquiryForm";
+import { services } from "@/content/site";
 
 type QuoteDialogProps = {
   open: boolean;
@@ -12,6 +14,11 @@ type QuoteDialogProps = {
 export default function QuoteDialog({ open, onClose }: QuoteDialogProps) {
   const { submit, pending, status } = useEnquiryForm();
   const dialogRef = useDialog(open, onClose);
+  const pathname = usePathname();
+  const defaultService = services.find(
+    (service) =>
+      pathname === `/${service.slug}` || pathname === `/${service.slug}/`,
+  )?.name;
 
   return (
     <div
@@ -40,12 +47,13 @@ export default function QuoteDialog({ open, onClose }: QuoteDialogProps) {
           ×
         </button>
         <h2 id="quote-dialog-title">Get a Free Quote</h2>
-        <form className="form form--2col" onSubmit={submit} noValidate={false}>
+        <form className="form form--2col" onSubmit={submit}>
           <EnquiryFields
             idPrefix="quote"
             pending={pending}
             status={status}
             submitLabel="Send"
+            defaultService={defaultService}
           />
         </form>
       </div>

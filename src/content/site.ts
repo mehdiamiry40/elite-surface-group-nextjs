@@ -17,9 +17,13 @@ export const business = {
   siteUrl: "https://elitesurfacegroup.com.au",
   openingHours: "Mo-Sa 09:00-17:00",
   foundedYears: 10,
+  /**
+   * Public profile URLs. Leave empty until real pages exist — the footer only
+   * renders icons for URLs that are set.
+   */
   social: {
-    facebook: "https://www.facebook.com/",
-    instagram: "https://www.instagram.com/",
+    facebook: "",
+    instagram: "",
   },
 } as const;
 
@@ -447,8 +451,8 @@ export const contactSection = {
 } as const;
 
 export const ctaBand = {
-  title: "External Cladding Services in Adelaide",
-  body: "Every property is unique, which is why we work closely with you to recommend the ideal cladding solution for your home or business. Our team ensures a perfect fit, combining durability, style, and long-lasting performance.",
+  title: "Walling & surface finishes across Adelaide",
+  body: "Every property is unique. Tell us about your cladding, render, Hebel or walling project and we will recommend a solution that balances durability, style and long-term performance.",
   note: "Quick, easy, and obligation-free — start transforming your property today!",
   background: "/images/2150921011.webp",
 } as const;

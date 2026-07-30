@@ -37,6 +37,12 @@ export default function Hero() {
       aria-label="Introduction"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+          setPaused(false);
+        }
+      }}
     >
       {heroSlides.map((slide, index) => (
         <div
@@ -69,14 +75,13 @@ export default function Hero() {
       </div>
 
       {heroSlides.length > 1 ? (
-        <div className="hero__dots" role="tablist" aria-label="Choose slide">
+        <div className="hero__dots" role="group" aria-label="Choose slide">
           {heroSlides.map((slide, index) => (
             <button
               key={slide.image}
               type="button"
-              role="tab"
-              aria-current={index === active}
-              aria-label={`Slide ${index + 1} of ${heroSlides.length}`}
+              aria-pressed={index === active}
+              aria-label={`Show slide ${index + 1} of ${heroSlides.length}`}
               onClick={() => {
                 setActive(index);
                 setPaused(true);

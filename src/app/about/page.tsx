@@ -4,19 +4,19 @@ import Carousel from "@/components/Carousel";
 import PageBanner from "@/components/PageBanner";
 import { CtaBand, Testimonials, TickList } from "@/components/sections";
 import { aboutPage, bannerImages } from "@/content/site";
-import { BreadcrumbSchema, ReviewSchema } from "@/components/JsonLd";
+import { BreadcrumbSchema } from "@/components/JsonLd";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "About",
   description: aboutPage.metaDescription,
-  alternates: { canonical: "/about" },
-};
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (
     <>
       <BreadcrumbSchema trail={[{ label: "About", href: "/about" }]} />
-      <ReviewSchema />
       <PageBanner
         title={aboutPage.bannerTitle}
         image={bannerImages["/about"]}

@@ -6,9 +6,36 @@ const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 /**
- * Modal plumbing shared by the quote dialog and the project lightbox: locks
- * body scroll, closes on Escape, keeps Tab inside the dialog, and restores
- * focus to whatever opened it.
+ * Nested overlays (mobile drawer + quote dialog) both need body scroll lock.
+ * A simple counter keeps the class on until the last overlay closes.
+ */
+let scrollLocks = 0;
+
+function lockScroll() {
+  scrollLocks += 1;
+  document.body.classList.add("is-locked");
+}
+
+function unlockScroll() {
+  scrollLocks = Math.max(0, scrollLocks - 1);
+  if (scrollLocks === 0) {
+    document.body.classList.remove("is-locked");
+  }
+}
+
+function anotherModalIsOpen(except: HTMLElement | null) {
+  return [...document.querySelectorAll<HTMLElement>('[aria-modal="true"]')].some(
+    (element) =>
+      element !== except &&
+      !element.hasAttribute("hidden") &&
+      element.getClientRects().length > 0,
+  );
+}
+
+/**
+ * Modal plumbing shared by the quote dialog, mobile drawer and project
+ * lightbox: locks body scroll, closes on Escape, keeps Tab inside the dialog,
+ * and restores focus to whatever opened it.
  */
 export function useDialog(
   open: boolean,
@@ -28,7 +55,7 @@ export function useDialog(
       restoreRef.current = document.activeElement;
     }
 
-    document.body.classList.add("is-locked");
+    lockScroll();
 
     const frame = window.requestAnimationFrame(() => {
       const dialog = dialogRef.current;
@@ -65,7 +92,12 @@ export function useDialog(
 
       const focusable = Array.from(
         dialog.querySelectorAll<HTMLElement>(FOCUSABLE),
-      ).filter((element) => element.offsetParent !== null);
+      ).filter((element) => {
+        if (element.closest("[hidden]")) {
+          return false;
+        }
+        return element.getClientRects().length > 0;
+      });
 
       if (!focusable.length) {
         event.preventDefault();
@@ -85,12 +117,17 @@ export function useDialog(
     };
 
     document.addEventListener("keydown", onKeyDown);
+    const dialogNode = dialogRef.current;
 
     return () => {
       window.cancelAnimationFrame(frame);
       document.removeEventListener("keydown", onKeyDown);
-      document.body.classList.remove("is-locked");
-      restoreRef.current?.focus();
+      unlockScroll();
+      // Another overlay (quote dialog) may have opened while this one closed —
+      // leave focus alone so it can take over.
+      if (!anotherModalIsOpen(dialogNode)) {
+        restoreRef.current?.focus();
+      }
     };
   }, [open, onClose, onArrow]);
 
