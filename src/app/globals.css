@@ -1201,6 +1201,11 @@ h3 {
   color: #8a2c17;
 }
 
+.form__status[data-state="warning"] {
+  background: #fff6e5;
+  color: #8a5a00;
+}
+
 .form__submit {
   grid-column: 1 / -1;
   justify-self: start;
@@ -1336,7 +1341,8 @@ h3 {
 }
 
 .footer a:hover {
-  color: var(--orange-ink);
+  /* White on --ink clears AA; orange-ink on the dark footer does not (3.58:1). */
+  color: var(--white);
   text-decoration: none;
 }
 

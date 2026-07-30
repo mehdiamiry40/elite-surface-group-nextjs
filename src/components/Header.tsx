@@ -3,8 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useId, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import QuoteButton from "@/components/QuoteButton";
+import { useDialog } from "@/components/useDialog";
 import { ChevronDownIcon, PhoneIcon } from "@/components/icons";
 import { business, mainNav } from "@/content/site";
 
@@ -13,19 +14,17 @@ export default function Header() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [openGroup, setOpenGroup] = useState<string | null>(null);
   const drawerId = useId();
+  const submenuId = useId();
+  const navGroupRef = useRef<HTMLDivElement>(null);
+  const burgerRef = useRef<HTMLButtonElement>(null);
+  const closeDrawer = useCallback(() => setDrawerOpen(false), []);
+  const drawerRef = useDialog(drawerOpen, closeDrawer);
 
   useEffect(() => {
     if (!drawerOpen) {
       return;
     }
 
-    document.body.classList.add("is-locked");
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setDrawerOpen(false);
-      }
-    };
     const query = window.matchMedia("(min-width: 1025px)");
     const onChange = () => {
       if (query.matches) {
@@ -33,20 +32,42 @@ export default function Header() {
       }
     };
 
-    document.addEventListener("keydown", onKeyDown);
     query.addEventListener("change", onChange);
-
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      query.removeEventListener("change", onChange);
-      document.body.classList.remove("is-locked");
-    };
+    return () => query.removeEventListener("change", onChange);
   }, [drawerOpen]);
+
+  useEffect(() => {
+    if (!openGroup) {
+      return;
+    }
+
+    const onPointerDown = (event: PointerEvent) => {
+      if (
+        navGroupRef.current &&
+        event.target instanceof Node &&
+        !navGroupRef.current.contains(event.target)
+      ) {
+        setOpenGroup(null);
+      }
+    };
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpenGroup(null);
+        burgerRef.current?.focus();
+      }
+    };
+
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [openGroup]);
 
   const isCurrent = (href: string) =>
     pathname === href || pathname === `${href}/`;
-
-  const closeDrawer = () => setDrawerOpen(false);
 
   return (
     <header className="header">
@@ -69,12 +90,15 @@ export default function Header() {
               <div
                 key={item.href}
                 className="nav__group"
+                ref={navGroupRef}
                 onMouseLeave={() => setOpenGroup(null)}
               >
                 <button
                   className="nav__toggle"
                   type="button"
                   aria-expanded={openGroup === item.href}
+                  aria-haspopup="menu"
+                  aria-controls={submenuId}
                   onClick={() =>
                     setOpenGroup((current) =>
                       current === item.href ? null : item.href,
@@ -85,12 +109,16 @@ export default function Header() {
                   <ChevronDownIcon className="nav__chevron" />
                 </button>
                 <div
+                  id={submenuId}
                   className="nav__submenu"
+                  role="menu"
                   data-open={openGroup === item.href}
                 >
                   <Link
                     href={item.href}
+                    role="menuitem"
                     aria-current={isCurrent(item.href) ? "page" : undefined}
+                    onClick={() => setOpenGroup(null)}
                   >
                     All {item.label}
                   </Link>
@@ -98,7 +126,9 @@ export default function Header() {
                     <Link
                       key={child.href}
                       href={child.href}
+                      role="menuitem"
                       aria-current={isCurrent(child.href) ? "page" : undefined}
+                      onClick={() => setOpenGroup(null)}
                     >
                       {child.label}
                     </Link>
@@ -138,6 +168,7 @@ export default function Header() {
         </a>
 
         <button
+          ref={burgerRef}
           className="burger"
           type="button"
           aria-expanded={drawerOpen}
@@ -158,7 +189,15 @@ export default function Header() {
         onClick={() => setDrawerOpen(false)}
       />
 
-      <div id={drawerId} className="drawer" hidden={!drawerOpen}>
+      <div
+        ref={drawerRef}
+        id={drawerId}
+        className="drawer"
+        hidden={!drawerOpen}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site menu"
+      >
         <button
           className="drawer__close"
           type="button"
@@ -201,7 +240,7 @@ export default function Header() {
             <PhoneIcon />
             {business.phoneDisplay}
           </a>
-          <QuoteButton />
+          <QuoteButton onBeforeOpen={closeDrawer} />
         </div>
       </div>
     </header>

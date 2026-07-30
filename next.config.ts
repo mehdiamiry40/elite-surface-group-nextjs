@@ -82,12 +82,14 @@ const nextConfig: NextConfig = {
     return [
       { source: "/:path*", headers: securityHeaders },
       {
-        // Content-addressed by filename; safe to cache hard.
+        // Filenames are semantic (cladding.webp), not content-hashed, so a
+        // year-long immutable cache would strand browsers on replaced assets.
+        // One week is long enough for CDN benefit and short enough to refresh.
         source: "/images/:path*",
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
+            value: "public, max-age=604800, stale-while-revalidate=86400",
           },
         ],
       },

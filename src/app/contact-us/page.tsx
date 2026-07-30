@@ -4,12 +4,13 @@ import PageBanner from "@/components/PageBanner";
 import { CtaBand } from "@/components/sections";
 import { bannerImages, contactPage } from "@/content/site";
 import { BreadcrumbSchema } from "@/components/JsonLd";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Contact Us",
   description: contactPage.metaDescription,
-  alternates: { canonical: "/contact-us" },
-};
+  path: "/contact-us",
+});
 
 export default function ContactPage() {
   return (

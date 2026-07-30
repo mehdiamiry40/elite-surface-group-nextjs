@@ -5,12 +5,13 @@ import { CtaBand } from "@/components/sections";
 import { termsOfService } from "@/content/legal";
 import { bannerImages, business } from "@/content/site";
 import { BreadcrumbSchema } from "@/components/JsonLd";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Terms of Service",
   description: `The terms and conditions that apply when you browse and use the ${business.name} website.`,
-  alternates: { canonical: "/terms-of-service" },
-};
+  path: "/terms-of-service",
+});
 
 export default function TermsOfServicePage() {
   return (

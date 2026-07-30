@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
-import { business } from "@/content/site";
+import { business, services } from "@/content/site";
 
 export const runtime = "nodejs";
 
@@ -17,6 +17,7 @@ const MAX = {
 const MAX_BODY_BYTES = 16_384;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX = 6;
+const ALLOWED_SERVICES = new Set(services.map((service) => service.name));
 
 /**
  * Best-effort, per-instance throttle.
@@ -25,7 +26,7 @@ const RATE_LIMIT_MAX = 6;
  * concurrent instance keeps its own map, so the effective ceiling is
  * `RATE_LIMIT_MAX × instances` and it resets on cold start. It exists to blunt
  * naive repeat submissions. For a hard limit, move this to a shared store
- * (Vercel KV / Upstash) — see docs/MIGRATION-AUDIT.md.
+ * (Vercel KV / Upstash) — see docs/FULL-SCALE-AUDIT.md.
  */
 const RATE_LIMIT_MAX_KEYS = 5_000;
 const requestBuckets = new Map<string, number[]>();
@@ -41,6 +42,23 @@ function evictStaleBuckets(now: number) {
     } else {
       requestBuckets.delete(key);
     }
+  }
+}
+
+/** Hard-caps the map when every remaining key is still inside the window. */
+function enforceKeyCap() {
+  if (requestBuckets.size < RATE_LIMIT_MAX_KEYS) {
+    return;
+  }
+
+  const target = Math.floor(RATE_LIMIT_MAX_KEYS / 2);
+  let removed = 0;
+  for (const key of requestBuckets.keys()) {
+    if (requestBuckets.size - removed <= target) {
+      break;
+    }
+    requestBuckets.delete(key);
+    removed += 1;
   }
 }
 
@@ -83,12 +101,26 @@ function originIsAllowed(request: NextRequest) {
   }
 }
 
+/**
+ * Prefer platform-provided client IP over the first X-Forwarded-For hop, which
+ * a client can spoof.
+ */
 function clientKey(request: NextRequest) {
-  return (
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    request.headers.get("x-real-ip") ||
-    "unknown"
-  );
+  const realIp = request.headers.get("x-real-ip")?.trim();
+  if (realIp) {
+    return realIp;
+  }
+
+  const vercelForwarded = request.headers.get("x-vercel-forwarded-for");
+  if (vercelForwarded) {
+    const parts = vercelForwarded.split(",").map((part) => part.trim());
+    const last = parts[parts.length - 1];
+    if (last) {
+      return last;
+    }
+  }
+
+  return "unknown";
 }
 
 function rateLimit(request: NextRequest) {
@@ -97,6 +129,7 @@ function rateLimit(request: NextRequest) {
 
   if (requestBuckets.size >= RATE_LIMIT_MAX_KEYS) {
     evictStaleBuckets(now);
+    enforceKeyCap();
   }
 
   const active = (requestBuckets.get(key) ?? []).filter(
@@ -192,9 +225,26 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  let rawBody: string;
+  try {
+    rawBody = await request.text();
+  } catch {
+    return NextResponse.json(
+      { message: "Please check the form and try again." },
+      { status: 400 },
+    );
+  }
+
+  if (rawBody.length > MAX_BODY_BYTES) {
+    return NextResponse.json(
+      { message: "The form submission is too large." },
+      { status: 413 },
+    );
+  }
+
   let body: Record<string, unknown>;
   try {
-    const parsed: unknown = await request.json();
+    const parsed: unknown = JSON.parse(rawBody);
     if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
       throw new TypeError("Expected an object");
     }
@@ -245,22 +295,29 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  if (service && !ALLOWED_SERVICES.has(service)) {
+    return NextResponse.json(
+      { message: "Please choose a valid service." },
+      { status: 400 },
+    );
+  }
+
   const resendKey = process.env.RESEND_API_KEY;
   const from = process.env.CONTACT_FROM_EMAIL;
   const to = process.env.CONTACT_TO_EMAIL;
 
   if (!resendKey || !from || !to) {
     // Loud on purpose: without these variables no enquiry is ever delivered,
-    // and the visitor-side mailto fallback is invisible to the site owner.
+    // and the visitor-side mailto fallback is easy to miss on mobile.
     console.error(
       "[contact] Enquiry NOT delivered — RESEND_API_KEY, CONTACT_FROM_EMAIL or " +
         "CONTACT_TO_EMAIL is unset. Falling back to the visitor's mail client.",
-      { from: email, page: sourcePath || "unknown" },
+      { page: sourcePath || "unknown" },
     );
     return NextResponse.json(
       {
         message:
-          "Your email app has been opened so you can send the enquiry directly.",
+          "Email delivery is unavailable right now. You can call us on 0413 844 912, or continue in your email app.",
         mailto: mailtoUrl({ name, email, phone, service, message }),
       },
       { status: 503 },
@@ -299,11 +356,15 @@ export async function POST(request: NextRequest) {
         <p>${escapeHtml(message).replaceAll("\n", "<br />")}</p>
       `,
     });
-  } catch {
+  } catch (error) {
+    console.error("[contact] Resend threw while sending an enquiry.", {
+      page: sourcePath || "unknown",
+      error: error instanceof Error ? error.message : "unknown",
+    });
     return NextResponse.json(
       {
         message:
-          "Email delivery is unavailable. Your email app has been opened instead.",
+          "Email delivery is unavailable right now. You can call us on 0413 844 912, or continue in your email app.",
         mailto: mailtoUrl({ name, email, phone, service, message }),
       },
       { status: 502 },
@@ -311,10 +372,14 @@ export async function POST(request: NextRequest) {
   }
 
   if (result.error) {
+    console.error("[contact] Resend returned an error.", {
+      page: sourcePath || "unknown",
+      error: result.error,
+    });
     return NextResponse.json(
       {
         message:
-          "Email delivery is unavailable. Your email app has been opened instead.",
+          "Email delivery is unavailable right now. You can call us on 0413 844 912, or continue in your email app.",
         mailto: mailtoUrl({ name, email, phone, service, message }),
       },
       { status: 502 },

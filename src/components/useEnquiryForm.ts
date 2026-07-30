@@ -4,7 +4,7 @@ import { useCallback, useState, type FormEvent } from "react";
 import { services } from "@/content/site";
 
 export type EnquiryStatus = {
-  state: "success" | "error";
+  state: "success" | "error" | "warning";
   message: string;
 } | null;
 
@@ -55,12 +55,14 @@ export function useEnquiryForm() {
 
       if (!response.ok) {
         if (payload.mailto) {
+          // Mailto is a last resort, not a successful delivery. Warn clearly and
+          // keep the form values so the visitor can call or retry.
           window.location.href = payload.mailto;
           setStatus({
-            state: "success",
+            state: "warning",
             message:
               payload.message ??
-              "Your email app has been opened so you can send the enquiry.",
+              "Email delivery is unavailable. Please call 0413 844 912, or send the message from your email app.",
           });
           return;
         }

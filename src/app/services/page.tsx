@@ -2,19 +2,19 @@ import type { Metadata } from "next";
 import PageBanner from "@/components/PageBanner";
 import { CtaBand, ServiceCards, Testimonials } from "@/components/sections";
 import { bannerImages, servicesPage } from "@/content/site";
-import { BreadcrumbSchema, ReviewSchema } from "@/components/JsonLd";
+import { BreadcrumbSchema } from "@/components/JsonLd";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Services",
   description: servicesPage.metaDescription,
-  alternates: { canonical: "/services" },
-};
+  path: "/services",
+});
 
 export default function ServicesPage() {
   return (
     <>
       <BreadcrumbSchema trail={[{ label: "Services", href: "/services" }]} />
-      <ReviewSchema />
       <PageBanner
         title={servicesPage.bannerTitle}
         image={bannerImages["/services"]}

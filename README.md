@@ -69,19 +69,20 @@ npm run lint        # eslint
 npm run build       # production build (runs the env check first)
 npm run check       # all three
 
-npm run start &     # smoke needs a live server
-npm run smoke       # 175 checks
+npm run start &     # smoke / a11y need a live server
+npm run smoke       # route, SEO, header and contact checks
+npm run a11y        # axe-core across 11 routes at desktop and mobile
 ```
 
 The smoke suite asserts what is easy to regress: every route returns 200, each
-page has exactly one `<h1>`, a meta description and a canonical link, every
-`tel:` link is the correct number, no page references `wp-content` or a
+page has exactly one `<h1>`, a meta description, canonical and Open Graph tags,
+every `tel:` link is the correct number, no page references `wp-content` or a
 third-party font, every image declares `alt`, security headers are present,
-images are immutably cached and served as `image/webp`, retired WordPress URLs
-still redirect, no orphaned images ship, and the contact endpoint rejects bad
-input without redirecting.
+images are cached and served as `image/webp`, retired WordPress URLs still
+redirect, no orphaned images ship, and the contact endpoint rejects bad input
+without redirecting.
 
-Point it at a deployment with `SMOKE_BASE_URL=https://… npm run smoke`.
+Point either suite at a deployment with `SMOKE_BASE_URL=https://…`.
 
 ## Audits
 
@@ -90,10 +91,13 @@ Point it at a deployment with `SMOKE_BASE_URL=https://… npm run smoke`.
 | [`docs/FULL-SCALE-AUDIT.md`](docs/FULL-SCALE-AUDIT.md) | Current post-launch audit of the live component rebuild |
 | [`docs/MIGRATION-AUDIT.md`](docs/MIGRATION-AUDIT.md) | Historical audit of the first WordPress-mirror pass and what the rebuild resolved |
 
-Two things were deliberately left alone and still need a human decision:
+Open items that still need a human decision outside the codebase:
 
-- **The legal pages cite UK law** (Data Protection Act 1998; "the laws of
-  England, Northern Ireland, Scotland and Wales") on an Australian business.
-  Preserved verbatim — rewriting legal text is not a developer's call.
-- **Social links point at Facebook and Instagram home pages**, not real
-  profiles; that is what the WordPress site linked to.
+- **Resend delivery** — set `RESEND_API_KEY`, `CONTACT_FROM_EMAIL` and
+  `CONTACT_TO_EMAIL` in Vercel, confirm `POST /api/contact/` returns 200, then
+  set `REQUIRE_CONTACT_DELIVERY=1`.
+- **Social profiles** — add real Facebook / Instagram URLs to `business.social`
+  in `src/content/site.ts` when they exist (icons stay hidden while empty).
+- **Legal review** — privacy and terms are now Australian-oriented and match
+  the live site, but a qualified review is still wise before relying on them
+  for anything beyond ordinary website enquiries.

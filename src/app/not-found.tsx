@@ -1,6 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { PhoneIcon } from "@/components/icons";
 import { business, mainNav } from "@/content/site";
+
+export const metadata: Metadata = {
+  title: "Page not found",
+  description:
+    "The page you requested does not exist or has moved. Browse Elite Surface Group services or call us for help.",
+  robots: { index: false, follow: false },
+};
 
 export default function NotFound() {
   return (
@@ -24,7 +32,7 @@ export default function NotFound() {
             </a>
           </p>
           <nav aria-label="Site sections" style={{ marginTop: 34 }}>
-            <ul style={{ display: "flex", flexWrap: "wrap", gap: 20, justifyContent: "center" }}>
+            <ul style={{ display: "flex", flexWrap: "wrap", gap: 20, listStyle: "none" }}>
               {mainNav.map((item) => (
                 <li key={item.href}>
                   <Link href={item.href}>{item.label}</Link>

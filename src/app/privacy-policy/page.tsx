@@ -5,12 +5,13 @@ import { CtaBand } from "@/components/sections";
 import { privacyPolicy } from "@/content/legal";
 import { bannerImages, business } from "@/content/site";
 import { BreadcrumbSchema } from "@/components/JsonLd";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Privacy Policy",
   description: `How ${business.name} collects, uses and protects the personal information you provide through this website.`,
-  alternates: { canonical: "/privacy-policy" },
-};
+  path: "/privacy-policy",
+});
 
 export default function PrivacyPolicyPage() {
   return (

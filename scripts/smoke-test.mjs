@@ -119,9 +119,13 @@ check(
   !/sample-page|hello-world|uncategorized|author/.test(sitemapXml),
 );
 check(
-  "sitemap lists every route",
+  "sitemap lists every route with trailing slashes",
   ROUTES.every((route) =>
-    sitemapXml.includes(route === "/" ? "elitesurfacegroup.com.au/" : route.replace(/\/$/, "")),
+    sitemapXml.includes(
+      route === "/"
+        ? "<loc>https://elitesurfacegroup.com.au/</loc>"
+        : `<loc>https://elitesurfacegroup.com.au${route}</loc>`,
+    ),
   ),
 );
 
@@ -139,6 +143,25 @@ for (const [route, html] of pages) {
   check(
     `${route} has a canonical link`,
     /<link rel="canonical"/.test(html),
+  );
+
+  check(
+    `${route} has an Open Graph image`,
+    /property="og:image"/.test(html),
+  );
+
+  check(
+    `${route} og:url matches the page`,
+    html.includes(
+      `property="og:url" content="https://elitesurfacegroup.com.au${
+        route === "/" ? "/" : route
+      }"`,
+    ) ||
+      html.includes(
+        `property="og:url" content="http://localhost:3000${
+          route === "/" ? "/" : route
+        }"`,
+      ),
   );
 
   // Every tel: link must be the single E.164 number — no placeholders.
@@ -197,8 +220,9 @@ check(
   `status ${assetResponse.status}`,
 );
 check(
-  "images are immutably cached",
-  /max-age=31536000/.test(assetResponse.headers.get("cache-control") ?? ""),
+  "images are cached without immutable year-long headers",
+  /max-age=604800/.test(assetResponse.headers.get("cache-control") ?? "") &&
+    !/immutable/.test(assetResponse.headers.get("cache-control") ?? ""),
   assetResponse.headers.get("cache-control") ?? "",
 );
 check(
@@ -276,6 +300,25 @@ for (const [name, expected, init] of contactChecks) {
   check(`contact endpoint ${name}`, response.status === expected, `status ${response.status}`);
 }
 
+const invalidService = await get("/api/contact/", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    Origin: baseUrl.origin,
+  },
+  body: JSON.stringify({
+    name: "Smoke Tester",
+    email: "smoke@example.com",
+    service: "Not A Real Service",
+    message: "Please ignore — smoke suite service allowlist check.",
+  }),
+});
+check(
+  "contact endpoint rejects an unknown service",
+  invalidService.status === 400,
+  `status ${invalidService.status}`,
+);
+
 // The client posts to the trailing-slash form; it must not redirect.
 const noRedirect = await get("/api/contact/", {
   method: "POST",
@@ -287,6 +330,44 @@ check(
   "contact endpoint does not redirect",
   ![307, 308].includes(noRedirect.status),
   `status ${noRedirect.status}`,
+);
+
+/* ------------------------------------------- content / compliance guards */
+
+const privacyHtml = pages.get("/privacy-policy/") ?? "";
+const termsHtml = pages.get("/terms-of-service/") ?? "";
+check(
+  "privacy policy cites Australian Privacy Principles",
+  /Australian Privacy Principles|Privacy Act 1988/.test(privacyHtml),
+);
+check(
+  "legal pages do not cite UK Data Protection Act 1998",
+  !/Data Protection Act 1998/.test(privacyHtml + termsHtml),
+);
+check(
+  "legal pages do not claim Google Analytics",
+  !/Google Analytics/.test(privacyHtml + termsHtml),
+);
+check(
+  "terms are governed by South Australian / Australian law",
+  /South Australia/.test(termsHtml) && /Australian Consumer Law/.test(termsHtml),
+);
+
+const homeHtml = pages.get("/") ?? "";
+check(
+  "footer has no placeholder Facebook/Instagram home links",
+  !/href="https:\/\/www\.facebook\.com\/?"/.test(homeHtml) &&
+    !/href="https:\/\/www\.instagram\.com\/?"/.test(homeHtml),
+);
+check(
+  "pages do not publish self-served AggregateRating schema",
+  ![...pages.values()].some((html) => /AggregateRating/.test(html)),
+);
+check(
+  "CTA band is not cladding-only",
+  !/External Cladding Services in Adelaide/.test(
+    [...pages.values()].join(""),
+  ),
 );
 
 /* ------------------------------------------------------------------ report */

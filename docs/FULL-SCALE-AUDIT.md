@@ -393,34 +393,44 @@ is needed.
 
 ---
 
-## Prioritised plan
+## Resolution
 
-**Today — lead path**
+Code fixes for findings #2–#23 landed after this audit. **#1 (Resend env vars /
+`REQUIRE_CONTACT_DELIVERY`) is intentionally left to the site owner** — it is
+configuration on Vercel, not an application change.
 
-1. Configure Resend env vars on Vercel; confirm `POST /api/contact/` → `200` (#1)
-2. Set `REQUIRE_CONTACT_DELIVERY=1` in Production (#1)
-3. Change the mailto fallback UX from success → warning/error (#4)
-4. Log Resend failures without raw visitor email (#4, #11)
+| # | Finding | Status |
+| --- | --- | --- |
+| 1 | Contact form cannot deliver email in production | **Open** — set Resend env vars + `REQUIRE_CONTACT_DELIVERY=1` |
+| 2 | Legal pages cite UK law | **Fixed** — Australian Privacy Principles / SA + ACL terms |
+| 3 | Analytics / cookie / consent claims | **Fixed** — legal copy matches the no-analytics site |
+| 4 | Mailto fallback looks like success | **Fixed** — warning state + call CTA; form values retained |
+| 5 | Placeholder social links | **Fixed** — empty `business.social`; footer icons hidden |
+| 6 | Rate limiter best-effort | **Partly fixed** — platform IP, hard key cap; shared store still backlog |
+| 7 | Body-size trusts Content-Length | **Fixed** — raw body length checked after read |
+| 8 | Free-form `service` / always Cladding | **Fixed** — allowlist + service-page / quote prefill |
+| 9 | CTA always sells cladding | **Fixed** — generic walling CTA copy |
+| 10 | Missing OG image / sticky `og:url` | **Fixed** — `pageMetadata()` + default banner image |
+| 11 | Logs include visitor email | **Fixed** — page only; Resend errors logged without address |
+| 12 | Immutable year-long image cache | **Fixed** — `max-age=604800` without `immutable` |
+| 13 | Sitemap / JSON-LD slash mismatch | **Fixed** — trailing slashes via `absoluteUrl()` |
+| 14 | Self-served 5★ review schema | **Fixed** — AggregateRating JSON-LD removed |
+| 15 | Incomplete hero tabs pattern | **Fixed** — plain pressed buttons; pause on focus |
+| 16 | Mobile drawer not modal | **Fixed** — dialog + focus trap; quote closes drawer cleanly |
+| 17 | Services submenu semantics | **Fixed** — `aria-haspopup`, menu roles, Escape / outside click |
+| 18 | Footer hover contrast | **Fixed** — white hover on dark footer |
+| 19 | 404 metadata | **Fixed** — dedicated title + `noindex` |
+| 20 | Org schema locality | **Fixed** — `addressLocality: Adelaide` (no invented street) |
+| 21 | ESLint toolchain advisories | **Accepted** — still in ESLint/`minimatch` only; forcing `brace-expansion@5` breaks lint. Not in the production bundle |
+| 22 | Stale migration-audit row | **Fixed** — in the audit PR |
+| 23 | No a11y regression suite | **Fixed** — `npm run a11y` (Playwright + axe-core) |
 
-**This week — compliance & trust**
+### Still open
 
-5. Commission Australian privacy + terms replacements (#2)
-6. Remove or rewrite Analytics/cookie/consent claims to match the product (#3)
-7. Fix or remove Facebook/Instagram hrefs (#5)
-
-**Next**
-
-8. Prefill service on service pages; allowlist `service` in the API (#8)
-9. Generic or route-aware CTA band copy (#9)
-10. OG image + per-page `og:url` (#10)
-11. Trailing slashes in sitemap + JSON-LD (#13)
-12. Body-size check after read; shared rate-limit store (#7, #6)
-13. Fingerprint or soften image cache policy (#12)
-14. Revisit self-served review schema (#14)
-15. Footer hover contrast; hero tabs; drawer focus trap (#18, #15, #16)
-16. Explicit 404 metadata (#19)
-17. Correct stale row in `MIGRATION-AUDIT.md` (#22)
-18. Playwright + axe in CI (#23)
+1. Configure Resend on Vercel and set `REQUIRE_CONTACT_DELIVERY=1` (#1)
+2. Optional: shared rate-limit store (Upstash / Vercel KV) for a hard ceiling (#6)
+3. Optional: qualified legal review of the new AU privacy/terms (#2)
+4. Optional: real Facebook / Instagram profile URLs in `business.social` (#5)
 
 ---
 
@@ -432,6 +442,7 @@ npm run check
 
 npm run start &
 npm run smoke
+npm run a11y
 
 # Against production
 SMOKE_BASE_URL=https://elitesurfacegroup.com.au npm run smoke

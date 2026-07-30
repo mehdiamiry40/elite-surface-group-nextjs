@@ -8,6 +8,8 @@ type EnquiryFieldsProps = {
   pending: boolean;
   status: EnquiryStatus;
   submitLabel?: string;
+  /** Prefills the service select (e.g. on a service page). */
+  defaultService?: string;
 };
 
 /**
@@ -21,8 +23,13 @@ export default function EnquiryFields({
   pending,
   status,
   submitLabel = "Send enquiry",
+  defaultService,
 }: EnquiryFieldsProps) {
   const id = (name: string) => `${idPrefix}-${name}`;
+  const selected =
+    defaultService && serviceOptions.includes(defaultService)
+      ? defaultService
+      : serviceOptions[0];
 
   return (
     <>
@@ -72,7 +79,7 @@ export default function EnquiryFields({
 
       <div className="field field--full">
         <label htmlFor={id("service")}>Service needed</label>
-        <select id={id("service")} name="service" defaultValue={serviceOptions[0]}>
+        <select id={id("service")} name="service" defaultValue={selected}>
           {serviceOptions.map((option) => (
             <option key={option} value={option}>
               {option}
@@ -104,7 +111,11 @@ export default function EnquiryFields({
       </div>
 
       {status ? (
-        <p className="form__status" data-state={status.state} role="status">
+        <p
+          className="form__status"
+          data-state={status.state}
+          role={status.state === "error" ? "alert" : "status"}
+        >
           {status.message}
         </p>
       ) : null}
