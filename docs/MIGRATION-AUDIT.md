@@ -410,7 +410,7 @@ four WordPress starter routes were dropped.
 | --- | --- | --- |
 | — | HTML mirror architecture | **Fixed** — real components, content in typed modules |
 | 1 | Placeholder `tel:` links | **Fixed** — one `business.phone` constant; smoke test enforces it |
-| 2 | Contact form silently sends nothing | **Fixed** — `prebuild` fails production builds without Resend vars; the fallback path now logs an error |
+| 2 | Contact form silently sends nothing | **Partly fixed** — `prebuild` warns when Resend vars are missing; set `REQUIRE_CONTACT_DELIVERY=1` to fail the build. The fallback path logs an error. See `docs/FULL-SCALE-AUDIT.md` #1 for the live-site status. |
 | 3 | WordPress starter pages indexable | **Fixed** — routes deleted, 301 to `/`, out of the sitemap |
 | 4 | No security headers | **Fixed** — CSP, nosniff, Referrer-Policy, X-Frame-Options, HSTS, Permissions-Policy |
 | 5 | 308 redirect on every form post | **Fixed** — client posts to `/api/contact/` |
@@ -449,9 +449,14 @@ banner and the closing CTA. It now has both.
 
 ### Still open
 
+- **#2 / contact delivery.** Build-time enforcement is opt-in via
+  `REQUIRE_CONTACT_DELIVERY=1`. Confirm the three Resend vars are set in
+  Production before treating the form as live.
 - **#10 — hard rate limiting.** The throttle is per-instance by design. A real
   limit needs Vercel KV or Upstash.
 - **The legal pages cite UK law** (Data Protection Act 1998; "the laws of
   England, Northern Ireland, Scotland and Wales") on a South Australian
   business. The text is preserved verbatim and needs review by someone
   qualified — rewriting it is not a developer's call.
+
+For the current production posture, see [`FULL-SCALE-AUDIT.md`](./FULL-SCALE-AUDIT.md).

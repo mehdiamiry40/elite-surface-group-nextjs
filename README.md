@@ -83,10 +83,12 @@ input without redirecting.
 
 Point it at a deployment with `SMOKE_BASE_URL=https://… npm run smoke`.
 
-## Migration notes
+## Audits
 
-This replaced a WordPress/Elementor site. `docs/MIGRATION-AUDIT.md` records the
-audit of the first migration pass and which findings this rebuild resolved.
+| Document | Covers |
+| --- | --- |
+| [`docs/FULL-SCALE-AUDIT.md`](docs/FULL-SCALE-AUDIT.md) | Current post-launch audit of the live component rebuild |
+| [`docs/MIGRATION-AUDIT.md`](docs/MIGRATION-AUDIT.md) | Historical audit of the first WordPress-mirror pass and what the rebuild resolved |
 
 Two things were deliberately left alone and still need a human decision:
 
