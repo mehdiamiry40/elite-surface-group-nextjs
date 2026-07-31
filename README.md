@@ -52,14 +52,13 @@ Enquiries are emailed through [Resend](https://resend.com). Copy
 
 Set the same three in the Vercel project settings.
 
-**Without them nothing is delivered.** The endpoint answers 503 and falls back
-to opening the visitor's mail client, which silently loses the enquiry for
-anyone without a configured mail app, and logs an error server-side for each one.
+**Without them nothing is delivered.** The endpoint answers 503 and gives the
+visitor explicit call and email links without discarding the form contents.
 
-`npm run prebuild` warns loudly about this but does not block the build — a
-rotated Resend key should not make the whole site undeployable. Once the site is
-serving real traffic, set `REQUIRE_CONTACT_DELIVERY=1` in Vercel to turn that
-warning into a hard failure.
+`npm run prebuild` warns during local development and fails Vercel Production
+builds when delivery is unconfigured. `REQUIRE_CONTACT_DELIVERY=1` applies the
+same rule in another environment. `ALLOW_UNCONFIGURED_CONTACT=1` is an
+emergency-only override.
 
 ## Checks
 
@@ -71,16 +70,16 @@ npm run check       # all three
 
 npm run start &     # smoke / a11y need a live server
 npm run smoke       # route, SEO, header and contact checks
-npm run a11y        # axe-core across 11 routes at desktop and mobile
+npm run a11y        # axe-core across routes and interactive UI states
 ```
 
 The smoke suite asserts what is easy to regress: every route returns 200, each
 page has exactly one `<h1>`, a meta description, canonical and Open Graph tags,
 every `tel:` link is the correct number, no page references `wp-content` or a
 third-party font, every image declares `alt`, security headers are present,
-images are cached and served as `image/webp`, retired WordPress URLs still
-redirect, no orphaned images ship, and the contact endpoint rejects bad input
-without redirecting.
+images are cached and served as `image/webp`, retired WordPress junk returns
+404, no orphaned images ship, and both JavaScript and progressive form paths
+reject bad input safely.
 
 Point either suite at a deployment with `SMOKE_BASE_URL=https://…`.
 
@@ -95,10 +94,12 @@ Point either suite at a deployment with `SMOKE_BASE_URL=https://…`.
 Open items that still need a human decision outside the codebase:
 
 - **Resend delivery** — set `RESEND_API_KEY`, `CONTACT_FROM_EMAIL` and
-  `CONTACT_TO_EMAIL` in Vercel, confirm `POST /api/contact/` returns 200, then
-  set `REQUIRE_CONTACT_DELIVERY=1`.
+  `CONTACT_TO_EMAIL` in Vercel, then confirm provider acceptance and mailbox
+  receipt.
 - **Social profiles** — add real Facebook / Instagram URLs to `business.social`
   in `src/content/site.ts` when they exist (icons stay hidden while empty).
 - **Legal review** — privacy and terms are now Australian-oriented and match
   the live site, but a qualified review is still wise before relying on them
   for anything beyond ordinary website enquiries.
+- **Business identity** — publish verified ABN, contractor licence, insurance
+  and warranty details before restoring any stronger claims or testimonials.

@@ -410,14 +410,14 @@ four WordPress starter routes were dropped.
 | --- | --- | --- |
 | — | HTML mirror architecture | **Fixed** — real components, content in typed modules |
 | 1 | Placeholder `tel:` links | **Fixed** — one `business.phone` constant; smoke test enforces it |
-| 2 | Contact form silently sends nothing | **Partly fixed** — `prebuild` warns when Resend vars are missing; set `REQUIRE_CONTACT_DELIVERY=1` to fail the build. The fallback path logs an error. See `docs/FULL-SCALE-AUDIT.md` #1 for the live-site status. |
-| 3 | WordPress starter pages indexable | **Fixed** — routes deleted, 301 to `/`, out of the sitemap |
+| 2 | Contact form silently sends nothing | **Fixed in code** — Vercel Production builds fail when delivery vars are missing; runtime failure shows explicit call/email options and retains form data. Valid credentials and mailbox receipt still require owner verification. |
+| 3 | WordPress starter pages indexable | **Fixed** — routes deleted, return 404, and are excluded from the sitemap |
 | 4 | No security headers | **Fixed** — CSP, nosniff, Referrer-Policy, X-Frame-Options, HSTS, Permissions-Policy |
 | 5 | 308 redirect on every form post | **Fixed** — client posts to `/api/contact/` |
 | 6 | WebP data behind `.png`/`.jpg` | **Fixed** — all imagery normalised to `.webp`; 75 legacy URLs 301 to the new paths |
 | 7 | ~2.9 MB duplicated CSS | **Fixed** — single ~23 KB stylesheet |
 | 8 | Oversized images | **Fixed** — `next/image`; the 1.4 MB `cladding.png` is now a 127 KB WebP source |
-| 9 | `max-age=0` on static assets | **Fixed** — `/images/*` is `max-age=31536000, immutable` |
+| 9 | `max-age=0` on static assets | **Fixed** — `/images/*` uses a bounded seven-day cache because semantic filenames are not content-hashed |
 | 10 | Rate limiter ineffective on serverless | **Partly fixed** — now bounded and evicts stale keys, and documented as best-effort. A shared store is still the real answer |
 | 11 | Three duplicate `<h1>` | **Fixed** — smoke test asserts exactly one per page |
 | 12 | Missing alt text | **Fixed** — every image has meaningful or explicitly empty alt; the projects gallery uses real `<img>` |
@@ -425,7 +425,7 @@ four WordPress starter routes were dropped.
 | 14 | JSON-LD errors | **Fixed** — `en-AU`, dead `SearchAction` removed, `legalName` dropped |
 | 15 | Third-party Google Fonts | **Fixed** — `next/font` self-hosts PT Sans + Roboto Slab |
 | 16 | Bare 404 page | **Fixed** — full site chrome, nav and a call link |
-| 17 | No linting or tests | **Fixed** — ESLint wired into `npm run check`; smoke suite grown from 1 assertion to 175 |
+| 17 | No linting or tests | **Fixed** — typecheck/lint/build, 208 smoke assertions, 28 interactive axe runs, and CI |
 | 18 | Migration scaffolding | **Fixed** — snapshot script and mirror removed; `public/` 12 MB → 3.0 MB |
 
 ### Measured effect
@@ -449,14 +449,12 @@ banner and the closing CTA. It now has both.
 
 ### Still open
 
-- **#2 / contact delivery.** Build-time enforcement is opt-in via
-  `REQUIRE_CONTACT_DELIVERY=1`. Confirm the three Resend vars are set in
-  Production before treating the form as live.
+- **#2 / contact delivery credentials.** Confirm the three Resend vars are set
+  in Production and verify provider acceptance plus mailbox receipt.
 - **#10 — hard rate limiting.** The throttle is per-instance by design. A real
   limit needs Vercel KV or Upstash.
-- **The legal pages cite UK law** (Data Protection Act 1998; "the laws of
-  England, Northern Ireland, Scotland and Wales") on a South Australian
-  business. The text is preserved verbatim and needs review by someone
-  qualified — rewriting it is not a developer's call.
+- **Legal review.** The UK text has been replaced with an Australian-oriented
+  policy and terms, but qualified review is still recommended.
 
-For the current production posture, see [`FULL-SCALE-AUDIT.md`](./FULL-SCALE-AUDIT.md).
+For the current production posture, see
+[`POST-MERGE-AUDIT.md`](./POST-MERGE-AUDIT.md).

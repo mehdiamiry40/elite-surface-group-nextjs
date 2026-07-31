@@ -98,7 +98,7 @@ const nextConfig: NextConfig = {
             value: "www.elitesurfacegroup.com.au",
           },
         ],
-        destination: "https://elitesurfacegroup.com.au/:path*",
+        destination: "https://elitesurfacegroup.com.au/:path*/",
         permanent: true,
       },
       ...LEGACY_SITEMAPS.map((source) => ({

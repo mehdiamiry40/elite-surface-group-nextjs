@@ -23,12 +23,63 @@ The website is structurally sound and fast:
 - Production security headers, canonical URLs, sitemap paths, image MIME
   types, and browser cache headers are present and consistent
 
-The site is not fully closed out. The primary concern remains the enquiry flow:
-the repository still permits production builds when contact delivery is absent,
-and the non-JavaScript form path leaks enquiry fields into the URL while losing
-the lead. Several previous audit items are also only partly fixed: the 404
-canonical, quote-dialog service prefill after client navigation, hero controls,
-submenu semantics, and interactive accessibility coverage.
+At the time of measurement, the site was not fully closed out. The repository
+permitted production builds when contact delivery was absent, and the
+non-JavaScript form path leaked enquiry fields into the URL while losing the
+lead. Several previous audit items were only partly fixed: the 404 canonical,
+quote-dialog service prefill after client navigation, hero controls, submenu
+semantics, and interactive accessibility coverage. The remediation update below
+records the subsequent fixes.
+
+## Remediation update
+
+The code-controlled findings in this report were remediated on branch
+`cursor/website-full-audit-9762`.
+
+### Fixed in code
+
+- progressive forms now POST safely and never put enquiry data in the URL
+- mail-app fallback is an explicit link; the page remains visible with form
+  contents intact
+- production Vercel builds fail when delivery variables are missing
+- request bodies are byte-limited while streaming; provider calls have an
+  eight-second deadline, idempotency key, and non-PII correlation logging
+- `www` permanently redirects to apex through application routing
+- unsupported superiority, guarantee, licence, insurance, warranty, timing,
+  rating, and experience claims were removed or qualified
+- inherited testimonials remain unpublished until their source, wording,
+  rating, and permission are verified
+- form privacy notice and provider/IP/overseas-processing disclosures were
+  added
+- local-intent titles, accurate service social-image metadata, current sitemap
+  dates, WebSite schema, square logo metadata, and 404 canonical handling were
+  corrected
+- retired WordPress junk now returns 404
+- service/about/project images use real dimensions; projects have captions and
+  contextual service links
+- below-fold backgrounds and inactive hero slides are deferred; LCP images use
+  high fetch priority; the quote dialog is lazy-mounted
+- service prefill updates after client navigation
+- hero pause/play and active-dot state are functional
+- desktop submenu uses a disclosure pattern with correct focus restoration
+- generic forms default to “Not sure / choose a service”
+- accessibility coverage now opens the submenu, quote dialog, drawer,
+  lightbox, and hero states
+- GitHub Actions CI and Node/npm version pinning were added
+
+### External actions still required
+
+1. Supply valid Resend credentials and verify actual mailbox receipt.
+2. Confirm the apex is selected as the primary domain in Vercel.
+3. Obtain qualified Australian legal review and publish verified business
+   identity/licence/insurance details before restoring stronger claims.
+4. Provision a shared rate-limit/bot-control service if a hard global quota is
+   required.
+5. Add verified social profile URLs when available.
+
+Post-fix verification: `npm run check` passed, smoke passed **208 / 208**, and
+the expanded accessibility suite passed **28 / 28** route/viewport/interactive
+axe runs.
 
 ## Verification performed
 
