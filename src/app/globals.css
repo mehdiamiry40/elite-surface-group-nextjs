@@ -1273,6 +1273,12 @@ h3 {
   font-size: 14px;
 }
 
+.form__privacy a,
+.prose p a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .progressive-notices {
   padding-top: 24px;
 }
