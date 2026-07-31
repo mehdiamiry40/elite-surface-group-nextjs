@@ -3,8 +3,8 @@ import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
 import Hero from "@/components/Hero";
 import ProjectGallery from "@/components/ProjectGallery";
+import { CtaBand } from "@/components/CtaBand";
 import {
-  CtaBand,
   SectionHead,
   ServiceCards,
   Testimonials,
@@ -14,16 +14,15 @@ import {
   aboutTeaser,
   differentiators,
   expertise,
-  featuredProjects,
   process,
-  projects,
   whyChoose,
-} from "@/content/site";
+} from "@/content/home";
+import { featuredProjects, projects } from "@/content/projects";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   description:
-    "Adelaide specialists in cladding, render, Hebel and complete walling installations. Over 10 years of experience across South Australia.",
+    "Adelaide specialists in cladding, render, Hebel and complete walling installations for residential and commercial projects.",
   path: "/",
 });
 
@@ -44,7 +43,6 @@ export default function HomePage() {
               width={600}
               height={400}
               sizes="(max-width: 767px) 100vw, 560px"
-              quality={78}
             />
           </div>
           <div className="split__body">
@@ -72,7 +70,6 @@ export default function HomePage() {
               width={600}
               height={400}
               sizes="(max-width: 767px) 100vw, 560px"
-              quality={78}
             />
           </div>
           <div className="split__body">
@@ -103,7 +100,6 @@ export default function HomePage() {
               width={600}
               height={400}
               sizes="(max-width: 767px) 100vw, 560px"
-              quality={78}
             />
           </div>
           <div className="split__body">
@@ -157,9 +153,16 @@ export default function HomePage() {
       {/* Expertise */}
       <section
         className="expertise"
-        style={{ backgroundImage: `url(${expertise.background})` }}
         aria-labelledby="expertise-title"
       >
+        <Image
+          className="section-background"
+          src={expertise.background}
+          alt=""
+          fill
+          sizes="100vw"
+          aria-hidden
+        />
         <div className="shell">
           <div className="expertise__intro">
             <h2 id="expertise-title">

@@ -22,7 +22,7 @@ export default function PageBanner({ title, image, crumbs }: PageBannerProps) {
         fill
         sizes="100vw"
         priority
-        quality={78}
+        fetchPriority="high"
         aria-hidden
       />
       <div className="shell">

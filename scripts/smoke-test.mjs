@@ -43,6 +43,9 @@ const ROUTES = [
   "/hebel/",
   "/walling/",
   "/projects/",
+  "/projects/two-storey-exterior-render/",
+  "/locations/",
+  "/locations/adelaide/",
   "/contact-us/",
   "/privacy-policy/",
   "/terms-of-service/",
@@ -67,8 +70,8 @@ for (const retired of [
 ]) {
   const response = await get(retired, { redirect: "manual" });
   check(
-    `retired ${retired} redirects`,
-    [301, 308].includes(response.status),
+    `retired ${retired} returns 404`,
+    response.status === 404,
     `status ${response.status}`,
   );
 }
@@ -93,13 +96,24 @@ for (const sitemap of [
 const legacyAssets = JSON.parse(
   readFileSync(path.join(projectRoot, "src/content/legacy-assets.json"), "utf8"),
 );
-const legacySample = Object.keys(legacyAssets).slice(0, 8);
-for (const legacy of legacySample) {
+for (const [legacy, destination] of Object.entries(legacyAssets)) {
   const response = await get(legacy, { redirect: "manual" });
+  const location = response.headers.get("location") ?? "";
   check(
     `legacy asset ${legacy} redirects`,
     [301, 308].includes(response.status),
     `status ${response.status}`,
+  );
+  check(
+    `legacy asset ${legacy} targets ${destination}`,
+    location.includes(destination),
+    `location ${location}`,
+  );
+  const target = await get(destination, { redirect: "manual" });
+  check(
+    `legacy target ${destination} exists`,
+    target.status === 200,
+    `status ${target.status}`,
   );
 }
 
@@ -107,6 +121,15 @@ for (const legacy of legacySample) {
 
 const notFound = await get("/this-route-does-not-exist/");
 check("unknown route 404s", notFound.status === 404, `status ${notFound.status}`);
+const notFoundHtml = await notFound.text();
+check(
+  "404 does not canonicalize to the homepage",
+  !/<link rel="canonical"/.test(notFoundHtml),
+);
+check(
+  "404 emits exactly one robots directive",
+  (notFoundHtml.match(/<meta name="robots"/g) ?? []).length === 1,
+);
 
 for (const endpoint of ["/sitemap.xml", "/robots.txt"]) {
   const response = await get(endpoint);
@@ -247,11 +270,16 @@ for (let index = 0; index < imageFiles.length; index += 12) {
 }
 
 // Nothing should ship that no page references.
-const allHtml = [...pages.values()].join("");
+const contentDir = path.join(projectRoot, "src/content");
+const contentSources = readdirSync(contentDir)
+  .filter((file) => file.endsWith(".ts") || file.endsWith(".json"))
+  .map((file) => readFileSync(path.join(contentDir, file), "utf8"))
+  .join("\n");
+const allReferences = [...pages.values()].join("") + contentSources;
 const orphans = imageFiles.filter(
   (file) =>
-    !allHtml.includes(encodeURIComponent(`/images/${file}`)) &&
-    !allHtml.includes(`/images/${file}`) &&
+    !allReferences.includes(encodeURIComponent(`/images/${file}`)) &&
+    !allReferences.includes(`/images/${file}`) &&
     !file.startsWith("cropped-esg-logo"),
 );
 check(
@@ -289,6 +317,7 @@ const contactChecks = [
       headers: {
         "Content-Type": "application/json",
         Origin: baseUrl.origin,
+        "x-real-ip": "198.51.100.10",
       },
       body: "null",
     },
@@ -305,6 +334,7 @@ const invalidService = await get("/api/contact/", {
   headers: {
     "Content-Type": "application/json",
     Origin: baseUrl.origin,
+    "x-real-ip": "198.51.100.11",
   },
   body: JSON.stringify({
     name: "Smoke Tester",
@@ -322,7 +352,11 @@ check(
 // The client posts to the trailing-slash form; it must not redirect.
 const noRedirect = await get("/api/contact/", {
   method: "POST",
-  headers: { "Content-Type": "application/json", Origin: baseUrl.origin },
+  headers: {
+    "Content-Type": "application/json",
+    Origin: baseUrl.origin,
+    "x-real-ip": "198.51.100.12",
+  },
   body: "null",
   redirect: "manual",
 });
@@ -330,6 +364,33 @@ check(
   "contact endpoint does not redirect",
   ![307, 308].includes(noRedirect.status),
   `status ${noRedirect.status}`,
+);
+
+const progressiveForm = await get("/api/contact/", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/x-www-form-urlencoded",
+    Origin: baseUrl.origin,
+    "x-real-ip": "198.51.100.22",
+  },
+  body: new URLSearchParams({
+    firstName: "Smoke",
+    lastName: "Tester",
+    email: "smoke@example.com",
+    service: "",
+    message: "Progressive form fallback check.",
+    company: "honeypot-check",
+    sourcePath: "/contact-us/",
+  }),
+  redirect: "manual",
+});
+const progressiveLocation = progressiveForm.headers.get("location") ?? "";
+check(
+  "progressive form POST redirects without personal data",
+  progressiveForm.status === 303 &&
+    /\/contact-us\/#enquiry-sent$/.test(progressiveLocation) &&
+    !/Smoke|smoke%40|message=/.test(progressiveLocation),
+  `status ${progressiveForm.status}, location ${progressiveLocation}`,
 );
 
 /* ------------------------------------------- content / compliance guards */
@@ -362,6 +423,10 @@ check(
 check(
   "pages do not publish self-served AggregateRating schema",
   ![...pages.values()].some((html) => /AggregateRating/.test(html)),
+);
+check(
+  "unverified testimonials and ratings are not published",
+  ![...pages.values()].some((html) => /Rated 5 out of 5|Sarah Mitchell/.test(html)),
 );
 check(
   "CTA band is not cladding-only",

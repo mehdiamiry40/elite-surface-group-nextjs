@@ -11,6 +11,10 @@
 export type LegalBlock =
   | { type: "heading"; text: string }
   | { type: "paragraph"; text: string }
+  | {
+      type: "paragraph";
+      content: readonly (string | { text: string; href: string })[];
+    }
   | { type: "list"; items: readonly string[] };
 
 export const privacyPolicy: readonly LegalBlock[] = [
@@ -24,7 +28,11 @@ export const privacyPolicy: readonly LegalBlock[] = [
   },
   {
     type: "paragraph",
-    text: "Elite Surface Group provides cladding, render, Hebel and walling services across Adelaide and South Australia. You can contact us about privacy matters using the details on our Contact Us page, by email at info@elitesurfacegroup.com.au, or by phone on 0413 844 912.",
+    content: [
+      "Elite Surface Group provides cladding, render, Hebel and walling services across Adelaide and South Australia. You can contact us about privacy matters using our ",
+      { text: "Contact Us page", href: "/contact-us/" },
+      ", by email at info@elitesurfacegroup.com.au, or by phone on 0413 844 912.",
+    ],
   },
   {
     type: "heading",
@@ -43,6 +51,7 @@ export const privacyPolicy: readonly LegalBlock[] = [
       "The service you are interested in",
       "Details of your project or message",
       "The page you submitted the form from",
+      "Your IP address and basic request information used temporarily for security, rate limiting and hosting logs",
     ],
   },
   {
@@ -91,7 +100,7 @@ export const privacyPolicy: readonly LegalBlock[] = [
   },
   {
     type: "paragraph",
-    text: "We may share personal information with service providers who help us operate the website or communicate with you (for example our hosting provider and email delivery provider), and only as needed for those services. We may also disclose information if required by law, or to protect the rights, property or safety of Elite Surface Group, our customers or others.",
+    text: "We may share personal information with service providers who help us operate the website or communicate with you, including our hosting provider (Vercel) and email delivery provider (Resend), and only as needed for those services. These providers may process or store information outside Australia, including in the United States. We may also disclose information if required by law, or to protect the rights, property or safety of Elite Surface Group, our customers or others.",
   },
   {
     type: "heading",
@@ -99,7 +108,7 @@ export const privacyPolicy: readonly LegalBlock[] = [
   },
   {
     type: "paragraph",
-    text: "We take reasonable steps to protect personal information from misuse, interference, loss and unauthorised access, modification or disclosure. Enquiry details that reach our inbox are held with our ordinary business email and records. How long we keep information depends on the nature of the enquiry and any project that follows; we do not keep personal information longer than we need for those purposes or as required by law.",
+    text: "We take reasonable steps to protect personal information from misuse, interference, loss and unauthorised access, modification or disclosure. Enquiry details that reach our inbox are held with our ordinary business email and project records. Security rate-limit records are temporary. We retain enquiry and project correspondence only while it is needed to respond, manage any resulting work, meet record-keeping obligations, or resolve a dispute, then delete or de-identify it when practical.",
   },
   {
     type: "heading",
@@ -107,7 +116,14 @@ export const privacyPolicy: readonly LegalBlock[] = [
   },
   {
     type: "paragraph",
-    text: "You may ask us for access to the personal information we hold about you, or ask us to correct it, by contacting us using the details above. If you have a privacy complaint, please contact us first so we can try to resolve it. If you are not satisfied with our response, you may contact the Office of the Australian Information Commissioner (OAIC) at oaic.gov.au.",
+    content: [
+      "You may ask us for access to the personal information we hold about you, or ask us to correct it, by contacting us using the details above. If you have a privacy complaint, please contact us first so we can try to resolve it. If you are not satisfied with our response, you may contact the ",
+      {
+        text: "Office of the Australian Information Commissioner (OAIC)",
+        href: "https://www.oaic.gov.au/",
+      },
+      ".",
+    ],
   },
   {
     type: "heading",
@@ -175,7 +191,11 @@ export const termsOfService: readonly LegalBlock[] = [
   },
   {
     type: "paragraph",
-    text: "This website does not use third-party analytics or advertising cookies to monitor browsing preferences. See our Privacy Policy for how we handle personal information from enquiries.",
+    content: [
+      "This website does not use third-party analytics or advertising cookies to monitor browsing preferences. See our ",
+      { text: "Privacy Policy", href: "/privacy-policy/" },
+      " for how we handle personal information from enquiries.",
+    ],
   },
   {
     type: "heading",

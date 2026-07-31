@@ -1,5 +1,9 @@
 # Full-scale audit — elitesurfacegroup.com.au
 
+> **Status: superseded.** This records the pre-merge audit and its first
+> remediation pass. See [`POST-MERGE-AUDIT.md`](./POST-MERGE-AUDIT.md) for the
+> current findings and remediation status.
+
 Audited commit `9df6f03` on `main` (post-launch fixes #2).  
 Next.js 16.2.12 / React 19.2.8 / Node 22.  
 Live domain: [https://elitesurfacegroup.com.au](https://elitesurfacegroup.com.au/).

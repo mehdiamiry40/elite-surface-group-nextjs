@@ -47,14 +47,6 @@ const securityHeaders = [
   { key: "X-DNS-Prefetch-Control", value: "on" },
 ];
 
-/** Pages the WordPress install shipped by default; none should stay indexed. */
-const RETIRED_PATHS = [
-  "/sample-page",
-  "/2026/01/28/hello-world",
-  "/category/uncategorized",
-  "/author/admin",
-];
-
 const LEGACY_SITEMAPS = [
   "/sitemap_index.xml",
   "/page-sitemap.xml",
@@ -98,14 +90,20 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "www.elitesurfacegroup.com.au",
+          },
+        ],
+        destination: "https://elitesurfacegroup.com.au/:path*/",
+        permanent: true,
+      },
       ...LEGACY_SITEMAPS.map((source) => ({
         source,
         destination: "/sitemap.xml",
-        permanent: true,
-      })),
-      ...RETIRED_PATHS.map((source) => ({
-        source,
-        destination: "/",
         permanent: true,
       })),
       // Old WordPress upload URLs -> consolidated WebP assets.
@@ -114,8 +112,6 @@ const nextConfig: NextConfig = {
         destination,
         permanent: true,
       })),
-      { source: "/wp-login.php", destination: "/", permanent: true },
-      { source: "/wp-admin/:path*", destination: "/", permanent: true },
     ];
   },
 };

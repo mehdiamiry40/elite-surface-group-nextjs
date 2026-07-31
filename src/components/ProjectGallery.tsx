@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useCallback, useState } from "react";
 import { useDialog } from "@/components/useDialog";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons";
-import type { Project } from "@/content/site";
+import type { Project } from "@/content/projects";
 
 type ProjectGalleryProps = {
   items: readonly Project[];
@@ -41,12 +42,24 @@ export default function ProjectGallery({ items }: ProjectGalleryProps) {
               <Image
                 src={item.image}
                 alt={item.alt}
-                width={600}
-                height={400}
+                width={item.width}
+                height={item.height}
                 sizes="(max-width: 767px) 100vw, (max-width: 1024px) 50vw, 380px"
-                quality={78}
               />
             </button>
+            <div className="gallery__caption">
+              <h3>
+                <Link href={`/projects/${item.slug}/`}>{item.title}</Link>
+              </h3>
+              <p>{item.summary}</p>
+              <p>
+                <Link href={`/projects/${item.slug}/`}>View case study</Link>
+                {" · "}
+                <Link href={`/${item.service}/`}>
+                  View {item.service} services
+                </Link>
+              </p>
+            </div>
           </li>
         ))}
       </ul>
@@ -105,10 +118,9 @@ export default function ProjectGallery({ items }: ProjectGalleryProps) {
             <Image
               src={current.image}
               alt={current.alt}
-              width={1200}
-              height={1600}
+              width={current.width}
+              height={current.height}
               sizes="92vw"
-              quality={82}
             />
           ) : null}
         </div>

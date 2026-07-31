@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import PageBanner from "@/components/PageBanner";
 import ProjectGallery from "@/components/ProjectGallery";
-import { CtaBand, SectionHead, Testimonials } from "@/components/sections";
+import { CtaBand } from "@/components/CtaBand";
+import { SectionHead, Testimonials } from "@/components/sections";
 import { bannerImages, featuredProjects, projects, projectsPage } from "@/content/site";
 import { BreadcrumbSchema } from "@/components/JsonLd";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Projects",
+  title: "Cladding & Walling Projects Adelaide",
   description: projectsPage.metaDescription,
   path: "/projects",
 });

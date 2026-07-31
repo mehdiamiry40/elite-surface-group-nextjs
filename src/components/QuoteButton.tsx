@@ -1,5 +1,6 @@
 "use client";
 
+import type { MouseEvent } from "react";
 import { useQuoteDialog } from "@/components/QuoteDialogProvider";
 
 type QuoteButtonProps = {
@@ -7,26 +8,42 @@ type QuoteButtonProps = {
   children?: React.ReactNode;
   /** Runs before the dialog opens (e.g. close the mobile drawer first). */
   onBeforeOpen?: () => void;
+  /** Progressive-enhancement target when JavaScript is unavailable. */
+  href?: string;
 };
 
-/** Opens the shared quote dialog. */
+/**
+ * Opens the shared quote dialog when hydrated; otherwise navigates to the
+ * contact form.
+ */
 export default function QuoteButton({
   className = "btn",
   children = "Get a Free Quote",
   onBeforeOpen,
+  href = "/contact-us/#contact",
 }: QuoteButtonProps) {
   const { open } = useQuoteDialog();
 
+  function onClick(event: MouseEvent<HTMLAnchorElement>) {
+    if (
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+    onBeforeOpen?.();
+    open();
+  }
+
   return (
-    <button
-      className={className}
-      type="button"
-      onClick={() => {
-        onBeforeOpen?.();
-        open();
-      }}
-    >
+    <a className={className} href={href} onClick={onClick}>
       {children}
-    </button>
+    </a>
   );
 }

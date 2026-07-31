@@ -520,6 +520,19 @@ h3 {
   text-decoration: none;
 }
 
+/* Quote CTA is an enhanced link; do not inherit drawer nav ink colour. */
+.drawer a.btn {
+  display: inline-flex;
+  padding: 10px 24px;
+  border-bottom: 0;
+  color: var(--white);
+  font-weight: 700;
+}
+
+.drawer a.btn:hover {
+  color: var(--white);
+}
+
 .drawer__sub a {
   padding-left: 18px;
   font-size: 15px;
@@ -597,14 +610,20 @@ h3 {
   gap: 14px;
 }
 
-.hero__dots {
+.hero__controls {
   position: absolute;
   bottom: 26px;
   left: 50%;
   z-index: 3;
   display: flex;
-  gap: 10px;
+  align-items: center;
+  gap: 14px;
   transform: translateX(-50%);
+}
+
+.hero__dots {
+  display: flex;
+  gap: 10px;
 }
 
 .hero__dots button {
@@ -627,9 +646,24 @@ h3 {
   border-radius: 50%;
 }
 
-.hero__dots button[aria-current="true"]::before {
+.hero__dots button[aria-pressed="true"]::before {
   background: var(--orange);
   border-color: var(--orange);
+}
+
+.hero__pause {
+  min-height: 32px;
+  border: 1px solid rgb(255 255 255 / 75%);
+  border-radius: 999px;
+  padding: 4px 12px;
+  background: rgb(0 0 0 / 35%);
+  color: var(--white);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.hero__pause:hover {
+  background: var(--orange-dark);
 }
 
 /* ----------------------------------------------------------------- banner */
@@ -868,6 +902,11 @@ h3 {
   color: rgb(255 255 255 / 80%);
 }
 
+.section-background {
+  z-index: -2;
+  object-fit: cover;
+}
+
 .expertise::after {
   content: "";
   position: absolute;
@@ -1040,6 +1079,7 @@ h3 {
   overflow: hidden;
   background: var(--tint);
   cursor: pointer;
+  width: 100%;
 }
 
 .gallery img {
@@ -1051,6 +1091,29 @@ h3 {
 
 .gallery button:hover img {
   transform: scale(1.05);
+}
+
+.gallery > li {
+  background: var(--white);
+  box-shadow: 0 4px 18px rgb(0 0 0 / 7%);
+}
+
+.gallery__caption {
+  padding: 18px;
+}
+
+.gallery__caption h3 {
+  margin-bottom: 6px;
+  font-size: 18px;
+}
+
+.gallery__caption p {
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+
+.gallery__caption a {
+  font-weight: 700;
 }
 
 /* -------------------------------------------------------------- lightbox */
@@ -1206,9 +1269,39 @@ h3 {
   color: #8a5a00;
 }
 
+.form__status a {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
 .form__submit {
   grid-column: 1 / -1;
   justify-self: start;
+}
+
+.form__privacy {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 14px;
+}
+
+.form__privacy a,
+.prose p a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.progressive-notices {
+  padding-top: 24px;
+}
+
+.progressive-notices .form__status {
+  display: none;
+}
+
+.progressive-notices .form__status:target {
+  display: block;
 }
 
 .form-card {
@@ -1314,6 +1407,42 @@ h3 {
   justify-items: start;
 }
 
+.cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.related-links {
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 0;
+  list-style: none;
+}
+
+.related-links a {
+  color: var(--orange-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.faq-list {
+  display: grid;
+  gap: 22px;
+  margin: 0;
+}
+
+.faq-list__item dt {
+  margin-bottom: 8px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.faq-list__item dd {
+  margin: 0;
+}
+
 /* ----------------------------------------------------------------- footer */
 
 .footer {
@@ -1366,6 +1495,10 @@ h3 {
 .footer__contact {
   display: grid;
   gap: 12px;
+}
+
+.footer__hours {
+  margin-top: 16px;
 }
 
 .footer__contact li {

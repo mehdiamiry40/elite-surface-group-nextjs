@@ -1,8 +1,22 @@
 import type { Metadata } from "next";
-import { business } from "@/content/site";
+import { business } from "@/content/business";
 
 /** Default social-share image (existing site banner, 1280×960 WebP). */
 export const DEFAULT_OG_IMAGE = "/images/banner.webp";
+
+type SocialImage = {
+  path: string;
+  width: number;
+  height: number;
+  alt: string;
+};
+
+const defaultSocialImage: SocialImage = {
+  path: DEFAULT_OG_IMAGE,
+  width: 1280,
+  height: 960,
+  alt: `${business.name} — walling and surface finishes in Adelaide`,
+};
 
 /**
  * Absolute URL for a site path or public asset.
@@ -25,7 +39,7 @@ type PageMetadataInput = {
   title?: string;
   description: string;
   path: string;
-  image?: string;
+  image?: SocialImage;
   /** When false, omit robots index (used by the 404 page). */
   index?: boolean;
 };
@@ -35,11 +49,11 @@ export function pageMetadata({
   title,
   description,
   path,
-  image = DEFAULT_OG_IMAGE,
+  image = defaultSocialImage,
   index = true,
 }: PageMetadataInput): Metadata {
   const url = absoluteUrl(path);
-  const imageUrl = absoluteUrl(image);
+  const imageUrl = absoluteUrl(image.path);
 
   return {
     ...(title ? { title } : {}),
@@ -58,9 +72,9 @@ export function pageMetadata({
       images: [
         {
           url: imageUrl,
-          width: 1280,
-          height: 960,
-          alt: `${business.name} — walling and surface finishes in Adelaide`,
+          width: image.width,
+          height: image.height,
+          alt: image.alt,
         },
       ],
     },

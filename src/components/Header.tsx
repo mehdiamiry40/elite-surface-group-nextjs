@@ -7,7 +7,8 @@ import { useCallback, useEffect, useId, useRef, useState } from "react";
 import QuoteButton from "@/components/QuoteButton";
 import { useDialog } from "@/components/useDialog";
 import { ChevronDownIcon, PhoneIcon } from "@/components/icons";
-import { business, mainNav } from "@/content/site";
+import { business } from "@/content/business";
+import { mainNav } from "@/content/navigation";
 
 export default function Header() {
   const pathname = usePathname();
@@ -16,7 +17,7 @@ export default function Header() {
   const drawerId = useId();
   const submenuId = useId();
   const navGroupRef = useRef<HTMLDivElement>(null);
-  const burgerRef = useRef<HTMLButtonElement>(null);
+  const submenuToggleRef = useRef<HTMLButtonElement>(null);
   const closeDrawer = useCallback(() => setDrawerOpen(false), []);
   const drawerRef = useDialog(drawerOpen, closeDrawer);
 
@@ -54,7 +55,7 @@ export default function Header() {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setOpenGroup(null);
-        burgerRef.current?.focus();
+        submenuToggleRef.current?.focus();
       }
     };
 
@@ -78,7 +79,6 @@ export default function Header() {
             alt={business.name}
             width={123}
             height={67}
-            priority
           />
         </Link>
 
@@ -94,10 +94,10 @@ export default function Header() {
                 onMouseLeave={() => setOpenGroup(null)}
               >
                 <button
+                  ref={submenuToggleRef}
                   className="nav__toggle"
                   type="button"
                   aria-expanded={openGroup === item.href}
-                  aria-haspopup="menu"
                   aria-controls={submenuId}
                   onClick={() =>
                     setOpenGroup((current) =>
@@ -111,12 +111,10 @@ export default function Header() {
                 <div
                   id={submenuId}
                   className="nav__submenu"
-                  role="menu"
                   data-open={openGroup === item.href}
                 >
                   <Link
                     href={item.href}
-                    role="menuitem"
                     aria-current={isCurrent(item.href) ? "page" : undefined}
                     onClick={() => setOpenGroup(null)}
                   >
@@ -126,7 +124,6 @@ export default function Header() {
                     <Link
                       key={child.href}
                       href={child.href}
-                      role="menuitem"
                       aria-current={isCurrent(child.href) ? "page" : undefined}
                       onClick={() => setOpenGroup(null)}
                     >
@@ -168,7 +165,6 @@ export default function Header() {
         </a>
 
         <button
-          ref={burgerRef}
           className="burger"
           type="button"
           aria-expanded={drawerOpen}
