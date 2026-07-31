@@ -75,29 +75,29 @@ export function ServiceCards({
         <ul className={`grid grid--${shown.length === 3 ? "3" : "4"}`}>
           {shown.map((service) => (
             <li key={service.slug} className="service-card">
-              <div className="service-card__media">
-                <Image
-                  src={service.image}
-                  alt={service.imageAlt}
-                  width={400}
-                  height={500}
-                  sizes="(max-width: 767px) 100vw, (max-width: 1024px) 50vw, 280px"
-                />
-              </div>
-              <div className="service-card__body">
-                <h3>
-                  <Link href={`/${service.slug}`}>{service.name}</Link>
-                </h3>
-                <p>{service.summary}</p>
-                <Link
-                  className="service-card__more"
-                  href={`/${service.slug}`}
-                  prefetch={false}
-                  aria-label={`Read more about ${service.name}`}
-                >
-                  <ArrowRightIcon />
-                </Link>
-              </div>
+              <Link
+                className="service-card__link"
+                href={`/${service.slug}`}
+                prefetch={false}
+              >
+                <div className="service-card__media">
+                  <Image
+                    src={service.image}
+                    alt={service.imageAlt}
+                    width={480}
+                    height={360}
+                    sizes="(max-width: 767px) 100vw, (max-width: 1024px) 50vw, 280px"
+                  />
+                </div>
+                <div className="service-card__body">
+                  <h3>{service.name}</h3>
+                  <p>{service.summary}</p>
+                  <span className="service-card__more">
+                    View service
+                    <ArrowRightIcon />
+                  </span>
+                </div>
+              </Link>
             </li>
           ))}
         </ul>

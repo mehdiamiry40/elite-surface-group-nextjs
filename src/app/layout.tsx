@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PT_Sans, Roboto_Slab } from "next/font/google";
+import { Source_Sans_3, Zilla_Slab } from "next/font/google";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { QuoteDialogProvider } from "@/components/QuoteDialogProvider";
@@ -8,17 +8,18 @@ import { absoluteUrl, DEFAULT_OG_IMAGE } from "@/lib/seo";
 import "./globals.css";
 
 // Self-hosted at build time, so the site makes no request to Google's CDN and
-// ships only the weights it actually uses.
-const body = PT_Sans({
+// ships only the weights it actually uses. Source Sans 3 + Zilla Slab keep a
+// workmanlike Adelaide trade feel without default system/Roboto stacks.
+const body = Source_Sans_3({
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400", "600", "700"],
   display: "swap",
   variable: "--font-body",
 });
 
-const heading = Roboto_Slab({
+const heading = Zilla_Slab({
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["500", "700"],
   display: "swap",
   variable: "--font-heading",
 });

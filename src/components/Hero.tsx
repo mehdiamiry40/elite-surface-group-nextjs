@@ -83,13 +83,16 @@ export default function Hero() {
       )}
 
       <div className="shell hero__inner">
-        <h1>{heroCopy.title}</h1>
+        <h1>
+          <span className="hero__brand">{heroCopy.brand}</span>
+          <span className="hero__tagline">{heroCopy.title}</span>
+        </h1>
         <p>{heroCopy.body}</p>
         <div className="hero__actions">
-          <QuoteButton />
+          <QuoteButton>Request a quote</QuoteButton>
           <a className="btn btn--ghost" href={`tel:${business.phone}`}>
             <PhoneIcon />
-            Call now
+            Call {business.phoneDisplay}
           </a>
         </div>
       </div>

@@ -30,7 +30,7 @@ export default function ContactSection({
           <p>{intro}</p>
         </div>
 
-        <div className={withDetails ? "split" : undefined}>
+        <div className={withDetails ? "split" : "contact-form-wrap"}>
           {withDetails ? (
             <div className="split__body">
               <h3>Talk to us directly</h3>

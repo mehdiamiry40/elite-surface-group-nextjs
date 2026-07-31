@@ -52,13 +52,9 @@ export default function ProjectGallery({ items }: ProjectGalleryProps) {
                 <Link href={`/projects/${item.slug}/`}>{item.title}</Link>
               </h3>
               <p>{item.summary}</p>
-              <p>
-                <Link href={`/projects/${item.slug}/`}>View case study</Link>
-                {" · "}
-                <Link href={`/${item.service}/`}>
-                  View {item.service} services
-                </Link>
-              </p>
+              <Link className="gallery__cta" href={`/projects/${item.slug}/`}>
+                View case study
+              </Link>
             </div>
           </li>
         ))}

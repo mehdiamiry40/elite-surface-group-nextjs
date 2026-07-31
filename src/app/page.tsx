@@ -3,7 +3,6 @@ import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
 import Hero from "@/components/Hero";
 import ProjectGallery from "@/components/ProjectGallery";
-import { CtaBand } from "@/components/CtaBand";
 import {
   SectionHead,
   ServiceCards,
@@ -132,14 +131,14 @@ export default function HomePage() {
             title={differentiators.title}
             id="differentiators-title"
           />
-          <ul className="grid grid--3">
+          <ul className="grid grid--3 feature-grid">
             {differentiators.items.map((item) => (
               <li className="feature" key={item.title}>
                 <Image
                   src={item.icon}
                   alt=""
-                  width={68}
-                  height={68}
+                  width={56}
+                  height={56}
                   aria-hidden
                 />
                 <h3>{item.title}</h3>
@@ -201,7 +200,7 @@ export default function HomePage() {
             id="featured-title"
           />
           <ProjectGallery items={projects} />
-          <p style={{ marginTop: 34, textAlign: "center" }}>
+          <p className="section-cta">
             <Link className="btn" href="/projects">
               View all projects
             </Link>
@@ -212,8 +211,6 @@ export default function HomePage() {
       <Testimonials />
 
       <ContactSection />
-
-      <CtaBand />
     </>
   );
 }
