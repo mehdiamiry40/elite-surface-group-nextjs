@@ -25,19 +25,23 @@ const heading = Zilla_Slab({
 });
 
 const HOME_DESCRIPTION =
-  "Adelaide specialists in cladding, render, Hebel and complete walling installations for residential and commercial projects.";
+  "Elite Surface Group installs cladding, render, Hebel and walling across Adelaide and South Australia. Free quotes for homes, renovations and commercial builds.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(business.siteUrl),
   title: {
-    default: `${business.name} — Cladding, Render & Hebel Specialists in Adelaide`,
+    default: `${business.name} | Adelaide Cladding & Render`,
     template: `%s — ${business.name}`,
   },
   description: HOME_DESCRIPTION,
+  // Robots are set per-page via pageMetadata() so the App Router's automatic
+  // 404 noindex is not duplicated by a root-layout index,follow directive.
   openGraph: {
     type: "website",
     siteName: business.name,
     locale: "en_AU",
+    title: `${business.name} | Adelaide Cladding & Render`,
+    description: HOME_DESCRIPTION,
     images: [
       {
         url: absoluteUrl(DEFAULT_OG_IMAGE),
@@ -49,6 +53,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    title: `${business.name} | Adelaide Cladding & Render`,
+    description: HOME_DESCRIPTION,
     images: [absoluteUrl(DEFAULT_OG_IMAGE)],
   },
   icons: {
@@ -79,13 +85,33 @@ const organisationSchema = {
     width: "192",
     height: "192",
   },
-  areaServed: { "@type": "AdministrativeArea", name: business.area },
+  knowsAbout: [
+    "Cladding installation",
+    "Rendering",
+    "Hebel wall systems",
+    "Walling",
+    "Adelaide construction finishes",
+  ],
+  areaServed: [
+    { "@type": "City", name: "Adelaide" },
+    { "@type": "AdministrativeArea", name: "South Australia" },
+  ],
   address: {
     "@type": "PostalAddress",
     addressLocality: "Adelaide",
     addressRegion: "SA",
     addressCountry: "AU",
   },
+  contactPoint: [
+    {
+      "@type": "ContactPoint",
+      telephone: business.phone,
+      email: business.email,
+      contactType: "customer service",
+      areaServed: "AU",
+      availableLanguage: ["English"],
+    },
+  ],
   openingHoursSpecification: {
     "@type": "OpeningHoursSpecification",
     dayOfWeek: [

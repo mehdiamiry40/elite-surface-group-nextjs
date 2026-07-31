@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import PageBanner from "@/components/PageBanner";
 import { CtaBand } from "@/components/CtaBand";
-import { BreadcrumbSchema } from "@/components/JsonLd";
+import { BreadcrumbSchema, ProjectSchema } from "@/components/JsonLd";
 import { bannerImages } from "@/content/pages";
 import { getProject, projects } from "@/content/projects";
 import { pageMetadata } from "@/lib/seo";
@@ -57,6 +57,7 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
           { label: project.title, href: `/projects/${project.slug}` },
         ]}
       />
+      <ProjectSchema project={project} />
       <PageBanner
         title={project.title}
         image={bannerImages["/projects"]}

@@ -9,6 +9,7 @@ import {
   Testimonials,
   TickList,
 } from "@/components/sections";
+import { HowToSchema } from "@/components/JsonLd";
 import {
   aboutTeaser,
   differentiators,
@@ -21,13 +22,18 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   description:
-    "Adelaide specialists in cladding, render, Hebel and complete walling installations for residential and commercial projects.",
+    "Elite Surface Group installs cladding, render, Hebel and walling across Adelaide and South Australia. Free quotes for homes, renovations and commercial builds.",
   path: "/",
 });
 
 export default function HomePage() {
   return (
     <>
+      <HowToSchema
+        name={`${process.title} with Elite Surface Group`}
+        description={process.intro}
+        steps={process.steps}
+      />
       <Hero />
 
       <ServiceCards />
