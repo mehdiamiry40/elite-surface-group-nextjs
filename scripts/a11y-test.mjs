@@ -116,7 +116,10 @@ await mobilePage.goto(new URL("/", baseUrl).toString(), {
 });
 await mobilePage.getByRole("button", { name: "Open menu" }).click();
 await runAxe(mobilePage, "mobile navigation drawer open");
-await mobilePage.getByRole("button", { name: "Get a Free Quote" }).last().click();
+await mobilePage
+  .getByRole("dialog", { name: "Site menu" })
+  .getByRole("button", { name: "Get a Free Quote" })
+  .click();
 await runAxe(mobilePage, "mobile quote opened from drawer");
 await mobile.close();
 

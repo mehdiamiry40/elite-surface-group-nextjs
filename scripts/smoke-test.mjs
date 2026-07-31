@@ -256,11 +256,13 @@ for (let index = 0; index < imageFiles.length; index += 12) {
 }
 
 // Nothing should ship that no page references.
-const allHtml = [...pages.values()].join("");
+const allReferences =
+  [...pages.values()].join("") +
+  readFileSync(path.join(projectRoot, "src/content/site.ts"), "utf8");
 const orphans = imageFiles.filter(
   (file) =>
-    !allHtml.includes(encodeURIComponent(`/images/${file}`)) &&
-    !allHtml.includes(`/images/${file}`) &&
+    !allReferences.includes(encodeURIComponent(`/images/${file}`)) &&
+    !allReferences.includes(`/images/${file}`) &&
     !file.startsWith("cropped-esg-logo"),
 );
 check(
