@@ -300,6 +300,7 @@ const contactChecks = [
       headers: {
         "Content-Type": "application/json",
         Origin: baseUrl.origin,
+        "x-real-ip": "198.51.100.10",
       },
       body: "null",
     },
@@ -316,6 +317,7 @@ const invalidService = await get("/api/contact/", {
   headers: {
     "Content-Type": "application/json",
     Origin: baseUrl.origin,
+    "x-real-ip": "198.51.100.11",
   },
   body: JSON.stringify({
     name: "Smoke Tester",
@@ -333,7 +335,11 @@ check(
 // The client posts to the trailing-slash form; it must not redirect.
 const noRedirect = await get("/api/contact/", {
   method: "POST",
-  headers: { "Content-Type": "application/json", Origin: baseUrl.origin },
+  headers: {
+    "Content-Type": "application/json",
+    Origin: baseUrl.origin,
+    "x-real-ip": "198.51.100.12",
+  },
   body: "null",
   redirect: "manual",
 });
