@@ -4,6 +4,10 @@ Audited commit `6cd1208` on 31 July 2026.
 
 Live site: [https://elitesurfacegroup.com.au](https://elitesurfacegroup.com.au/)
 
+For the latest residual findings and prioritized improvement suggestions after
+the remediations below, see
+[`IMPROVEMENT-ROADMAP.md`](./IMPROVEMENT-ROADMAP.md).
+
 This is a fresh audit after the fixes recorded in
 [`FULL-SCALE-AUDIT.md`](./FULL-SCALE-AUDIT.md) were merged. It covers the
 deployed visitor journey, application code, security, accessibility, SEO,

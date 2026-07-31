@@ -87,7 +87,8 @@ Point either suite at a deployment with `SMOKE_BASE_URL=https://…`.
 
 | Document | Covers |
 | --- | --- |
-| [`docs/POST-MERGE-AUDIT.md`](docs/POST-MERGE-AUDIT.md) | Current full-scale audit of the merged code and live website |
+| [`docs/IMPROVEMENT-ROADMAP.md`](docs/IMPROVEMENT-ROADMAP.md) | Current full-scale audit, residual findings, and prioritized improvement suggestions |
+| [`docs/POST-MERGE-AUDIT.md`](docs/POST-MERGE-AUDIT.md) | Post-merge audit and remediation record for the prior fix wave |
 | [`docs/FULL-SCALE-AUDIT.md`](docs/FULL-SCALE-AUDIT.md) | Pre-merge audit and resolution history |
 | [`docs/MIGRATION-AUDIT.md`](docs/MIGRATION-AUDIT.md) | Historical audit of the first WordPress-mirror pass and what the rebuild resolved |
 
