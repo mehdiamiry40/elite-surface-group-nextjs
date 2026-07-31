@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import ContactSection from "@/components/ContactSection";
 import PageBanner from "@/components/PageBanner";
-import { CtaBand } from "@/components/sections";
-import { bannerImages, business, contactPage } from "@/content/site";
+import { CtaBand } from "@/components/CtaBand";
+import { business } from "@/content/business";
+import { bannerImages, contactPage } from "@/content/pages";
 import { BreadcrumbSchema } from "@/components/JsonLd";
 import { pageMetadata } from "@/lib/seo";
 

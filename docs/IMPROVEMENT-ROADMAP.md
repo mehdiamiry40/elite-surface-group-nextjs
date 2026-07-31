@@ -1,7 +1,7 @@
 # Full-scale audit and improvement roadmap
 
-Audited branch `cursor/website-full-audit-9762` at commit `40082e6` on
-31 July 2026, and compared against the live site
+Audited branch `cursor/website-full-audit-9762` on 31 July 2026, and compared
+against the live site
 [https://elitesurfacegroup.com.au](https://elitesurfacegroup.com.au/).
 
 This follows [`POST-MERGE-AUDIT.md`](./POST-MERGE-AUDIT.md). That document
@@ -9,30 +9,49 @@ records the post-merge defects and the remediations already on this branch.
 This document answers: **what still needs attention, and what should be
 improved next for growth, trust, performance, and operations.**
 
-## Executive verdict
+## Remediation update
 
-On this branch the site is in strong shape as a static Adelaide trade marketing
-site:
+Code-controlled residual findings and roadmap quick/medium items from this
+document were implemented on the same branch. Post-fix verification:
 
 | Check | Result |
 | --- | --- |
-| `npm run check` | Pass |
-| Smoke (`localhost`) | **208 / 208** |
-| Axe interactive suite | **28 / 28** |
+| `npm run check` | Pass (typecheck, lint, unit tests, build, bundle budget) |
+| Smoke (`localhost`) | **458 / 458** |
+| Axe interactive suite | **34 / 34** |
 | `npm audit --omit=dev` | **0** |
-| Full `npm audit` | 9 high, ESLint/dev toolchain only |
-| Public routes | Static/SSG; only `/api/contact` dynamic |
-| First-load JS (home) | ~555 KiB raw / ~161 KiB gzip |
+| First-load JS (home) | ~559 KiB uncompressed (under 575 KiB budget) |
 
-**Production is still behind this branch.** Live probes on 31 July 2026 still
-show pre-remediation behaviour: `www` serves a duplicate `200` (no apex
-redirect), sitemap `lastmod` dates are old WordPress-era timestamps, and the
-404 page still emits a homepage canonical. Merge and deploy PR #4 before
-treating production as closed out.
+### Fixed in code
 
-No new P0 security defect was found in the remediated codebase. Remaining work
-is mostly **owner operations** (Resend, domains, legal identity), a few
-**residual code defects**, and a clear **growth / SEO / conversion roadmap**.
+- legacy `testi-bg` redirect targets an existing image; smoke validates every
+  legacy redirect and final target
+- service pages emit a single LCP image preload; unused `quality` props removed
+- quote CTAs are progressive links to `/contact-us/#contact` with JS enhance
+- CTA bands include Call + Quote actions
+- service FAQs with visible markup + `FAQPage` schema; claims qualified;
+  contextual related links
+- contact API: loopback origin equivalence for local smoke, structured logs,
+  redacted provider errors, optional Upstash shared rate limit
+- content split into narrow modules; client islands import smaller surfaces;
+  `CtaBand` isolated from carousel-bearing sections
+- project case-study routes `/projects/[slug]/` and locations hub + Adelaide
+  page; sitemap/smoke/a11y updated
+- contact-security unit tests and CI bundle budget gate
+
+### Still owner / external
+
+Resend mailbox verification, apex primary domain, legal entity/ABN/licence
+review, real social URLs, and provisioning Upstash (optional env vars are
+wired). CSP `'unsafe-inline'` remains required by the current Next inline
+bootstrap/JSON-LD approach. Dev-only ESLint advisories remain upstream.
+
+## Executive verdict
+
+On this branch the site is in strong shape as a static Adelaide trade marketing
+site. **Production may still be behind until this branch is merged and
+deployed** — re-probe `www` redirect, sitemap dates, and 404 canonical after
+release.
 
 ---
 

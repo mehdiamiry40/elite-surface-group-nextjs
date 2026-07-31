@@ -3,7 +3,7 @@ import { PT_Sans, Roboto_Slab } from "next/font/google";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { QuoteDialogProvider } from "@/components/QuoteDialogProvider";
-import { business } from "@/content/site";
+import { business } from "@/content/business";
 import { absoluteUrl, DEFAULT_OG_IMAGE } from "@/lib/seo";
 import "./globals.css";
 

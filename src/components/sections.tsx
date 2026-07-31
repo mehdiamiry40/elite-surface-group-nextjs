@@ -1,15 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import Carousel from "@/components/Carousel";
-import QuoteButton from "@/components/QuoteButton";
 import { ArrowRightIcon, CheckIcon } from "@/components/icons";
-import {
-  ctaBand,
-  services,
-  servicesIntro,
-  testimonials,
-  testimonialsSection,
-} from "@/content/site";
+import { services, servicesIntro } from "@/content/services";
+import { testimonials, testimonialsSection } from "@/content/pages";
+
+export { CtaBand } from "@/components/CtaBand";
 
 /* ------------------------------------------------------------ section head */
 
@@ -86,7 +82,6 @@ export function ServiceCards({
                   width={400}
                   height={500}
                   sizes="(max-width: 767px) 100vw, (max-width: 1024px) 50vw, 280px"
-                  quality={78}
                 />
               </div>
               <div className="service-card__body">
@@ -143,37 +138,6 @@ export function Testimonials() {
             </figure>
           ))}
         </Carousel>
-      </div>
-    </section>
-  );
-}
-
-/* ---------------------------------------------------------------- cta band */
-
-export function CtaBand() {
-  return (
-    <section
-      className="cta"
-      aria-labelledby="cta-title"
-    >
-      <Image
-        className="section-background"
-        src={ctaBand.background}
-        alt=""
-        fill
-        sizes="100vw"
-        quality={72}
-        aria-hidden
-      />
-      <div className="shell cta__inner">
-        <div>
-          <h2 id="cta-title">{ctaBand.title}</h2>
-          <p>{ctaBand.body}</p>
-        </div>
-        <div className="cta__aside">
-          <QuoteButton />
-          <p>{ctaBand.note}</p>
-        </div>
       </div>
     </section>
   );

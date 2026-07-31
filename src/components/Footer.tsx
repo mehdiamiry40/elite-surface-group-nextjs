@@ -7,7 +7,8 @@ import {
   PhoneIcon,
   PinIcon,
 } from "@/components/icons";
-import { business, footerBlurb, footerNav } from "@/content/site";
+import { business } from "@/content/business";
+import { footerBlurb, footerNav } from "@/content/navigation";
 
 const socialLinks = [
   {

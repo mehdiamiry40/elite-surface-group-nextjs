@@ -1,5 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { business, services } from "@/content/site";
+import { business } from "@/content/business";
+import { locationPages } from "@/content/locations";
+import { projects } from "@/content/projects";
+import { services } from "@/content/services";
+import {
+  contactLog,
+  isAllowedOrigin,
+  redactSensitiveText,
+  ResendDeliveryError,
+} from "@/lib/contact-security";
 
 export const runtime = "nodejs";
 export const maxDuration = 10;
@@ -24,10 +33,13 @@ const ALLOWED_SOURCE_PATHS = new Set([
   "/about/",
   "/services/",
   "/projects/",
+  "/locations/",
   "/contact-us/",
   "/privacy-policy/",
   "/terms-of-service/",
   ...services.map((service) => `/${service.slug}/`),
+  ...projects.map((project) => `/projects/${project.slug}/`),
+  ...locationPages.map((location) => `/locations/${location.slug}/`),
 ]);
 
 /**
@@ -121,34 +133,15 @@ function originIsAllowed(request: NextRequest) {
     return false;
   }
 
-  const origin = request.headers.get("origin");
-  if (!origin) {
-    return true;
-  }
-
-  const allowedOrigins = new Set([request.nextUrl.origin]);
   const configuredSite = process.env.NEXT_PUBLIC_SITE_URL;
   const vercelHost = process.env.VERCEL_URL;
 
-  for (const candidate of [
-    configuredSite,
-    vercelHost ? `https://${vercelHost}` : undefined,
-  ]) {
-    if (!candidate) {
-      continue;
-    }
-    try {
-      allowedOrigins.add(new URL(candidate).origin);
-    } catch {
-      // Ignore malformed optional deployment configuration.
-    }
-  }
-
-  try {
-    return allowedOrigins.has(new URL(origin).origin);
-  } catch {
-    return false;
-  }
+  return isAllowedOrigin(
+    request.headers.get("origin"),
+    request.nextUrl.origin,
+    [configuredSite, vercelHost ? `https://${vercelHost}` : undefined],
+    { hostHeader: request.headers.get("host") },
+  );
 }
 
 /**
@@ -173,7 +166,7 @@ function clientKey(request: NextRequest) {
   return "unknown";
 }
 
-function rateLimit(request: NextRequest) {
+function memoryRateLimit(request: NextRequest) {
   const now = Date.now();
   const key = clientKey(request);
 
@@ -194,6 +187,58 @@ function rateLimit(request: NextRequest) {
   active.push(now);
   requestBuckets.set(key, active);
   return true;
+}
+
+/**
+ * Optional shared limiter via Upstash Redis REST.
+ * When UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN are unset, falls back
+ * to the in-memory limiter.
+ */
+async function sharedRateLimit(request: NextRequest) {
+  const url = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token) {
+    return memoryRateLimit(request);
+  }
+
+  const key = `contact:${clientKey(request)}`;
+  try {
+    const response = await fetch(`${url}/pipeline`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify([
+        ["INCR", key],
+        ["EXPIRE", key, Math.ceil(RATE_LIMIT_WINDOW_MS / 1000)],
+      ]),
+      signal: AbortSignal.timeout(1_500),
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      return memoryRateLimit(request);
+    }
+
+    const result: unknown = await response.json();
+    const count =
+      Array.isArray(result) &&
+      result[0] &&
+      typeof result[0] === "object" &&
+      result[0] !== null &&
+      "result" in result[0]
+        ? Number(result[0].result)
+        : Number.NaN;
+
+    if (!Number.isFinite(count)) {
+      return memoryRateLimit(request);
+    }
+
+    return count <= RATE_LIMIT_MAX;
+  } catch {
+    return memoryRateLimit(request);
+  }
 }
 
 function tooLong(value: string, max: number) {
@@ -291,11 +336,18 @@ async function sendWithResend(
 
   const result: unknown = await response.json().catch(() => null);
   if (!response.ok) {
-    throw new Error(
+    const providerCode =
+      result && typeof result === "object" && "name" in result
+        ? String(result.name)
+        : undefined;
+    const providerMessage =
       result && typeof result === "object" && "message" in result
         ? String(result.message)
-        : `Resend returned HTTP ${response.status}`,
-    );
+        : undefined;
+    throw new ResendDeliveryError(response.status, {
+      providerCode,
+      message: providerMessage,
+    });
   }
 
   return result && typeof result === "object" && "id" in result
@@ -338,7 +390,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (!rateLimit(request)) {
+  if (!(await sharedRateLimit(request))) {
     if (isBrowserForm) {
       return contactResponse(
         request,
@@ -474,11 +526,9 @@ export async function POST(request: NextRequest) {
   if (!resendKey || !from || !to) {
     // Loud on purpose: without these variables no enquiry is ever delivered,
     // and the visitor-side mailto fallback is easy to miss on mobile.
-    console.error(
-      "[contact] Enquiry NOT delivered — RESEND_API_KEY, CONTACT_FROM_EMAIL or " +
-        "CONTACT_TO_EMAIL is unset. Falling back to the visitor's mail client.",
-      { page: sourcePath || "unknown" },
-    );
+    contactLog("contact.delivery_unconfigured", {
+      page: sourcePath || "unknown",
+    });
     return contactResponse(
       request,
       isBrowserForm,
@@ -528,16 +578,25 @@ export async function POST(request: NextRequest) {
       requestId,
     );
 
-    console.info("[contact] Enquiry accepted by Resend.", {
+    contactLog("contact.resend.accepted", {
       requestId,
       emailId,
       page: sourcePath || "unknown",
     });
   } catch (error) {
-    console.error("[contact] Resend threw while sending an enquiry.", {
+    contactLog("contact.resend.failed", {
       requestId,
       page: sourcePath || "unknown",
-      error: error instanceof Error ? error.message : "unknown",
+      providerStatus:
+        error instanceof ResendDeliveryError
+          ? error.providerStatus
+          : undefined,
+      providerCode:
+        error instanceof ResendDeliveryError ? error.providerCode : undefined,
+      error:
+        error instanceof Error
+          ? redactSensitiveText(error.message)
+          : "unknown",
     });
     return contactResponse(
       request,

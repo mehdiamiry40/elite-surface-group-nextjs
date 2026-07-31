@@ -520,6 +520,19 @@ h3 {
   text-decoration: none;
 }
 
+/* Quote CTA is an enhanced link; do not inherit drawer nav ink colour. */
+.drawer a.btn {
+  display: inline-flex;
+  padding: 10px 24px;
+  border-bottom: 0;
+  color: var(--white);
+  font-weight: 700;
+}
+
+.drawer a.btn:hover {
+  color: var(--white);
+}
+
 .drawer__sub a {
   padding-left: 18px;
   font-size: 15px;
@@ -1392,6 +1405,42 @@ h3 {
   display: grid;
   gap: 14px;
   justify-items: start;
+}
+
+.cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.related-links {
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 0;
+  list-style: none;
+}
+
+.related-links a {
+  color: var(--orange-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.faq-list {
+  display: grid;
+  gap: 22px;
+  margin: 0;
+}
+
+.faq-list__item dt {
+  margin-bottom: 8px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.faq-list__item dd {
+  margin: 0;
 }
 
 /* ----------------------------------------------------------------- footer */

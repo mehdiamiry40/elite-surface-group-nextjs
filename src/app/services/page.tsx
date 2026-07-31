@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import PageBanner from "@/components/PageBanner";
-import { CtaBand, ServiceCards, Testimonials } from "@/components/sections";
+import { CtaBand } from "@/components/CtaBand";
+import { ServiceCards, Testimonials } from "@/components/sections";
 import { bannerImages, servicesPage } from "@/content/site";
 import { BreadcrumbSchema } from "@/components/JsonLd";
 import { pageMetadata } from "@/lib/seo";

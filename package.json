@@ -13,9 +13,11 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit --incremental false",
+    "test": "node --experimental-strip-types --test src/lib/contact-security.test.ts",
     "smoke": "node scripts/smoke-test.mjs",
     "a11y": "node scripts/a11y-test.mjs",
-    "check": "npm run typecheck && npm run lint && npm run build"
+    "bundle-budget": "node scripts/check-bundle-budget.mjs",
+    "check": "npm run typecheck && npm run lint && npm run test && npm run build && npm run bundle-budget"
   },
   "dependencies": {
     "next": "16.2.12",

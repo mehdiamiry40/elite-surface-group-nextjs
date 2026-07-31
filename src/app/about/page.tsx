@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Carousel from "@/components/Carousel";
 import PageBanner from "@/components/PageBanner";
-import { CtaBand, Testimonials, TickList } from "@/components/sections";
+import { CtaBand } from "@/components/CtaBand";
+import { Testimonials, TickList } from "@/components/sections";
 import { aboutPage, bannerImages } from "@/content/site";
 import { BreadcrumbSchema } from "@/components/JsonLd";
 import { pageMetadata } from "@/lib/seo";
@@ -39,7 +40,6 @@ export default function AboutPage() {
                 width={item.width}
                 height={item.height}
                 sizes="(max-width: 767px) 100vw, (max-width: 1024px) 50vw, 380px"
-                quality={78}
               />
             ))}
           </Carousel>

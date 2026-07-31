@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PhoneIcon } from "@/components/icons";
-import { business, mainNav } from "@/content/site";
+import { business } from "@/content/business";
+import { mainNav } from "@/content/navigation";
 
 export const metadata: Metadata = {
   title: "Page not found",

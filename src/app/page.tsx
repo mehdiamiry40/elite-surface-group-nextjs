@@ -3,8 +3,8 @@ import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
 import Hero from "@/components/Hero";
 import ProjectGallery from "@/components/ProjectGallery";
+import { CtaBand } from "@/components/CtaBand";
 import {
-  CtaBand,
   SectionHead,
   ServiceCards,
   Testimonials,
@@ -14,11 +14,10 @@ import {
   aboutTeaser,
   differentiators,
   expertise,
-  featuredProjects,
   process,
-  projects,
   whyChoose,
-} from "@/content/site";
+} from "@/content/home";
+import { featuredProjects, projects } from "@/content/projects";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -44,7 +43,6 @@ export default function HomePage() {
               width={600}
               height={400}
               sizes="(max-width: 767px) 100vw, 560px"
-              quality={78}
             />
           </div>
           <div className="split__body">
@@ -72,7 +70,6 @@ export default function HomePage() {
               width={600}
               height={400}
               sizes="(max-width: 767px) 100vw, 560px"
-              quality={78}
             />
           </div>
           <div className="split__body">
@@ -103,7 +100,6 @@ export default function HomePage() {
               width={600}
               height={400}
               sizes="(max-width: 767px) 100vw, 560px"
-              quality={78}
             />
           </div>
           <div className="split__body">
@@ -165,7 +161,6 @@ export default function HomePage() {
           alt=""
           fill
           sizes="100vw"
-          quality={72}
           aria-hidden
         />
         <div className="shell">

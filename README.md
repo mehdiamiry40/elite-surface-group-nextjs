@@ -97,8 +97,10 @@ Open items that still need a human decision outside the codebase:
 - **Resend delivery** — set `RESEND_API_KEY`, `CONTACT_FROM_EMAIL` and
   `CONTACT_TO_EMAIL` in Vercel, then confirm provider acceptance and mailbox
   receipt.
+- **Optional shared rate limit** — set `UPSTASH_REDIS_REST_URL` and
+  `UPSTASH_REDIS_REST_TOKEN` if a hard global contact quota is required.
 - **Social profiles** — add real Facebook / Instagram URLs to `business.social`
-  in `src/content/site.ts` when they exist (icons stay hidden while empty).
+  in `src/content/business.ts` when they exist (icons stay hidden while empty).
 - **Legal review** — privacy and terms are now Australian-oriented and match
   the live site, but a qualified review is still wise before relying on them
   for anything beyond ordinary website enquiries.

@@ -3,7 +3,8 @@
 import EnquiryFields from "@/components/EnquiryFields";
 import { useEnquiryForm } from "@/components/useEnquiryForm";
 import { MailIcon, PhoneIcon, PinIcon } from "@/components/icons";
-import { business, contactSection } from "@/content/site";
+import { business } from "@/content/business";
+import { contactSection } from "@/content/pages";
 
 type ContactSectionProps = {
   /** Renders the contact details column beside the form. */

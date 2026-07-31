@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import EnquiryFields from "@/components/EnquiryFields";
 import { useDialog } from "@/components/useDialog";
 import { useEnquiryForm } from "@/components/useEnquiryForm";
-import { services } from "@/content/site";
+import { services } from "@/content/services";
 
 type QuoteDialogProps = {
   open: boolean;

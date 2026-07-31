@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { business } from "@/content/site";
+import { business } from "@/content/business";
 
 /** Default social-share image (existing site banner, 1280×960 WebP). */
 export const DEFAULT_OG_IMAGE = "/images/banner.webp";

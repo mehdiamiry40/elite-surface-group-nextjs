@@ -4,7 +4,8 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import QuoteButton from "@/components/QuoteButton";
 import { PhoneIcon } from "@/components/icons";
-import { business, heroCopy, heroSlides } from "@/content/site";
+import { business } from "@/content/business";
+import { heroCopy, heroSlides } from "@/content/home";
 
 const INTERVAL = 6000;
 
@@ -76,7 +77,6 @@ export default function Hero() {
               sizes="100vw"
               priority={index === 0}
               fetchPriority={index === 0 ? "high" : undefined}
-              quality={80}
             />
           </div>
         ) : null,

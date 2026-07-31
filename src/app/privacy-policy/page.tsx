@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import LegalContent from "@/components/LegalContent";
 import PageBanner from "@/components/PageBanner";
-import { CtaBand } from "@/components/sections";
+import { CtaBand } from "@/components/CtaBand";
 import { privacyPolicy } from "@/content/legal";
-import { bannerImages, business } from "@/content/site";
+import { business } from "@/content/business";
+import { bannerImages } from "@/content/pages";
 import { BreadcrumbSchema } from "@/components/JsonLd";
 import { pageMetadata } from "@/lib/seo";
 

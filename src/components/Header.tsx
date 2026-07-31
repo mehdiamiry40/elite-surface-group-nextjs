@@ -7,7 +7,8 @@ import { useCallback, useEffect, useId, useRef, useState } from "react";
 import QuoteButton from "@/components/QuoteButton";
 import { useDialog } from "@/components/useDialog";
 import { ChevronDownIcon, PhoneIcon } from "@/components/icons";
-import { business, mainNav } from "@/content/site";
+import { business } from "@/content/business";
+import { mainNav } from "@/content/navigation";
 
 export default function Header() {
   const pathname = usePathname();

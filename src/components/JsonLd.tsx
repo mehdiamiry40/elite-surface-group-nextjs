@@ -1,5 +1,6 @@
 import { absoluteUrl } from "@/lib/seo";
-import { business, type Service } from "@/content/site";
+import { business } from "@/content/business";
+import type { Service, ServiceFaq } from "@/content/services";
 
 /**
  * Structured data helpers.
@@ -59,6 +60,30 @@ export function ServiceSchema({ service }: { service: Service }) {
         image: absoluteUrl(service.image),
         provider: { "@id": `${business.siteUrl}/#organization` },
         areaServed: { "@type": "AdministrativeArea", name: business.area },
+      }}
+    />
+  );
+}
+
+/** FAQPage schema — only emit when the same Q&A is visible on the page. */
+export function FAQPageSchema({ faqs }: { faqs: readonly ServiceFaq[] }) {
+  if (!faqs.length) {
+    return null;
+  }
+
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.answer,
+          },
+        })),
       }}
     />
   );

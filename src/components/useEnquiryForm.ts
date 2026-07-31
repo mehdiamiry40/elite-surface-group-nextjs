@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
-import { services } from "@/content/site";
+import { serviceNames } from "@/content/services";
 
 export type EnquiryStatus = {
   state: "success" | "error" | "warning";
@@ -9,7 +9,7 @@ export type EnquiryStatus = {
   mailto?: string;
 } | null;
 
-export const serviceOptions = services.map((service) => service.name);
+export const serviceOptions = serviceNames;
 
 /**
  * Posts an enquiry to the contact endpoint.

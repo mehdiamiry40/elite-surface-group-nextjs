@@ -43,6 +43,9 @@ const ROUTES = [
   "/hebel/",
   "/walling/",
   "/projects/",
+  "/projects/two-storey-exterior-render/",
+  "/locations/",
+  "/locations/adelaide/",
   "/contact-us/",
   "/privacy-policy/",
   "/terms-of-service/",
@@ -93,13 +96,24 @@ for (const sitemap of [
 const legacyAssets = JSON.parse(
   readFileSync(path.join(projectRoot, "src/content/legacy-assets.json"), "utf8"),
 );
-const legacySample = Object.keys(legacyAssets).slice(0, 8);
-for (const legacy of legacySample) {
+for (const [legacy, destination] of Object.entries(legacyAssets)) {
   const response = await get(legacy, { redirect: "manual" });
+  const location = response.headers.get("location") ?? "";
   check(
     `legacy asset ${legacy} redirects`,
     [301, 308].includes(response.status),
     `status ${response.status}`,
+  );
+  check(
+    `legacy asset ${legacy} targets ${destination}`,
+    location.includes(destination),
+    `location ${location}`,
+  );
+  const target = await get(destination, { redirect: "manual" });
+  check(
+    `legacy target ${destination} exists`,
+    target.status === 200,
+    `status ${target.status}`,
   );
 }
 
@@ -256,9 +270,12 @@ for (let index = 0; index < imageFiles.length; index += 12) {
 }
 
 // Nothing should ship that no page references.
-const allReferences =
-  [...pages.values()].join("") +
-  readFileSync(path.join(projectRoot, "src/content/site.ts"), "utf8");
+const contentDir = path.join(projectRoot, "src/content");
+const contentSources = readdirSync(contentDir)
+  .filter((file) => file.endsWith(".ts") || file.endsWith(".json"))
+  .map((file) => readFileSync(path.join(contentDir, file), "utf8"))
+  .join("\n");
+const allReferences = [...pages.values()].join("") + contentSources;
 const orphans = imageFiles.filter(
   (file) =>
     !allReferences.includes(encodeURIComponent(`/images/${file}`)) &&
