@@ -22,6 +22,7 @@ export default function PageBanner({ title, image, crumbs }: PageBannerProps) {
         fill
         sizes="100vw"
         priority
+        fetchPriority="high"
         quality={78}
         aria-hidden
       />

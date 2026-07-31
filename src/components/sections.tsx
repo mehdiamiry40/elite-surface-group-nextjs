@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Carousel from "@/components/Carousel";
 import QuoteButton from "@/components/QuoteButton";
-import { ArrowRightIcon, CheckIcon, StarIcon } from "@/components/icons";
+import { ArrowRightIcon, CheckIcon } from "@/components/icons";
 import {
   ctaBand,
   services,
@@ -97,6 +97,7 @@ export function ServiceCards({
                 <Link
                   className="service-card__more"
                   href={`/${service.slug}`}
+                  prefetch={false}
                   aria-label={`Read more about ${service.name}`}
                 >
                   <ArrowRightIcon />
@@ -113,10 +114,13 @@ export function ServiceCards({
 /* ------------------------------------------------------------ testimonials */
 
 export function Testimonials() {
+  if (!testimonials.length) {
+    return null;
+  }
+
   return (
     <section
       className="testimonials"
-      style={{ backgroundImage: `url(${testimonialsSection.background})` }}
       aria-labelledby="testimonials-title"
       id="testimonials"
     >
@@ -130,17 +134,6 @@ export function Testimonials() {
         <Carousel label="testimonial">
           {testimonials.map((item) => (
             <figure className="quote" key={item.name}>
-              {/* role="img" so the aria-label is permitted and the five
-                  decorative glyphs are announced as one rating. */}
-              <div
-                className="quote__stars"
-                role="img"
-                aria-label="Rated 5 out of 5"
-              >
-                {Array.from({ length: 5 }, (_, index) => (
-                  <StarIcon key={index} />
-                ))}
-              </div>
               <blockquote>
                 <p>{item.quote}</p>
               </blockquote>
@@ -161,9 +154,17 @@ export function CtaBand() {
   return (
     <section
       className="cta"
-      style={{ backgroundImage: `url(${ctaBand.background})` }}
       aria-labelledby="cta-title"
     >
+      <Image
+        className="section-background"
+        src={ctaBand.background}
+        alt=""
+        fill
+        sizes="100vw"
+        quality={72}
+        aria-hidden
+      />
       <div className="shell cta__inner">
         <div>
           <h2 id="cta-title">{ctaBand.title}</h2>

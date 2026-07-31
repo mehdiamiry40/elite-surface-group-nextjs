@@ -77,7 +77,12 @@ export default function ContactSection({
               <h3>{contactSection.formTitle}</h3>
               <p>{contactSection.formNote}</p>
             </div>
-            <form className="form form--2col" onSubmit={submit}>
+            <form
+              className="form form--2col"
+              action="/api/contact/"
+              method="post"
+              onSubmit={submit}
+            >
               <EnquiryFields
                 idPrefix="contact"
                 pending={pending}

@@ -4,19 +4,13 @@
  * Reports whether contact-form delivery is configured.
  *
  * Without RESEND_API_KEY, CONTACT_FROM_EMAIL and CONTACT_TO_EMAIL the API
- * answers 503 and falls back to opening the visitor's mail client, which loses
- * the enquiry for anyone without a configured mail app. That is worth shouting
- * about — but it is a *runtime* condition, so this warns by default rather than
- * failing the build:
+ * answers 503 and offers direct call/email options. That is acceptable during
+ * local development, but not for a production deployment whose primary purpose
+ * is lead generation.
  *
- *   - the route handler already degrades gracefully and logs an error per
- *     dropped enquiry, so the failure is observable where it actually happens;
- *   - blocking builds would mean a rotated or expired Resend key makes the whole
- *     site undeployable, so you could not ship an unrelated fix to a live site.
- *
- * Set REQUIRE_CONTACT_DELIVERY=1 to make this fatal instead. Do that once the
- * site is serving real traffic — that is the point where a form which cannot
- * deliver becomes lost business rather than an unfinished setup step.
+ * Production Vercel builds fail by default when configuration is absent.
+ * REQUIRE_CONTACT_DELIVERY=1 applies the same rule elsewhere. The emergency
+ * ALLOW_UNCONFIGURED_CONTACT=1 override must be explicit.
  */
 
 const REQUIRED = ["RESEND_API_KEY", "CONTACT_FROM_EMAIL", "CONTACT_TO_EMAIL"];
@@ -35,16 +29,21 @@ console.warn(
     `check-env: CONTACT FORM CANNOT DELIVER EMAIL (${target} build)\n` +
     `${banner}\n` +
     `Missing: ${missing.join(", ")}\n\n` +
-    "Enquiries will fall back to opening the visitor's mail client, which\n" +
-    "silently loses them for anyone without a configured mail app.\n\n" +
+    "The form will show direct phone/email options instead of delivering.\n\n" +
     "Set these in the Vercel project settings (or .env.local locally) before\n" +
     "this site serves real traffic.\n" +
     `${banner}\n`,
 );
 
-if (process.env.REQUIRE_CONTACT_DELIVERY === "1") {
+const mustDeliver =
+  process.env.VERCEL_ENV === "production" ||
+  process.env.REQUIRE_CONTACT_DELIVERY === "1";
+const emergencyOverride = process.env.ALLOW_UNCONFIGURED_CONTACT === "1";
+
+if (mustDeliver && !emergencyOverride) {
   console.error(
-    "check-env: failing the build because REQUIRE_CONTACT_DELIVERY=1.\n",
+    "check-env: failing a delivery-required build. Configure Resend or set " +
+      "ALLOW_UNCONFIGURED_CONTACT=1 only for an emergency deployment.\n",
   );
   process.exit(1);
 }

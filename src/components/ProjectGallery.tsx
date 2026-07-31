@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useCallback, useState } from "react";
 import { useDialog } from "@/components/useDialog";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons";
@@ -41,12 +42,19 @@ export default function ProjectGallery({ items }: ProjectGalleryProps) {
               <Image
                 src={item.image}
                 alt={item.alt}
-                width={600}
-                height={400}
+                width={item.width}
+                height={item.height}
                 sizes="(max-width: 767px) 100vw, (max-width: 1024px) 50vw, 380px"
                 quality={78}
               />
             </button>
+            <div className="gallery__caption">
+              <h3>{item.title}</h3>
+              <p>{item.summary}</p>
+              <Link href={`/${item.service}/`}>
+                View {item.service} services
+              </Link>
+            </div>
           </li>
         ))}
       </ul>
@@ -105,8 +113,8 @@ export default function ProjectGallery({ items }: ProjectGalleryProps) {
             <Image
               src={current.image}
               alt={current.alt}
-              width={1200}
-              height={1600}
+              width={current.width}
+              height={current.height}
               sizes="92vw"
               quality={82}
             />

@@ -67,8 +67,8 @@ for (const retired of [
 ]) {
   const response = await get(retired, { redirect: "manual" });
   check(
-    `retired ${retired} redirects`,
-    [301, 308].includes(response.status),
+    `retired ${retired} returns 404`,
+    response.status === 404,
     `status ${response.status}`,
   );
 }
@@ -107,6 +107,15 @@ for (const legacy of legacySample) {
 
 const notFound = await get("/this-route-does-not-exist/");
 check("unknown route 404s", notFound.status === 404, `status ${notFound.status}`);
+const notFoundHtml = await notFound.text();
+check(
+  "404 does not canonicalize to the homepage",
+  !/<link rel="canonical"/.test(notFoundHtml),
+);
+check(
+  "404 emits exactly one robots directive",
+  (notFoundHtml.match(/<meta name="robots"/g) ?? []).length === 1,
+);
 
 for (const endpoint of ["/sitemap.xml", "/robots.txt"]) {
   const response = await get(endpoint);
@@ -332,6 +341,32 @@ check(
   `status ${noRedirect.status}`,
 );
 
+const progressiveForm = await get("/api/contact/", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/x-www-form-urlencoded",
+    Origin: baseUrl.origin,
+  },
+  body: new URLSearchParams({
+    firstName: "Smoke",
+    lastName: "Tester",
+    email: "smoke@example.com",
+    service: "",
+    message: "Progressive form fallback check.",
+    company: "honeypot-check",
+    sourcePath: "/contact-us/",
+  }),
+  redirect: "manual",
+});
+const progressiveLocation = progressiveForm.headers.get("location") ?? "";
+check(
+  "progressive form POST redirects without personal data",
+  progressiveForm.status === 303 &&
+    /\/contact-us\/#enquiry-sent$/.test(progressiveLocation) &&
+    !/Smoke|smoke%40|message=/.test(progressiveLocation),
+  `status ${progressiveForm.status}, location ${progressiveLocation}`,
+);
+
 /* ------------------------------------------- content / compliance guards */
 
 const privacyHtml = pages.get("/privacy-policy/") ?? "";
@@ -362,6 +397,10 @@ check(
 check(
   "pages do not publish self-served AggregateRating schema",
   ![...pages.values()].some((html) => /AggregateRating/.test(html)),
+);
+check(
+  "unverified testimonials and ratings are not published",
+  ![...pages.values()].some((html) => /Rated 5 out of 5|Sarah Mitchell/.test(html)),
 );
 check(
   "CTA band is not cladding-only",

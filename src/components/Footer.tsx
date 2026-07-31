@@ -59,7 +59,9 @@ export default function Footer() {
             <ul className="footer__links">
               {footerNav.quickLinks.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href}>{link.label}</Link>
+                  <Link href={link.href} prefetch={false}>
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -70,7 +72,9 @@ export default function Footer() {
             <ul className="footer__links">
               {footerNav.services.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href}>{link.label}</Link>
+                  <Link href={link.href} prefetch={false}>
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -92,6 +96,9 @@ export default function Footer() {
                 <span>{business.area}</span>
               </li>
             </ul>
+            <p className="footer__hours">
+              <strong>Hours:</strong> {business.openingHoursDisplay}
+            </p>
           </div>
         </div>
 
@@ -102,7 +109,9 @@ export default function Footer() {
           <ul>
             {footerNav.legal.map((link) => (
               <li key={link.href}>
-                <Link href={link.href}>{link.label}</Link>
+                <Link href={link.href} prefetch={false}>
+                  {link.label}
+                </Link>
               </li>
             ))}
           </ul>

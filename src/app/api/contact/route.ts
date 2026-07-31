@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
 import { business, services } from "@/content/site";
 
 export const runtime = "nodejs";
+export const maxDuration = 10;
 
 const MAX = {
   name: 120,
@@ -15,9 +15,20 @@ const MAX = {
 };
 
 const MAX_BODY_BYTES = 16_384;
+const RESEND_TIMEOUT_MS = 8_000;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX = 6;
 const ALLOWED_SERVICES = new Set(services.map((service) => service.name));
+const ALLOWED_SOURCE_PATHS = new Set([
+  "/",
+  "/about/",
+  "/services/",
+  "/projects/",
+  "/contact-us/",
+  "/privacy-policy/",
+  "/terms-of-service/",
+  ...services.map((service) => `/${service.slug}/`),
+]);
 
 /**
  * Best-effort, per-instance throttle.
@@ -30,6 +41,41 @@ const ALLOWED_SERVICES = new Set(services.map((service) => service.name));
  */
 const RATE_LIMIT_MAX_KEYS = 5_000;
 const requestBuckets = new Map<string, number[]>();
+
+class BodyTooLargeError extends Error {}
+
+/** Reads at most MAX_BODY_BYTES without buffering a platform-sized payload. */
+async function readBody(request: NextRequest) {
+  const reader = request.body?.getReader();
+  if (!reader) {
+    return "";
+  }
+
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) {
+      break;
+    }
+
+    total += value.byteLength;
+    if (total > MAX_BODY_BYTES) {
+      await reader.cancel();
+      throw new BodyTooLargeError("Request body exceeds the limit");
+    }
+    chunks.push(value);
+  }
+
+  const body = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    body.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return new TextDecoder().decode(body);
+}
 
 /** Drops expired buckets so the map cannot grow without bound. */
 function evictStaleBuckets(now: number) {
@@ -64,6 +110,10 @@ function enforceKeyCap() {
 
 function text(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
+}
+
+function singleLine(value: unknown) {
+  return text(value).replace(/[\u0000-\u001f\u007f]/g, " ");
 }
 
 function originIsAllowed(request: NextRequest) {
@@ -174,46 +224,130 @@ function mailtoUrl({
 }) {
   const recipient = process.env.CONTACT_TO_EMAIL || business.email;
   const subject = `Website enquiry${service ? ` — ${service}` : ""}`;
+  // Keep the fallback below common URL-length limits. The full message remains
+  // in the on-page form so the visitor can copy it or retry.
+  const fallbackMessage =
+    message.length > 1_200 ? `${message.slice(0, 1_200)}…` : message;
   const body = [
     `Name: ${name}`,
     `Email: ${email}`,
     `Phone: ${phone || "Not provided"}`,
     `Service: ${service || "Not specified"}`,
     "",
-    message,
+    fallbackMessage,
   ].join("\n");
   return `mailto:${encodeURIComponent(recipient)}?subject=${encodeURIComponent(
     subject,
   )}&body=${encodeURIComponent(body)}`;
 }
 
+type ContactPayload = {
+  ok?: boolean;
+  message: string;
+  mailto?: string;
+};
+
+type FormOutcome = "sent" | "unavailable" | "invalid";
+
+function contactResponse(
+  request: NextRequest,
+  isBrowserForm: boolean,
+  payload: ContactPayload,
+  status: number,
+  outcome: FormOutcome,
+) {
+  if (isBrowserForm) {
+    const destination = new URL("/contact-us/", request.url);
+    destination.hash = `enquiry-${outcome}`;
+    return NextResponse.redirect(destination, 303);
+  }
+  return NextResponse.json(payload, { status });
+}
+
+type ResendEmail = {
+  from: string;
+  to: string[];
+  reply_to: string;
+  subject: string;
+  text: string;
+  html: string;
+};
+
+async function sendWithResend(
+  apiKey: string,
+  email: ResendEmail,
+  idempotencyKey: string,
+) {
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+      "Idempotency-Key": idempotencyKey,
+    },
+    body: JSON.stringify(email),
+    signal: AbortSignal.timeout(RESEND_TIMEOUT_MS),
+  });
+
+  const result: unknown = await response.json().catch(() => null);
+  if (!response.ok) {
+    throw new Error(
+      result && typeof result === "object" && "message" in result
+        ? String(result.message)
+        : `Resend returned HTTP ${response.status}`,
+    );
+  }
+
+  return result && typeof result === "object" && "id" in result
+    ? String(result.id)
+    : "accepted";
+}
+
 export async function POST(request: NextRequest) {
   const contentType =
     request.headers.get("content-type")?.split(";")[0].trim().toLowerCase() ??
     "";
-  if (contentType !== "application/json") {
+  const isJson = contentType === "application/json";
+  const isBrowserForm = contentType === "application/x-www-form-urlencoded";
+
+  if (!isJson && !isBrowserForm) {
     return NextResponse.json(
-      { message: "This endpoint accepts JSON form submissions only." },
+      { message: "This endpoint accepts website form submissions only." },
       { status: 415 },
     );
   }
 
   const contentLength = Number(request.headers.get("content-length") ?? "0");
   if (Number.isFinite(contentLength) && contentLength > MAX_BODY_BYTES) {
-    return NextResponse.json(
+    return contactResponse(
+      request,
+      isBrowserForm,
       { message: "The form submission is too large." },
-      { status: 413 },
+      413,
+      "invalid",
     );
   }
 
   if (!originIsAllowed(request)) {
-    return NextResponse.json(
+    return contactResponse(
+      request,
+      isBrowserForm,
       { message: "This form submission was not accepted." },
-      { status: 403 },
+      403,
+      "invalid",
     );
   }
 
   if (!rateLimit(request)) {
+    if (isBrowserForm) {
+      return contactResponse(
+        request,
+        true,
+        { message: "Too many enquiries were submitted. Please try again soon." },
+        429,
+        "unavailable",
+      );
+    }
     return NextResponse.json(
       { message: "Too many enquiries were submitted. Please try again soon." },
       {
@@ -227,45 +361,67 @@ export async function POST(request: NextRequest) {
 
   let rawBody: string;
   try {
-    rawBody = await request.text();
-  } catch {
-    return NextResponse.json(
-      { message: "Please check the form and try again." },
-      { status: 400 },
-    );
-  }
-
-  if (rawBody.length > MAX_BODY_BYTES) {
-    return NextResponse.json(
-      { message: "The form submission is too large." },
-      { status: 413 },
+    rawBody = await readBody(request);
+  } catch (error) {
+    return contactResponse(
+      request,
+      isBrowserForm,
+      {
+        message:
+          error instanceof BodyTooLargeError
+            ? "The form submission is too large."
+            : "Please check the form and try again.",
+      },
+      error instanceof BodyTooLargeError ? 413 : 400,
+      "invalid",
     );
   }
 
   let body: Record<string, unknown>;
   try {
-    const parsed: unknown = JSON.parse(rawBody);
-    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
-      throw new TypeError("Expected an object");
+    if (isJson) {
+      const parsed: unknown = JSON.parse(rawBody);
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+        throw new TypeError("Expected an object");
+      }
+      body = parsed as Record<string, unknown>;
+    } else {
+      const params = new URLSearchParams(rawBody);
+      body = Object.fromEntries(params);
+      body.name = [params.get("firstName"), params.get("lastName")]
+        .map((part) => part?.trim())
+        .filter(Boolean)
+        .join(" ");
     }
-    body = parsed as Record<string, unknown>;
   } catch {
-    return NextResponse.json(
+    return contactResponse(
+      request,
+      isBrowserForm,
       { message: "Please check the form and try again." },
-      { status: 400 },
+      400,
+      "invalid",
     );
   }
 
-  const name = text(body.name);
-  const email = text(body.email);
-  const phone = text(body.phone);
-  const service = text(body.service);
+  const name = singleLine(body.name);
+  const email = singleLine(body.email);
+  const phone = singleLine(body.phone);
+  const service = singleLine(body.service);
   const message = text(body.message);
-  const sourcePath = text(body.sourcePath);
-  const company = text(body.company);
+  const requestedSourcePath = singleLine(body.sourcePath);
+  const sourcePath = ALLOWED_SOURCE_PATHS.has(requestedSourcePath)
+    ? requestedSourcePath
+    : "unknown";
+  const company = singleLine(body.company);
 
   if (company) {
-    return NextResponse.json({ ok: true });
+    return contactResponse(
+      request,
+      isBrowserForm,
+      { ok: true, message: "Thanks — your message has been sent." },
+      200,
+      "sent",
+    );
   }
 
   if (
@@ -277,9 +433,12 @@ export async function POST(request: NextRequest) {
     tooLong(sourcePath, MAX.sourcePath) ||
     tooLong(company, MAX.company)
   ) {
-    return NextResponse.json(
+    return contactResponse(
+      request,
+      isBrowserForm,
       { message: "One or more form fields are too long." },
-      { status: 422 },
+      422,
+      "invalid",
     );
   }
 
@@ -289,16 +448,22 @@ export async function POST(request: NextRequest) {
     !message ||
     !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
   ) {
-    return NextResponse.json(
+    return contactResponse(
+      request,
+      isBrowserForm,
       { message: "Please provide your name, email address and message." },
-      { status: 400 },
+      400,
+      "invalid",
     );
   }
 
   if (service && !ALLOWED_SERVICES.has(service)) {
-    return NextResponse.json(
+    return contactResponse(
+      request,
+      isBrowserForm,
       { message: "Please choose a valid service." },
-      { status: 400 },
+      400,
+      "invalid",
     );
   }
 
@@ -314,23 +479,27 @@ export async function POST(request: NextRequest) {
         "CONTACT_TO_EMAIL is unset. Falling back to the visitor's mail client.",
       { page: sourcePath || "unknown" },
     );
-    return NextResponse.json(
+    return contactResponse(
+      request,
+      isBrowserForm,
       {
         message:
           "Email delivery is unavailable right now. You can call us on 0413 844 912, or continue in your email app.",
         mailto: mailtoUrl({ name, email, phone, service, message }),
       },
-      { status: 503 },
+      503,
+      "unavailable",
     );
   }
 
-  let result: Awaited<ReturnType<Resend["emails"]["send"]>>;
+  const requestId = crypto.randomUUID();
   try {
-    const resend = new Resend(resendKey);
-    result = await resend.emails.send({
+    const emailId = await sendWithResend(
+      resendKey,
+      {
       from,
       to: [to],
-      replyTo: email,
+        reply_to: email,
       subject: `Elite Surface Group website enquiry${
         service ? ` — ${service}` : ""
       }`,
@@ -355,39 +524,42 @@ export async function POST(request: NextRequest) {
         <hr />
         <p>${escapeHtml(message).replaceAll("\n", "<br />")}</p>
       `,
+      },
+      requestId,
+    );
+
+    console.info("[contact] Enquiry accepted by Resend.", {
+      requestId,
+      emailId,
+      page: sourcePath || "unknown",
     });
   } catch (error) {
     console.error("[contact] Resend threw while sending an enquiry.", {
+      requestId,
       page: sourcePath || "unknown",
       error: error instanceof Error ? error.message : "unknown",
     });
-    return NextResponse.json(
+    return contactResponse(
+      request,
+      isBrowserForm,
       {
         message:
           "Email delivery is unavailable right now. You can call us on 0413 844 912, or continue in your email app.",
         mailto: mailtoUrl({ name, email, phone, service, message }),
       },
-      { status: 502 },
+      502,
+      "unavailable",
     );
   }
 
-  if (result.error) {
-    console.error("[contact] Resend returned an error.", {
-      page: sourcePath || "unknown",
-      error: result.error,
-    });
-    return NextResponse.json(
-      {
-        message:
-          "Email delivery is unavailable right now. You can call us on 0413 844 912, or continue in your email app.",
-        mailto: mailtoUrl({ name, email, phone, service, message }),
-      },
-      { status: 502 },
-    );
-  }
-
-  return NextResponse.json({
-    ok: true,
-    message: "Thanks — your message has been sent.",
-  });
+  return contactResponse(
+    request,
+    isBrowserForm,
+    {
+      ok: true,
+      message: "Thanks — your message has been sent.",
+    },
+    200,
+    "sent",
+  );
 }

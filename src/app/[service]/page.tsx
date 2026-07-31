@@ -36,7 +36,12 @@ export async function generateMetadata({
     title: service.metaTitle,
     description: service.metaDescription,
     path: `/${service.slug}`,
-    image: service.image,
+    image: {
+      path: service.image,
+      width: service.imageWidth,
+      height: service.imageHeight,
+      alt: service.imageAlt,
+    },
   });
 }
 
@@ -72,8 +77,8 @@ export default async function ServicePage({ params }: PageProps) {
             <Image
               src={service.image}
               alt={service.imageAlt}
-              width={600}
-              height={400}
+              width={service.imageWidth}
+              height={service.imageHeight}
               sizes="(max-width: 767px) 100vw, 560px"
               quality={80}
               priority

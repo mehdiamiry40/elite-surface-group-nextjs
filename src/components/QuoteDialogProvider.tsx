@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import {
   createContext,
   useCallback,
@@ -8,12 +9,13 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import QuoteDialog from "@/components/QuoteDialog";
+
+const QuoteDialog = dynamic(() => import("@/components/QuoteDialog"), {
+  ssr: false,
+});
 
 type QuoteDialogContextValue = {
   open: () => void;
-  close: () => void;
-  isOpen: boolean;
 };
 
 const QuoteDialogContext = createContext<QuoteDialogContextValue | null>(null);
@@ -28,12 +30,12 @@ export function QuoteDialogProvider({ children }: { children: ReactNode }) {
   const open = useCallback(() => setIsOpen(true), []);
   const close = useCallback(() => setIsOpen(false), []);
 
-  const value = useMemo(() => ({ open, close, isOpen }), [open, close, isOpen]);
+  const value = useMemo(() => ({ open }), [open]);
 
   return (
     <QuoteDialogContext.Provider value={value}>
       {children}
-      <QuoteDialog open={isOpen} onClose={close} />
+      {isOpen ? <QuoteDialog open onClose={close} /> : null}
     </QuoteDialogContext.Provider>
   );
 }

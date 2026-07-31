@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { QuoteDialogProvider } from "@/components/QuoteDialogProvider";
 import { business } from "@/content/site";
-import { absoluteUrl, DEFAULT_OG_IMAGE, pageMetadata } from "@/lib/seo";
+import { absoluteUrl, DEFAULT_OG_IMAGE } from "@/lib/seo";
 import "./globals.css";
 
 // Self-hosted at build time, so the site makes no request to Google's CDN and
@@ -23,11 +23,8 @@ const heading = Roboto_Slab({
   variable: "--font-heading",
 });
 
-const homeMeta = pageMetadata({
-  description:
-    "Adelaide specialists in cladding, render, Hebel and complete walling installations. Over 10 years of experience across South Australia.",
-  path: "/",
-});
+const HOME_DESCRIPTION =
+  "Adelaide specialists in cladding, render, Hebel and complete walling installations for residential and commercial projects.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(business.siteUrl),
@@ -35,8 +32,7 @@ export const metadata: Metadata = {
     default: `${business.name} — Cladding, Render & Hebel Specialists in Adelaide`,
     template: `%s — ${business.name}`,
   },
-  description: homeMeta.description,
-  alternates: homeMeta.alternates,
+  description: HOME_DESCRIPTION,
   openGraph: {
     type: "website",
     siteName: business.name,
@@ -71,15 +67,16 @@ const organisationSchema = {
   url: business.siteUrl,
   telephone: business.phone,
   email: business.email,
-  image: absoluteUrl("/images/esg-logo-1.webp"),
+  description: HOME_DESCRIPTION,
+  image: absoluteUrl("/images/cropped-esg-logo-1-192x192.webp"),
   logo: {
     "@type": "ImageObject",
     "@id": `${business.siteUrl}/#logo`,
-    url: absoluteUrl("/images/esg-logo-1.webp"),
+    url: absoluteUrl("/images/cropped-esg-logo-1-192x192.webp"),
     caption: business.name,
     inLanguage: "en-AU",
-    width: "123",
-    height: "67",
+    width: "192",
+    height: "192",
   },
   areaServed: { "@type": "AdministrativeArea", name: business.area },
   address: {
@@ -103,6 +100,17 @@ const organisationSchema = {
   },
 };
 
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${business.siteUrl}/#website`,
+  url: `${business.siteUrl}/`,
+  name: business.name,
+  description: HOME_DESCRIPTION,
+  publisher: { "@id": `${business.siteUrl}/#organization` },
+  inLanguage: "en-AU",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -113,6 +121,10 @@ export default function RootLayout({
           type="application/ld+json"
           // Static, developer-authored object — no user input reaches this.
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organisationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
         <a className="skip-link" href="#main">
           Skip to content

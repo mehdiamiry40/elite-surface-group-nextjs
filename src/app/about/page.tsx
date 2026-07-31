@@ -36,8 +36,8 @@ export default function AboutPage() {
                 key={item.image}
                 src={item.image}
                 alt={item.alt}
-                width={500}
-                height={334}
+                width={item.width}
+                height={item.height}
                 sizes="(max-width: 767px) 100vw, (max-width: 1024px) 50vw, 380px"
                 quality={78}
               />

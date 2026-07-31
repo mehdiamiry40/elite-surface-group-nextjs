@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { serviceOptions, type EnquiryStatus } from "@/components/useEnquiryForm";
 
 type EnquiryFieldsProps = {
@@ -26,10 +28,11 @@ export default function EnquiryFields({
   defaultService,
 }: EnquiryFieldsProps) {
   const id = (name: string) => `${idPrefix}-${name}`;
+  const pathname = usePathname();
   const selected =
     defaultService && serviceOptions.includes(defaultService)
       ? defaultService
-      : serviceOptions[0];
+      : "";
 
   return (
     <>
@@ -79,7 +82,13 @@ export default function EnquiryFields({
 
       <div className="field field--full">
         <label htmlFor={id("service")}>Service needed</label>
-        <select id={id("service")} name="service" defaultValue={selected}>
+        <select
+          key={`${pathname}:${selected}`}
+          id={id("service")}
+          name="service"
+          defaultValue={selected}
+        >
+          <option value="">Not sure / choose a service</option>
           {serviceOptions.map((option) => (
             <option key={option} value={option}>
               {option}
@@ -99,6 +108,8 @@ export default function EnquiryFields({
         />
       </div>
 
+      <input type="hidden" name="sourcePath" value={pathname} />
+
       <div className="field field--hidden" aria-hidden="true">
         <label htmlFor={id("company")}>Company</label>
         <input
@@ -117,12 +128,22 @@ export default function EnquiryFields({
           role={status.state === "error" ? "alert" : "status"}
         >
           {status.message}
+          {status.mailto ? (
+            <>
+              {" "}
+              <a href={status.mailto}>Continue in your email app</a>.
+            </>
+          ) : null}
         </p>
       ) : null}
 
       <button className="btn form__submit" type="submit" disabled={pending}>
         {pending ? "Sending…" : submitLabel}
       </button>
+      <p className="form__privacy">
+        We use your details only to respond to this enquiry. See our{" "}
+        <Link href="/privacy-policy/">Privacy Policy</Link>.
+      </p>
     </>
   );
 }

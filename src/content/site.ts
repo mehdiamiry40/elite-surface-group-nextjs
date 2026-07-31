@@ -7,7 +7,7 @@
 
 export const business = {
   name: "Elite Surface Group",
-  tagline: "SA's Leading Experts in Walling Installations & Finishes",
+  tagline: "Adelaide Walling Installation & Finish Specialists",
   /** E.164 for `tel:` hrefs — never hand-write a `tel:` link anywhere else. */
   phone: "+61413844912",
   /** Human-readable form of the same number. */
@@ -16,7 +16,7 @@ export const business = {
   area: "Adelaide & South Australia",
   siteUrl: "https://elitesurfacegroup.com.au",
   openingHours: "Mo-Sa 09:00-17:00",
-  foundedYears: 10,
+  openingHoursDisplay: "Monday–Saturday, 9:00 am–5:00 pm",
   /**
    * Public profile URLs. Leave empty until real pages exist — the footer only
    * renders icons for URLs that are set.
@@ -53,7 +53,6 @@ export const footerNav = {
   quickLinks: [
     { label: "About Us", href: "/about" },
     { label: "Projects", href: "/projects" },
-    { label: "Testimonials", href: "/about#testimonials" },
     { label: "Contact Us", href: "/contact-us" },
   ],
   services: [
@@ -69,7 +68,7 @@ export const footerNav = {
 } as const;
 
 export const footerBlurb =
-  "Elite Surface Group has been transforming properties across Adelaide and South Australia for over a decade. Our team of skilled professionals brings expertise, dedication, and an unwavering commitment to quality to every project.";
+  "Elite Surface Group provides cladding, render, Hebel and walling services across Adelaide and South Australia, with a focus on careful installation, clear communication and durable finishes.";
 
 /* ---------------------------------------------------------------- services */
 
@@ -80,6 +79,8 @@ export type Service = {
   bannerTitle: string;
   image: string;
   imageAlt: string;
+  imageWidth: number;
+  imageHeight: number;
   /** Short blurb used on the homepage service cards. */
   summary: string;
   metaTitle: string;
@@ -95,13 +96,15 @@ export const services: readonly Service[] = [
   {
     slug: "cladding",
     name: "Cladding",
-    bannerTitle: "Cladding",
+    bannerTitle: "Cladding Installation Adelaide",
     image: "/images/cladding.webp",
     imageAlt:
       "Modern home with dark timber-look exterior cladding installed by Elite Surface Group",
+    imageWidth: 1000,
+    imageHeight: 667,
     summary:
       "We provide high-quality cladding solutions that enhance your property’s appearance and protection. Our team ensures a precise installation using durable materials that withstand Adelaide’s weather.",
-    metaTitle: "Cladding",
+    metaTitle: "Cladding Installation Adelaide",
     metaDescription:
       "Professional cladding installation across Adelaide and South Australia. Durable, weather-resistant systems for residential and commercial properties.",
     intro: [
@@ -124,17 +127,19 @@ export const services: readonly Service[] = [
   {
     slug: "render",
     name: "Render",
-    bannerTitle: "Render",
+    bannerTitle: "Rendering Services Adelaide",
     image: "/images/render.webp",
     imageAlt:
       "Smooth rendered interior wall with a clean contemporary finish by Elite Surface Group",
+    imageWidth: 1000,
+    imageHeight: 422,
     summary:
       "Our professional rendering services give walls a smooth and polished finish. We specialise in both new render applications and repairs, ensuring a long-lasting and visually appealing result.",
-    metaTitle: "Render",
+    metaTitle: "Rendering Services Adelaide",
     metaDescription:
       "Expert rendering services in Adelaide. Smooth, textured and custom render finishes for internal and external walls, applied to last.",
     intro: [
-      "Our professional render services provide smooth, durable, and visually striking finishes for both internal and external walls. With over a decade of experience, Elite Surface Group ensures every render application is completed to the highest standard.",
+      "Our professional render services provide smooth, durable, and visually striking finishes for both internal and external walls. We prepare and apply each finish with close attention to the substrate, conditions, and project specification.",
       "We offer a variety of render finishes to suit different architectural styles, whether you’re after a modern, textured, or classic look. Our team focuses on proper surface preparation and expert application to achieve long-lasting results.",
     ],
     detail: [
@@ -153,18 +158,20 @@ export const services: readonly Service[] = [
   {
     slug: "hebel",
     name: "Hebel",
-    bannerTitle: "Hebel",
+    bannerTitle: "Hebel Wall Systems Adelaide",
     image: "/images/hebel.webp",
     imageAlt:
       "Hebel panel wall system installed on a modern build by Elite Surface Group",
+    imageWidth: 1000,
+    imageHeight: 646,
     summary:
-      "We install Hebel panels that are lightweight, energy-efficient, and fire-resistant. Perfect for modern homes, our expert team guarantees accurate installation and lasting performance.",
-    metaTitle: "Hebel",
+      "We install Hebel panels for residential and commercial projects, following the specified system details for accurate placement, fixing and finishing.",
+    metaTitle: "Hebel Wall Systems Adelaide",
     metaDescription:
-      "Hebel wall system specialists in Adelaide. Lightweight, fire-resistant, thermally efficient panels installed to Australian standards.",
+      "Hebel wall system installation in Adelaide. Lightweight panels with thermal, acoustic and fire-performance properties when specified and installed as a complete system.",
     intro: [
       "Elite Surface Group specialises in Hebel wall systems, a lightweight yet highly durable solution ideal for modern construction. Hebel panels are known for their strength, fire resistance, thermal efficiency, and acoustic performance.",
-      "Our experienced team handles complete Hebel installations, ensuring accuracy, compliance, and structural integrity throughout the process. Hebel is a smart choice for projects that demand efficiency without compromising on performance.",
+      "Our team handles complete Hebel installations with attention to panel placement, fixing and detailing. Final system performance depends on the specified product, design and complete installed assembly.",
     ],
     detail: [
       "Hebel systems require specialist knowledge and accurate installation, and our team is trained to deliver both. We ensure correct panel placement, secure fixing, and proper detailing to maximise the performance benefits of Hebel walls, resulting in faster construction timelines and reliable outcomes.",
@@ -182,18 +189,20 @@ export const services: readonly Service[] = [
   {
     slug: "walling",
     name: "Walling",
-    bannerTitle: "Walling",
+    bannerTitle: "Walling Services Adelaide",
     image: "/images/walling.webp",
     imageAlt:
       "Interior walling installation with a crisp painted finish by Elite Surface Group",
+    imageWidth: 1000,
+    imageHeight: 778,
     summary:
       "Our walling solutions are designed for strength and durability. From renovations to new builds, we deliver high-quality finishes that combine practicality with a premium look.",
-    metaTitle: "Walling",
+    metaTitle: "Walling Services Adelaide",
     metaDescription:
       "Complete walling solutions across South Australia — structural wall systems, internal and external walls, and high-quality finishes.",
     intro: [
       "From structural walls to finishing systems, Elite Surface Group delivers comprehensive walling solutions for a wide range of construction projects. Our walling services are designed to provide strength, stability, and a high-quality finish.",
-      "We manage walling installations from start to finish, ensuring precision, safety, and compliance with Australian standards. Whether it’s a residential build or a large commercial project, our team delivers dependable results.",
+      "We manage walling installations from start to finish with attention to precision, safety, the project specification and applicable product installation requirements.",
     ],
     detail: [
       "Every walling project we undertake is planned with durability and performance in mind. We work closely with builders and project managers to ensure wall systems integrate seamlessly with other construction elements, from early-stage construction through to final finishes.",
@@ -241,7 +250,7 @@ export const aboutTeaser = {
   image: "/images/trusted-walling.webp",
   imageAlt: "Elite Surface Group tradespeople rendering an interior wall",
   body: [
-    "Elite Surface Group has been transforming homes and commercial properties across Adelaide and South Australia for over a decade. Our skilled team combines technical expertise with a dedication to quality, ensuring every project is completed to the highest standards.",
+    "Elite Surface Group works on homes and commercial properties across Adelaide and South Australia. Our team combines practical walling experience with careful planning, clear communication and attention to finish.",
     "Whether it’s modern cladding, professional rendering, or Hebel panel installation, we focus on delivering results that enhance both the look and value of your property.",
   ],
 } as const;
@@ -281,13 +290,13 @@ export const whyChoose = {
   imageAlt: "Bright living room with a smooth rendered feature wall",
   columns: [
     [
-      "Over 10 years of industry experience",
-      "Quality craftsmanship guaranteed",
+      "Practical walling and surface-finish experience",
+      "Careful workmanship and quality checks",
       "Local Adelaide experts",
     ],
     [
-      "Licensed and fully insured services",
-      "Competitive pricing",
+      "Project-specific scope and documentation",
+      "Clear, itemised pricing",
       "Free quotes and consultations",
     ],
   ],
@@ -301,32 +310,32 @@ export const differentiators = {
   items: [
     {
       icon: "/images/carpentry.webp",
-      title: "Skilled – Craftsmanship",
+      title: "Skilled Craftsmanship",
       body: "Delivering high-quality workmanship on every project.",
     },
     {
       icon: "/images/rating.webp",
-      title: "Trusted – Experts",
-      body: "Over 10 years of experience you can rely on.",
+      title: "Experienced Team",
+      body: "Practical advice and careful installation for each project.",
     },
     {
       icon: "/images/color-palette.webp",
-      title: "Wide Range – Of Walling Solutions",
+      title: "Walling Solutions",
       body: "Cladding, rendering, Hebel panels, and more.",
     },
     {
       icon: "/images/price-tag.webp",
-      title: "Clear – Pricing",
+      title: "Clear Pricing",
       body: "Honest, transparent quotes with no hidden costs.",
     },
     {
       icon: "/images/shield.webp",
-      title: "Reliable – Project Delivery",
-      body: "We complete every project on time, every time.",
+      title: "Planned Project Delivery",
+      body: "We agree the scope and expected programme before work begins.",
     },
     {
       icon: "/images/support.webp",
-      title: "Dedicated – Customer Support",
+      title: "Customer Support",
       body: "Friendly guidance and advice throughout your project.",
     },
   ],
@@ -351,12 +360,12 @@ export const expertise = {
     {
       icon: "/images/diamond.webp",
       title: "Installation",
-      body: "Skilled professionals providing a 7-year labour warranty for peace of mind.",
+      body: "Careful installation to the agreed scope and project specification.",
     },
     {
       icon: "/images/price-tag.webp",
-      title: "Price Guarantee",
-      body: "Honest, obligation-free quotes to ensure fair and clear pricing.",
+      title: "Clear Quotes",
+      body: "Obligation-free quotes describing the included scope and pricing.",
     },
   ],
 } as const;
@@ -364,34 +373,69 @@ export const expertise = {
 /* ----------------------------------------------------------------- projects */
 
 export type Project = {
+  title: string;
+  service: Service["slug"];
+  summary: string;
   image: string;
   alt: string;
+  width: number;
+  height: number;
 };
 
 export const projects: readonly Project[] = [
   {
+    title: "Two-storey exterior render",
+    service: "render",
+    summary: "Smooth white render across a completed two-storey facade.",
     image: "/images/img-6.webp",
     alt: "Rendered two-storey home with a smooth white exterior finish",
+    width: 1600,
+    height: 2133,
   },
   {
+    title: "Curved rendered wall detail",
+    service: "render",
+    summary: "Crisp render and paint finish around a curved wall detail.",
     image: "/images/img-5.webp",
     alt: "Curved rendered wall detail with a crisp painted finish",
+    width: 1600,
+    height: 2133,
   },
   {
+    title: "Contemporary exterior cladding",
+    service: "cladding",
+    summary: "Feature cladding installed on a contemporary residence.",
     image: "/images/img-4.webp",
     alt: "External cladding installation on a contemporary residence",
+    width: 1600,
+    height: 2133,
   },
   {
+    title: "Rendered boundary wall",
+    service: "render",
+    summary: "Completed render finish beside a landscaped driveway.",
     image: "/images/img-3.webp",
     alt: "Rendered boundary wall alongside a landscaped driveway",
+    width: 1600,
+    height: 2133,
   },
   {
+    title: "Mixed cladding and render facade",
+    service: "cladding",
+    summary: "A modern facade combining contrasting cladding and render.",
     image: "/images/img-2.webp",
     alt: "Modern facade combining cladding and render finishes",
+    width: 1600,
+    height: 2133,
   },
   {
+    title: "Dark feature cladding",
+    service: "cladding",
+    summary: "Dark feature cladding on a completed residential exterior.",
     image: "/images/img-1.webp",
     alt: "Completed residential exterior with dark feature cladding",
+    width: 1280,
+    height: 960,
   },
 ];
 
@@ -404,39 +448,49 @@ export const featuredProjects = {
 
 /* ------------------------------------------------------------- testimonials */
 
-export const testimonials = [
+/**
+ * Testimonials inherited from the former site are retained as drafts until
+ * their source, wording, rating and publication permission are documented.
+ */
+const testimonialDrafts = [
   {
     name: "Sarah Mitchell",
     quote:
       "Elite Surface Group completely transformed the exterior of our home with high-quality rendering. The team was professional, efficient, and the final finish looks incredible. Highly recommend!",
+    verified: false,
   },
   {
     name: "David Robertson",
     quote:
       "We chose Elite Surface Group for our cladding installation and couldn’t be happier. The workmanship was excellent, communication was clear, and the project was finished right on schedule.",
+    verified: false,
   },
   {
     name: "Amanda Lee",
     quote:
       "The Hebel installation was handled with great attention to detail. The team was punctual, respectful, and delivered exactly what they promised. The results exceeded our expectations.",
+    verified: false,
   },
   {
     name: "Mark Thompson",
     quote:
       "From start to finish, the experience was smooth and stress-free. Honest pricing, quality craftsmanship, and a team that truly cares about the final outcome.",
+    verified: false,
   },
   {
     name: "Jason Carter",
     quote:
       "Elite Surface Group did an outstanding job on our renovation project. The finish is clean and modern, and the professionalism shown throughout was second to none.",
+    verified: false,
   },
 ] as const;
 
+export const testimonials = testimonialDrafts.filter((item) => item.verified);
+
 export const testimonialsSection = {
-  eyebrow: "What We Do",
+  eyebrow: "Customer Feedback",
   title: "What Our Clients Say",
   intro: "Don’t just take our word for it – hear from our satisfied customers.",
-  background: "/images/testi-bg.webp",
 } as const;
 
 /* --------------------------------------------------------------------- CTAs */
@@ -463,26 +517,37 @@ export const aboutPage = {
   bannerTitle: "About Us",
   title: "About Elite Surface Group",
   metaDescription:
-    "Elite Surface Group is South Australia’s trusted specialist in walling installations and surface finishes, with over 10 years of industry experience.",
-  lead: "Elite Surface Group is South Australia’s trusted specialist in walling installations and surface finishes. With over 10 years of hands-on industry experience, we’ve built a reputation for delivering high-quality workmanship, reliable service, and long-lasting results across residential, commercial, and development projects.",
+    "Meet the Adelaide team providing cladding, render, Hebel and walling installations for residential and commercial projects.",
+  lead: "Elite Surface Group provides walling installations and surface finishes across Adelaide and South Australia. We work with homeowners, builders and developers on residential, commercial and development projects.",
   gallery: [
-    { image: "/images/hebel.webp", alt: "Hebel panel wall system installation" },
+    {
+      image: "/images/hebel.webp",
+      alt: "Hebel panel wall system installation",
+      width: 1000,
+      height: 646,
+    },
     {
       image: "/images/trusted-walling.webp",
       alt: "Tradespeople rendering an interior wall",
+      width: 1000,
+      height: 668,
     },
     {
       image: "/images/cladding.webp",
       alt: "Exterior cladding on a modern Adelaide home",
+      width: 1000,
+      height: 667,
     },
     {
       image: "/images/walling.webp",
       alt: "Finished interior walling with a painted surface",
+      width: 1000,
+      height: 778,
     },
   ],
   body: [
     "Based in Adelaide, South Australia, we work closely with builders, developers, and homeowners to provide tailored walling solutions that meet both functional and aesthetic requirements. From modern cladding systems to durable render finishes and structural Hebel installations, our team combines technical expertise with attention to detail on every project.",
-    "Over the years, Elite Surface Group has successfully completed a wide range of projects across South Australia, from single residential homes to multi-unit developments and commercial sites. Our experience allows us to adapt to different project scopes and construction requirements while maintaining the same high standard of quality.",
+    "Our project experience spans residential homes, multi-unit developments and commercial sites. We adapt the installation plan to the documented scope, system requirements and conditions on each site.",
   ],
   prideLead: "At Elite Surface Group, we pride ourselves on:",
   pride: [
@@ -491,24 +556,24 @@ export const aboutPage = {
       "High-quality materials and proven systems",
     ],
     [
-      "Clear communication and reliable timelines",
-      "Compliance with Australian building standards",
+      "Clear communication and agreed programmes",
+      "Work aligned with the project specification",
     ],
   ],
   closing:
-    "We take a hands-on approach to every job, ensuring careful planning, skilled execution, and results that exceed expectations. Whether it’s a new build, renovation, or large-scale development, our goal is simple — to deliver walling solutions that look great, perform exceptionally, and stand the test of time.",
+    "We take a hands-on approach to every job, with careful planning, skilled execution and a clear final quality check. Whether it’s a new build, renovation or larger development, our goal is to deliver the agreed walling solution and finish.",
 } as const;
 
 /* ------------------------------------------------------------ simple pages */
 
 export const servicesPage = {
-  bannerTitle: "Services",
+  bannerTitle: "Cladding, Render, Hebel & Walling Services",
   metaDescription:
     "Cladding, render, Hebel and complete walling services across Adelaide and South Australia, delivered by Elite Surface Group.",
 } as const;
 
 export const projectsPage = {
-  bannerTitle: "Projects",
+  bannerTitle: "Cladding & Walling Projects Adelaide",
   metaDescription:
     "See completed cladding, render, Hebel and walling projects delivered by Elite Surface Group across Adelaide and South Australia.",
 } as const;

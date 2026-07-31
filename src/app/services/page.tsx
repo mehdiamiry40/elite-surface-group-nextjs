@@ -6,7 +6,7 @@ import { BreadcrumbSchema } from "@/components/JsonLd";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Services",
+  title: "Cladding, Render, Hebel & Walling Services Adelaide",
   description: servicesPage.metaDescription,
   path: "/services",
 });

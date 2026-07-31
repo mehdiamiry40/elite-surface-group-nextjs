@@ -7,7 +7,6 @@ export const metadata: Metadata = {
   title: "Page not found",
   description:
     "The page you requested does not exist or has moved. Browse Elite Surface Group services or call us for help.",
-  robots: { index: false, follow: false },
 };
 
 export default function NotFound() {
