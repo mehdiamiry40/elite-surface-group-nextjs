@@ -55,19 +55,32 @@ export function pageMetadata({
   const url = absoluteUrl(path);
   const imageUrl = absoluteUrl(image.path);
 
+  const defaultTitle = `${business.name} | Adelaide Cladding & Render`;
+  const resolvedTitle = title ? `${title} — ${business.name}` : defaultTitle;
+
   return {
     ...(title ? { title } : {}),
     description,
     alternates: { canonical: url },
-    robots: index ? { index: true, follow: true } : { index: false, follow: false },
+    robots: index
+      ? {
+          index: true,
+          follow: true,
+          googleBot: {
+            index: true,
+            follow: true,
+            "max-image-preview": "large",
+            "max-snippet": -1,
+            "max-video-preview": -1,
+          },
+        }
+      : { index: false, follow: false },
     openGraph: {
       type: "website",
       siteName: business.name,
       locale: "en_AU",
       url,
-      title: title
-        ? `${title} — ${business.name}`
-        : `${business.name} — Cladding, Render & Hebel Specialists in Adelaide`,
+      title: resolvedTitle,
       description,
       images: [
         {
@@ -80,9 +93,7 @@ export function pageMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: title
-        ? `${title} — ${business.name}`
-        : `${business.name} — Cladding, Render & Hebel Specialists in Adelaide`,
+      title: resolvedTitle,
       description,
       images: [imageUrl],
     },

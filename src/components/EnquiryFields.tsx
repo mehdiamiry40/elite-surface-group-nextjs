@@ -42,6 +42,7 @@ export default function EnquiryFields({
           id={id("first-name")}
           name="firstName"
           autoComplete="given-name"
+          placeholder="Alex…"
           maxLength={60}
           required
         />
@@ -53,6 +54,7 @@ export default function EnquiryFields({
           id={id("last-name")}
           name="lastName"
           autoComplete="family-name"
+          placeholder="Nguyen…"
           maxLength={59}
         />
       </div>
@@ -63,7 +65,10 @@ export default function EnquiryFields({
           id={id("email")}
           name="email"
           type="email"
+          inputMode="email"
           autoComplete="email"
+          spellCheck={false}
+          placeholder="you@example.com…"
           maxLength={254}
           required
         />
@@ -75,7 +80,9 @@ export default function EnquiryFields({
           id={id("phone")}
           name="phone"
           type="tel"
+          inputMode="tel"
           autoComplete="tel"
+          placeholder="0413 844 912…"
           maxLength={50}
         />
       </div>
@@ -86,6 +93,7 @@ export default function EnquiryFields({
           key={`${pathname}:${selected}`}
           id={id("service")}
           name="service"
+          autoComplete="off"
           defaultValue={selected}
         >
           <option value="">Not sure / choose a service</option>
@@ -104,6 +112,7 @@ export default function EnquiryFields({
           name="message"
           rows={4}
           maxLength={5000}
+          placeholder="Suburb, property type, and what you’d like done…"
           required
         />
       </div>
@@ -126,6 +135,7 @@ export default function EnquiryFields({
           className="form__status"
           data-state={status.state}
           role={status.state === "error" ? "alert" : "status"}
+          aria-live={status.state === "error" ? "assertive" : "polite"}
         >
           {status.message}
           {status.mailto ? (

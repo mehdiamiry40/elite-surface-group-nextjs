@@ -131,6 +131,15 @@ check(
   (notFoundHtml.match(/<meta name="robots"/g) ?? []).length === 1,
 );
 
+const llms = await get("/llms.txt");
+check("GET /llms.txt", llms.status === 200, `status ${llms.status}`);
+const llmsBody = await llms.text();
+check(
+  "llms.txt references primary service pages",
+  /cladding|render|hebel|walling/i.test(llmsBody) &&
+    /elitesurfacegroup\.com\.au/.test(llmsBody),
+);
+
 for (const endpoint of ["/sitemap.xml", "/robots.txt"]) {
   const response = await get(endpoint);
   check(`GET ${endpoint}`, response.status === 200, `status ${response.status}`);

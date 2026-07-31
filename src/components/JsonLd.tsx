@@ -1,5 +1,6 @@
 import { absoluteUrl } from "@/lib/seo";
 import { business } from "@/content/business";
+import type { Project } from "@/content/projects";
 import type { Service, ServiceFaq } from "@/content/services";
 
 /**
@@ -83,6 +84,85 @@ export function FAQPageSchema({ faqs }: { faqs: readonly ServiceFaq[] }) {
             "@type": "Answer",
             text: faq.answer,
           },
+        })),
+      }}
+    />
+  );
+}
+
+/** HowTo schema for a visible process sequence on the page. */
+export function HowToSchema({
+  name,
+  description,
+  steps,
+}: {
+  name: string;
+  description: string;
+  steps: readonly { title: string; body: string }[];
+}) {
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        name,
+        description,
+        step: steps.map((step, index) => ({
+          "@type": "HowToStep",
+          position: index + 1,
+          name: step.title,
+          text: step.body,
+        })),
+      }}
+    />
+  );
+}
+
+/** Case-study CreativeWork for project detail pages. */
+export function ProjectSchema({ project }: { project: Project }) {
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "CreativeWork",
+        "@id": `${absoluteUrl(`/projects/${project.slug}`)}#project`,
+        name: project.title,
+        description: `${project.summary} ${project.scope}`,
+        image: absoluteUrl(project.image),
+        url: absoluteUrl(`/projects/${project.slug}`),
+        about: {
+          "@type": "Service",
+          name: project.service,
+          provider: { "@id": `${business.siteUrl}/#organization` },
+        },
+        contentLocation: {
+          "@type": "Place",
+          name: project.suburb,
+        },
+        creator: { "@id": `${business.siteUrl}/#organization` },
+        inLanguage: "en-AU",
+      }}
+    />
+  );
+}
+
+/** ItemList of services for the services hub. */
+export function ServiceListSchema({
+  services,
+}: {
+  services: readonly Service[];
+}) {
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        name: `${business.name} walling services`,
+        itemListElement: services.map((service, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: service.name,
+          url: absoluteUrl(`/${service.slug}`),
         })),
       }}
     />
