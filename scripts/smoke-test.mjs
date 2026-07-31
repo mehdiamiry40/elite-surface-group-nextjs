@@ -34,22 +34,32 @@ async function get(pathname, init) {
 
 /* ------------------------------------------------------------------ routes */
 
-const ROUTES = [
+/** Pull `slug: "…",` entries from typed content modules (skips union types). */
+function contentSlugs(relativePath) {
+  const source = readFileSync(path.join(projectRoot, relativePath), "utf8");
+  return [...source.matchAll(/slug:\s*"([^"]+)",/g)].map((match) => match[1]);
+}
+
+const serviceSlugs = contentSlugs("src/content/services.ts");
+const projectSlugs = contentSlugs("src/content/projects.ts");
+const locationSlugs = contentSlugs("src/content/locations.ts");
+
+/** Full public indexable set — must stay in lockstep with `src/app/sitemap.ts`. */
+const EXPECTED_SITEMAP_PATHS = [
   "/",
   "/about/",
   "/services/",
-  "/cladding/",
-  "/render/",
-  "/hebel/",
-  "/walling/",
+  ...serviceSlugs.map((slug) => `/${slug}/`),
   "/projects/",
-  "/projects/two-storey-exterior-render/",
+  ...projectSlugs.map((slug) => `/projects/${slug}/`),
   "/locations/",
-  "/locations/adelaide/",
+  ...locationSlugs.map((slug) => `/locations/${slug}/`),
   "/contact-us/",
   "/privacy-policy/",
   "/terms-of-service/",
 ];
+
+const ROUTES = EXPECTED_SITEMAP_PATHS;
 
 const pages = new Map();
 
@@ -146,19 +156,43 @@ for (const endpoint of ["/sitemap.xml", "/robots.txt"]) {
 }
 
 const sitemapXml = await (await get("/sitemap.xml")).text();
+const sitemapLocs = [...sitemapXml.matchAll(/<loc>(.*?)<\/loc>/g)].map(
+  (match) => match[1],
+);
+const expectedSitemapLocs = EXPECTED_SITEMAP_PATHS.map((route) =>
+  route === "/"
+    ? "https://elitesurfacegroup.com.au/"
+    : `https://elitesurfacegroup.com.au${route}`,
+);
 check(
   "sitemap excludes retired WordPress pages",
   !/sample-page|hello-world|uncategorized|author/.test(sitemapXml),
 );
 check(
-  "sitemap lists every route with trailing slashes",
-  ROUTES.every((route) =>
-    sitemapXml.includes(
-      route === "/"
-        ? "<loc>https://elitesurfacegroup.com.au/</loc>"
-        : `<loc>https://elitesurfacegroup.com.au${route}</loc>`,
-    ),
+  "sitemap URL count matches public pages",
+  sitemapLocs.length === expectedSitemapLocs.length,
+  `found ${sitemapLocs.length}, expected ${expectedSitemapLocs.length}`,
+);
+check(
+  "sitemap URL set matches public pages exactly",
+  sitemapLocs.length === expectedSitemapLocs.length &&
+    expectedSitemapLocs.every((loc) => sitemapLocs.includes(loc)) &&
+    sitemapLocs.every((loc) => expectedSitemapLocs.includes(loc)),
+);
+check(
+  "sitemap locs use apex host with trailing slashes",
+  sitemapLocs.every(
+    (loc) =>
+      loc.startsWith("https://elitesurfacegroup.com.au/") && loc.endsWith("/"),
   ),
+);
+check(
+  "sitemap lastmod is present on every URL",
+  (sitemapXml.match(/<lastmod>/g) ?? []).length === sitemapLocs.length,
+);
+check(
+  "sitemap lastmod is not stale WordPress-era dates",
+  !/<lastmod>2026-0[1-4]-/.test(sitemapXml),
 );
 
 /* ----------------------------------------------------------------- content */
