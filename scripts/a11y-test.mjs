@@ -98,7 +98,7 @@ await desktopPage.goto(new URL("/", baseUrl).toString(), {
 await desktopPage.getByRole("button", { name: "Services" }).click();
 await runAxe(desktopPage, "desktop services disclosure open");
 await desktopPage.keyboard.press("Escape");
-await desktopPage.getByRole("link", { name: "Get a Free Quote" }).first().click();
+await desktopPage.getByRole("link", { name: /request a quote|free quote/i }).first().click();
 await runAxe(desktopPage, "desktop quote dialog open");
 await desktopPage.getByRole("button", { name: "Close quote form" }).click();
 await desktopPage.getByRole("button", { name: "Pause slides" }).click();
@@ -121,7 +121,7 @@ await mobilePage.getByRole("button", { name: "Open menu" }).click();
 await runAxe(mobilePage, "mobile navigation drawer open");
 await mobilePage
   .getByRole("dialog", { name: "Site menu" })
-  .getByRole("link", { name: "Get a Free Quote" })
+  .getByRole("link", { name: /request a quote|free quote/i })
   .click();
 await runAxe(mobilePage, "mobile quote opened from drawer");
 await mobile.close();

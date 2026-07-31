@@ -16,8 +16,9 @@ export const heroSlides = [
 ] as const;
 
 export const heroCopy = {
+  brand: business.name,
   title: business.tagline,
-  body: "Transforming Adelaide homes and businesses with cladding, render, Hebel and walling solutions specified for each project.",
+  body: "Cladding, render, Hebel and walling for Adelaide homes and commercial builds — specified for each project, finished with care.",
 } as const;
 
 export const aboutTeaser = {

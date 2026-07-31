@@ -150,7 +150,7 @@ export default function Header() {
             <PhoneIcon />
             {business.phoneDisplay}
           </a>
-          <QuoteButton />
+          <QuoteButton>Free quote</QuoteButton>
         </div>
 
         {/* Phone is the primary lead channel for this business, so the mobile
@@ -236,7 +236,7 @@ export default function Header() {
             <PhoneIcon />
             {business.phoneDisplay}
           </a>
-          <QuoteButton onBeforeOpen={closeDrawer} />
+          <QuoteButton onBeforeOpen={closeDrawer}>Free quote</QuoteButton>
         </div>
       </div>
     </header>
