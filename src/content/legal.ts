@@ -20,7 +20,7 @@ export type LegalBlock =
 export const privacyPolicy: readonly LegalBlock[] = [
   {
     type: "paragraph",
-    text: "Elite Surface Group (“we”, “us”) is based in Adelaide, South Australia. This privacy policy explains how we collect, use and hold personal information when you use elitesurfacegroup.com.au or contact us through the site. We handle personal information in accordance with the Australian Privacy Principles in the Privacy Act 1988 (Cth).",
+    text: "Elite Surface Group is operated by Elite Surface Group Pty Ltd (ABN 35 691 074 567) (“we”, “us”), based in Adelaide, South Australia. This privacy policy explains how we collect, use and hold personal information when you use elitesurfacegroup.com.au or contact us through the site. We handle personal information in accordance with the Australian Privacy Principles in the Privacy Act 1988 (Cth).",
   },
   {
     type: "heading",
@@ -29,7 +29,7 @@ export const privacyPolicy: readonly LegalBlock[] = [
   {
     type: "paragraph",
     content: [
-      "Elite Surface Group provides cladding, render, Hebel and walling services across Adelaide and South Australia. You can contact us about privacy matters using our ",
+      "Elite Surface Group Pty Ltd (ABN 35 691 074 567), trading as Elite Surface Group, provides cladding, render, Hebel and walling services across Adelaide and South Australia. You can contact us about privacy matters using our ",
       { text: "Contact Us page", href: "/contact-us/" },
       ", by email at info@elitesurfacegroup.com.au, or by phone on 0413 844 912.",
     ],
@@ -146,7 +146,7 @@ export const termsOfService: readonly LegalBlock[] = [
   },
   {
     type: "paragraph",
-    text: "The terms “Elite Surface Group”, “we”, “us” and “our” refer to Elite Surface Group, operating in Adelaide and South Australia. “You” means the person using this website.",
+    text: "The terms “Elite Surface Group”, “we”, “us” and “our” refer to Elite Surface Group Pty Ltd (ABN 35 691 074 567), trading as Elite Surface Group in Adelaide and South Australia. “You” means the person using this website.",
   },
   {
     type: "heading",

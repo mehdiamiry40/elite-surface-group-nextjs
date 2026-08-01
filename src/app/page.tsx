@@ -3,20 +3,8 @@ import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
 import Hero from "@/components/Hero";
 import ProjectGallery from "@/components/ProjectGallery";
-import {
-  SectionHead,
-  ServiceCards,
-  Testimonials,
-  TickList,
-} from "@/components/sections";
-import { HowToSchema } from "@/components/JsonLd";
-import {
-  aboutTeaser,
-  differentiators,
-  expertise,
-  process,
-  whyChoose,
-} from "@/content/home";
+import { SectionHead, ServiceCards } from "@/components/sections";
+import { aboutTeaser, process } from "@/content/home";
 import { featuredProjects, projects } from "@/content/projects";
 import { pageMetadata } from "@/lib/seo";
 
@@ -29,11 +17,6 @@ export const metadata = pageMetadata({
 export default function HomePage() {
   return (
     <>
-      <HowToSchema
-        name={`${process.title} with Elite Surface Group`}
-        description={process.intro}
-        steps={process.steps}
-      />
       <Hero />
 
       <ServiceCards />
@@ -95,107 +78,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Why choose us */}
-      <section className="section" aria-labelledby="why-title">
-        <div className="shell split">
-          <div className="split__media">
-            <Image
-              src={whyChoose.image}
-              alt={whyChoose.imageAlt}
-              width={600}
-              height={400}
-              sizes="(max-width: 767px) 100vw, 560px"
-            />
-          </div>
-          <div className="split__body">
-            <h2 id="why-title">
-              <span className="accent">{whyChoose.titleAccent} </span>
-              {whyChoose.title}
-            </h2>
-            <p>{whyChoose.intro}</p>
-            <div className="grid grid--2">
-              {whyChoose.columns.map((column) => (
-                <TickList key={column[0]} items={column} />
-              ))}
-            </div>
-            <p>{whyChoose.closing}</p>
-            <Link className="btn" href="/about">
-              Learn more about us
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* What sets us apart */}
-      <section
-        className="section section--tint"
-        aria-labelledby="differentiators-title"
-      >
-        <div className="shell">
-          <SectionHead
-            titleAccent={differentiators.titleAccent}
-            title={differentiators.title}
-            id="differentiators-title"
-          />
-          <ul className="grid grid--3 feature-grid">
-            {differentiators.items.map((item) => (
-              <li className="feature" key={item.title}>
-                <Image
-                  src={item.icon}
-                  alt=""
-                  width={56}
-                  height={56}
-                  aria-hidden
-                />
-                <h3>{item.title}</h3>
-                <p>{item.body}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* Expertise */}
-      <section
-        className="expertise"
-        aria-labelledby="expertise-title"
-      >
-        <Image
-          className="section-background"
-          src={expertise.background}
-          alt=""
-          fill
-          sizes="100vw"
-          aria-hidden
-        />
-        <div className="shell">
-          <div className="expertise__intro">
-            <h2 id="expertise-title">
-              <span className="accent">{expertise.titleAccent} </span>
-              {expertise.title}
-            </h2>
-            <p>{expertise.intro}</p>
-          </div>
-          <ul className="grid grid--4">
-            {expertise.items.map((item) => (
-              <li key={item.title}>
-                <div className="expertise__card">
-                  <Image
-                    src={item.icon}
-                    alt=""
-                    width={62}
-                    height={62}
-                    aria-hidden
-                  />
-                </div>
-                <h3>{item.title}</h3>
-                <p>{item.body}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
       {/* Featured projects */}
       <section className="section" aria-labelledby="featured-title">
         <div className="shell">
@@ -205,7 +87,7 @@ export default function HomePage() {
             intro={featuredProjects.intro}
             id="featured-title"
           />
-          <ProjectGallery items={projects} />
+          <ProjectGallery items={projects.slice(0, 3)} />
           <p className="section-cta">
             <Link className="btn" href="/projects">
               View all projects
@@ -213,8 +95,6 @@ export default function HomePage() {
           </p>
         </div>
       </section>
-
-      <Testimonials />
 
       <ContactSection />
     </>

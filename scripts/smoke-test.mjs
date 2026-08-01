@@ -201,6 +201,21 @@ for (const [route, html] of pages) {
   const h1Count = (html.match(/<h1[\s>]/g) ?? []).length;
   check(`${route} has exactly one <h1>`, h1Count === 1, `found ${h1Count}`);
 
+  const title = html.match(/<title>([^<]*)<\/title>/)?.[1] ?? "";
+  check(
+    `${route} title is within the search snippet budget`,
+    title.length > 0 && title.length <= 65,
+    `${title.length} characters: ${title}`,
+  );
+
+  const description =
+    html.match(/<meta name="description" content="([^"]*)"/)?.[1] ?? "";
+  check(
+    `${route} description is within the search snippet budget`,
+    description.length >= 40 && description.length <= 160,
+    `${description.length} characters`,
+  );
+
   check(
     `${route} has a meta description`,
     /<meta name="description" content="[^"]{40,}"/.test(html),
@@ -456,8 +471,27 @@ check(
   "terms are governed by South Australian / Australian law",
   /South Australia/.test(termsHtml) && /Australian Consumer Law/.test(termsHtml),
 );
+check(
+  "legal pages identify the registered entity and ABN",
+  [privacyHtml, termsHtml].every(
+    (html) =>
+      /Elite Surface Group Pty Ltd/.test(html) && /35 691 074 567/.test(html),
+  ),
+);
 
 const homeHtml = pages.get("/") ?? "";
+check(
+  "site publishes the registered entity and ABN",
+  /Elite Surface Group Pty Ltd/.test(homeHtml) && /35 691 074 567/.test(homeHtml),
+);
+check(
+  "homepage does not emit instructional HowTo schema",
+  !/\"@type\":\"HowTo\"/.test(homeHtml),
+);
+check(
+  "homepage shows three featured project case studies",
+  (homeHtml.match(/>View case study</g) ?? []).length === 3,
+);
 check(
   "footer has no placeholder Facebook/Instagram home links",
   !/href="https:\/\/www\.facebook\.com\/?"/.test(homeHtml) &&

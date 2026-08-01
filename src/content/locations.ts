@@ -11,7 +11,7 @@ export type LocationPage = {
 
 export const locationsHub = {
   bannerTitle: "Service Areas",
-  metaTitle: "Cladding & Walling Service Areas Adelaide",
+  metaTitle: "Adelaide Service Areas",
   metaDescription:
     "Elite Surface Group provides cladding, render, Hebel and walling services across Adelaide and South Australia.",
   intro:

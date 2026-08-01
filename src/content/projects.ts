@@ -3,6 +3,7 @@ import type { Service } from "@/content/services";
 export type Project = {
   slug: string;
   title: string;
+  metaTitle: string;
   service: Service["slug"];
   summary: string;
   suburb: string;
@@ -19,6 +20,7 @@ export const projects: readonly Project[] = [
   {
     slug: "two-storey-exterior-render",
     title: "Two-storey exterior render",
+    metaTitle: "Two-storey Render Project Adelaide",
     service: "render",
     summary: "Smooth white render across a completed two-storey facade.",
     suburb: "Adelaide metro",
@@ -36,6 +38,7 @@ export const projects: readonly Project[] = [
   {
     slug: "curved-rendered-wall-detail",
     title: "Curved rendered wall detail",
+    metaTitle: "Curved Render Detail Adelaide",
     service: "render",
     summary: "Crisp render and paint finish around a curved wall detail.",
     suburb: "Adelaide metro",
@@ -53,6 +56,7 @@ export const projects: readonly Project[] = [
   {
     slug: "contemporary-exterior-cladding",
     title: "Contemporary exterior cladding",
+    metaTitle: "Exterior Cladding Project Adelaide",
     service: "cladding",
     summary: "Feature cladding installed on a contemporary residence.",
     suburb: "Adelaide metro",
@@ -70,6 +74,7 @@ export const projects: readonly Project[] = [
   {
     slug: "rendered-boundary-wall",
     title: "Rendered boundary wall",
+    metaTitle: "Rendered Boundary Wall Adelaide",
     service: "render",
     summary: "Completed render finish beside a landscaped driveway.",
     suburb: "Adelaide metro",
@@ -87,6 +92,7 @@ export const projects: readonly Project[] = [
   {
     slug: "mixed-cladding-and-render-facade",
     title: "Mixed cladding and render facade",
+    metaTitle: "Cladding & Render Facade Adelaide",
     service: "cladding",
     summary: "A modern facade combining contrasting cladding and render.",
     suburb: "Adelaide metro",
@@ -104,6 +110,7 @@ export const projects: readonly Project[] = [
   {
     slug: "dark-feature-cladding",
     title: "Dark feature cladding",
+    metaTitle: "Dark Feature Cladding Adelaide",
     service: "cladding",
     summary: "Dark feature cladding on a completed residential exterior.",
     suburb: "Adelaide metro",

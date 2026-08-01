@@ -14,57 +14,14 @@ export const ctaBand = {
   background: "/images/2150921011.webp",
 } as const;
 
-/**
- * Testimonials inherited from the former site are retained as drafts until
- * their source, wording, rating and publication permission are documented.
- */
-const testimonialDrafts = [
-  {
-    name: "Sarah Mitchell",
-    quote:
-      "Elite Surface Group completely transformed the exterior of our home with high-quality rendering. The team was professional, efficient, and the final finish looks incredible. Highly recommend!",
-    verified: false,
-  },
-  {
-    name: "David Robertson",
-    quote:
-      "We chose Elite Surface Group for our cladding installation and couldn’t be happier. The workmanship was excellent, communication was clear, and the project was finished right on schedule.",
-    verified: false,
-  },
-  {
-    name: "Amanda Lee",
-    quote:
-      "The Hebel installation was handled with great attention to detail. The team was punctual, respectful, and delivered exactly what they promised. The results exceeded our expectations.",
-    verified: false,
-  },
-  {
-    name: "Mark Thompson",
-    quote:
-      "From start to finish, the experience was smooth and stress-free. Honest pricing, quality craftsmanship, and a team that truly cares about the final outcome.",
-    verified: false,
-  },
-  {
-    name: "Jason Carter",
-    quote:
-      "Elite Surface Group did an outstanding job on our renovation project. The finish is clean and modern, and the professionalism shown throughout was second to none.",
-    verified: false,
-  },
-] as const;
-
-export const testimonials = testimonialDrafts.filter((item) => item.verified);
-
-export const testimonialsSection = {
-  eyebrow: "Customer Feedback",
-  title: "What Our Clients Say",
-  intro: "Verified client feedback will appear here once publication permission is confirmed.",
-} as const;
-
 export const aboutPage = {
   bannerTitle: "About Us",
   title: "About Elite Surface Group",
   metaDescription:
     "Meet the Adelaide team providing cladding, render, Hebel and walling installations for residential and commercial projects.",
   lead: "Elite Surface Group provides walling installations and surface finishes across Adelaide and South Australia. We work with homeowners, builders and developers on residential, commercial and development projects.",
+  identity:
+    "Elite Surface Group is operated by Elite Surface Group Pty Ltd (ABN 35 691 074 567), with its main business location in South Australia.",
   gallery: [
     {
       image: "/images/hebel.webp",

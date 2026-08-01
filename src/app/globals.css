@@ -1036,132 +1036,9 @@ h3 {
   font-size: 15px;
 }
 
-/* ---------------------------------------------------------- feature grid */
-
-.feature-grid {
-  gap: 20px;
-}
-
-.feature {
-  padding: 26px 24px 28px;
-  border-top: 3px solid var(--orange);
-  background: var(--white);
-  box-shadow: var(--shadow-card);
-  text-align: left;
-}
-
-.feature img {
-  width: 48px;
-  height: 48px;
-  margin-bottom: 16px;
-  object-fit: contain;
-}
-
-.feature h3 {
-  font-size: 18px;
-}
-
-.feature p {
-  margin-top: 10px;
-  color: var(--ink-soft);
-  font-size: 15px;
-}
-
-/* -------------------------------------------------------------- expertise */
-
-.expertise {
-  position: relative;
-  isolation: isolate;
-  padding-block: var(--section-y);
-  background: #000 center / cover no-repeat;
-  color: rgb(255 255 255 / 80%);
-}
-
 .section-background {
   z-index: -2;
   object-fit: cover;
-}
-
-.expertise::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: rgb(0 0 0 / 62%);
-}
-
-.expertise h2,
-.expertise h3 {
-  color: var(--white);
-}
-
-.expertise__intro {
-  max-width: 640px;
-  margin-bottom: 46px;
-}
-
-.expertise__card {
-  display: grid;
-  place-items: center;
-  aspect-ratio: 3 / 2;
-  margin-bottom: 20px;
-  border: 1px solid rgb(255 255 255 / 45%);
-}
-
-.expertise__card img {
-  width: 62px;
-  height: 62px;
-  object-fit: contain;
-}
-
-.expertise p {
-  font-size: 15px;
-}
-
-.expertise h3 {
-  margin-bottom: 8px;
-}
-
-/* ----------------------------------------------------------- testimonials */
-
-.testimonials {
-  position: relative;
-  isolation: isolate;
-  padding-block: var(--section-y);
-  background: var(--dark) center / cover no-repeat;
-  color: rgb(255 255 255 / 82%);
-}
-
-.testimonials::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: rgb(30 36 49 / 88%);
-}
-
-.testimonials h2 {
-  color: var(--white);
-}
-
-.quote {
-  display: flex;
-  flex-direction: column;
-  padding: 30px 26px;
-  background: var(--white);
-  color: var(--body);
-}
-
-.quote blockquote {
-  flex: 1;
-  margin-bottom: 18px;
-}
-
-.quote__stars {
-  display: flex;
-  gap: 3px;
-  margin-bottom: 14px;
-  color: var(--orange);
 }
 
 .footer__social a {
@@ -1980,10 +1857,6 @@ h3 {
   .modal h2 {
     margin-inline: 30px;
     font-size: 25px;
-  }
-
-  .expertise__card {
-    aspect-ratio: 2 / 1;
   }
 
   .footer__grid {

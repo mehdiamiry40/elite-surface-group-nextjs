@@ -22,12 +22,9 @@ export {
 } from "@/content/services";
 export {
   aboutTeaser,
-  differentiators,
-  expertise,
   heroCopy,
   heroSlides,
   process,
-  whyChoose,
 } from "@/content/home";
 export {
   featuredProjects,
@@ -43,8 +40,6 @@ export {
   ctaBand,
   projectsPage,
   servicesPage,
-  testimonials,
-  testimonialsSection,
 } from "@/content/pages";
 export {
   getLocation,
