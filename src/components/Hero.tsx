@@ -83,6 +83,7 @@ export default function Hero() {
       )}
 
       <div className="shell hero__inner">
+        <span className="hero__eyebrow">Adelaide · South Australia</span>
         <h1>
           <span className="hero__brand">{heroCopy.brand}</span>
           <span className="hero__tagline">{heroCopy.title}</span>
@@ -95,6 +96,11 @@ export default function Hero() {
             Call {business.phoneDisplay}
           </a>
         </div>
+        <ul className="hero__proof" aria-label="Project strengths">
+          <li>Residential &amp; commercial</li>
+          <li>Clear project scope</li>
+          <li>Finish-focused delivery</li>
+        </ul>
       </div>
 
       {heroSlides.length > 1 ? (

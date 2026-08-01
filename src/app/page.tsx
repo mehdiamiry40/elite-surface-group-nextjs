@@ -19,6 +19,26 @@ export default function HomePage() {
     <>
       <Hero />
 
+      <section className="trust-strip" aria-label="Why work with Elite Surface Group">
+        <div className="shell trust-strip__grid">
+          <div>
+            <span className="trust-strip__number">01</span>
+            <strong>Adelaide focused</strong>
+            <p>Local walling and surface expertise across South Australia.</p>
+          </div>
+          <div>
+            <span className="trust-strip__number">02</span>
+            <strong>One coordinated team</strong>
+            <p>Cladding, render, Hebel and walling in one clear scope.</p>
+          </div>
+          <div>
+            <span className="trust-strip__number">03</span>
+            <strong>Built around your brief</strong>
+            <p>Practical advice, transparent quotes and careful finishes.</p>
+          </div>
+        </div>
+      </section>
+
       <ServiceCards />
 
       {/* Trusted specialists */}
@@ -34,10 +54,8 @@ export default function HomePage() {
             />
           </div>
           <div className="split__body">
-            <h2 id="about-teaser-title">
-              <span className="accent">{aboutTeaser.eyebrow} </span>
-              {aboutTeaser.title}
-            </h2>
+            <span className="eyebrow">{aboutTeaser.eyebrow}</span>
+            <h2 id="about-teaser-title">{aboutTeaser.title}</h2>
             {aboutTeaser.body.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
@@ -61,10 +79,8 @@ export default function HomePage() {
             />
           </div>
           <div className="split__body">
-            <h2 id="process-title">
-              <span className="accent">Our </span>
-              Professional Process
-            </h2>
+            <span className="eyebrow">How we work</span>
+            <h2 id="process-title">Our Professional Process</h2>
             <p>{process.intro}</p>
             <ul className="steps">
               {process.steps.map((step) => (
