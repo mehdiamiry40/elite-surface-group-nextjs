@@ -22,7 +22,11 @@ export default function ContactSection({
   const { submit, pending, status } = useEnquiryForm();
 
   return (
-    <section className="section" aria-labelledby="contact-title" id="contact">
+    <section
+      className="section section--contact"
+      aria-labelledby="contact-title"
+      id="contact"
+    >
       <div className="shell">
         <div className="section-head">
           <span className="eyebrow">{contactSection.eyebrow}</span>

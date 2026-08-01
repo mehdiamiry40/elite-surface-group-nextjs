@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Source_Sans_3, Zilla_Slab } from "next/font/google";
+import { Archivo, Manrope } from "next/font/google";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { QuoteDialogProvider } from "@/components/QuoteDialogProvider";
@@ -7,19 +7,19 @@ import { business } from "@/content/business";
 import { absoluteUrl, DEFAULT_OG_IMAGE } from "@/lib/seo";
 import "./globals.css";
 
-// Self-hosted at build time, so the site makes no request to Google's CDN and
-// ships only the weights it actually uses. Source Sans 3 + Zilla Slab keep a
-// workmanlike Adelaide trade feel without default system/Roboto stacks.
-const body = Source_Sans_3({
+// Self-hosted at build time, so the site makes no request to Google's CDN.
+// Manrope stays highly legible at small sizes while Archivo gives headings the
+// clean, engineered character of an architectural specification.
+const body = Manrope({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
   variable: "--font-body",
 });
 
-const heading = Zilla_Slab({
+const heading = Archivo({
   subsets: ["latin"],
-  weight: ["500", "700"],
+  weight: ["600", "700"],
   display: "swap",
   variable: "--font-heading",
 });
