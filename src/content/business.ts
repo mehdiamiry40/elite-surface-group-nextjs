@@ -1,5 +1,8 @@
 export const business = {
   name: "Elite Surface Group",
+  legalName: "Elite Surface Group Pty Ltd",
+  /** Australian Business Number, displayed with the standard 2-3-3-3 grouping. */
+  abn: "35 691 074 567",
   tagline: "Adelaide Walling Installation & Finish Specialists",
   /** E.164 for `tel:` hrefs — never hand-write a `tel:` link anywhere else. */
   phone: "+61413844912",

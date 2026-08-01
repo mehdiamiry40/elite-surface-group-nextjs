@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import PageBanner from "@/components/PageBanner";
 import ProjectGallery from "@/components/ProjectGallery";
 import { CtaBand } from "@/components/CtaBand";
-import { SectionHead, Testimonials } from "@/components/sections";
+import { SectionHead } from "@/components/sections";
 import { bannerImages, featuredProjects, projects, projectsPage } from "@/content/site";
 import { BreadcrumbSchema } from "@/components/JsonLd";
 import { pageMetadata } from "@/lib/seo";
@@ -34,8 +34,6 @@ export default function ProjectsPage() {
           <ProjectGallery items={projects} />
         </div>
       </section>
-
-      <Testimonials />
 
       <CtaBand />
     </>

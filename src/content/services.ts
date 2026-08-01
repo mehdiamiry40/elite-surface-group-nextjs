@@ -40,7 +40,7 @@ export const services: readonly Service[] = [
       "Cladding installation for Adelaide homes and commercial builds, using systems selected for the project design, exposure and budget.",
     metaTitle: "Cladding Installation Adelaide",
     metaDescription:
-      "Professional cladding installation across Adelaide and South Australia. Weather-resistant cladding systems for residential and commercial properties when correctly specified and installed.",
+      "Cladding installation across Adelaide for homes and commercial builds, with systems selected for the design, substrate, exposure and budget.",
     intro: [
       "Cladding is an effective way to update both the appearance and weather protection of a building. At Elite Surface Group, we install cladding systems suited to residential and commercial projects across Adelaide and South Australia.",
       "We help you choose a cladding approach that fits the design intent, substrate and local conditions, then install it to the manufacturer and project requirements. Finished performance depends on the selected system, detailing and ongoing maintenance.",
@@ -146,7 +146,7 @@ export const services: readonly Service[] = [
       "Hebel panel installation for residential and commercial projects, following the specified system details for placement, fixing and finishing.",
     metaTitle: "Hebel Wall Systems Adelaide",
     metaDescription:
-      "Hebel wall system installation in Adelaide. Lightweight panels with thermal, acoustic and fire-performance properties when specified and installed as a complete system.",
+      "Hebel wall system installation across Adelaide, with lightweight panels installed to the specified thermal, acoustic and fire-performance system details.",
     intro: [
       "Elite Surface Group installs Hebel wall systems for modern construction across Adelaide and South Australia. Hebel panels are a lightweight autoclaved aerated concrete option commonly specified for strength-to-weight, fire, thermal and acoustic performance when used as a complete compliant system.",
       "Our team handles panel placement, fixing and detailing to the project and manufacturer requirements. Final system performance depends on the specified product, design, penetrations and the complete installed assembly.",

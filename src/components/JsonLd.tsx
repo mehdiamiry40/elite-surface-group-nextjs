@@ -90,34 +90,6 @@ export function FAQPageSchema({ faqs }: { faqs: readonly ServiceFaq[] }) {
   );
 }
 
-/** HowTo schema for a visible process sequence on the page. */
-export function HowToSchema({
-  name,
-  description,
-  steps,
-}: {
-  name: string;
-  description: string;
-  steps: readonly { title: string; body: string }[];
-}) {
-  return (
-    <JsonLd
-      data={{
-        "@context": "https://schema.org",
-        "@type": "HowTo",
-        name,
-        description,
-        step: steps.map((step, index) => ({
-          "@type": "HowToStep",
-          position: index + 1,
-          name: step.title,
-          text: step.body,
-        })),
-      }}
-    />
-  );
-}
-
 /** Case-study CreativeWork for project detail pages. */
 export function ProjectSchema({ project }: { project: Project }) {
   return (

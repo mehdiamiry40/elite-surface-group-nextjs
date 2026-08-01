@@ -3,7 +3,7 @@ import Image from "next/image";
 import Carousel from "@/components/Carousel";
 import PageBanner from "@/components/PageBanner";
 import { CtaBand } from "@/components/CtaBand";
-import { Testimonials, TickList } from "@/components/sections";
+import { TickList } from "@/components/sections";
 import { aboutPage, bannerImages } from "@/content/site";
 import { BreadcrumbSchema } from "@/components/JsonLd";
 import { pageMetadata } from "@/lib/seo";
@@ -29,6 +29,7 @@ export default function AboutPage() {
           <div className="section-head">
             <h2 id="about-title">{aboutPage.title}</h2>
             <p>{aboutPage.lead}</p>
+            <p>{aboutPage.identity}</p>
           </div>
 
           <Carousel label="workshop image" perView={{ desktop: 3, tablet: 2, mobile: 1 }}>
@@ -58,8 +59,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
-      <Testimonials />
 
       <CtaBand />
     </>

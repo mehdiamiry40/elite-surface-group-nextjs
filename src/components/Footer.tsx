@@ -105,7 +105,8 @@ export default function Footer() {
 
         <div className="footer__bar">
           <p>
-            © {new Date().getFullYear()} {business.name}. All rights reserved.
+            © {new Date().getFullYear()} {business.legalName}. ABN {business.abn}.
+            All rights reserved.
           </p>
           <ul>
             {footerNav.legal.map((link) => (

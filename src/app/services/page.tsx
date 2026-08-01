@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import PageBanner from "@/components/PageBanner";
 import { CtaBand } from "@/components/CtaBand";
-import { ServiceCards, Testimonials } from "@/components/sections";
+import { ServiceCards } from "@/components/sections";
 import { bannerImages, servicesPage } from "@/content/pages";
 import { services } from "@/content/services";
 import { BreadcrumbSchema, ServiceListSchema } from "@/components/JsonLd";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Cladding, Render, Hebel & Walling Services Adelaide",
+  title: "Cladding & Walling Adelaide",
   description: servicesPage.metaDescription,
   path: "/services",
 });
@@ -25,8 +25,6 @@ export default function ServicesPage() {
       />
 
       <ServiceCards />
-
-      <Testimonials />
 
       <CtaBand />
     </>

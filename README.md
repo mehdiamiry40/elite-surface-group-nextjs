@@ -7,6 +7,7 @@ with Next.js 16 (App Router) and React 19.
 
 ```bash
 npm ci
+npx playwright install chromium
 npm run dev
 ```
 
@@ -66,7 +67,8 @@ emergency-only override.
 npm run typecheck   # tsc
 npm run lint        # eslint
 npm run build       # production build (runs the env check first)
-npm run check       # all three
+npm test            # unit tests
+npm run check       # typecheck, lint, unit tests, build and bundle budget
 
 npm run start &     # smoke / a11y need a live server
 npm run smoke       # route, SEO, header and contact checks
@@ -104,5 +106,5 @@ Open items that still need a human decision outside the codebase:
 - **Legal review** — privacy and terms are now Australian-oriented and match
   the live site, but a qualified review is still wise before relying on them
   for anything beyond ordinary website enquiries.
-- **Business identity** — publish verified ABN, contractor licence, insurance
-  and warranty details before restoring any stronger claims or testimonials.
+- **Business credentials** — publish contractor licence, insurance and warranty
+  details only after the owner supplies current evidence.

@@ -29,7 +29,7 @@ export async function generateMetadata({
   }
 
   return pageMetadata({
-    title: `${project.title} — Adelaide ${project.service}`,
+    title: project.metaTitle,
     description: `${project.summary} ${project.suburb} case study by Elite Surface Group.`,
     path: `/projects/${project.slug}`,
     image: {

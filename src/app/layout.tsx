@@ -71,6 +71,8 @@ const organisationSchema = {
   "@type": ["HomeAndConstructionBusiness", "Organization"],
   "@id": `${business.siteUrl}/#organization`,
   name: business.name,
+  legalName: business.legalName,
+  taxID: business.abn,
   url: business.siteUrl,
   telephone: business.phone,
   email: business.email,

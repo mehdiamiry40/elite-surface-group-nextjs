@@ -1,9 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import Carousel from "@/components/Carousel";
 import { ArrowRightIcon, CheckIcon } from "@/components/icons";
 import { services, servicesIntro } from "@/content/services";
-import { testimonials, testimonialsSection } from "@/content/pages";
 
 export { CtaBand } from "@/components/CtaBand";
 
@@ -101,43 +99,6 @@ export function ServiceCards({
             </li>
           ))}
         </ul>
-      </div>
-    </section>
-  );
-}
-
-/* ------------------------------------------------------------ testimonials */
-
-export function Testimonials() {
-  if (!testimonials.length) {
-    return null;
-  }
-
-  return (
-    <section
-      className="testimonials"
-      aria-labelledby="testimonials-title"
-      id="testimonials"
-    >
-      <div className="shell">
-        <SectionHead
-          eyebrow={testimonialsSection.eyebrow}
-          title={testimonialsSection.title}
-          intro={testimonialsSection.intro}
-          id="testimonials-title"
-        />
-        <Carousel label="testimonial">
-          {testimonials.map((item) => (
-            <figure className="quote" key={item.name}>
-              <blockquote>
-                <p>{item.quote}</p>
-              </blockquote>
-              <figcaption>
-                <h3>{item.name}</h3>
-              </figcaption>
-            </figure>
-          ))}
-        </Carousel>
       </div>
     </section>
   );
