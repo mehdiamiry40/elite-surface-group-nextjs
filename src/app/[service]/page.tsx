@@ -132,7 +132,7 @@ export default async function ServicePage({ params }: PageProps) {
         </div>
       </section>
 
-      <ServiceCards titleAccent="Other" currentSlug={service.slug} />
+      <ServiceCards title="Other services" currentSlug={service.slug} />
 
       <ContactSection
         defaultService={service.name}

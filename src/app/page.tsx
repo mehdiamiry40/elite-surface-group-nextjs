@@ -19,26 +19,6 @@ export default function HomePage() {
     <>
       <Hero />
 
-      <section className="trust-strip" aria-label="Why work with Elite Surface Group">
-        <div className="shell trust-strip__grid">
-          <div>
-            <span className="trust-strip__number">01</span>
-            <strong>Adelaide focused</strong>
-            <p>Local walling and surface expertise across South Australia.</p>
-          </div>
-          <div>
-            <span className="trust-strip__number">02</span>
-            <strong>One coordinated team</strong>
-            <p>Cladding, render, Hebel and walling in one clear scope.</p>
-          </div>
-          <div>
-            <span className="trust-strip__number">03</span>
-            <strong>Built around your brief</strong>
-            <p>Practical advice, transparent quotes and careful finishes.</p>
-          </div>
-        </div>
-      </section>
-
       <ServiceCards />
 
       {/* Trusted specialists */}
@@ -80,7 +60,7 @@ export default function HomePage() {
           </div>
           <div className="split__body">
             <span className="eyebrow">How we work</span>
-            <h2 id="process-title">Our Professional Process</h2>
+            <h2 id="process-title">From site review to handover</h2>
             <p>{process.intro}</p>
             <ul className="steps">
               {process.steps.map((step) => (
@@ -112,7 +92,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <ContactSection />
+      <ContactSection withDetails />
     </>
   );
 }
