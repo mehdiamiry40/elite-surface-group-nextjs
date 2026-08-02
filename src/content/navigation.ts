@@ -41,4 +41,4 @@ export const footerNav = {
 } as const;
 
 export const footerBlurb =
-  "Elite Surface Group provides cladding, render, Hebel and walling services across Adelaide and South Australia, with a focus on careful installation, clear communication and durable finishes.";
+  "Cladding, render, Hebel and walling installation across Adelaide and South Australia for residential and commercial projects.";

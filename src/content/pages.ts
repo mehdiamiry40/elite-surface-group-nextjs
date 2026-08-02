@@ -1,16 +1,16 @@
 export const contactSection = {
-  eyebrow: "Get In Touch",
-  title: "Ready to Transform Your Property?",
+  eyebrow: "Project enquiries",
+  title: "Tell us what you’re planning.",
   intro:
-    "Contact us today for a free quote and consultation. Our team is ready to discuss your project and recommend a practical next step.",
-  formTitle: "Send Us a Message",
-  formNote: "We typically respond within 24 hours.",
+    "Share the suburb, property type and the work you need. We’ll review the details and reply within one business day.",
+  formTitle: "Project details",
+  formNote: "A few specifics help us price the right scope.",
 } as const;
 
 export const ctaBand = {
-  title: "Walling & surface finishes across Adelaide",
-  body: "Every property is unique. Tell us about your cladding, render, Hebel or walling project and we will recommend a solution that balances durability, style and long-term performance for the specified system.",
-  note: "Quick, easy, and obligation-free — start your project conversation today.",
+  title: "Planning cladding, render or walling work?",
+  body: "Send through the plans, photos or a short brief. We’ll confirm what we need to quote the scope and timing.",
+  note: "Quotes are obligation-free.",
   background: "/images/2150921011.webp",
 } as const;
 
@@ -19,7 +19,7 @@ export const aboutPage = {
   title: "About Elite Surface Group",
   metaDescription:
     "Meet the Adelaide team providing cladding, render, Hebel and walling installations for residential and commercial projects.",
-  lead: "Elite Surface Group provides walling installations and surface finishes across Adelaide and South Australia. We work with homeowners, builders and developers on residential, commercial and development projects.",
+  lead: "Elite Surface Group installs cladding, render, Hebel and walling across Adelaide and South Australia for homeowners, builders and developers.",
   identity:
     "Elite Surface Group is operated by Elite Surface Group Pty Ltd (ABN 35 691 074 567), with its main business location in South Australia.",
   gallery: [
@@ -49,10 +49,10 @@ export const aboutPage = {
     },
   ],
   body: [
-    "Based in Adelaide, South Australia, we work with builders, developers and homeowners on walling solutions that meet functional and aesthetic requirements. From cladding systems to render finishes and Hebel installations, our team combines practical trade knowledge with attention to detail on every project.",
-    "Our project experience spans residential homes, multi-unit developments and commercial sites. We adapt the installation plan to the documented scope, system requirements and conditions on each site.",
+    "Our work spans residential homes, multi-unit developments and commercial sites. Each installation is planned around the documented scope, system requirements and conditions on site.",
+    "We coordinate with builders and adjoining trades so substrates, junctions and finishes are ready in the right sequence.",
   ],
-  prideLead: "At Elite Surface Group, we pride ourselves on:",
+  prideLead: "What clients can expect:",
   pride: [
     [
       "Professional installers with practical site experience",
@@ -64,7 +64,7 @@ export const aboutPage = {
     ],
   ],
   closing:
-    "We take a hands-on approach to every job, with careful planning, skilled execution and a clear final quality check. Whether it is a new build, renovation or larger development, our goal is to deliver the agreed walling solution and finish.",
+    "For new builds, renovations and larger developments, our focus is the same: a clear scope, practical site coordination and the agreed finish.",
 } as const;
 
 export const servicesPage = {

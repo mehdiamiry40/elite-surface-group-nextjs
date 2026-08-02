@@ -245,4 +245,4 @@ export const services: readonly Service[] = [
 export const serviceNames = services.map((service) => service.name);
 
 export const servicesIntro =
-  "From cladding to rendering, we deliver walling solutions tailored to the project brief across Adelaide and South Australia.";
+  "Cladding, render, Hebel and walling for Adelaide homes, renovations and commercial builds.";

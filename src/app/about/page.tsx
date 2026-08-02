@@ -32,7 +32,7 @@ export default function AboutPage() {
             <p>{aboutPage.identity}</p>
           </div>
 
-          <Carousel label="workshop image" perView={{ desktop: 3, tablet: 2, mobile: 1 }}>
+          <Carousel label="workshop image" perView={{ desktop: 2, tablet: 2, mobile: 1 }}>
             {aboutPage.gallery.map((item) => (
               <Image
                 key={item.image}

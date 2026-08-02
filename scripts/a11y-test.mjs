@@ -101,9 +101,15 @@ await desktopPage.keyboard.press("Escape");
 await desktopPage.getByRole("link", { name: /request a quote|free quote/i }).first().click();
 await runAxe(desktopPage, "desktop quote dialog open");
 await desktopPage.getByRole("button", { name: "Close quote form" }).click();
-await desktopPage.getByRole("button", { name: "Pause slides" }).click();
-await desktopPage.getByRole("button", { name: /Show slide 2/ }).click();
-await runAxe(desktopPage, "desktop hero paused on second slide");
+await runAxe(desktopPage, "desktop static hero");
+
+await desktopPage.goto(new URL("/about/", baseUrl).toString(), {
+  waitUntil: "networkidle",
+});
+await desktopPage
+  .getByRole("button", { name: "Next workshop image" })
+  .click();
+await runAxe(desktopPage, "desktop workshop carousel advanced");
 
 await desktopPage.goto(new URL("/projects/", baseUrl).toString(), {
   waitUntil: "networkidle",

@@ -132,8 +132,8 @@ export function getProject(slug: string) {
 }
 
 export const featuredProjects = {
-  eyebrow: "Our Work",
-  title: "Featured Projects",
+  eyebrow: "Selected work",
+  title: "Recent Adelaide projects",
   intro:
-    "Browse completed cladding and render projects that show the standard of finish we aim for on Adelaide homes.",
+    "Completed cladding and render work, with notes on the scope, site detail and finished result.",
 } as const;

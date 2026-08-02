@@ -16,45 +16,44 @@ export const heroSlides = [
 ] as const;
 
 export const heroCopy = {
-  brand: business.name,
-  title: business.tagline,
-  body: "Cladding, render, Hebel and walling for Adelaide homes and commercial builds — specified for each project, finished with care.",
+  eyebrow: "Cladding · Render · Hebel · Walling",
+  title: "Walling and exterior finishes for Adelaide builds.",
+  body: "For homes, renovations and commercial projects. We quote the scope clearly, install the specified system and pay attention to the junctions and finish.",
 } as const;
 
 export const aboutTeaser = {
-  eyebrow: "Adelaide's",
-  title: "Walling Specialists",
+  eyebrow: "Based in Adelaide",
+  title: "Cladding, render and walling under one scope",
   image: "/images/trusted-walling.webp",
   imageAlt: "Elite Surface Group tradespeople rendering an interior wall",
   body: [
-    `${business.name} is operated by ${business.legalName} (ABN ${business.abn}), with its main business location in South Australia.`,
-    "Elite Surface Group works on homes and commercial properties across Adelaide and South Australia. Our team combines practical walling experience with careful planning, clear communication and attention to finish.",
-    "Whether it is modern cladding, professional rendering or Hebel panel installation, we focus on results that improve presentation and support the long-term performance of the wall system when maintained as recommended.",
+    `${business.name} installs cladding, render, Hebel and walling on homes and commercial projects across Adelaide and South Australia.`,
+    "We plan the work around the specified system, site conditions and surrounding trades, with the scope and responsibilities set out before installation begins.",
   ],
 } as const;
 
 export const process = {
   title: "Our Professional Process",
   intro:
-    "Successful projects start with clear communication and finish with a documented quality check. Our process keeps scope, pricing and programme visible at every stage.",
+    "From the first site review to handover, we keep the scope, materials and timing visible. If site conditions change, we discuss them before the work continues.",
   image: "/images/2148211774.webp",
   imageAlt: "Modern dining space framed by a finished feature wall",
   steps: [
     {
-      title: "Consultation & Site Assessment",
-      body: "We meet with you to understand your goals, inspect the site, and recommend a suitable cladding or walling approach for the property and brief.",
+      title: "Site review",
+      body: "We review the plans, photos and site conditions, then confirm the work that needs to be quoted.",
     },
     {
-      title: "Detailed & Transparent Quote",
-      body: "You receive a clear, obligation-free quote outlining scope, materials, timeline assumptions and pricing — no hidden line items.",
+      title: "Scope and quote",
+      body: "The quote sets out the scope, materials, responsibilities and timing assumptions.",
     },
     {
-      title: "Careful Installation",
-      body: "Our team carries out the installation with attention to safety and detailing, using materials and systems agreed in the quote.",
+      title: "Installation",
+      body: "Installation follows the agreed system details and is coordinated with the surrounding trades.",
     },
     {
-      title: "Final Quality Check",
-      body: "Before handover we inspect the completed work against the agreed scope and finish expectations.",
+      title: "Handover check",
+      body: "We check the completed work against the agreed scope and close out outstanding items before handover.",
     },
   ],
 } as const;

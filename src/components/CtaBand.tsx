@@ -22,7 +22,7 @@ export function CtaBand() {
         </div>
         <div className="cta__aside">
           <div className="cta__actions">
-            <QuoteButton>Talk through my project</QuoteButton>
+            <QuoteButton>Request a quote</QuoteButton>
             <a className="btn btn--ghost" href={`tel:${business.phone}`}>
               <PhoneIcon />
               Call {business.phoneDisplay}
