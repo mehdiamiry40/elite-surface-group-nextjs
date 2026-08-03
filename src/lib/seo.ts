@@ -1,22 +1,40 @@
 import type { Metadata } from "next";
 import { business } from "@/content/business";
 
-/** Default social-share image (existing site banner, 1280×960 WebP). */
-export const DEFAULT_OG_IMAGE = "/images/banner.webp";
+/** Default social-share card. */
+export const DEFAULT_OG_IMAGE = "/images/og/og-default.jpg";
 
-type SocialImage = {
+export type SocialImage = {
   path: string;
   width: number;
   height: number;
   alt: string;
 };
 
-const defaultSocialImage: SocialImage = {
-  path: DEFAULT_OG_IMAGE,
-  width: 1280,
-  height: 960,
-  alt: `${business.name} — walling and surface finishes in Adelaide`,
-};
+/**
+ * A pre-rendered share card from `public/images/og/`.
+ *
+ * These are 1200×630 — the 1.91:1 ratio Facebook, LinkedIn, X and most chat
+ * apps crop to. Passing a raw site photograph instead means the scraper crops a
+ * 4:3 or 3:2 image to fit, usually cutting the subject in half, and the preview
+ * carries no branding, headline or phone number.
+ *
+ * `name` matches the card filename: a route slug (`cladding`,
+ * `two-storey-exterior-render`) or a page key (`about`, `contact`).
+ */
+export function ogCard(name: string, alt: string): SocialImage {
+  return {
+    path: `/images/og/og-${name}.jpg`,
+    width: 1200,
+    height: 630,
+    alt,
+  };
+}
+
+const defaultSocialImage = ogCard(
+  "default",
+  `${business.name} — cladding, render and walling in Adelaide`,
+);
 
 /**
  * Absolute URL for a site path or public asset.

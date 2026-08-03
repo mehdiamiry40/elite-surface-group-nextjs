@@ -15,7 +15,8 @@ export const ctaBand = {
 } as const;
 
 export const aboutPage = {
-  bannerTitle: "About Us",
+  bannerTitle: "About Our Adelaide Team",
+  metaTitle: "About Our Adelaide Team",
   title: "About Elite Surface Group",
   metaDescription:
     "Meet the Adelaide team providing cladding, render, Hebel and walling installations for residential and commercial projects.",
@@ -80,7 +81,8 @@ export const projectsPage = {
 } as const;
 
 export const contactPage = {
-  bannerTitle: "Contact Us",
+  bannerTitle: "Contact Our Adelaide Team",
+  metaTitle: "Contact Our Adelaide Team",
   metaDescription:
     "Get in touch with Elite Surface Group for a free, obligation-free quote on cladding, render, Hebel and walling work in Adelaide.",
   intro:

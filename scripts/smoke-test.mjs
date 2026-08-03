@@ -315,7 +315,21 @@ check(
 /* ------------------------------------------------- every image is reachable */
 
 const imageDir = path.join(projectRoot, "public/images");
-const imageFiles = readdirSync(imageDir);
+
+/**
+ * Every image under `public/images`, relative to it and including nested paths
+ * such as `og/og-cladding.jpg`. A flat `readdirSync` returns subdirectory
+ * *names*, which then get requested as though they were files.
+ */
+function imagePaths(dir, prefix = "") {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
+    entry.isDirectory()
+      ? imagePaths(path.join(dir, entry.name), `${prefix}${entry.name}/`)
+      : [`${prefix}${entry.name}`],
+  );
+}
+
+const imageFiles = imagePaths(imageDir);
 check("image directory is not empty", imageFiles.length > 0);
 for (let index = 0; index < imageFiles.length; index += 12) {
   const batch = imageFiles.slice(index, index + 12);

@@ -5,12 +5,13 @@ import { CtaBand } from "@/components/CtaBand";
 import { business } from "@/content/business";
 import { bannerImages, contactPage } from "@/content/pages";
 import { BreadcrumbSchema } from "@/components/JsonLd";
-import { pageMetadata } from "@/lib/seo";
+import { ogCard, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Contact Us",
+  title: contactPage.metaTitle,
   description: contactPage.metaDescription,
   path: "/contact-us",
+  image: ogCard("contact", "Request an obligation-free Adelaide quote"),
 });
 
 export default function ContactPage() {

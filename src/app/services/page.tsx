@@ -5,12 +5,13 @@ import { ServiceCards } from "@/components/sections";
 import { bannerImages, servicesPage } from "@/content/pages";
 import { services } from "@/content/services";
 import { BreadcrumbSchema, ServiceListSchema } from "@/components/JsonLd";
-import { pageMetadata } from "@/lib/seo";
+import { ogCard, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
   title: "Cladding & Walling Adelaide",
   description: servicesPage.metaDescription,
   path: "/services",
+  image: ogCard("services", "Cladding, render, Hebel and walling services"),
 });
 
 export default function ServicesPage() {

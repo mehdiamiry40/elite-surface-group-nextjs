@@ -6,12 +6,13 @@ import { CtaBand } from "@/components/CtaBand";
 import { TickList } from "@/components/sections";
 import { aboutPage, bannerImages } from "@/content/site";
 import { BreadcrumbSchema } from "@/components/JsonLd";
-import { pageMetadata } from "@/lib/seo";
+import { ogCard, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "About",
+  title: aboutPage.metaTitle,
   description: aboutPage.metaDescription,
   path: "/about",
+  image: ogCard("about", "About Elite Surface Group, Adelaide"),
 });
 
 export default function AboutPage() {

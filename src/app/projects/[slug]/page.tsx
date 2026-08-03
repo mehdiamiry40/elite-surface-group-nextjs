@@ -7,7 +7,7 @@ import { CtaBand } from "@/components/CtaBand";
 import { BreadcrumbSchema, ProjectSchema } from "@/components/JsonLd";
 import { bannerImages } from "@/content/pages";
 import { getProject, projects } from "@/content/projects";
-import { pageMetadata } from "@/lib/seo";
+import { ogCard, pageMetadata } from "@/lib/seo";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -32,12 +32,7 @@ export async function generateMetadata({
     title: project.metaTitle,
     description: `${project.summary} ${project.suburb} case study by Elite Surface Group.`,
     path: `/projects/${project.slug}`,
-    image: {
-      path: project.image,
-      width: project.width,
-      height: project.height,
-      alt: project.alt,
-    },
+    image: ogCard(project.slug, `${project.title} — ${project.suburb}`),
   });
 }
 

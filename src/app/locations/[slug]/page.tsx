@@ -13,7 +13,7 @@ import {
 } from "@/content/locations";
 import { projects } from "@/content/projects";
 import { services } from "@/content/services";
-import { pageMetadata } from "@/lib/seo";
+import { ogCard, pageMetadata } from "@/lib/seo";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -38,6 +38,8 @@ export async function generateMetadata({
     title: location.metaTitle,
     description: location.metaDescription,
     path: `/locations/${location.slug}`,
+    // The Adelaide page reuses the default card; it already names the city.
+    image: ogCard("default", `${location.bannerTitle} — Elite Surface Group`),
   });
 }
 
