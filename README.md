@@ -31,6 +31,14 @@ Images live in `public/images/` as WebP. `next/image` handles resizing and
 format negotiation, so add the largest version you have and let the optimiser
 derive the rest.
 
+`public/images/og/` holds the 1200×630 share cards used for link previews on
+social platforms and in chat apps — the 1.91:1 ratio those scrapers crop to.
+Each is the page's photo behind a dark scrim, with the logo, the page headline
+and the phone number. Pages select one with `ogCard(name, alt)` from
+`src/lib/seo.ts`, where `name` is the route slug or page key. If you rename a
+route or change a `bannerTitle`, regenerate the matching card so the preview and
+the page still say the same thing.
+
 ## Project layout
 
 ```
@@ -74,6 +82,10 @@ npm run start &     # smoke / a11y need a live server
 npm run smoke       # route, SEO, header and contact checks
 npm run a11y        # axe-core across routes and interactive UI states
 ```
+
+`npm run a11y` downloads its own Chromium. Where one is already provisioned
+(CI images, sandboxes), point at it with
+`PLAYWRIGHT_CHROMIUM_PATH=/path/to/chrome npm run a11y` instead.
 
 The smoke suite asserts what is easy to regress: every route returns 200, each
 page has exactly one `<h1>`, a meta description, canonical and Open Graph tags,

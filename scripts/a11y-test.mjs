@@ -41,7 +41,15 @@ const VIEWPORTS = [
 const failures = [];
 let checks = 0;
 
-const browser = await chromium.launch({ headless: true });
+// CI images and sandboxes often ship a pre-provisioned Chromium rather than the
+// exact revision `npx playwright install` would fetch. Honour an explicit path
+// when one is set; unset, this behaves exactly as before.
+const browser = await chromium.launch({
+  headless: true,
+  ...(process.env.PLAYWRIGHT_CHROMIUM_PATH
+    ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_PATH }
+    : {}),
+});
 
 async function runAxe(page, label) {
   checks += 1;

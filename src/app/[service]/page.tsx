@@ -13,7 +13,8 @@ import {
   FAQPageSchema,
   ServiceSchema,
 } from "@/components/JsonLd";
-import { pageMetadata } from "@/lib/seo";
+import { business } from "@/content/business";
+import { ogCard, pageMetadata } from "@/lib/seo";
 
 type PageProps = {
   params: Promise<{ service: string }>;
@@ -43,12 +44,7 @@ export async function generateMetadata({
     title: service.metaTitle,
     description: service.metaDescription,
     path: `/${service.slug}`,
-    image: {
-      path: service.image,
-      width: service.imageWidth,
-      height: service.imageHeight,
-      alt: service.imageAlt,
-    },
+    image: ogCard(service.slug, `${service.bannerTitle} — ${business.name}`),
   });
 }
 

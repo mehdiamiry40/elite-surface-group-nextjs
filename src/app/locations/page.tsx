@@ -6,12 +6,13 @@ import { BreadcrumbSchema } from "@/components/JsonLd";
 import { bannerImages } from "@/content/pages";
 import { locationPages, locationsHub } from "@/content/locations";
 import { services } from "@/content/services";
-import { pageMetadata } from "@/lib/seo";
+import { ogCard, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
   title: locationsHub.metaTitle,
   description: locationsHub.metaDescription,
   path: "/locations",
+  image: ogCard("locations", "Service areas across Adelaide and South Australia"),
 });
 
 export default function LocationsPage() {
