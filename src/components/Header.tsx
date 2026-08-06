@@ -6,9 +6,18 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import QuoteButton from "@/components/QuoteButton";
 import { useDialog } from "@/components/useDialog";
-import { ChevronDownIcon, PhoneIcon } from "@/components/icons";
+import {
+  ArrowRightIcon,
+  ChevronDownIcon,
+  PhoneIcon,
+} from "@/components/icons";
 import { business } from "@/content/business";
-import { mainNav } from "@/content/navigation";
+import {
+  mainNav,
+  primaryNav,
+  utilityNav,
+  type NavItem,
+} from "@/content/navigation";
 
 export default function Header() {
   const pathname = usePathname();
@@ -18,7 +27,10 @@ export default function Header() {
   const submenuId = useId();
   const navGroupRef = useRef<HTMLDivElement>(null);
   const submenuToggleRef = useRef<HTMLButtonElement>(null);
-  const closeDrawer = useCallback(() => setDrawerOpen(false), []);
+  const closeDrawer = useCallback(() => {
+    setDrawerOpen(false);
+    setOpenGroup(null);
+  }, []);
   const drawerRef = useDialog(drawerOpen, closeDrawer);
 
   useEffect(() => {
@@ -29,16 +41,16 @@ export default function Header() {
     const query = window.matchMedia("(min-width: 1025px)");
     const onChange = () => {
       if (query.matches) {
-        setDrawerOpen(false);
+        closeDrawer();
       }
     };
 
     query.addEventListener("change", onChange);
     return () => query.removeEventListener("change", onChange);
-  }, [drawerOpen]);
+  }, [closeDrawer, drawerOpen]);
 
   useEffect(() => {
-    if (!openGroup) {
+    if (!openGroup || drawerOpen) {
       return;
     }
 
@@ -65,25 +77,32 @@ export default function Header() {
       document.removeEventListener("pointerdown", onPointerDown);
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [openGroup]);
+  }, [drawerOpen, openGroup]);
 
   const isCurrent = (href: string) =>
     pathname === href || pathname === `${href}/`;
+
+  const isItemCurrent = (item: NavItem) =>
+    isCurrent(item.href) ||
+    item.children?.some((child) => isCurrent(child.href)) === true;
 
   return (
     <header className="header">
       <div className="header__utility">
         <div className="shell header__utility-inner">
-          <p>
-            <span>Adelaide &amp; South Australia</span>
-            <span aria-hidden="true">·</span>
-            <span>Residential &amp; commercial projects</span>
-          </p>
-          <div className="header__utility-links">
-            <a href={`mailto:${business.email}`}>Email us</a>
+          <nav className="header__utility-links" aria-label="Secondary">
+            {utilityNav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={isCurrent(item.href) ? "page" : undefined}
+              >
+                {item.label}
+              </Link>
+            ))}
             <span aria-hidden="true" />
-            <a href={`tel:${business.phone}`}>{business.phoneDisplay}</a>
-          </div>
+            <a href={`mailto:${business.email}`}>Email us</a>
+          </nav>
         </div>
       </div>
 
@@ -97,16 +116,20 @@ export default function Header() {
           />
         </Link>
 
-        <div className="header__spacer" />
-
         <nav className="nav" aria-label="Main">
-          {mainNav.map((item) =>
+          {primaryNav.map((item) =>
             item.children ? (
               <div
                 key={item.href}
                 className="nav__group"
                 ref={navGroupRef}
+                onMouseEnter={() => setOpenGroup(item.href)}
                 onMouseLeave={() => setOpenGroup(null)}
+                onBlur={(event) => {
+                  if (!event.currentTarget.contains(event.relatedTarget)) {
+                    setOpenGroup(null);
+                  }
+                }}
               >
                 <button
                   ref={submenuToggleRef}
@@ -114,11 +137,9 @@ export default function Header() {
                   type="button"
                   aria-expanded={openGroup === item.href}
                   aria-controls={submenuId}
-                  onClick={() =>
-                    setOpenGroup((current) =>
-                      current === item.href ? null : item.href,
-                    )
-                  }
+                  data-current={isItemCurrent(item)}
+                  onFocus={() => setOpenGroup(item.href)}
+                  onClick={() => setOpenGroup(item.href)}
                 >
                   {item.label}
                   <ChevronDownIcon className="nav__chevron" />
@@ -128,23 +149,54 @@ export default function Header() {
                   className="nav__submenu"
                   data-open={openGroup === item.href}
                 >
-                  <Link
-                    href={item.href}
-                    aria-current={isCurrent(item.href) ? "page" : undefined}
-                    onClick={() => setOpenGroup(null)}
-                  >
-                    All {item.label}
-                  </Link>
-                  {item.children.map((child) => (
+                  <div className="shell nav__submenu-inner">
                     <Link
-                      key={child.href}
-                      href={child.href}
-                      aria-current={isCurrent(child.href) ? "page" : undefined}
+                      className="nav__submenu-overview"
+                      href={item.href}
+                      aria-current={isCurrent(item.href) ? "page" : undefined}
                       onClick={() => setOpenGroup(null)}
                     >
-                      {child.label}
+                      <span className="nav__submenu-kicker">Services</span>
+                      <span className="nav__submenu-title">
+                        Every surface, one experienced team.
+                      </span>
+                      <span className="nav__submenu-copy">
+                        Explore cladding, render, Hebel and walling systems for
+                        residential and commercial projects across Adelaide.
+                      </span>
+                      <span className="nav__submenu-overview-link">
+                        View all services
+                        <ArrowRightIcon />
+                      </span>
                     </Link>
-                  ))}
+
+                    <ul className="nav__service-grid">
+                      {item.children.map((child, index) => (
+                        <li key={child.href}>
+                          <Link
+                            className="nav__service-link"
+                            href={child.href}
+                            aria-current={
+                              isCurrent(child.href) ? "page" : undefined
+                            }
+                            onClick={() => setOpenGroup(null)}
+                          >
+                            <span
+                              className="nav__service-index"
+                              aria-hidden="true"
+                            >
+                              {String(index + 1).padStart(2, "0")}
+                            </span>
+                            <span className="nav__service-copy">
+                              <strong>{child.label}</strong>
+                              <span>{child.description}</span>
+                            </span>
+                            <ArrowRightIcon className="nav__service-arrow" />
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
             ) : (
@@ -167,17 +219,6 @@ export default function Header() {
           </a>
           <QuoteButton>Start a project</QuoteButton>
         </div>
-
-        {/* Phone is the primary lead channel for this business, so the mobile
-            header keeps a tap-to-call button rather than burying the number
-            behind the menu. */}
-        <a
-          className="header__call"
-          href={`tel:${business.phone}`}
-          aria-label={`Call ${business.phoneDisplay}`}
-        >
-          <PhoneIcon size={18} />
-        </a>
 
         <button
           className="burger"
@@ -209,49 +250,98 @@ export default function Header() {
         aria-modal="true"
         aria-label="Site menu"
       >
-        <button
-          className="drawer__close"
-          type="button"
-          aria-label="Close menu"
-          onClick={() => setDrawerOpen(false)}
-        >
-          ×
-        </button>
+        <div className="drawer__head">
+          <Link
+            className="drawer__logo"
+            href="/"
+            aria-label={`${business.name} home`}
+            onClick={closeDrawer}
+          >
+            <Image
+              src="/images/esg-logo-1.webp"
+              alt={business.name}
+              width={123}
+              height={67}
+            />
+          </Link>
+          <button
+            className="drawer__close"
+            type="button"
+            aria-label="Close menu"
+            onClick={closeDrawer}
+          >
+            ×
+          </button>
+        </div>
 
-        <nav aria-label="Mobile">
-          {mainNav.map((item) => (
-            <div key={item.href}>
-              <Link
-                href={item.href}
-                aria-current={isCurrent(item.href) ? "page" : undefined}
-                onClick={closeDrawer}
-              >
-                {item.label}
-              </Link>
-              {item.children ? (
-                <div className="drawer__sub">
-                  {item.children.map((child) => (
-                    <Link
-                      key={child.href}
-                      href={child.href}
-                      aria-current={isCurrent(child.href) ? "page" : undefined}
-                      onClick={closeDrawer}
+        <div className="drawer__body">
+          <nav aria-label="Mobile">
+            {mainNav.map((item) => (
+              <div className="drawer__item" key={item.href}>
+                {item.children ? (
+                  <>
+                    <button
+                      className="drawer__toggle"
+                      type="button"
+                      aria-expanded={openGroup === item.href}
+                      aria-controls={`${drawerId}-${item.label}`}
+                      data-current={isItemCurrent(item)}
+                      onClick={() =>
+                        setOpenGroup((current) =>
+                          current === item.href ? null : item.href,
+                        )
+                      }
                     >
-                      {child.label}
-                    </Link>
-                  ))}
-                </div>
-              ) : null}
-            </div>
-          ))}
-        </nav>
+                      {item.label}
+                      <ChevronDownIcon />
+                    </button>
+                    <div
+                      id={`${drawerId}-${item.label}`}
+                      className="drawer__sub"
+                      hidden={openGroup !== item.href}
+                    >
+                      <Link href={item.href} onClick={closeDrawer}>
+                        View all {item.label.toLowerCase()}
+                      </Link>
+                      {item.children.map((child) => (
+                        <Link
+                          key={child.href}
+                          href={child.href}
+                          aria-current={
+                            isCurrent(child.href) ? "page" : undefined
+                          }
+                          onClick={closeDrawer}
+                        >
+                          {child.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <Link
+                    href={item.href}
+                    aria-current={isCurrent(item.href) ? "page" : undefined}
+                    onClick={closeDrawer}
+                  >
+                    {item.label}
+                  </Link>
+                )}
+              </div>
+            ))}
+          </nav>
 
-        <div className="drawer__cta">
-          <a className="btn btn--dark" href={`tel:${business.phone}`}>
-            <PhoneIcon />
-            {business.phoneDisplay}
-          </a>
-          <QuoteButton onBeforeOpen={closeDrawer}>Start a project</QuoteButton>
+          <div className="drawer__cta">
+            <a className="btn btn--outline" href={`tel:${business.phone}`}>
+              <PhoneIcon />
+              {business.phoneDisplay}
+            </a>
+            <QuoteButton onBeforeOpen={closeDrawer}>Start a project</QuoteButton>
+          </div>
+
+          <div className="drawer__meta">
+            <span>{business.area}</span>
+            <a href={`mailto:${business.email}`}>{business.email}</a>
+          </div>
         </div>
       </div>
     </header>
