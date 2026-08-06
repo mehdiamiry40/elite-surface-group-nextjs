@@ -40,70 +40,16 @@ export const projects: readonly Project[] = [
     title: "Curved rendered wall detail",
     metaTitle: "Curved Render Detail Adelaide",
     service: "render",
-    summary: "Crisp render and paint finish around a curved wall detail.",
+    summary: "A continuous light render finish around a curved upper wall.",
     suburb: "Adelaide metro",
     scope:
-      "Render and paint finish to a curved architectural wall detail on a residential exterior.",
+      "Rendered finish around the curved upper wall and adjoining window returns shown.",
     challenge:
-      "Maintaining an even thickness and clean line through a curved form without telegraphing substrate irregularities.",
+      "Following the radius while keeping the edge and surface visually even.",
     outcome:
-      "A crisp painted render finish that reads cleanly along the curve in natural light.",
-    image: "/images/img-5.webp",
-    alt: "Curved rendered wall detail with a crisp painted finish",
-    width: 1600,
-    height: 2133,
-  },
-  {
-    slug: "contemporary-exterior-cladding",
-    title: "Contemporary exterior cladding",
-    metaTitle: "Exterior Cladding Project Adelaide",
-    service: "cladding",
-    summary: "Feature cladding installed on a contemporary residence.",
-    suburb: "Adelaide metro",
-    scope:
-      "Feature cladding installation to a contemporary residential exterior elevation.",
-    challenge:
-      "Aligning cladding modules with openings and junctions so the facade reads as a deliberate design feature.",
-    outcome:
-      "A completed cladding elevation that supports the contemporary residence design.",
+      "A continuous light finish that holds a clean curve in direct sunlight.",
     image: "/images/img-4.webp",
-    alt: "External cladding installation on a contemporary residence",
-    width: 1600,
-    height: 2133,
-  },
-  {
-    slug: "rendered-boundary-wall",
-    title: "Rendered boundary wall",
-    metaTitle: "Rendered Boundary Wall Adelaide",
-    service: "render",
-    summary: "Completed render finish beside a landscaped driveway.",
-    suburb: "Adelaide metro",
-    scope:
-      "Render finish to a boundary wall adjoining a landscaped residential driveway.",
-    challenge:
-      "Delivering a durable external finish beside landscaping and vehicle access without trapping moisture at the base detail.",
-    outcome:
-      "A completed render finish that presents cleanly beside the driveway and planting.",
-    image: "/images/img-3.webp",
-    alt: "Rendered boundary wall alongside a landscaped driveway",
-    width: 1600,
-    height: 2133,
-  },
-  {
-    slug: "mixed-cladding-and-render-facade",
-    title: "Mixed cladding and render facade",
-    metaTitle: "Cladding & Render Facade Adelaide",
-    service: "cladding",
-    summary: "A modern facade combining contrasting cladding and render.",
-    suburb: "Adelaide metro",
-    scope:
-      "Combined cladding and render finishes on a modern residential facade.",
-    challenge:
-      "Coordinating two finish systems so transitions, flashings and colour contrast stay sharp.",
-    outcome:
-      "A mixed facade with clear contrast between cladding and render planes.",
-    image: "/images/img-2.webp",
-    alt: "Modern facade combining cladding and render finishes",
+    alt: "Curved upper wall with a light rendered finish",
     width: 1600,
     height: 2133,
   },
@@ -112,18 +58,54 @@ export const projects: readonly Project[] = [
     title: "Dark feature cladding",
     metaTitle: "Dark Feature Cladding Adelaide",
     service: "cladding",
-    summary: "Dark feature cladding on a completed residential exterior.",
+    summary: "Dark feature panels set against a light rendered facade.",
     suburb: "Adelaide metro",
     scope:
-      "Dark feature cladding to a completed residential exterior elevation.",
+      "Dark facade panels to the upper level and garage elevation shown.",
     challenge:
-      "Keeping board lines, fixings and junctions consistent on a high-contrast dark finish that shows alignment clearly.",
+      "Coordinating panel lines with the windows, eaves and garage opening.",
     outcome:
-      "A finished dark cladding feature that anchors the residential exterior design.",
+      "A high-contrast facade with consistent dark panel lines.",
     image: "/images/img-1.webp",
-    alt: "Completed residential exterior with dark feature cladding",
+    alt: "Two-storey home with dark feature panels and light rendered walls",
     width: 1280,
     height: 960,
+  },
+  {
+    slug: "rendered-window-reveal-detail",
+    title: "Rendered window reveal detail",
+    metaTitle: "Rendered Window Reveal Detail Adelaide",
+    service: "render",
+    summary: "Clean render lines around a large glazed opening and parapet edge.",
+    suburb: "Adelaide metro",
+    scope:
+      "External render around the glazed opening, including the return and upper parapet edge shown.",
+    challenge:
+      "Keeping the long horizontal edges and window return visually straight at close range.",
+    outcome:
+      "An even finish with crisp lines around the opening and parapet.",
+    image: "/images/img-3.webp",
+    alt: "Close view of a rendered window reveal and upper parapet",
+    width: 1600,
+    height: 2133,
+  },
+  {
+    slug: "rendered-column-and-stone-junctions",
+    title: "Rendered columns and stone junctions",
+    metaTitle: "Rendered Column Detail Adelaide",
+    service: "render",
+    summary: "Rendered columns and ledges meeting an existing stone base.",
+    suburb: "Adelaide metro",
+    scope:
+      "Render finish to the column faces, moulded bases and horizontal ledges shown during construction.",
+    challenge:
+      "Keeping repeated column edges consistent while resolving the junction above irregular stonework.",
+    outcome:
+      "Crisp rendered faces and ledges above the contrasting stone base.",
+    image: "/images/img-5.webp",
+    alt: "Rendered exterior columns and ledges above a stone base",
+    width: 1600,
+    height: 2133,
   },
 ];
 
@@ -132,8 +114,17 @@ export function getProject(slug: string) {
 }
 
 export const featuredProjects = {
-  eyebrow: "Selected work",
-  title: "Recent Adelaide projects",
+  eyebrow: "Selected Adelaide work",
+  title: "Detail you can see. Scope you can understand.",
   intro:
-    "Completed cladding and render work, with notes on the scope, site detail and finished result.",
+    "A closer look at completed and in-progress render and cladding details across Adelaide residential work.",
 } as const;
+
+/** Kept reachable so historic social-share URLs do not become broken assets. */
+export const legacyProjectSocialImages = [
+  "/images/og/og-contemporary-exterior-cladding.jpg",
+  "/images/og/og-curved-rendered-wall-detail.jpg",
+  "/images/og/og-projects.jpg",
+  "/images/og/og-rendered-boundary-wall.jpg",
+  "/images/og/og-mixed-cladding-and-render-facade.jpg",
+] as const;

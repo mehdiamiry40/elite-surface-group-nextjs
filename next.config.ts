@@ -106,6 +106,21 @@ const nextConfig: NextConfig = {
         destination: "/sitemap.xml",
         permanent: true,
       })),
+      {
+        source: "/projects/contemporary-exterior-cladding",
+        destination: "/projects/dark-feature-cladding/",
+        permanent: true,
+      },
+      {
+        source: "/projects/rendered-boundary-wall",
+        destination: "/projects/",
+        permanent: true,
+      },
+      {
+        source: "/projects/mixed-cladding-and-render-facade",
+        destination: "/projects/",
+        permanent: true,
+      },
       // Old WordPress upload URLs -> consolidated WebP assets.
       ...Object.entries(legacyAssets).map(([source, destination]) => ({
         source,

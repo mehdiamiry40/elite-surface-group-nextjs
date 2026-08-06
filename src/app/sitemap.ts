@@ -5,7 +5,7 @@ import { projects } from "@/content/projects";
 import { services } from "@/content/services";
 
 /** Updated whenever this typed content release changes public pages. */
-const CONTENT_LAST_MODIFIED = new Date("2026-07-31T12:00:00.000Z");
+const CONTENT_LAST_MODIFIED = new Date("2026-08-07T00:00:00.000Z");
 
 const PRIORITY: Record<string, number> = {
   "/": 1,

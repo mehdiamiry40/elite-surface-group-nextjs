@@ -13,6 +13,11 @@ type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
+const PROJECTS_WITH_MATCHING_SOCIAL_CARDS = new Set([
+  "two-storey-exterior-render",
+  "dark-feature-cladding",
+]);
+
 export const dynamicParams = false;
 
 export function generateStaticParams() {
@@ -30,9 +35,11 @@ export async function generateMetadata({
 
   return pageMetadata({
     title: project.metaTitle,
-    description: `${project.summary} ${project.suburb} case study by Elite Surface Group.`,
+    description: `${project.summary} ${project.suburb} project detail from Elite Surface Group.`,
     path: `/projects/${project.slug}`,
-    image: ogCard(project.slug, `${project.title} — ${project.suburb}`),
+    image: PROJECTS_WITH_MATCHING_SOCIAL_CARDS.has(project.slug)
+      ? ogCard(project.slug, `${project.title} — ${project.suburb}`)
+      : undefined,
   });
 }
 
@@ -84,11 +91,11 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
               <strong>Service:</strong>{" "}
               <Link href={`/${project.service}/`}>{project.service}</Link>
             </p>
-            <h3>Scope</h3>
+            <h3>Detail shown</h3>
             <p>{project.scope}</p>
-            <h3>Challenge</h3>
+            <h3>Coordination focus</h3>
             <p>{project.challenge}</p>
-            <h3>Outcome</h3>
+            <h3>Finish shown</h3>
             <p>{project.outcome}</p>
             <p>
               <Link href="/projects/">Back to all projects</Link>

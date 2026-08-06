@@ -45,8 +45,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: absoluteUrl(DEFAULT_OG_IMAGE),
-        width: 1280,
-        height: 960,
+        width: 1200,
+        height: 630,
         alt: `${business.name} — walling and surface finishes in Adelaide`,
       },
     ],

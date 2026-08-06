@@ -72,6 +72,21 @@ export default function Header() {
 
   return (
     <header className="header">
+      <div className="header__utility">
+        <div className="shell header__utility-inner">
+          <p>
+            <span>Adelaide &amp; South Australia</span>
+            <span aria-hidden="true">·</span>
+            <span>Residential &amp; commercial projects</span>
+          </p>
+          <div className="header__utility-links">
+            <a href={`mailto:${business.email}`}>Email us</a>
+            <span aria-hidden="true" />
+            <a href={`tel:${business.phone}`}>{business.phoneDisplay}</a>
+          </div>
+        </div>
+      </div>
+
       <div className="shell header__inner">
         <Link className="header__logo" href="/" aria-label={`${business.name} home`}>
           <Image
@@ -150,7 +165,7 @@ export default function Header() {
             <PhoneIcon />
             {business.phoneDisplay}
           </a>
-          <QuoteButton>Free quote</QuoteButton>
+          <QuoteButton>Start a project</QuoteButton>
         </div>
 
         {/* Phone is the primary lead channel for this business, so the mobile
@@ -236,7 +251,7 @@ export default function Header() {
             <PhoneIcon />
             {business.phoneDisplay}
           </a>
-          <QuoteButton onBeforeOpen={closeDrawer}>Free quote</QuoteButton>
+          <QuoteButton onBeforeOpen={closeDrawer}>Start a project</QuoteButton>
         </div>
       </div>
     </header>

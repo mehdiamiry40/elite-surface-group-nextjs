@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { business } from "@/content/business";
 
 /** Default social-share card. */
-export const DEFAULT_OG_IMAGE = "/images/og/og-default.jpg";
+export const DEFAULT_OG_IMAGE = "/og.png";
 
 export type SocialImage = {
   path: string;
@@ -31,10 +31,12 @@ export function ogCard(name: string, alt: string): SocialImage {
   };
 }
 
-const defaultSocialImage = ogCard(
-  "default",
-  `${business.name} — cladding, render and walling in Adelaide`,
-);
+const defaultSocialImage: SocialImage = {
+  path: DEFAULT_OG_IMAGE,
+  width: 1200,
+  height: 630,
+  alt: `${business.name} — cladding, render and walling in Adelaide`,
+};
 
 /**
  * Absolute URL for a site path or public asset.

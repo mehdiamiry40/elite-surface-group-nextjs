@@ -5,7 +5,6 @@ export type NavItem = {
 };
 
 export const mainNav: readonly NavItem[] = [
-  { label: "About", href: "/about" },
   {
     label: "Services",
     href: "/services",
@@ -17,8 +16,9 @@ export const mainNav: readonly NavItem[] = [
     ],
   },
   { label: "Projects", href: "/projects" },
+  { label: "About", href: "/about" },
   { label: "Service areas", href: "/locations" },
-  { label: "Contact Us", href: "/contact-us" },
+  { label: "Contact", href: "/contact-us" },
 ];
 
 export const footerNav = {
