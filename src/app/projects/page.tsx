@@ -5,12 +5,13 @@ import { CtaBand } from "@/components/CtaBand";
 import { SectionHead } from "@/components/sections";
 import { bannerImages, featuredProjects, projects, projectsPage } from "@/content/site";
 import { BreadcrumbSchema } from "@/components/JsonLd";
-import { pageMetadata } from "@/lib/seo";
+import { ogCard, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
   title: "Render & Cladding Projects Adelaide",
   description: projectsPage.metaDescription,
   path: "/projects",
+  image: ogCard("projects", "Render and cladding project details across Adelaide"),
 });
 
 export default function ProjectsPage() {

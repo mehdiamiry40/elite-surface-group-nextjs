@@ -31,11 +31,10 @@ export const services: readonly Service[] = [
     slug: "cladding",
     name: "Cladding",
     bannerTitle: "Cladding Installation Adelaide",
-    image: "/images/cladding.webp",
-    imageAlt:
-      "Modern home with dark timber-look exterior cladding installed by Elite Surface Group",
-    imageWidth: 1000,
-    imageHeight: 667,
+    image: "/images/v2/service-cladding-installation.webp",
+    imageAlt: "Installer aligning charcoal vertical cladding on an Adelaide home",
+    imageWidth: 1600,
+    imageHeight: 1067,
     summary:
       "Cladding installation for Adelaide homes and commercial builds, using systems selected for the project design, exposure and budget.",
     metaTitle: "Cladding Installation Adelaide",
@@ -84,11 +83,10 @@ export const services: readonly Service[] = [
     slug: "render",
     name: "Render",
     bannerTitle: "Rendering Services Adelaide",
-    image: "/images/render.webp",
-    imageAlt:
-      "Smooth rendered interior wall with a clean contemporary finish by Elite Surface Group",
-    imageWidth: 1000,
-    imageHeight: 422,
+    image: "/images/v2/service-render-application.webp",
+    imageAlt: "Tradesperson applying an even render finish to an exterior wall",
+    imageWidth: 1600,
+    imageHeight: 1067,
     summary:
       "Rendering for new work and repairs — smooth, textured and custom finishes prepared and applied to suit the substrate and conditions.",
     metaTitle: "Rendering Services Adelaide",
@@ -137,11 +135,10 @@ export const services: readonly Service[] = [
     slug: "hebel",
     name: "Hebel",
     bannerTitle: "Hebel Wall Systems Adelaide",
-    image: "/images/hebel.webp",
-    imageAlt:
-      "Hebel panel wall system installed on a modern build by Elite Surface Group",
-    imageWidth: 1000,
-    imageHeight: 646,
+    image: "/images/v2/service-hebel-installation.webp",
+    imageAlt: "Installer checking lightweight AAC wall panels on a new Adelaide build",
+    imageWidth: 1600,
+    imageHeight: 1067,
     summary:
       "Hebel panel installation for residential and commercial projects, following the specified system details for placement, fixing and finishing.",
     metaTitle: "Hebel Wall Systems Adelaide",
@@ -190,11 +187,10 @@ export const services: readonly Service[] = [
     slug: "walling",
     name: "Walling",
     bannerTitle: "Walling Services Adelaide",
-    image: "/images/walling.webp",
-    imageAlt:
-      "Interior walling installation with a crisp painted finish by Elite Surface Group",
-    imageWidth: 1000,
-    imageHeight: 778,
+    image: "/images/v2/service-walling-installation.webp",
+    imageAlt: "Installer checking internal steel wall framing with a laser level",
+    imageWidth: 1600,
+    imageHeight: 1067,
     summary:
       "Internal and external walling solutions for renovations and new builds, coordinated to the project specification and finish requirements.",
     metaTitle: "Walling Services Adelaide",

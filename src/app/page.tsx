@@ -61,8 +61,8 @@ export default function HomePage() {
             <Image
               src={coverage.image}
               alt={coverage.imageAlt}
-              width={1280}
-              height={853}
+              width={1600}
+              height={1200}
               sizes="(max-width: 767px) 100vw, 55vw"
             />
           </div>
@@ -78,8 +78,8 @@ export default function HomePage() {
             <Image
               src={aboutTeaser.image}
               alt={aboutTeaser.imageAlt}
-              width={1000}
-              height={668}
+              width={1600}
+              height={1200}
               sizes="(max-width: 767px) 100vw, 55vw"
             />
           </div>
@@ -149,8 +149,8 @@ export default function HomePage() {
                   <Image
                     src={audience.image}
                     alt={audience.imageAlt}
-                    width={1000}
-                    height={667}
+                    width={1600}
+                    height={900}
                     sizes="(max-width: 767px) 100vw, 50vw"
                   />
                 </div>
