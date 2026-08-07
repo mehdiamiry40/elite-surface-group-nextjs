@@ -11,7 +11,7 @@ export const ctaBand = {
   title: "Planning cladding, render or walling work?",
   body: "Send through the plans, photos or a short brief. We’ll confirm what we need to quote the scope and timing.",
   note: "Quotes are obligation-free.",
-  background: "/images/2150921011.webp",
+  background: "/images/v2/cta-render-action.webp",
 } as const;
 
 export const aboutPage = {
@@ -25,28 +25,28 @@ export const aboutPage = {
     "Elite Surface Group is operated by Elite Surface Group Pty Ltd (ABN 35 691 074 567), with its main business location in South Australia.",
   gallery: [
     {
-      image: "/images/hebel.webp",
-      alt: "Hebel panel wall system installation",
-      width: 1000,
-      height: 646,
+      image: "/images/v2/home-team-site-review.webp",
+      alt: "Construction team reviewing plans and facade details on site",
+      width: 1600,
+      height: 1200,
     },
     {
-      image: "/images/trusted-walling.webp",
-      alt: "Tradespeople rendering an interior wall",
-      width: 1000,
-      height: 668,
+      image: "/images/v2/service-render-application.webp",
+      alt: "Tradesperson finishing fresh exterior render with a hand trowel",
+      width: 1600,
+      height: 1067,
     },
     {
-      image: "/images/cladding.webp",
-      alt: "Exterior cladding on a modern Adelaide home",
-      width: 1000,
-      height: 667,
+      image: "/images/v2/service-cladding-installation.webp",
+      alt: "Installer fixing charcoal vertical cladding around a window",
+      width: 1600,
+      height: 1067,
     },
     {
-      image: "/images/walling.webp",
-      alt: "Finished interior walling with a painted surface",
-      width: 1000,
-      height: 778,
+      image: "/images/v2/service-walling-installation.webp",
+      alt: "Installer checking steel wall framing with a laser level",
+      width: 1600,
+      height: 1067,
     },
   ],
   body: [
@@ -91,16 +91,16 @@ export const contactPage = {
 
 /** Banner background images, keyed by route. */
 export const bannerImages: Record<string, string> = {
-  "/about": "/images/pexels-eye4dtail-118009.webp",
-  "/services": "/images/2185.webp",
-  "/cladding": "/images/cladding.webp",
-  "/render": "/images/render.webp",
-  "/hebel": "/images/hebel.webp",
-  "/walling": "/images/walling.webp",
-  "/projects": "/images/2197.webp",
-  "/locations": "/images/banner.webp",
-  "/locations/adelaide": "/images/banner.webp",
-  "/contact-us": "/images/pexels-fwstudio-33348-131637.webp",
-  "/privacy-policy": "/images/pexels-peter-vang-2157328093-35419416.webp",
-  "/terms-of-service": "/images/pexels-peter-vang-2157328093-35419416.webp",
+  "/about": "/images/v2/banner-about.webp",
+  "/services": "/images/v2/banner-services.webp",
+  "/cladding": "/images/v2/banner-cladding.webp",
+  "/render": "/images/v2/banner-render.webp",
+  "/hebel": "/images/v2/banner-hebel.webp",
+  "/walling": "/images/v2/banner-walling.webp",
+  "/projects": "/images/v2/banner-projects.webp",
+  "/locations": "/images/v2/banner-locations.webp",
+  "/locations/adelaide": "/images/v2/banner-locations.webp",
+  "/contact-us": "/images/v2/banner-contact.webp",
+  "/privacy-policy": "/images/v2/banner-legal.webp",
+  "/terms-of-service": "/images/v2/banner-legal.webp",
 };

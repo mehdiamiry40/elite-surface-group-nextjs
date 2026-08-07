@@ -41,7 +41,7 @@ export default function AboutPage() {
                 alt={item.alt}
                 width={item.width}
                 height={item.height}
-                sizes="(max-width: 767px) 100vw, (max-width: 1024px) 50vw, 380px"
+                sizes="(max-width: 767px) 100vw, (max-width: 1024px) 50vw, 620px"
               />
             ))}
           </Carousel>

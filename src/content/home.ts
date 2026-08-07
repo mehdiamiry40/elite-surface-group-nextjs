@@ -2,16 +2,8 @@ import { business } from "@/content/business";
 
 export const heroSlides = [
   {
-    image: "/images/banner.webp",
-    alt: "Contemporary Adelaide home with dark cladding and a landscaped frontage",
-  },
-  {
-    image: "/images/10734.webp",
-    alt: "Rendered exterior wall detail on a modern residential build",
-  },
-  {
-    image: "/images/pexels-karola-g2-5701.webp",
-    alt: "Textured render finish on an exterior feature wall",
+    image: "/images/v2/home-hero-adelaide.webp",
+    alt: "Contemporary Adelaide home with charcoal cladding and light rendered walls",
   },
 ] as const;
 
@@ -42,8 +34,8 @@ export const trustPoints = [
 export const aboutTeaser = {
   eyebrow: "About Elite Surface Group",
   title: "The details behind a clean, considered finish.",
-  image: "/images/trusted-walling.webp",
-  imageAlt: "Two tradespeople finishing a bright interior wall",
+  image: "/images/v2/home-team-site-review.webp",
+  imageAlt: "Construction team reviewing facade details on an Adelaide building site",
   body: [
     `${business.name} installs cladding, render, Hebel and walling on homes, renovations, multi-unit developments and commercial projects across Adelaide and South Australia.`,
     "We plan each installation around the specified system, site conditions and surrounding trades, with the scope and responsibilities made clear before work begins.",
@@ -54,8 +46,8 @@ export const coverage = {
   eyebrow: "Adelaide & South Australia",
   title: "Local knowledge. Project-ready delivery.",
   body: "From a focused facade upgrade to a coordinated walling package, we review the brief, confirm the system requirements and plan the work around the wider build.",
-  image: "/images/cladding.webp",
-  imageAlt: "Contemporary home exterior with timber-look cladding",
+  image: "/images/v2/home-adelaide-coverage.webp",
+  imageAlt: "Contemporary Adelaide home with charcoal cladding and native landscaping",
 } as const;
 
 export const process = {
@@ -87,8 +79,8 @@ export const audiences = [
     eyebrow: "For homeowners & renovators",
     title: "Bring the idea. We’ll help define the scope.",
     body: "Share photos, plans and the finish you have in mind. We’ll clarify what needs to be inspected and quoted before work begins.",
-    image: "/images/2148211774.webp",
-    imageAlt: "Close-up of pale masonry blocks",
+    image: "/images/v2/homeowner-consultation.webp",
+    imageAlt: "Homeowner and estimator reviewing exterior renovation materials",
     href: "/contact-us/#contact",
     linkLabel: "Discuss your project",
   },
@@ -96,8 +88,8 @@ export const audiences = [
     eyebrow: "For builders & developers",
     title: "A walling partner built around the programme.",
     body: "Send the drawings, specification and programme. We’ll review scope boundaries, system details and coordination points with adjoining trades.",
-    image: "/images/470.webp",
-    imageAlt: "Building plans, scale rulers and drawing tools",
+    image: "/images/v2/builders-plan-review.webp",
+    imageAlt: "Builder and tradesperson reviewing elevation drawings on site",
     href: "/services/",
     linkLabel: "Explore our services",
   },

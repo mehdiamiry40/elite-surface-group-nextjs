@@ -30,10 +30,10 @@ export const projects: readonly Project[] = [
       "Working across two storeys while keeping joints, reveals and weather exposure detailing clean and even.",
     outcome:
       "A smooth, uniform white render finish ready for handover with the surrounding landscaping in place.",
-    image: "/images/img-6.webp",
-    alt: "Rendered two-storey home with a smooth white exterior finish",
+    image: "/images/v2/project-two-storey-exterior-render.webp",
+    alt: "Completed two-storey Adelaide home with a smooth light render finish",
     width: 1600,
-    height: 2133,
+    height: 1067,
   },
   {
     slug: "curved-rendered-wall-detail",
@@ -48,10 +48,10 @@ export const projects: readonly Project[] = [
       "Following the radius while keeping the edge and surface visually even.",
     outcome:
       "A continuous light finish that holds a clean curve in direct sunlight.",
-    image: "/images/img-4.webp",
-    alt: "Curved upper wall with a light rendered finish",
+    image: "/images/v2/project-curved-render-detail.webp",
+    alt: "Curved rendered upper wall with an even light finish",
     width: 1600,
-    height: 2133,
+    height: 1067,
   },
   {
     slug: "dark-feature-cladding",
@@ -66,10 +66,10 @@ export const projects: readonly Project[] = [
       "Coordinating panel lines with the windows, eaves and garage opening.",
     outcome:
       "A high-contrast facade with consistent dark panel lines.",
-    image: "/images/img-1.webp",
-    alt: "Two-storey home with dark feature panels and light rendered walls",
-    width: 1280,
-    height: 960,
+    image: "/images/v2/project-dark-feature-cladding.webp",
+    alt: "Two-storey Adelaide home with charcoal feature cladding and light render",
+    width: 1600,
+    height: 1067,
   },
   {
     slug: "rendered-window-reveal-detail",
@@ -84,10 +84,10 @@ export const projects: readonly Project[] = [
       "Keeping the long horizontal edges and window return visually straight at close range.",
     outcome:
       "An even finish with crisp lines around the opening and parapet.",
-    image: "/images/img-3.webp",
-    alt: "Close view of a rendered window reveal and upper parapet",
+    image: "/images/v2/project-rendered-window-reveal.webp",
+    alt: "Crisp rendered reveal around a large aluminium-framed window",
     width: 1600,
-    height: 2133,
+    height: 1067,
   },
   {
     slug: "rendered-column-and-stone-junctions",
@@ -102,10 +102,10 @@ export const projects: readonly Project[] = [
       "Keeping repeated column edges consistent while resolving the junction above irregular stonework.",
     outcome:
       "Crisp rendered faces and ledges above the contrasting stone base.",
-    image: "/images/img-5.webp",
-    alt: "Rendered exterior columns and ledges above a stone base",
+    image: "/images/v2/project-rendered-columns-stone.webp",
+    alt: "Rendered exterior columns and ledges meeting a limestone base",
     width: 1600,
-    height: 2133,
+    height: 1067,
   },
 ];
 
