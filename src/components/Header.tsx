@@ -95,7 +95,7 @@ export default function Header() {
             onClick={closeMenu}
           >
             <Image
-              src="/images/esg-logo.svg"
+              src="/images/esg-logo-1.webp"
               alt=""
               width={123}
               height={67}

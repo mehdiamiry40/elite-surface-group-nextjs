@@ -46,7 +46,7 @@ export default function Footer() {
           <div>
             <div className="footer__logo">
               <Image
-                src="/images/footer-logo.svg"
+                src="/images/footer-logo.webp"
                 alt={business.name}
                 width={123}
                 height={67}
