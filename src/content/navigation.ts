@@ -33,16 +33,10 @@ export const mainNav: readonly NavItem[] = [
     ],
   },
   { label: "Projects", href: "/projects" },
-  { label: "About", href: "/about" },
   { label: "Service areas", href: "/locations" },
+  { label: "About", href: "/about" },
   { label: "Contact", href: "/contact-us" },
 ];
-
-// The desktop header follows a two-tier information hierarchy: commercial
-// decision paths stay in the main row while quieter company links sit above.
-// Mobile keeps the complete `mainNav` list in one place.
-export const primaryNav: readonly NavItem[] = mainNav.slice(0, 2);
-export const utilityNav: readonly NavItem[] = mainNav.slice(2);
 
 export const footerNav = {
   quickLinks: [

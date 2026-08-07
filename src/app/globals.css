@@ -35,6 +35,320 @@
   color-scheme: light;
 }
 
+/* -------------------------------------------- Carbase.au-style navigation */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: var(--white);
+  color: var(--ink);
+  transition: box-shadow 0.15s ease;
+}
+
+.site-header[data-raised="true"] {
+  box-shadow: 0 10px 28px rgb(11 43 82 / 16%);
+}
+
+.site-header__utility {
+  display: none;
+  background: var(--navy);
+  color: var(--white);
+}
+
+.site-header__utility-inner {
+  min-height: 36px;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 28px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.site-header__utility a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  color: var(--white);
+  transition: color 0.15s ease;
+}
+
+.site-header__utility a:hover {
+  color: var(--peach);
+  text-decoration: none;
+}
+
+.site-header__utility-divider {
+  color: rgb(255 255 255 / 35%);
+}
+
+.site-header__utility-phone {
+  gap: 8px;
+}
+
+.site-header__main {
+  border-bottom: 1px solid var(--line);
+  background: var(--white);
+}
+
+.site-header__main-inner {
+  display: flex;
+  height: 76px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.site-header__logo {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  line-height: 0;
+}
+
+.site-header__logo:hover {
+  text-decoration: none;
+}
+
+.site-header__logo img {
+  display: block;
+  width: 108px;
+  height: auto;
+}
+
+.site-header__desktop-nav {
+  display: none;
+}
+
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.site-header__quote,
+.site-header__mobile-quote {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid var(--orange-ink);
+  border-radius: 2px;
+  padding: 8px 22px;
+  background: var(--orange-ink);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.site-header__quote {
+  display: none;
+}
+
+.site-header__quote:hover,
+.site-header__mobile-quote:hover {
+  border-color: var(--orange-dark);
+  background: var(--orange-dark);
+  color: var(--white);
+  text-decoration: none;
+}
+
+.site-header__menu-button {
+  display: block;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  padding: 8px 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.site-header__menu-button span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  margin: 5px auto;
+  background: currentcolor;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+}
+
+.site-header__menu-button[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.site-header__menu-button[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+
+.site-header__menu-button[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.site-header__mobile-panel {
+  max-height: calc(100dvh - 76px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-bottom: 1px solid var(--line);
+  background: var(--white);
+}
+
+.site-header__mobile-panel[hidden] {
+  display: none;
+}
+
+.site-header__mobile-nav {
+  padding-block: 8px;
+}
+
+.site-header__mobile-nav
+  > a:not(.site-header__mobile-call):not(.site-header__mobile-quote) {
+  display: flex;
+  min-height: 56px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 1px solid var(--line);
+  padding-block: 14px;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.site-header__mobile-nav
+  > a:not(.site-header__mobile-call):not(.site-header__mobile-quote):hover {
+  color: var(--orange-dark);
+  text-decoration: none;
+}
+
+.site-header__mobile-nav
+  > a:not(.site-header__mobile-call):not(.site-header__mobile-quote)
+  svg {
+  flex: none;
+  color: var(--orange-ink);
+}
+
+.site-header__mobile-call {
+  display: flex;
+  width: 100%;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 20px;
+  border: 1px solid var(--navy);
+  border-radius: 2px;
+  padding: 8px 20px;
+  background: transparent;
+  color: var(--navy);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.site-header__mobile-call:hover {
+  background: var(--navy);
+  color: var(--white);
+  text-decoration: none;
+}
+
+.site-header__mobile-quote {
+  width: 100%;
+  margin-block: 12px;
+}
+
+@media (min-width: 640px) {
+  .site-header__logo img {
+    width: 118px;
+  }
+
+  .site-header__quote {
+    display: inline-flex;
+  }
+}
+
+@media (min-width: 1024px) {
+  .site-header__utility {
+    display: block;
+  }
+
+  .site-header__utility-inner {
+    display: flex;
+  }
+
+  .site-header__main-inner {
+    height: 88px;
+  }
+
+  .site-header__logo img {
+    width: 123px;
+  }
+
+  .site-header__desktop-nav {
+    display: flex;
+    height: 100%;
+    align-items: stretch;
+    margin-left: auto;
+  }
+
+  .site-header__desktop-nav a {
+    display: inline-flex;
+    min-width: clamp(112px, 9vw, 128px);
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid var(--line);
+    padding-inline: 18px;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.25;
+    text-align: center;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .site-header__desktop-nav a:hover,
+  .site-header__desktop-nav a[aria-current="page"],
+  .site-header__desktop-nav a[data-current="true"] {
+    background: var(--peach-pale);
+    color: var(--orange-dark);
+    text-decoration: none;
+  }
+
+  .site-header__desktop-nav a[aria-current="page"],
+  .site-header__desktop-nav a[data-current="true"] {
+    font-weight: 700;
+  }
+
+  .site-header__actions {
+    margin-left: 18px;
+  }
+
+  .site-header__menu-button {
+    display: none;
+  }
+
+  .site-header__mobile-panel {
+    display: none;
+  }
+}
+
 /* --------------------------------------------------------------- baseline */
 
 *,

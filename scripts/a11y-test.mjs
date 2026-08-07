@@ -104,10 +104,7 @@ const desktopPage = await desktop.newPage();
 await desktopPage.goto(new URL("/", baseUrl).toString(), {
   waitUntil: "networkidle",
 });
-await desktopPage.getByRole("button", { name: "Services" }).click();
-await desktopPage.waitForTimeout(UI_SETTLE_MS);
-await runAxe(desktopPage, "desktop services disclosure open");
-await desktopPage.keyboard.press("Escape");
+await runAxe(desktopPage, "desktop navigation");
 await desktopPage
   .getByRole("link", { name: /start a project|request a quote|free quote/i })
   .first()
@@ -140,17 +137,17 @@ const mobilePage = await mobile.newPage();
 await mobilePage.goto(new URL("/", baseUrl).toString(), {
   waitUntil: "networkidle",
 });
-await mobilePage.getByRole("button", { name: "Open menu" }).click();
+await mobilePage.getByRole("button", { name: "Open navigation" }).click();
 await mobilePage.waitForTimeout(UI_SETTLE_MS);
-await runAxe(mobilePage, "mobile navigation drawer open");
+await runAxe(mobilePage, "mobile navigation open");
 await mobilePage
-  .getByRole("dialog", { name: "Site menu" })
+  .getByRole("navigation", { name: "Mobile navigation" })
   .getByRole("link", {
     name: /start a project|request a quote|free quote/i,
   })
   .click();
 await mobilePage.waitForTimeout(UI_SETTLE_MS);
-await runAxe(mobilePage, "mobile quote opened from drawer");
+await runAxe(mobilePage, "mobile quote opened from navigation");
 await mobile.close();
 
 await browser.close();
