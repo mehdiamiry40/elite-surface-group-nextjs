@@ -75,9 +75,9 @@ export const servicesPage = {
 } as const;
 
 export const projectsPage = {
-  bannerTitle: "Cladding & Walling Projects Adelaide",
+  bannerTitle: "Render & Cladding Projects Adelaide",
   metaDescription:
-    "See completed cladding, render, Hebel and walling projects delivered by Elite Surface Group across Adelaide and South Australia.",
+    "Explore render and cladding project details from Elite Surface Group across Adelaide and South Australia.",
 } as const;
 
 export const contactPage = {

@@ -1,7 +1,7 @@
 import Image from "next/image";
+import Link from "next/link";
 import QuoteButton from "@/components/QuoteButton";
-import { PhoneIcon } from "@/components/icons";
-import { business } from "@/content/business";
+import { ArrowRightIcon } from "@/components/icons";
 import { heroCopy, heroSlides } from "@/content/home";
 
 export default function Hero() {
@@ -18,15 +18,26 @@ export default function Hero() {
       />
 
       <div className="shell hero__inner">
-        <span className="hero__eyebrow">{heroCopy.eyebrow}</span>
-        <h1>{heroCopy.title}</h1>
-        <p>{heroCopy.body}</p>
-        <div className="hero__actions">
-          <QuoteButton>Request a quote</QuoteButton>
-          <a className="btn btn--ghost" href={`tel:${business.phone}`}>
-            <PhoneIcon />
-            Call {business.phoneDisplay}
-          </a>
+        <div className="hero__frame">
+          <span className="hero__eyebrow">
+            <span aria-hidden="true" />
+            {heroCopy.eyebrow}
+          </span>
+          <h1>
+            {heroCopy.titleLines.map((line) => (
+              <span className="hero__headline-line" key={line}>
+                {line}
+              </span>
+            ))}
+          </h1>
+          <p>{heroCopy.body}</p>
+          <div className="hero__actions">
+            <QuoteButton>Request a free quote</QuoteButton>
+            <Link className="btn btn--hero-link" href="/services/">
+              Explore our services
+              <ArrowRightIcon />
+            </Link>
+          </div>
         </div>
       </div>
     </section>

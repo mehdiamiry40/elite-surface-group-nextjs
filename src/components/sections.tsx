@@ -64,7 +64,7 @@ export function ServiceCards({
           intro={servicesIntro}
         />
         <ul className={`grid grid--${shown.length === 3 ? "3" : "4"}`}>
-          {shown.map((service) => (
+          {shown.map((service, index) => (
             <li key={service.slug} className="service-card">
               <Link
                 className="service-card__link"
@@ -81,6 +81,9 @@ export function ServiceCards({
                   />
                 </div>
                 <div className="service-card__body">
+                  <span className="service-card__index" aria-hidden="true">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
                   <h3>{service.name}</h3>
                   <p>{service.summary}</p>
                   <span className="service-card__more">

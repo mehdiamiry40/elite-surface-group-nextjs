@@ -1,24 +1,41 @@
 export type NavItem = {
   label: string;
   href: string;
+  description?: string;
   children?: readonly NavItem[];
 };
 
 export const mainNav: readonly NavItem[] = [
-  { label: "About", href: "/about" },
   {
     label: "Services",
     href: "/services",
     children: [
-      { label: "Cladding", href: "/cladding" },
-      { label: "Render", href: "/render" },
-      { label: "Hebel", href: "/hebel" },
-      { label: "Walling", href: "/walling" },
+      {
+        label: "Cladding",
+        href: "/cladding",
+        description: "Architectural facades and durable external finishes.",
+      },
+      {
+        label: "Render",
+        href: "/render",
+        description: "Clean, resilient finishes for new and existing walls.",
+      },
+      {
+        label: "Hebel",
+        href: "/hebel",
+        description: "Lightweight wall systems installed with precision.",
+      },
+      {
+        label: "Walling",
+        href: "/walling",
+        description: "Complete internal and external walling solutions.",
+      },
     ],
   },
   { label: "Projects", href: "/projects" },
   { label: "Service areas", href: "/locations" },
-  { label: "Contact Us", href: "/contact-us" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact-us" },
 ];
 
 export const footerNav = {

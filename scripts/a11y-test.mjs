@@ -37,6 +37,7 @@ const VIEWPORTS = [
   { width: 1440, height: 900, label: "desktop" },
   { width: 390, height: 844, label: "mobile" },
 ];
+const UI_SETTLE_MS = 400;
 
 const failures = [];
 let checks = 0;
@@ -103,12 +104,15 @@ const desktopPage = await desktop.newPage();
 await desktopPage.goto(new URL("/", baseUrl).toString(), {
   waitUntil: "networkidle",
 });
-await desktopPage.getByRole("button", { name: "Services" }).click();
-await runAxe(desktopPage, "desktop services disclosure open");
-await desktopPage.keyboard.press("Escape");
-await desktopPage.getByRole("link", { name: /request a quote|free quote/i }).first().click();
+await runAxe(desktopPage, "desktop navigation");
+await desktopPage
+  .getByRole("link", { name: /start a project|request a quote|free quote/i })
+  .first()
+  .click();
+await desktopPage.waitForTimeout(UI_SETTLE_MS);
 await runAxe(desktopPage, "desktop quote dialog open");
 await desktopPage.getByRole("button", { name: "Close quote form" }).click();
+await desktopPage.waitForTimeout(UI_SETTLE_MS);
 await runAxe(desktopPage, "desktop static hero");
 
 await desktopPage.goto(new URL("/about/", baseUrl).toString(), {
@@ -117,12 +121,14 @@ await desktopPage.goto(new URL("/about/", baseUrl).toString(), {
 await desktopPage
   .getByRole("button", { name: "Next workshop image" })
   .click();
+await desktopPage.waitForTimeout(UI_SETTLE_MS);
 await runAxe(desktopPage, "desktop workshop carousel advanced");
 
 await desktopPage.goto(new URL("/projects/", baseUrl).toString(), {
   waitUntil: "networkidle",
 });
 await desktopPage.getByRole("button", { name: /Enlarge project image/ }).first().click();
+await desktopPage.waitForTimeout(UI_SETTLE_MS);
 await runAxe(desktopPage, "desktop project lightbox open");
 await desktop.close();
 
@@ -131,13 +137,17 @@ const mobilePage = await mobile.newPage();
 await mobilePage.goto(new URL("/", baseUrl).toString(), {
   waitUntil: "networkidle",
 });
-await mobilePage.getByRole("button", { name: "Open menu" }).click();
-await runAxe(mobilePage, "mobile navigation drawer open");
+await mobilePage.getByRole("button", { name: "Open navigation" }).click();
+await mobilePage.waitForTimeout(UI_SETTLE_MS);
+await runAxe(mobilePage, "mobile navigation open");
 await mobilePage
-  .getByRole("dialog", { name: "Site menu" })
-  .getByRole("link", { name: /request a quote|free quote/i })
+  .getByRole("navigation", { name: "Mobile navigation" })
+  .getByRole("link", {
+    name: /start a project|request a quote|free quote/i,
+  })
   .click();
-await runAxe(mobilePage, "mobile quote opened from drawer");
+await mobilePage.waitForTimeout(UI_SETTLE_MS);
+await runAxe(mobilePage, "mobile quote opened from navigation");
 await mobile.close();
 
 await browser.close();

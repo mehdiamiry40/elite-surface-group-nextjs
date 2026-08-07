@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Archivo, Manrope } from "next/font/google";
+import { Figtree } from "next/font/google";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { QuoteDialogProvider } from "@/components/QuoteDialogProvider";
@@ -8,20 +8,13 @@ import { absoluteUrl, DEFAULT_OG_IMAGE } from "@/lib/seo";
 import "./globals.css";
 
 // Self-hosted at build time, so the site makes no request to Google's CDN.
-// Manrope stays highly legible at small sizes while Archivo gives headings the
-// clean, engineered character of an architectural specification.
-const body = Manrope({
+// A single variable family keeps the hierarchy calm and human while avoiding
+// duplicate font downloads for a heading face that was visually overridden.
+const sans = Figtree({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: "variable",
   display: "swap",
-  variable: "--font-body",
-});
-
-const heading = Archivo({
-  subsets: ["latin"],
-  weight: ["600", "700"],
-  display: "swap",
-  variable: "--font-heading",
+  variable: "--font-sans",
 });
 
 const HOME_DESCRIPTION =
@@ -45,8 +38,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: absoluteUrl(DEFAULT_OG_IMAGE),
-        width: 1280,
-        height: 960,
+        width: 1200,
+        height: 630,
         alt: `${business.name} — walling and surface finishes in Adelaide`,
       },
     ],
@@ -144,7 +137,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en-AU" className={`${body.variable} ${heading.variable}`}>
+    <html lang="en-AU" className={sans.variable}>
       <body>
         <script
           type="application/ld+json"
