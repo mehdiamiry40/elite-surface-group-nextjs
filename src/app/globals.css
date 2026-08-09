@@ -2821,13 +2821,13 @@ h5 {
 .hero {
   align-items: end;
   min-height: min(900px, calc(100svh - 122px));
-  background: var(--navy-deep);
+  background: #0a0908;
 }
 
 .hero::after {
   background:
-    linear-gradient(90deg, rgb(4 20 40 / 68%) 0%, rgb(4 20 40 / 35%) 58%, rgb(4 20 40 / 16%) 100%),
-    linear-gradient(0deg, rgb(4 20 40 / 48%) 0%, transparent 52%);
+    linear-gradient(90deg, rgb(10 9 8 / 68%) 0%, rgb(10 9 8 / 35%) 58%, rgb(10 9 8 / 16%) 100%),
+    linear-gradient(0deg, rgb(10 9 8 / 48%) 0%, transparent 52%);
 }
 
 .hero__image {
@@ -2856,7 +2856,7 @@ h5 {
   border-top: 3px solid rgb(255 255 255 / 86%);
   border-right: 3px solid rgb(255 255 255 / 86%);
   border-bottom: 3px solid rgb(255 255 255 / 86%);
-  background: rgb(7 31 61 / 38%);
+  background: rgb(10 9 8 / 38%);
   backdrop-filter: blur(2px);
 }
 
@@ -2904,7 +2904,7 @@ h5 {
 .btn--hero-link:hover {
   border-color: var(--white);
   background: var(--white);
-  color: var(--navy);
+  color: #0a0908;
 }
 
 /* proof rail */
@@ -3616,8 +3616,8 @@ h5 {
 
   .hero::after {
     background:
-      linear-gradient(90deg, rgb(4 20 40 / 72%), rgb(4 20 40 / 46%)),
-      linear-gradient(0deg, rgb(4 20 40 / 62%), transparent 58%);
+      linear-gradient(90deg, rgb(10 9 8 / 72%), rgb(10 9 8 / 46%)),
+      linear-gradient(0deg, rgb(10 9 8 / 62%), transparent 58%);
   }
 
   .hero__inner {
