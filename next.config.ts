@@ -63,6 +63,7 @@ const nextConfig: NextConfig = {
 
   images: {
     formats: ["image/avif", "image/webp"],
+    qualities: [75, 90],
     // deviceSizes/imageSizes are left at their defaults on purpose: the
     // optimiser only accepts widths from that allowlist and 400s on anything
     // else, so narrowing it to the widths the current layout happens to ask for
