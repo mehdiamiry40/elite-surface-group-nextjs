@@ -3,7 +3,7 @@ import { business } from "@/content/business";
 export const heroSlides = [
   {
     image: "/images/v2/home-hero-adelaide.webp",
-    mobileImage: "/images/v2/home-hero-adelaide-mobile.webp",
+    mobileImage: "/images/v2/home-hero-adelaide-mobile-v2.webp",
     alt: "Contemporary Adelaide home with charcoal cladding and light rendered walls",
   },
 ] as const;
