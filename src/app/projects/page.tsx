@@ -28,7 +28,7 @@ export default function ProjectsPage() {
         <div className="shell">
           <SectionHead
             eyebrow={featuredProjects.eyebrow}
-            title="Project details"
+            title="A closer look at our work"
             intro={featuredProjects.intro}
             id="projects-title"
           />

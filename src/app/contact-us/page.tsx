@@ -31,7 +31,7 @@ export default function ContactPage() {
           data-state="success"
           tabIndex={-1}
         >
-          Thanks — your message has been accepted.
+          Thanks—your enquiry has been sent. We’ll be in touch soon.
         </p>
         <p
           id="enquiry-unavailable"
@@ -49,8 +49,7 @@ export default function ContactPage() {
           data-state="error"
           tabIndex={-1}
         >
-          The enquiry could not be submitted. Please check the form and try
-          again.
+          We couldn’t submit your enquiry. Please check the form and try again.
         </p>
       </div>
 

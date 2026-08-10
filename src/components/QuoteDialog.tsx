@@ -46,7 +46,7 @@ export default function QuoteDialog({ open, onClose }: QuoteDialogProps) {
         >
           ×
         </button>
-        <h2 id="quote-dialog-title">Get a Free Quote</h2>
+        <h2 id="quote-dialog-title">Request an Obligation-Free Quote</h2>
         <form
           className="form form--2col"
           action="/api/contact/"
@@ -57,7 +57,7 @@ export default function QuoteDialog({ open, onClose }: QuoteDialogProps) {
             idPrefix="quote"
             pending={pending}
             status={status}
-            submitLabel="Send"
+            submitLabel="Send enquiry"
             defaultService={defaultService}
           />
         </form>

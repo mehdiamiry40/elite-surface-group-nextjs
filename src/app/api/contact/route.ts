@@ -470,7 +470,7 @@ export async function POST(request: NextRequest) {
     return contactResponse(
       request,
       isBrowserForm,
-      { ok: true, message: "Thanks — your message has been sent." },
+      { ok: true, message: "Thanks—your enquiry has been sent. We’ll be in touch soon." },
       200,
       "sent",
     );
@@ -616,7 +616,7 @@ export async function POST(request: NextRequest) {
     isBrowserForm,
     {
       ok: true,
-      message: "Thanks — your message has been sent.",
+      message: "Thanks—your enquiry has been sent. We’ll be in touch soon.",
     },
     200,
     "sent",

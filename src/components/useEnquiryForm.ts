@@ -87,7 +87,9 @@ export function useEnquiryForm() {
       form.reset();
       setStatus({
         state: "success",
-        message: payload.message ?? "Thanks — your message has been sent.",
+        message:
+          payload.message ??
+          "Thanks—your enquiry has been sent. We’ll be in touch soon.",
       });
     } catch (error) {
       if (!mountedRef.current) {

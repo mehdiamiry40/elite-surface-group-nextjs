@@ -17,7 +17,7 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   description:
-    "Elite Surface Group installs cladding, render, Hebel and walling across Adelaide and South Australia. Free quotes for homes, renovations and commercial builds.",
+    "Cladding, render, Hebel and walling for homes and commercial projects across Adelaide and South Australia. Request an obligation-free quote.",
   path: "/",
 });
 
@@ -41,7 +41,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <ServiceCards title="One team. Every surface." />
+      <ServiceCards title="Four specialist services. One coordinated team." />
 
       <section
         className="section home-story home-story--coverage"
@@ -53,7 +53,7 @@ export default function HomePage() {
             <h2 id="coverage-title">{coverage.title}</h2>
             <p>{coverage.body}</p>
             <Link className="text-link" href="/locations/">
-              Explore our service area
+              View our service areas
               <ArrowRightIcon />
             </Link>
           </div>
@@ -90,7 +90,7 @@ export default function HomePage() {
               <p key={paragraph}>{paragraph}</p>
             ))}
             <Link className="text-link" href="/about/">
-              Meet Elite Surface Group
+              Get to know our team
               <ArrowRightIcon />
             </Link>
           </div>
@@ -108,7 +108,7 @@ export default function HomePage() {
           <ProjectGallery items={projects.slice(0, 3)} />
           <p className="section-cta">
             <Link className="text-link" href="/projects/">
-              View all project details
+              Explore all projects
               <ArrowRightIcon />
             </Link>
           </p>
@@ -137,9 +137,9 @@ export default function HomePage() {
       <section className="section home-audiences" aria-labelledby="audience-title">
         <div className="shell">
           <SectionHead
-            eyebrow="Built around your project"
-            title="How can we help?"
-            intro="A clearer starting point for homeowners, builders and development teams."
+            eyebrow="Support shaped around your project"
+            title="A practical place to start."
+            intro="Clear next steps for homeowners, builders and development teams."
             id="audience-title"
           />
           <ul className="audience-grid">
