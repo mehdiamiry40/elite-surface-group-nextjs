@@ -91,7 +91,7 @@ export default async function LocationPage({ params }: PageProps) {
               </li>
             ))}
           </ul>
-          <h3>What local clients can expect</h3>
+          <h3>What you can expect</h3>
           <TickList items={location.proof} />
           {localProjects.length ? (
             <>
@@ -113,7 +113,7 @@ export default async function LocationPage({ params }: PageProps) {
       </section>
 
       <ContactSection
-        intro={`Tell us about your ${location.name} cladding, render, Hebel or walling project for an obligation-free quote.`}
+        intro={`Planning cladding, render, Hebel or walling work in ${location.name}? Send us the details for an obligation-free quote.`}
       />
       <CtaBand />
     </>

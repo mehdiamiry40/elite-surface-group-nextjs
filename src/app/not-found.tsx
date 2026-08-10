@@ -7,7 +7,7 @@ import { mainNav } from "@/content/navigation";
 export const metadata: Metadata = {
   title: "Page not found",
   description:
-    "The page you requested does not exist or has moved. Browse Elite Surface Group services or call us for help.",
+    "The page you’re looking for may have moved. Explore Elite Surface Group services or contact our Adelaide team for help.",
 };
 
 export default function NotFound() {
@@ -18,9 +18,9 @@ export default function NotFound() {
           <p className="eyebrow">Error 404</p>
           <h1>Page not found</h1>
           <p>
-            The page you requested does not exist or has moved. Try one of the
-            links below, or give us a call and we will point you in the right
-            direction.
+            The page you’re looking for may have moved or no longer exists.
+            Explore one of the sections below, or call us and we’ll point you
+            in the right direction.
           </p>
           <p style={{ display: "flex", flexWrap: "wrap", gap: 14, justifyContent: "center" }}>
             <Link className="btn" href="/">

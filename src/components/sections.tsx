@@ -45,7 +45,7 @@ export function TickList({ items }: { items: readonly string[] }) {
 /* ----------------------------------------------------------- service cards */
 
 export function ServiceCards({
-  title = "Cladding, render, Hebel and walling",
+  title = "Cladding, render, Hebel & walling",
   currentSlug,
 }: {
   title?: string;
@@ -87,7 +87,7 @@ export function ServiceCards({
                   <h3>{service.name}</h3>
                   <p>{service.summary}</p>
                   <span className="service-card__more">
-                    View service
+                    Explore service
                     <ArrowRightIcon />
                   </span>
                 </div>

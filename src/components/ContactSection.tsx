@@ -39,8 +39,8 @@ export default function ContactSection({
             <div className="split__body">
               <h3>Talk to us directly</h3>
               <p>
-                Call during business hours, or email the suburb and a short
-                description of the work.
+                Call us during business hours, or email your suburb, plans and
+                a short description of the work.
               </p>
               {/* A <dl> may only contain dt/dd (optionally wrapped in a single
                   div per group), so the icon lives inside the group div rather

@@ -56,6 +56,9 @@ export default async function ServicePage({ params }: PageProps) {
     notFound();
   }
 
+  const serviceLabel =
+    service.slug === "hebel" ? service.name : service.name.toLowerCase();
+
   return (
     <>
       <ServiceSchema service={service} />
@@ -87,7 +90,7 @@ export default async function ServicePage({ params }: PageProps) {
             />
           </div>
           <div className="split__body">
-            <h2 id="service-intro">{service.name} services in Adelaide</h2>
+            <h2 id="service-intro">{service.name} services across Adelaide</h2>
             {service.intro.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
@@ -104,7 +107,7 @@ export default async function ServicePage({ params }: PageProps) {
 
       <section className="section section--tint" aria-labelledby="service-detail">
         <div className="shell prose">
-          <h2 id="service-detail">Why choose our {service.name.toLowerCase()}</h2>
+          <h2 id="service-detail">How we approach {serviceLabel}</h2>
           {service.detail.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
@@ -132,7 +135,7 @@ export default async function ServicePage({ params }: PageProps) {
 
       <ContactSection
         defaultService={service.name}
-        intro={`Tell us about your ${service.name.toLowerCase()} project and we will come back to you with an obligation-free quote.`}
+        intro={`Tell us about your ${serviceLabel} project, and we’ll review the details for an obligation-free quote.`}
       />
 
       <CtaBand />

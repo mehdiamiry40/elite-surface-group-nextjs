@@ -36,26 +36,26 @@ export const services: readonly Service[] = [
     imageWidth: 1600,
     imageHeight: 1067,
     summary:
-      "Cladding installation for Adelaide homes and commercial builds, using systems selected for the project design, exposure and budget.",
+      "Architectural cladding installed with careful setting-out, clean junctions and close attention to the system details.",
     metaTitle: "Cladding Installation Adelaide",
     metaDescription:
-      "Cladding installation across Adelaide for homes and commercial builds, with systems selected for the design, substrate, exposure and budget.",
+      "Architectural cladding installation across Adelaide for homes and commercial builds, planned around the design, substrate, exposure and budget.",
     intro: [
-      "Cladding is an effective way to update both the appearance and weather protection of a building. At Elite Surface Group, we install cladding systems suited to residential and commercial projects across Adelaide and South Australia.",
-      "We help you choose a cladding approach that fits the design intent, substrate and local conditions, then install it to the manufacturer and project requirements. Finished performance depends on the selected system, detailing and ongoing maintenance.",
+      "The right cladding can completely change the character of a building while adding another layer of protection to the wall behind it. We install architectural cladding for new homes, renovations and commercial projects across Adelaide and South Australia.",
+      "Every project starts with the building, not a one-size-fits-all product. We consider the design, substrate, site exposure and budget, then install the selected system to the manufacturer’s requirements and project specification.",
     ],
     detail: [
-      "Our cladding process focuses on preparation, accurate setting-out and clean junctions. We assess each site to recommend a suitable system based on design, environmental exposure and budget. When installed as specified, quality cladding can improve weather protection and presentation — results vary with product choice, substrate condition and maintenance.",
+      "A strong cladding result comes down to what sits behind the finished surface. We focus on substrate readiness, accurate setting-out, aligned panel lines and tidy junctions around windows, corners and adjoining finishes. Product choice, exposure and ongoing maintenance all influence long-term performance, so those details are considered before installation begins.",
     ],
-    benefitsLead: "Typical benefits of a well-specified cladding installation include:",
+    benefitsLead: "A well-selected and correctly installed cladding system can offer:",
     benefits: [
-      "Improved thermal and acoustic performance when the full wall system is specified for those outcomes",
-      "A refreshed exterior appearance matched to the project design",
-      "Added weather protection for the wall build-up behind the cladding",
-      "Lower-maintenance exterior finishes compared with some painted substrates",
+      "A distinctive exterior finish shaped around the architectural design",
+      "Added protection for the wall build-up behind the cladding",
+      "Thermal and acoustic benefits when included in the complete wall specification",
+      "A lower-maintenance surface than some painted exterior substrates",
     ],
     closing:
-      "From contemporary homes to larger developments, we deliver cladding solutions tailored to the documented project requirements. See our cladding and mixed-facade work on the projects page, or ask about rendering where a combined finish is planned.",
+      "From a single feature elevation to a complete facade, we tailor the installation to the documented design and site conditions. Explore our cladding and mixed-facade projects, or ask us about combining cladding with render for a contrasting finish.",
     relatedLinks: [
       { label: "View cladding projects", href: "/projects/" },
       { label: "Rendering services", href: "/render/" },
@@ -65,17 +65,17 @@ export const services: readonly Service[] = [
       {
         question: "Which cladding systems do you install in Adelaide?",
         answer:
-          "We install a range of residential and commercial cladding systems. The right option depends on design, substrate, exposure and budget — we recommend a system after reviewing the project details.",
+          "We install a range of residential and commercial cladding systems. The best fit depends on the design, substrate, site exposure and budget, so we confirm the system after reviewing the project details.",
       },
       {
         question: "Is cladding suitable for coastal or wind-exposed Adelaide sites?",
         answer:
-          "Many cladding systems can perform well in exposed conditions when the product, fixings and detailing are specified for that environment. We assess exposure during consultation and follow the relevant installation requirements.",
+          "Yes, many systems are suitable for exposed sites when the product, fixings and detailing are specified for those conditions. We consider exposure during quoting and follow the relevant system requirements during installation.",
       },
       {
         question: "How do I maintain external cladding?",
         answer:
-          "Maintenance varies by product. Most systems benefit from periodic cleaning and inspection of junctions, flashings and sealants. We can outline care expectations for the system used on your project.",
+          "Care requirements vary by product. Most cladding benefits from periodic cleaning and checks of junctions, flashings and sealants. We can explain the maintenance needs of the system selected for your project.",
       },
     ],
   },
@@ -88,26 +88,26 @@ export const services: readonly Service[] = [
     imageWidth: 1600,
     imageHeight: 1067,
     summary:
-      "Rendering for new work and repairs — smooth, textured and custom finishes prepared and applied to suit the substrate and conditions.",
+      "Smooth, textured and custom render finishes, prepared and applied to suit the wall, the conditions and the design.",
     metaTitle: "Rendering Services Adelaide",
     metaDescription:
-      "Expert rendering services in Adelaide. Smooth, textured and custom render finishes for internal and external walls, applied with careful substrate preparation.",
+      "Rendering services across Adelaide for internal and external walls, with smooth, textured and custom finishes backed by careful surface preparation.",
     intro: [
-      "Our render services provide smooth, durable and visually consistent finishes for internal and external walls. We prepare and apply each finish with close attention to the substrate, conditions and project specification.",
-      "We offer a variety of render finishes to suit different architectural styles, whether you want a modern, textured or classic look. Longevity depends on preparation, product system, exposure and maintenance — we focus on getting those foundations right.",
+      "Render can refresh a tired exterior, create a clean finish on new construction or add texture and depth to an architectural design. We render internal and external walls for residential and commercial projects across Adelaide and South Australia.",
+      "The finish is only as sound as the preparation beneath it. We assess the substrate, repair or prepare it as required, and apply the agreed render system with close attention to weather conditions, junctions and surface consistency.",
     ],
     detail: [
-      "Rendering is both a technical and visual process. We pay close attention to surface preparation, weather conditions and finishing techniques to achieve a consistent result. Render systems can help resist weathering and present a clean finish when specified, applied and maintained correctly; no finish is immune to movement, impact or deferred maintenance.",
+      "Rendering is equal parts technical preparation and skilled finishing. We work to achieve even colour, texture and lines across the visible surface while allowing for the movement, exposure and maintenance needs of the underlying wall. Existing cracks, weak coatings or damaged substrates are identified before the new finish goes on.",
     ],
-    benefitsLead: "Why choose our render services:",
+    benefitsLead: "Our rendering work is built around:",
     benefits: [
-      "Clean and consistent finishes matched to the agreed sample or specification",
-      "Improved wall protection when render forms part of a suitable weatherproofing strategy",
-      "Suitable for residential and commercial properties",
-      "Custom finishes to support the design intent",
+      "Thorough preparation suited to the existing substrate",
+      "Clean, consistent finishes matched to the agreed sample or specification",
+      "Smooth, textured and custom options for different architectural styles",
+      "Careful detailing around openings, edges and adjoining materials",
     ],
     closing:
-      "A quality render can improve presentation and help protect the wall surface behind it. Pair it with cladding feature elements where the design calls for contrast — browse our render projects or request a quote.",
+      "A well-executed render finish can sharpen the appearance of a building and support the wall system behind it. Browse our completed render details, or talk to us about pairing render with feature cladding for contrast.",
     relatedLinks: [
       { label: "View render projects", href: "/projects/" },
       { label: "Cladding installation", href: "/cladding/" },
@@ -117,17 +117,17 @@ export const services: readonly Service[] = [
       {
         question: "What causes render to crack?",
         answer:
-          "Cracking can come from substrate movement, inadequate preparation, incompatible systems, impact or age. We assess the wall build-up and recommend a suitable render approach; existing cracks may need repair before a new finish is applied.",
+          "Cracks can result from substrate movement, poor preparation, incompatible materials, impact or age. We assess the wall before recommending a system, and existing cracks may need to be repaired before a new finish is applied.",
       },
       {
         question: "Do you offer acrylic and cement render?",
         answer:
-          "We work with render systems suited to the substrate and project brief. Product selection is confirmed during quoting so the finish matches the design and performance requirements.",
+          "We work with render systems selected to suit the substrate and project brief. The product and finish are confirmed during quoting so they align with the design and performance requirements.",
       },
       {
         question: "Can you repair and re-render existing walls?",
         answer:
-          "Yes. We assess adhesion, substrate condition and previous coatings, then recommend repair, patching or a full re-render where that is the better long-term option.",
+          "Yes. We check the substrate, adhesion and previous coatings before recommending local repairs, patching or a full re-render, depending on the wall’s condition.",
       },
     ],
   },
@@ -140,26 +140,26 @@ export const services: readonly Service[] = [
     imageWidth: 1600,
     imageHeight: 1067,
     summary:
-      "Hebel panel installation for residential and commercial projects, following the specified system details for placement, fixing and finishing.",
+      "Hebel wall systems installed with accurate panel placement, secure fixing and careful junction detailing.",
     metaTitle: "Hebel Wall Systems Adelaide",
     metaDescription:
-      "Hebel wall system installation across Adelaide, with lightweight panels installed to the specified thermal, acoustic and fire-performance system details.",
+      "Hebel wall system installation across Adelaide for residential and commercial projects, completed to the specified fixing and performance details.",
     intro: [
-      "Elite Surface Group installs Hebel wall systems for modern construction across Adelaide and South Australia. Hebel panels are a lightweight autoclaved aerated concrete option commonly specified for strength-to-weight, fire, thermal and acoustic performance when used as a complete compliant system.",
-      "Our team handles panel placement, fixing and detailing to the project and manufacturer requirements. Final system performance depends on the specified product, design, penetrations and the complete installed assembly.",
+      "Hebel is a lightweight autoclaved aerated concrete system used across homes, multi-residential developments and commercial construction. When designed and installed as a complete system, it can provide documented fire, thermal and acoustic performance without the weight of traditional masonry.",
+      "We install Hebel wall systems across Adelaide and South Australia, handling panel placement, fixing and junction detailing to the project specification and manufacturer requirements.",
     ],
     detail: [
-      "Hebel systems need accurate setting-out and specialist detailing. We focus on correct panel placement, secure fixing and junctions so the installed wall can deliver the performance the specification intends — including construction programme benefits where the design allows faster enclosure than some traditional masonry approaches.",
+      "Accuracy matters at every stage of a Hebel installation. We set out panels carefully, use the specified fixings and pay close attention to openings, penetrations and adjoining materials. That disciplined approach helps the completed wall assembly deliver the performance documented in the design.",
     ],
-    benefitsLead: "Advantages of Hebel systems, when specified and installed as a complete system, can include:",
+    benefitsLead: "When specified as a complete system, Hebel can provide:",
     benefits: [
-      "Lightweight panels with useful structural capacity for the designed wall type",
-      "Thermal and sound insulation characteristics defined by the full wall build-up",
-      "Fire-performance ratings as documented for the specified system",
-      "Efficient installation compared with some traditional masonry methods",
+      "A lightweight alternative to some traditional masonry wall systems",
+      "Thermal and acoustic performance defined by the complete wall build-up",
+      "Fire-performance ratings documented for the specified system",
+      "Efficient installation where the design and site programme allow",
     ],
     closing:
-      "We work with builders and developers to deliver Hebel solutions that meet project timelines and specifications. Discuss walling and finish packages alongside Hebel where your programme needs a single trade partner.",
+      "We work closely with builders and developers to keep Hebel installation aligned with the programme and surrounding trades. If the project also includes walling or exterior finishes, ask us about bringing the work together under one coordinated package.",
     relatedLinks: [
       { label: "Walling services", href: "/walling/" },
       { label: "View related projects", href: "/projects/" },
@@ -169,17 +169,17 @@ export const services: readonly Service[] = [
       {
         question: "Are Hebel walls fire resistant?",
         answer:
-          "Hebel systems can achieve fire-performance ratings when the complete wall assembly is specified and installed to the tested system details. Ratings apply to the documented build-up, not to the panel alone in isolation from the design.",
+          "Hebel systems can achieve documented fire-performance ratings when the complete wall assembly is designed and installed to the tested system details. The rating applies to that full build-up, not the panel by itself.",
       },
       {
         question: "Is Hebel suitable for residential and commercial builds?",
         answer:
-          "Yes. Hebel is used on homes, multi-residential and commercial projects. Suitability depends on structural design, finishes and the project specification.",
+          "Yes. Hebel is used across homes, multi-residential developments and commercial projects. Its suitability depends on the structural design, required finishes and full project specification.",
       },
       {
         question: "Do you only supply labour, or full Hebel installation?",
         answer:
-          "We install Hebel wall systems to the agreed scope. Materials, accessories and finishing packages are confirmed in the quote so responsibilities are clear before work starts.",
+          "We install Hebel wall systems to an agreed scope. The quote confirms who supplies the panels, accessories and finishing components so every responsibility is clear before work starts.",
       },
     ],
   },
@@ -192,26 +192,26 @@ export const services: readonly Service[] = [
     imageWidth: 1600,
     imageHeight: 1067,
     summary:
-      "Internal and external walling solutions for renovations and new builds, coordinated to the project specification and finish requirements.",
+      "Internal and external walling installed accurately, safely and in step with the wider construction programme.",
     metaTitle: "Walling Services Adelaide",
     metaDescription:
-      "Complete walling solutions across South Australia — structural wall systems, internal and external walls, and high-quality finishes.",
+      "Internal and external walling services across Adelaide and South Australia for new homes, renovations, multi-unit and commercial projects.",
     intro: [
-      "From structural walls to finishing systems, Elite Surface Group delivers walling solutions for a wide range of construction projects across Adelaide and South Australia.",
-      "We manage walling installations with attention to precision, safety, the project specification and applicable product installation requirements — coordinating with builders so walls integrate with the wider build.",
+      "Good walling gives every trade that follows a better starting point. Elite Surface Group installs internal and external wall systems for new homes, renovations, multi-unit developments and commercial projects across Adelaide and South Australia.",
+      "We plan the work around the drawings, selected system and site programme, then coordinate closely with builders so framing, linings, openings and finishes connect cleanly with the wider build.",
     ],
     detail: [
-      "Every walling project is planned around durability and the documented performance goals. We work with builders and project managers so wall systems integrate with adjoining trades from early-stage construction through to final finishes.",
+      "Walling demands accuracy long before the surface is finished. We focus on set-out, alignment, openings and junctions while keeping safety, access and adjoining trades in view. The result is a wall system prepared for the next stage and aligned with the documented performance requirements.",
     ],
-    benefitsLead: "Our walling services include:",
+    benefitsLead: "Our walling capability includes:",
     benefits: [
-      "Internal and external wall systems",
-      "Structural wall installations where within our agreed scope",
-      "Finishes and detailing aligned to the specification",
-      "Residential and commercial projects",
+      "Internal and external wall systems for residential and commercial work",
+      "Structural wall installation where included in the agreed scope",
+      "Accurate openings, junctions and finishing details",
+      "Coordination with builders, services and adjoining trades",
     ],
     closing:
-      "We focus on workmanship and clear communication so walling work is completed to the agreed standard. Explore cladding, render and Hebel pages for specialised systems, or request a quote for a combined package.",
+      "Clear communication and careful installation keep walling work moving towards the agreed finish. Explore our cladding, render and Hebel services, or request a quote for a coordinated package.",
     relatedLinks: [
       { label: "Cladding services", href: "/cladding/" },
       { label: "Hebel wall systems", href: "/hebel/" },
@@ -221,17 +221,17 @@ export const services: readonly Service[] = [
       {
         question: "Do you handle internal and external walling?",
         answer:
-          "Yes. We work on internal and external wall systems as defined in the project scope, including coordination with finishes such as render or cladding where specified.",
+          "Yes. We install internal and external wall systems within the agreed project scope, including coordination with render or cladding finishes where required.",
       },
       {
         question: "Can you work with our builder or project manager?",
         answer:
-          "We regularly work under builder direction. Clear drawings, programme dates and scope boundaries help us integrate cleanly with other trades.",
+          "Yes. We regularly work under builder or project-manager direction. Clear drawings, programme dates and scope boundaries help us integrate efficiently with other trades.",
       },
       {
         question: "How do I get a walling quote?",
         answer:
-          "Share plans, photos or a brief through our contact form, or call us. We provide an obligation-free quote outlining scope, materials and timing assumptions.",
+          "Send your plans, photos and project brief through our contact form, or call us directly. We’ll review the details and prepare an obligation-free quote outlining the work, materials and timing assumptions.",
       },
     ],
   },
@@ -241,4 +241,4 @@ export const services: readonly Service[] = [
 export const serviceNames = services.map((service) => service.name);
 
 export const servicesIntro =
-  "Cladding, render, Hebel and walling for Adelaide homes, renovations and commercial builds.";
+  "Specialist installation for new homes, renovations, multi-unit developments and commercial builds across Adelaide.";

@@ -27,7 +27,7 @@ export default function LocationsPage() {
 
       <section className="section" aria-labelledby="locations-intro">
         <div className="shell prose">
-          <h2 id="locations-intro">Where we work</h2>
+          <h2 id="locations-intro">Our service area</h2>
           <p>{locationsHub.intro}</p>
           <ul>
             {locationPages.map((location) => (
@@ -40,7 +40,7 @@ export default function LocationsPage() {
               </li>
             ))}
           </ul>
-          <h3>Services available across our service area</h3>
+          <h3>What we deliver</h3>
           <ul>
             {services.map((service) => (
               <li key={service.slug}>

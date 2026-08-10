@@ -42,7 +42,7 @@ export default function EnquiryFields({
           id={id("first-name")}
           name="firstName"
           autoComplete="given-name"
-          placeholder="Alex…"
+          placeholder="Alex"
           maxLength={60}
           required
         />
@@ -54,7 +54,7 @@ export default function EnquiryFields({
           id={id("last-name")}
           name="lastName"
           autoComplete="family-name"
-          placeholder="Nguyen…"
+          placeholder="Nguyen"
           maxLength={59}
         />
       </div>
@@ -68,7 +68,7 @@ export default function EnquiryFields({
           inputMode="email"
           autoComplete="email"
           spellCheck={false}
-          placeholder="you@example.com…"
+          placeholder="you@example.com"
           maxLength={254}
           required
         />
@@ -82,7 +82,7 @@ export default function EnquiryFields({
           type="tel"
           inputMode="tel"
           autoComplete="tel"
-          placeholder="0413 844 912…"
+          placeholder="0413 844 912"
           maxLength={50}
         />
       </div>
@@ -96,7 +96,7 @@ export default function EnquiryFields({
           autoComplete="off"
           defaultValue={selected}
         >
-          <option value="">Not sure / choose a service</option>
+          <option value="">Choose a service / not sure yet</option>
           {serviceOptions.map((option) => (
             <option key={option} value={option}>
               {option}
@@ -112,7 +112,7 @@ export default function EnquiryFields({
           name="message"
           rows={4}
           maxLength={5000}
-          placeholder="Suburb, property type, and what you’d like done…"
+          placeholder="Tell us the suburb, property type, timing and work you have in mind."
           required
         />
       </div>
@@ -151,7 +151,7 @@ export default function EnquiryFields({
         {pending ? "Sending…" : submitLabel}
       </button>
       <p className="form__privacy">
-        We use your details only to respond to this enquiry. See our{" "}
+        We’ll only use your details to respond to this enquiry. See our{" "}
         <Link href="/privacy-policy/">Privacy Policy</Link>.
       </p>
     </>

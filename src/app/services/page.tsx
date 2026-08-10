@@ -8,7 +8,7 @@ import { BreadcrumbSchema, ServiceListSchema } from "@/components/JsonLd";
 import { ogCard, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Cladding & Walling Adelaide",
+  title: "Cladding, Render, Hebel & Walling Adelaide",
   description: servicesPage.metaDescription,
   path: "/services",
   image: ogCard("services", "Cladding, render, Hebel and walling services"),

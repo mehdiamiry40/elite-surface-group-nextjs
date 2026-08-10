@@ -18,7 +18,7 @@ type QuoteButtonProps = {
  */
 export default function QuoteButton({
   className = "btn",
-  children = "Get a Free Quote",
+  children = "Request a Free Quote",
   onBeforeOpen,
   href = "/contact-us/#contact",
 }: QuoteButtonProps) {

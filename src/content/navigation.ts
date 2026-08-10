@@ -13,22 +13,22 @@ export const mainNav: readonly NavItem[] = [
       {
         label: "Cladding",
         href: "/cladding",
-        description: "Architectural facades and durable external finishes.",
+        description: "Architectural cladding installed for a clean, refined finish.",
       },
       {
         label: "Render",
         href: "/render",
-        description: "Clean, resilient finishes for new and existing walls.",
+        description: "Smooth and textured finishes for new and existing walls.",
       },
       {
         label: "Hebel",
         href: "/hebel",
-        description: "Lightweight wall systems installed with precision.",
+        description: "Lightweight wall systems installed to the project specification.",
       },
       {
         label: "Walling",
         href: "/walling",
-        description: "Complete internal and external walling solutions.",
+        description: "Internal and external walling for new builds and renovations.",
       },
     ],
   },
@@ -58,4 +58,4 @@ export const footerNav = {
 } as const;
 
 export const footerBlurb =
-  "Cladding, render, Hebel and walling installation across Adelaide and South Australia for residential and commercial projects.";
+  "Carefully planned cladding, render, Hebel and walling for homes and commercial projects across Adelaide and South Australia.";

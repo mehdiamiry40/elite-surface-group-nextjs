@@ -30,8 +30,8 @@ export default function Footer() {
       <div className="shell">
         <section className="footer__lead" aria-labelledby="footer-lead-title">
           <div>
-            <span>Start your next project</span>
-            <h2 id="footer-lead-title">A clearer scope starts with a conversation.</h2>
+            <span>Ready when you are</span>
+            <h2 id="footer-lead-title">Let’s turn your plans into a clear scope.</h2>
           </div>
           <div className="footer__lead-actions">
             <QuoteButton>Request a free quote</QuoteButton>

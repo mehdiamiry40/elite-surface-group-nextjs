@@ -86,21 +86,21 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
             <h2 id="case-study-title">{project.title}</h2>
             <p>{project.summary}</p>
             <p>
-              <strong>Area:</strong> {project.suburb}
+              <strong>Location:</strong> {project.suburb}
               <br />
               <strong>Service:</strong>{" "}
               <Link href={`/${project.service}/`}>{project.service}</Link>
             </p>
-            <h3>Detail shown</h3>
+            <h3>The scope</h3>
             <p>{project.scope}</p>
-            <h3>Coordination focus</h3>
+            <h3>The challenge</h3>
             <p>{project.challenge}</p>
-            <h3>Finish shown</h3>
+            <h3>The result</h3>
             <p>{project.outcome}</p>
             <p>
               <Link href="/projects/">Back to all projects</Link>
               {" · "}
-              <Link href="/contact-us/#contact">Request a similar quote</Link>
+              <Link href="/contact-us/#contact">Discuss a similar project</Link>
             </p>
           </div>
         </div>
