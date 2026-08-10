@@ -27,27 +27,46 @@ export default function LocationsPage() {
 
       <section className="section" aria-labelledby="locations-intro">
         <div className="shell prose">
-          <h2 id="locations-intro">Our service area</h2>
-          <p>{locationsHub.intro}</p>
-          <ul>
+          <h2 id="locations-intro">{locationsHub.introTitle}</h2>
+          {locationsHub.intro.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
+      </section>
+
+      <section className="section section--tint" aria-labelledby="locations-areas">
+        <div className="shell">
+          <div className="section-head">
+            <h2 id="locations-areas">Areas we cover</h2>
+          </div>
+          <div className="grid grid--2">
             {locationPages.map((location) => (
-              <li key={location.slug}>
-                <Link href={`/locations/${location.slug}/`}>
-                  {location.name}
-                </Link>
-                {" — "}
-                {location.metaDescription}
-              </li>
+              <div key={location.slug}>
+                <h3>
+                  <Link href={`/locations/${location.slug}/`}>
+                    {location.name}
+                  </Link>
+                </h3>
+                <p>{location.hubBlurb}</p>
+              </div>
             ))}
-          </ul>
-          <h3>What we deliver</h3>
+          </div>
+        </div>
+      </section>
+
+      <section className="section" aria-labelledby="locations-services">
+        <div className="shell prose">
+          <h2 id="locations-services">What we deliver in every area</h2>
           <ul>
             {services.map((service) => (
               <li key={service.slug}>
                 <Link href={`/${service.slug}/`}>{service.name}</Link>
+                {" — "}
+                {service.summary}
               </li>
             ))}
           </ul>
+          <p>{locationsHub.closing}</p>
         </div>
       </section>
 

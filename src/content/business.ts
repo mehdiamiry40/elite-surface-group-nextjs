@@ -3,7 +3,7 @@ export const business = {
   legalName: "Elite Surface Group Pty Ltd",
   /** Australian Business Number, displayed with the standard 2-3-3-3 grouping. */
   abn: "35 691 074 567",
-  tagline: "Adelaide Cladding, Render, Hebel & Walling Specialists",
+  tagline: "Cladding, render, Hebel and walling specialists in Adelaide",
   /** E.164 for `tel:` hrefs — never hand-write a `tel:` link anywhere else. */
   phone: "+61413844912",
   /** Human-readable form of the same number. */

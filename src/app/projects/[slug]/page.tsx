@@ -7,6 +7,7 @@ import { CtaBand } from "@/components/CtaBand";
 import { BreadcrumbSchema, ProjectSchema } from "@/components/JsonLd";
 import { bannerImages } from "@/content/pages";
 import { getProject, projects } from "@/content/projects";
+import { services } from "@/content/services";
 import { ogCard, pageMetadata } from "@/lib/seo";
 
 type PageProps = {
@@ -35,7 +36,7 @@ export async function generateMetadata({
 
   return pageMetadata({
     title: project.metaTitle,
-    description: `${project.summary} ${project.suburb} project detail from Elite Surface Group.`,
+    description: project.metaDescription,
     path: `/projects/${project.slug}`,
     image: PROJECTS_WITH_MATCHING_SOCIAL_CARDS.has(project.slug)
       ? ogCard(project.slug, `${project.title} — ${project.suburb}`)
@@ -89,7 +90,10 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
               <strong>Location:</strong> {project.suburb}
               <br />
               <strong>Service:</strong>{" "}
-              <Link href={`/${project.service}/`}>{project.service}</Link>
+              <Link href={`/${project.service}/`}>
+                {services.find((service) => service.slug === project.service)
+                  ?.name ?? project.service}
+              </Link>
             </p>
             <h3>The scope</h3>
             <p>{project.scope}</p>
@@ -97,6 +101,12 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
             <p>{project.challenge}</p>
             <h3>The result</h3>
             <p>{project.outcome}</p>
+            <h3>{project.detailsLead}</h3>
+            <ul>
+              {project.details.map((detail) => (
+                <li key={detail}>{detail}</li>
+              ))}
+            </ul>
             <p>
               <Link href="/projects/">Back to all projects</Link>
               {" · "}

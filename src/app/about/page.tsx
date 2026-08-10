@@ -56,8 +56,24 @@ export default function AboutPage() {
                 <TickList key={column[0]} items={column} />
               ))}
             </div>
-            <p style={{ marginTop: 24 }}>{aboutPage.closing}</p>
           </div>
+        </div>
+      </section>
+
+      <section className="section section--tint" aria-labelledby="about-approach">
+        <div className="shell">
+          <div className="section-head">
+            <h2 id="about-approach">{aboutPage.approachTitle}</h2>
+          </div>
+          <div className="grid grid--2">
+            {aboutPage.approach.map((step) => (
+              <div key={step.title}>
+                <h3>{step.title}</h3>
+                <p>{step.body}</p>
+              </div>
+            ))}
+          </div>
+          <p className="section-cta">{aboutPage.closing}</p>
         </div>
       </section>
 

@@ -4,6 +4,8 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { QuoteDialogProvider } from "@/components/QuoteDialogProvider";
 import { business } from "@/content/business";
+import { locationPages } from "@/content/locations";
+import { services } from "@/content/services";
 import { absoluteUrl, DEFAULT_OG_IMAGE } from "@/lib/seo";
 import "./globals.css";
 
@@ -18,12 +20,19 @@ const sans = Figtree({
 });
 
 const HOME_DESCRIPTION =
-  "Cladding, render, Hebel and walling for homes and commercial projects across Adelaide and South Australia. Request an obligation-free quote.";
+  "Cladding, rendering, Hebel and walling for homes, renovations and commercial builds across Adelaide and South Australia. Obligation-free quotes.";
+
+/**
+ * Rendered verbatim on the homepage. Keep the whole string under 65 characters
+ * — the smoke suite enforces the search-snippet budget, and an escaped `&`
+ * counts as five.
+ */
+const HOME_TITLE = `Cladding, Render and Hebel Adelaide | ${business.name}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(business.siteUrl),
   title: {
-    default: `${business.name} | Adelaide Cladding & Render`,
+    default: HOME_TITLE,
     template: `%s — ${business.name}`,
   },
   description: HOME_DESCRIPTION,
@@ -33,7 +42,7 @@ export const metadata: Metadata = {
     type: "website",
     siteName: business.name,
     locale: "en_AU",
-    title: `${business.name} | Adelaide Cladding & Render`,
+    title: HOME_TITLE,
     description: HOME_DESCRIPTION,
     images: [
       {
@@ -46,7 +55,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${business.name} | Adelaide Cladding & Render`,
+    title: HOME_TITLE,
     description: HOME_DESCRIPTION,
     images: [absoluteUrl(DEFAULT_OG_IMAGE)],
   },
@@ -80,17 +89,39 @@ const organisationSchema = {
     width: "192",
     height: "192",
   },
+  slogan: business.tagline,
   knowsAbout: [
-    "Cladding installation",
-    "Rendering",
-    "Hebel wall systems",
-    "Walling",
+    "Wall cladding installation",
+    "House rendering",
+    "Acrylic and cement render",
+    "Hebel AAC wall systems",
+    "Internal and external walling",
+    "Facade renewal",
     "Adelaide construction finishes",
   ],
   areaServed: [
     { "@type": "City", name: "Adelaide" },
     { "@type": "AdministrativeArea", name: "South Australia" },
+    ...locationPages
+      .filter((location) => location.name !== "Adelaide")
+      .map((location) => ({
+        "@type": "AdministrativeArea",
+        name: location.name,
+      })),
   ],
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: `${business.name} services`,
+    itemListElement: services.map((service) => ({
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        name: service.name,
+        description: service.metaDescription,
+        url: absoluteUrl(`/${service.slug}`),
+      },
+    })),
+  },
   address: {
     "@type": "PostalAddress",
     addressLocality: "Adelaide",

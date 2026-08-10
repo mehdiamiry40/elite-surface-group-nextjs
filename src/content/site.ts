@@ -18,13 +18,19 @@ export {
   services,
   servicesIntro,
   type Service,
+  type ServiceApplication,
   type ServiceFaq,
 } from "@/content/services";
 export {
   aboutTeaser,
+  audiences,
+  coverage,
   heroCopy,
   heroSlides,
+  homeFaqs,
+  homeIntro,
   process,
+  trustPoints,
 } from "@/content/home";
 export {
   featuredProjects,
@@ -45,5 +51,7 @@ export {
   getLocation,
   locationPages,
   locationsHub,
+  type LocationCondition,
+  type LocationFaq,
   type LocationPage,
 } from "@/content/locations";

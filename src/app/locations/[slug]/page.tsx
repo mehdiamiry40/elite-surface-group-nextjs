@@ -5,7 +5,7 @@ import PageBanner from "@/components/PageBanner";
 import { CtaBand } from "@/components/CtaBand";
 import ContactSection from "@/components/ContactSection";
 import { TickList } from "@/components/sections";
-import { BreadcrumbSchema } from "@/components/JsonLd";
+import { BreadcrumbSchema, FAQPageSchema } from "@/components/JsonLd";
 import { bannerImages } from "@/content/pages";
 import {
   getLocation,
@@ -38,7 +38,7 @@ export async function generateMetadata({
     title: location.metaTitle,
     description: location.metaDescription,
     path: `/locations/${location.slug}`,
-    // The Adelaide page reuses the default card; it already names the city.
+    // Area pages reuse the default card; it already names the city.
     image: ogCard("default", `${location.bannerTitle} — Elite Surface Group`),
   });
 }
@@ -51,10 +51,7 @@ export default async function LocationPage({ params }: PageProps) {
     notFound();
   }
 
-  const localProjects = projects.filter((project) =>
-    project.suburb.toLowerCase().includes(location.name.toLowerCase()) ||
-    project.suburb.toLowerCase().includes("adelaide"),
-  );
+  const relatedProjects = projects.slice(0, 3);
 
   return (
     <>
@@ -64,6 +61,7 @@ export default async function LocationPage({ params }: PageProps) {
           { label: location.name, href: `/locations/${location.slug}` },
         ]}
       />
+      <FAQPageSchema faqs={location.faqs} />
       <PageBanner
         title={location.bannerTitle}
         image={bannerImages[`/locations/${location.slug}`] ?? bannerImages["/locations"]}
@@ -81,6 +79,28 @@ export default async function LocationPage({ params }: PageProps) {
           {location.intro.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
+        </div>
+      </section>
+
+      <section className="section section--tint" aria-labelledby="location-conditions">
+        <div className="shell">
+          <div className="section-head">
+            <h2 id="location-conditions">{location.conditionsTitle}</h2>
+          </div>
+          <div className="grid grid--2">
+            {location.conditions.map((condition) => (
+              <div key={condition.title}>
+                <h3>{condition.title}</h3>
+                <p>{condition.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section" aria-labelledby="location-services">
+        <div className="shell prose">
+          <h2 id="location-services">Our services in {location.name}</h2>
           <p>{location.servicesLead}</p>
           <ul>
             {services.map((service) => (
@@ -88,27 +108,50 @@ export default async function LocationPage({ params }: PageProps) {
                 <Link href={`/${service.slug}/`}>
                   {service.name} in {location.name}
                 </Link>
+                {" — "}
+                {service.summary}
               </li>
             ))}
           </ul>
+
           <h3>What you can expect</h3>
           <TickList items={location.proof} />
-          {localProjects.length ? (
-            <>
-              <h3>Project examples</h3>
-              <ul>
-                {localProjects.map((project) => (
-                  <li key={project.slug}>
-                    <Link href={`/projects/${project.slug}/`}>
-                      {project.title}
-                    </Link>
-                    {" — "}
-                    {project.summary}
-                  </li>
-                ))}
-              </ul>
-            </>
-          ) : null}
+
+          <h3>Suburbs we cover</h3>
+          <p>{location.suburbsLead}</p>
+          <ul>
+            {location.suburbs.map((suburb) => (
+              <li key={suburb}>{suburb}</li>
+            ))}
+          </ul>
+
+          <h3>Related project details from around Adelaide</h3>
+          <ul>
+            {relatedProjects.map((project) => (
+              <li key={project.slug}>
+                <Link href={`/projects/${project.slug}/`}>{project.title}</Link>
+                {" — "}
+                {project.summary}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="section section--tint" aria-labelledby="location-faqs">
+        <div className="shell prose">
+          <h2 id="location-faqs">{location.name} questions</h2>
+          <dl className="faq-list">
+            {location.faqs.map((faq) => (
+              <div key={faq.question} className="faq-list__item">
+                <dt>{faq.question}</dt>
+                <dd>{faq.answer}</dd>
+              </div>
+            ))}
+          </dl>
+          <p>
+            <Link href="/locations/">See all our Adelaide service areas</Link>
+          </p>
         </div>
       </section>
 

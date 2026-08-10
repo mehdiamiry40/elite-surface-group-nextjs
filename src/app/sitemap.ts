@@ -5,11 +5,15 @@ import { projects } from "@/content/projects";
 import { services } from "@/content/services";
 
 /** Updated whenever this typed content release changes public pages. */
-const CONTENT_LAST_MODIFIED = new Date("2026-08-07T00:00:00.000Z");
+const CONTENT_LAST_MODIFIED = new Date("2026-08-10T00:00:00.000Z");
 
 const PRIORITY: Record<string, number> = {
   "/": 1,
   "/services/": 0.9,
+  "/cladding/": 0.9,
+  "/render/": 0.9,
+  "/hebel/": 0.9,
+  "/walling/": 0.9,
   "/contact-us/": 0.9,
   "/locations/adelaide/": 0.9,
   "/about/": 0.8,

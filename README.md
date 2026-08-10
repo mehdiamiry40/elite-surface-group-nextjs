@@ -15,17 +15,39 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Editing content
 
-There is no CMS. All copy, imagery and navigation live in two typed modules:
+There is no CMS. All copy, imagery and navigation live in typed modules under
+`src/content/`:
 
 | File | Holds |
 | --- | --- |
-| `src/content/site.ts` | Business details, navigation, services, homepage sections, projects, testimonials, page metadata |
-| `src/content/legal.ts` | Privacy policy and terms of service |
+| `business.ts` | Trading details: name, ABN, phone, email, hours, service area |
+| `navigation.ts` | Header and footer navigation, footer blurb |
+| `home.ts` | Hero, trust strip, homepage intro, coverage, process, audiences, homepage FAQs |
+| `services.ts` | The four service pages: copy, applications, local notes, FAQs |
+| `locations.ts` | Service-area hub and the per-area pages |
+| `projects.ts` | Project case studies |
+| `pages.ts` | About, services hub, projects hub, contact, CTA band, banner images |
+| `legal.ts` | Privacy policy and terms of service |
+| `site.ts` | Convenience re-exports for server components |
 
 Change the text there and the change flows to every page that uses it. Phone
 numbers in particular are defined **once** — `business.phone` (E.164, used for
 every `tel:` href) and `business.phoneDisplay` (the human-readable form). Never
 hand-write a `tel:` link; the smoke suite fails the build if you do.
+
+### Metadata budgets
+
+The smoke suite enforces the search-snippet budget on every route: the rendered
+`<title>` must be **65 characters or fewer** and the meta description must land
+between **40 and 160**. Titles render as `metaTitle — Elite Surface Group`, so
+keep a `metaTitle` under 40 characters — and remember the check counts raw HTML,
+where an escaped `&` costs five characters and a straight apostrophe six. Use
+"and" and typographic quotes in metadata.
+
+Adding a service, project or service-area entry automatically adds the route to
+`sitemap.xml`, the contact endpoint's source-path allowlist and the smoke
+suite's route list. New service-area pages are expected to carry genuinely
+local content; near-duplicate area pages are worse than none.
 
 Images live in `public/images/` as WebP. `next/image` handles resizing and
 format negotiation, so add the largest version you have and let the optimiser

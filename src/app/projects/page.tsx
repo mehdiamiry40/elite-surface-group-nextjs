@@ -8,7 +8,7 @@ import { BreadcrumbSchema } from "@/components/JsonLd";
 import { ogCard, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Render & Cladding Projects Adelaide",
+  title: projectsPage.metaTitle,
   description: projectsPage.metaDescription,
   path: "/projects",
   image: ogCard("projects", "Render and cladding project details across Adelaide"),
@@ -24,7 +24,16 @@ export default function ProjectsPage() {
         crumbs={[{ label: "Projects" }]}
       />
 
-      <section className="section" aria-labelledby="projects-title">
+      <section className="section" aria-labelledby="projects-intro">
+        <div className="shell prose">
+          <h2 id="projects-intro">{projectsPage.introTitle}</h2>
+          {projectsPage.intro.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
+      </section>
+
+      <section className="section section--tint" aria-labelledby="projects-title">
         <div className="shell">
           <SectionHead
             eyebrow={featuredProjects.eyebrow}
@@ -33,6 +42,7 @@ export default function ProjectsPage() {
             id="projects-title"
           />
           <ProjectGallery items={projects} />
+          <p className="section-cta">{projectsPage.closing}</p>
         </div>
       </section>
 

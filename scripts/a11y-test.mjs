@@ -29,6 +29,7 @@ const ROUTES = [
   "/projects/two-storey-exterior-render/",
   "/locations/",
   "/locations/adelaide/",
+  "/locations/adelaide-hills/",
   "/contact-us/",
   "/privacy-policy/",
   "/terms-of-service/",

@@ -4,11 +4,14 @@ import ContactSection from "@/components/ContactSection";
 import Hero from "@/components/Hero";
 import ProjectGallery from "@/components/ProjectGallery";
 import { ArrowRightIcon } from "@/components/icons";
-import { SectionHead, ServiceCards } from "@/components/sections";
+import { FAQPageSchema } from "@/components/JsonLd";
+import { SectionHead, ServiceCards, TickList } from "@/components/sections";
 import {
   aboutTeaser,
   audiences,
   coverage,
+  homeFaqs,
+  homeIntro,
   process,
   trustPoints,
 } from "@/content/home";
@@ -17,13 +20,14 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   description:
-    "Cladding, render, Hebel and walling for homes and commercial projects across Adelaide and South Australia. Request an obligation-free quote.",
+    "Cladding, rendering, Hebel and walling for homes, renovations and commercial builds across Adelaide and South Australia. Obligation-free quotes.",
   path: "/",
 });
 
 export default function HomePage() {
   return (
     <>
+      <FAQPageSchema faqs={homeFaqs.items} />
       <Hero />
 
       <section className="trust-strip" aria-label="Why work with Elite Surface Group">
@@ -41,7 +45,17 @@ export default function HomePage() {
         </div>
       </section>
 
-      <ServiceCards title="Four specialist services. One coordinated team." />
+      <section className="section" aria-labelledby="home-intro-title">
+        <div className="shell prose">
+          <h2 id="home-intro-title">{homeIntro.title}</h2>
+          {homeIntro.body.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+          <TickList items={homeIntro.points} />
+        </div>
+      </section>
+
+      <ServiceCards title="Four wall trades. One coordinated team." />
 
       <section
         className="section home-story home-story--coverage"
@@ -168,6 +182,21 @@ export default function HomePage() {
               </li>
             ))}
           </ul>
+        </div>
+      </section>
+
+      <section className="section section--tint" aria-labelledby="home-faqs-title">
+        <div className="shell prose">
+          <h2 id="home-faqs-title">{homeFaqs.title}</h2>
+          <p>{homeFaqs.intro}</p>
+          <dl className="faq-list">
+            {homeFaqs.items.map((faq) => (
+              <div key={faq.question} className="faq-list__item">
+                <dt>{faq.question}</dt>
+                <dd>{faq.answer}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </section>
 

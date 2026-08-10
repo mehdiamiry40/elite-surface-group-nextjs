@@ -35,7 +35,7 @@ const defaultSocialImage: SocialImage = {
   path: DEFAULT_OG_IMAGE,
   width: 1200,
   height: 630,
-  alt: `${business.name} — cladding, render and walling in Adelaide`,
+  alt: `${business.name} — cladding, render, Hebel and walling in Adelaide`,
 };
 
 /**
@@ -75,7 +75,7 @@ export function pageMetadata({
   const url = absoluteUrl(path);
   const imageUrl = absoluteUrl(image.path);
 
-  const defaultTitle = `${business.name} | Adelaide Cladding & Render`;
+  const defaultTitle = `Cladding, Render and Hebel Adelaide | ${business.name}`;
   const resolvedTitle = title ? `${title} — ${business.name}` : defaultTitle;
 
   return {

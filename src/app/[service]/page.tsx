@@ -113,6 +113,33 @@ export default async function ServicePage({ params }: PageProps) {
           ))}
           <p>{service.benefitsLead}</p>
           <TickList items={service.benefits} />
+        </div>
+      </section>
+
+      <section className="section" aria-labelledby="service-applications">
+        <div className="shell">
+          <div className="section-head">
+            <h2 id="service-applications">
+              Where we install {serviceLabel} across Adelaide
+            </h2>
+            <p>{service.applicationsLead}</p>
+          </div>
+          <div className="grid grid--2">
+            {service.applications.map((application) => (
+              <div key={application.title}>
+                <h3>{application.title}</h3>
+                <p>{application.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section section--tint" aria-labelledby="service-local">
+        <div className="shell prose">
+          <h2 id="service-local">{service.name} in Adelaide conditions</h2>
+          <p>{service.localLead}</p>
+          <TickList items={service.local} />
           <p style={{ marginTop: 24 }}>{service.closing}</p>
         </div>
       </section>

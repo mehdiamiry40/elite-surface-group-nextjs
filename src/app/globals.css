@@ -1671,7 +1671,10 @@ h3 {
 }
 
 .form__privacy a,
-.prose p a {
+/* Links sitting inside running text need more than colour to be identifiable —
+   list items included, where a link is followed by descriptive copy. */
+.prose p a,
+.prose li a {
   text-decoration: underline;
   text-underline-offset: 2px;
 }
@@ -2009,9 +2012,23 @@ h3 {
   display: grid;
   gap: 10px;
   margin: 0 0 1.1em;
+  padding-left: 22px;
+  list-style: disc;
 }
 
-.prose ul li {
+.prose ul li::marker {
+  color: var(--orange-ink);
+}
+
+/* Icon lists (tick lists, legal points) swap the marker for the icon column.
+   Without this split, a plain <li> of text is treated as a grid item and gets
+   squeezed into the 20px icon column. */
+.prose ul:has(svg) {
+  padding-left: 0;
+  list-style: none;
+}
+
+.prose ul:has(svg) li {
   display: grid;
   grid-template-columns: 20px 1fr;
   gap: 10px;

@@ -53,6 +53,18 @@ export default function ContactPage() {
         </p>
       </div>
 
+      <section className="section" aria-labelledby="contact-details-title">
+        <div className="shell prose">
+          <h2 id="contact-details-title">{contactPage.detailsTitle}</h2>
+          <ul>
+            {contactPage.details.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+          <p>{contactPage.detailsNote}</p>
+        </div>
+      </section>
+
       {/* The WordPress version of this page had no form and no contact details
           at all — only the banner and the closing CTA. Both are added here. */}
       <ContactSection withDetails intro={contactPage.intro} />
