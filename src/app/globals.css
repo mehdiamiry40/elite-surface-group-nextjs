@@ -943,13 +943,7 @@ h3 {
 }
 
 .hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background:
-    linear-gradient(105deg, rgb(10 9 8 / 78%) 0%, rgb(10 9 8 / 48%) 48%, rgb(10 9 8 / 18%) 100%),
-    linear-gradient(0deg, rgb(10 9 8 / 55%) 0%, transparent 42%);
+  content: none;
 }
 
 .hero__inner {
@@ -2824,12 +2818,6 @@ h5 {
   background: var(--navy-deep);
 }
 
-.hero::after {
-  background:
-    linear-gradient(90deg, rgb(4 20 40 / 68%) 0%, rgb(4 20 40 / 35%) 58%, rgb(4 20 40 / 16%) 100%),
-    linear-gradient(0deg, rgb(4 20 40 / 48%) 0%, transparent 52%);
-}
-
 .hero__image {
   object-fit: cover;
   object-position: center 53%;
@@ -2857,7 +2845,6 @@ h5 {
   border-right: 3px solid rgb(255 255 255 / 86%);
   border-bottom: 3px solid rgb(255 255 255 / 86%);
   background: rgb(7 31 61 / 38%);
-  backdrop-filter: blur(2px);
 }
 
 .hero__eyebrow {
@@ -3612,12 +3599,6 @@ h5 {
 
   .hero {
     min-height: calc(100svh - 86px);
-  }
-
-  .hero::after {
-    background:
-      linear-gradient(90deg, rgb(4 20 40 / 72%), rgb(4 20 40 / 46%)),
-      linear-gradient(0deg, rgb(4 20 40 / 62%), transparent 58%);
   }
 
   .hero__inner {
