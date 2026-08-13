@@ -6,7 +6,7 @@ import PageBanner from "@/components/PageBanner";
 import { CtaBand } from "@/components/CtaBand";
 import { SectionHead } from "@/components/sections";
 import { bannerImages } from "@/content/pages";
-import { renderCrackingGuide, resourcesHub } from "@/content/resources";
+import { resourceGuides, resourcesHub } from "@/content/resources";
 import { ogCard, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
@@ -14,8 +14,8 @@ export const metadata: Metadata = pageMetadata({
   description: resourcesHub.metaDescription,
   path: "/resources",
   image: ogCard(
-    "render-cracking-adelaide",
-    "Adelaide render and wall-system homeowner resources",
+    "resources",
+    "Adelaide render, cladding and wall-system resources",
   ),
 });
 
@@ -41,22 +41,24 @@ export default function ResourcesPage() {
             id="resources-title"
           />
           <ul className="project-link-grid project-link-grid--2 resource-grid">
-            <li className="project-link-card">
-              <span>{renderCrackingGuide.category}</span>
-              <h3>
-                <Link href={`/resources/${renderCrackingGuide.slug}/`}>
-                  {renderCrackingGuide.metaTitle}
+            {resourceGuides.map((guide) => (
+              <li className="project-link-card" key={guide.slug}>
+                <span>{guide.category}</span>
+                <h3>
+                  <Link href={`/resources/${guide.slug}/`}>
+                    {guide.metaTitle}
+                  </Link>
+                </h3>
+                <p>{guide.summary}</p>
+                <Link
+                  className="text-link"
+                  href={`/resources/${guide.slug}/`}
+                >
+                  Read the guide
+                  <ArrowRightIcon />
                 </Link>
-              </h3>
-              <p>{renderCrackingGuide.summary}</p>
-              <Link
-                className="text-link"
-                href={`/resources/${renderCrackingGuide.slug}/`}
-              >
-                Read the guide
-                <ArrowRightIcon />
-              </Link>
-            </li>
+              </li>
+            ))}
             <li className="project-link-card">
               <span>Quote preparation</span>
               <h3>
@@ -87,9 +89,9 @@ export default function ResourcesPage() {
             property from a description or photograph.
           </p>
           <p>
-            When you are ready to discuss visible render or wall-finish work,
-            review our <Link href="/render/">Adelaide rendering services</Link>{" "}
-            or{" "}
+            When you are ready to discuss a new installation or a clearly
+            scoped finish, review our <Link href="/cladding/">cladding</Link>{" "}
+            and <Link href="/render/">rendering</Link> services, or{" "}
             <Link href="/contact-us/#contact">
               send the team your project details
             </Link>

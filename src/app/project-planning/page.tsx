@@ -52,6 +52,15 @@ export default function ProjectPlanningPage() {
             for what to record and when another professional may need to assess
             the building before a repair is scoped.
           </p>
+          <p>
+            For a new cladding or facade-replacement enquiry near Adelaide’s
+            coast, use our{" "}
+            <Link href="/resources/cladding-maintenance-coastal-adelaide/">
+              coastal cladding maintenance guide
+            </Link>{" "}
+            to identify the proposed product, site exposure, unwashed areas and
+            future access questions worth resolving before installation.
+          </p>
           <TickList items={projectPlanningPage.enquiryDetails} />
           <p>
             If you are still comparing options, start with the outcome you want

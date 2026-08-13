@@ -58,6 +58,9 @@ export default function RenderCrackingGuidePage() {
                 Published {renderCrackingGuide.publishedDisplay}
               </time>
               <span>{renderCrackingGuide.readingTime}</span>
+              <span>
+                Prepared by <Link href="/about/">Elite Surface Group</Link>
+              </span>
             </div>
             <h2 id="guide-summary">The short answer</h2>
             <p className="article-lead">

@@ -44,6 +44,7 @@ export {
 } from "@/content/locations";
 export { projectPlanningPage } from "@/content/project-planning";
 export {
+  claddingMaintenanceGuide,
   renderCrackingGuide,
   resourceGuides,
   resourcesHub,
