@@ -128,6 +128,7 @@ export function ProjectSchema({ project }: { project: Project }) {
 /** Visible editorial guide authored and published by the business. */
 export function ArticleSchema({ guide }: { guide: ResourceGuide }) {
   const url = absoluteUrl(`/resources/${guide.slug}`);
+  const service = services.find((item) => item.slug === guide.serviceSlug);
 
   return (
     <JsonLd
@@ -155,7 +156,7 @@ export function ArticleSchema({ guide }: { guide: ResourceGuide }) {
           "@type": "Organization",
           "@id": `${business.siteUrl}/#organization`,
           name: business.name,
-          url: business.siteUrl,
+          url: absoluteUrl("/about"),
         },
         publisher: {
           "@type": "Organization",
@@ -165,8 +166,8 @@ export function ArticleSchema({ guide }: { guide: ResourceGuide }) {
         },
         about: {
           "@type": "Service",
-          "@id": `${absoluteUrl("/render")}#service`,
-          name: "Render",
+          "@id": `${absoluteUrl(`/${guide.serviceSlug}`)}#service`,
+          name: service?.name ?? guide.serviceSlug,
         },
         inLanguage: "en-AU",
       }}

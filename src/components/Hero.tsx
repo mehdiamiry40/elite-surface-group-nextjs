@@ -45,7 +45,7 @@ export default function Hero() {
           <h1>
             {heroCopy.titleLines.map((line) => (
               <span className="hero__headline-line" key={line}>
-                {line}
+                {line}{" "}
               </span>
             ))}
           </h1>

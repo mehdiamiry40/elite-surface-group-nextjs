@@ -100,6 +100,8 @@ export const bannerImages: Record<string, string> = {
   "/project-planning": "/images/v2/banner-services.webp",
   "/resources": "/images/v2/banner-services.webp",
   "/resources/render-cracking-adelaide": "/images/v2/banner-render.webp",
+  "/resources/cladding-maintenance-coastal-adelaide":
+    "/images/v2/banner-cladding.webp",
   "/projects": "/images/v2/banner-projects.webp",
   "/locations": "/images/v2/banner-locations.webp",
   "/locations/adelaide": "/images/v2/banner-locations.webp",

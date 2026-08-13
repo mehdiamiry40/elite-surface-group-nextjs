@@ -105,8 +105,6 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
                 width={project.width}
                 height={project.height}
                 sizes="(max-width: 767px) 100vw, (max-width: 1200px) 65vw, 780px"
-                priority
-                fetchPriority="high"
               />
               <figcaption>{project.imageCaption}</figcaption>
             </figure>
@@ -169,6 +167,11 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
             {project.service === "render" ? (
               <Link href="/resources/render-cracking-adelaide/">
                 Read the render-cracking guide
+              </Link>
+            ) : null}
+            {project.service === "cladding" ? (
+              <Link href="/resources/cladding-maintenance-coastal-adelaide/">
+                Read the coastal cladding care guide
               </Link>
             ) : null}
             <Link href="/projects/">Back to all projects</Link>

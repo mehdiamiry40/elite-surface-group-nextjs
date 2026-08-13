@@ -45,6 +45,10 @@ export const mainNav: readonly NavItem[] = [
         href: "/resources/render-cracking-adelaide",
       },
       {
+        label: "Coastal cladding care",
+        href: "/resources/cladding-maintenance-coastal-adelaide",
+      },
+      {
         label: "Project planning",
         href: "/project-planning",
       },

@@ -62,6 +62,10 @@ export const services: readonly Service[] = [
       { label: "View cladding projects", href: "/projects/" },
       { label: "Rendering services", href: "/render/" },
       { label: "Adelaide service area", href: "/locations/adelaide/" },
+      {
+        label: "Coastal cladding maintenance guide",
+        href: "/resources/cladding-maintenance-coastal-adelaide/",
+      },
       { label: "Plan your project enquiry", href: "/project-planning/" },
     ],
     faqs: [
@@ -84,7 +88,7 @@ export const services: readonly Service[] = [
       {
         question: "How do I maintain external cladding?",
         answer:
-          "Care requirements vary by product. Most cladding benefits from periodic cleaning and checks of junctions, flashings and sealants. We can explain the maintenance needs of the system selected for your project.",
+          "There is no single schedule for every cladding system. Identify the exact product, finish and exposure, then follow the current manufacturer guidance for cleaning, inspections and recoating. Our coastal Adelaide cladding guide explains what to confirm without treating one product’s instructions as universal.",
       },
     ],
   },

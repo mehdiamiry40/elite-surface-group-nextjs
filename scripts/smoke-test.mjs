@@ -188,9 +188,10 @@ check(
     /elitesurfacegroup\.com\.au/.test(llmsBody),
 );
 check(
-  "llms.txt references the resources hub and render-cracking guide",
+  "llms.txt references the resources hub and published guides",
   /\/resources\//.test(llmsBody) &&
-    /\/resources\/render-cracking-adelaide\//.test(llmsBody),
+    /\/resources\/render-cracking-adelaide\//.test(llmsBody) &&
+    /\/resources\/cladding-maintenance-coastal-adelaide\//.test(llmsBody),
 );
 
 for (const endpoint of ["/sitemap.xml", "/robots.txt"]) {
@@ -602,6 +603,8 @@ const adelaideHtml = pages.get("/locations/adelaide/") ?? "";
 const resourcesHtml = pages.get("/resources/") ?? "";
 const renderCrackingHtml =
   pages.get("/resources/render-cracking-adelaide/") ?? "";
+const claddingMaintenanceHtml =
+  pages.get("/resources/cladding-maintenance-coastal-adelaide/") ?? "";
 const projectPlanningHtml = pages.get("/project-planning/") ?? "";
 check(
   "site publishes the registered entity and ABN",
@@ -700,13 +703,24 @@ check(
   !/\"@type\":\"HowTo\"/.test(homeHtml),
 );
 check(
-  "resources hub links to its published guide and project planning",
+  "resources hub links to its published guides and project planning",
   [
     "/resources/render-cracking-adelaide/",
+    "/resources/cladding-maintenance-coastal-adelaide/",
     "/project-planning/",
+    "/cladding/",
     "/render/",
     "/contact-us/#contact",
   ].every((href) => resourcesHtml.includes(`href="${href}"`)),
+);
+check(
+  "resources hub and coastal guide use matching social cards",
+  resourcesHtml.includes(
+    "https://elitesurfacegroup.com.au/images/og/og-resources.jpg",
+  ) &&
+    claddingMaintenanceHtml.includes(
+      "https://elitesurfacegroup.com.au/images/og/og-cladding-maintenance-coastal-adelaide.jpg",
+    ),
 );
 check(
   "render-cracking guide publishes visible date and illustration boundary",
@@ -786,6 +800,89 @@ check(
   ),
 );
 check(
+  "coastal cladding guide publishes its visible date and image boundary",
+  /<time date[Tt]ime="2026-08-13">Published (?:<!-- -->)?13 August 2026<\/time>/.test(
+    claddingMaintenanceHtml,
+  ) &&
+    /shown as an installation example—not as evidence of a particular coastal exposure category/.test(
+      claddingMaintenanceHtml,
+    ) &&
+    /Prepared by (?:<!-- -->)?<a href="\/about\/">Elite Surface Group<\/a>/.test(
+      claddingMaintenanceHtml,
+    ) &&
+    /not a cleaning specification, a warranty statement or a remote diagnosis/.test(
+      claddingMaintenanceHtml,
+    ),
+);
+check(
+  "coastal cladding guide links authoritative sources",
+  [
+    "www.sa.gov.au/topics/business-and-trade/building-industry/",
+    "www.yourhome.gov.au/materials/cladding-systems",
+    "www.jameshardie.com.au/fibre-cement",
+    "colorbond.com/why-colorbond-steel/maintenance",
+    "safework.sa.gov.au/industry/construction/working-at-heights",
+  ].every((source) => claddingMaintenanceHtml.includes(source)),
+);
+check(
+  "coastal cladding guide links service, proof, location, planning and enquiry",
+  [
+    "/cladding/",
+    "/projects/dark-feature-cladding/",
+    "/locations/adelaide/",
+    "/project-planning/",
+    "/contact-us/#contact",
+  ].every((href) => claddingMaintenanceHtml.includes(`href="${href}"`)),
+);
+check(
+  "coastal cladding guide avoids instructional HowTo schema",
+  !/"@type":"HowTo"/.test(claddingMaintenanceHtml),
+);
+
+const claddingMaintenanceJsonLd = [
+  ...claddingMaintenanceHtml.matchAll(
+    /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g,
+  ),
+]
+  .map(([, block]) => {
+    try {
+      return JSON.parse(block);
+    } catch {
+      return null;
+    }
+  })
+  .find((data) => data?.["@type"] === "Article");
+check(
+  "coastal cladding guide emits matching Article schema",
+  claddingMaintenanceJsonLd?.["@id"] ===
+    "https://elitesurfacegroup.com.au/resources/cladding-maintenance-coastal-adelaide/#article" &&
+    claddingMaintenanceJsonLd?.url ===
+      "https://elitesurfacegroup.com.au/resources/cladding-maintenance-coastal-adelaide/" &&
+    claddingMaintenanceJsonLd?.mainEntityOfPage?.["@id"] ===
+      "https://elitesurfacegroup.com.au/resources/cladding-maintenance-coastal-adelaide/" &&
+    claddingMaintenanceJsonLd?.datePublished === "2026-08-13" &&
+    claddingMaintenanceJsonLd?.dateModified === "2026-08-13" &&
+    claddingMaintenanceJsonLd?.image?.contentUrl ===
+      "https://elitesurfacegroup.com.au/images/v2/project-dark-feature-cladding.webp" &&
+    claddingMaintenanceJsonLd?.image?.width === 1600 &&
+    claddingMaintenanceJsonLd?.image?.height === 1067 &&
+    claddingMaintenanceJsonLd?.about?.["@id"] ===
+      "https://elitesurfacegroup.com.au/cladding/#service" &&
+    claddingMaintenanceJsonLd?.author?.["@id"] ===
+      "https://elitesurfacegroup.com.au/#organization" &&
+    claddingMaintenanceJsonLd?.publisher?.["@id"] ===
+      "https://elitesurfacegroup.com.au/#organization" &&
+    claddingMaintenanceJsonLd?.inLanguage === "en-AU",
+);
+check(
+  "cladding and planning pages link to the coastal cladding guide",
+  [pages.get("/cladding/") ?? "", projectPlanningHtml].every((html) =>
+    html.includes(
+      'href="/resources/cladding-maintenance-coastal-adelaide/"',
+    ),
+  ),
+);
+check(
   "homepage shows three featured project case studies",
   (homeHtml.match(/>View case study</g) ?? []).length === 3,
 );
@@ -857,6 +954,14 @@ for (const slug of projectSlugs) {
     check(
       `${slug} links to the render-cracking guide`,
       projectHtml.includes('href="/resources/render-cracking-adelaide/"'),
+    );
+  }
+  if (service === "cladding") {
+    check(
+      `${slug} links to the coastal cladding guide`,
+      projectHtml.includes(
+        'href="/resources/cladding-maintenance-coastal-adelaide/"',
+      ),
     );
   }
   check(
