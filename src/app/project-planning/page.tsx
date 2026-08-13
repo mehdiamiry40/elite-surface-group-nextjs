@@ -61,6 +61,15 @@ export default function ProjectPlanningPage() {
             to identify the proposed product, site exposure, unwashed areas and
             future access questions worth resolving before installation.
           </p>
+          <p>
+            If a Hebel wall will receive a rendered or coated finish, review
+            our{" "}
+            <Link href="/resources/rendering-hebel-panels-adelaide/">
+              guide to rendering Hebel panels
+            </Link>{" "}
+            for the system documents, movement details, coating specification
+            and trade responsibilities that should be clear before work begins.
+          </p>
           <TickList items={projectPlanningPage.enquiryDetails} />
           <p>
             If you are still comparing options, start with the outcome you want

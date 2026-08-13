@@ -191,7 +191,8 @@ check(
   "llms.txt references the resources hub and published guides",
   /\/resources\//.test(llmsBody) &&
     /\/resources\/render-cracking-adelaide\//.test(llmsBody) &&
-    /\/resources\/cladding-maintenance-coastal-adelaide\//.test(llmsBody),
+    /\/resources\/cladding-maintenance-coastal-adelaide\//.test(llmsBody) &&
+    /\/resources\/rendering-hebel-panels-adelaide\//.test(llmsBody),
 );
 
 for (const endpoint of ["/sitemap.xml", "/robots.txt"]) {
@@ -605,6 +606,8 @@ const renderCrackingHtml =
   pages.get("/resources/render-cracking-adelaide/") ?? "";
 const claddingMaintenanceHtml =
   pages.get("/resources/cladding-maintenance-coastal-adelaide/") ?? "";
+const renderingHebelHtml =
+  pages.get("/resources/rendering-hebel-panels-adelaide/") ?? "";
 const projectPlanningHtml = pages.get("/project-planning/") ?? "";
 check(
   "site publishes the registered entity and ABN",
@@ -707,19 +710,24 @@ check(
   [
     "/resources/render-cracking-adelaide/",
     "/resources/cladding-maintenance-coastal-adelaide/",
+    "/resources/rendering-hebel-panels-adelaide/",
     "/project-planning/",
     "/cladding/",
     "/render/",
+    "/hebel/",
     "/contact-us/#contact",
   ].every((href) => resourcesHtml.includes(`href="${href}"`)),
 );
 check(
-  "resources hub and coastal guide use matching social cards",
+  "resource pages use matching social cards",
   resourcesHtml.includes(
     "https://elitesurfacegroup.com.au/images/og/og-resources.jpg",
   ) &&
     claddingMaintenanceHtml.includes(
       "https://elitesurfacegroup.com.au/images/og/og-cladding-maintenance-coastal-adelaide.jpg",
+    ) &&
+    renderingHebelHtml.includes(
+      "https://elitesurfacegroup.com.au/images/og/og-rendering-hebel-panels-adelaide.jpg",
     ),
 );
 check(
@@ -879,6 +887,104 @@ check(
   [pages.get("/cladding/") ?? "", projectPlanningHtml].every((html) =>
     html.includes(
       'href="/resources/cladding-maintenance-coastal-adelaide/"',
+    ),
+  ),
+);
+check(
+  "Hebel finishing guide publishes its visible date and evidence boundary",
+  /<time date[Tt]ime="2026-08-13">Published (?:<!-- -->)?13 August 2026<\/time>/.test(
+    renderingHebelHtml,
+  ) &&
+    /Illustrative wall-system image—not a record of a particular Elite Surface Group project/.test(
+      renderingHebelHtml,
+    ) &&
+    /not an application method, an engineering specification, a warranty promise or a remote assessment/.test(
+      renderingHebelHtml,
+    ) &&
+    /Prepared by (?:<!-- -->)?<a href="\/about\/">Elite Surface Group<\/a>/.test(
+      renderingHebelHtml,
+    ),
+);
+check(
+  "Hebel finishing guide links authoritative sources",
+  [
+    "hebel.com.au/resources/technical-documents/",
+    "hebel.com.au/wp-content/uploads/downloads/Houses-and-Low-Rise-Multi-Residential-External-Walls-PowerPanelXL-Design-and-Installation-Guide_HELIT016.pdf",
+    "hebel.com.au/coatings/",
+    "hebel.com.au/resources/warranty/",
+    "hebel.com.au/resources/safety/",
+    "dulux.com.au/specifier/products/acratex/",
+    "plan.sa.gov.au/resources/building/building_code",
+    "safework.sa.gov.au/industry/construction/silica",
+  ].every((source) => renderingHebelHtml.includes(source)) &&
+    !renderingHebelHtml.includes("2016/11/Installer-Checklist.pdf"),
+);
+check(
+  "Hebel finishing guide links services, location, planning, resources and enquiry",
+  [
+    "/hebel/",
+    "/render/",
+    "/locations/adelaide/",
+    "/project-planning/",
+    "/resources/",
+    "/contact-us/#contact",
+  ].every((href) => renderingHebelHtml.includes(`href="${href}"`)),
+);
+check(
+  "Hebel finishing guide avoids instructional HowTo schema",
+  !/"@type":"HowTo"/.test(renderingHebelHtml),
+);
+
+const renderingHebelJsonLd = [
+  ...renderingHebelHtml.matchAll(
+    /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g,
+  ),
+]
+  .map(([, block]) => {
+    try {
+      return JSON.parse(block);
+    } catch {
+      return null;
+    }
+  })
+  .find((data) => data?.["@type"] === "Article");
+check(
+  "Hebel finishing guide emits matching Article schema",
+  renderingHebelJsonLd?.["@id"] ===
+    "https://elitesurfacegroup.com.au/resources/rendering-hebel-panels-adelaide/#article" &&
+    renderingHebelJsonLd?.url ===
+      "https://elitesurfacegroup.com.au/resources/rendering-hebel-panels-adelaide/" &&
+    renderingHebelJsonLd?.mainEntityOfPage?.["@id"] ===
+      "https://elitesurfacegroup.com.au/resources/rendering-hebel-panels-adelaide/" &&
+    renderingHebelJsonLd?.datePublished === "2026-08-13" &&
+    renderingHebelJsonLd?.dateModified === "2026-08-13" &&
+    renderingHebelJsonLd?.image?.contentUrl ===
+      "https://elitesurfacegroup.com.au/images/v2/service-hebel-installation.webp" &&
+    renderingHebelJsonLd?.image?.width === 1600 &&
+    renderingHebelJsonLd?.image?.height === 1067 &&
+    renderingHebelJsonLd?.about?.["@id"] ===
+      "https://elitesurfacegroup.com.au/hebel/#service" &&
+    renderingHebelJsonLd?.author?.["@id"] ===
+      "https://elitesurfacegroup.com.au/#organization" &&
+    renderingHebelJsonLd?.publisher?.["@id"] ===
+      "https://elitesurfacegroup.com.au/#organization" &&
+    renderingHebelJsonLd?.inLanguage === "en-AU",
+);
+check(
+  "Hebel, render and planning pages link to the Hebel finishing guide",
+  [
+    pages.get("/hebel/") ?? "",
+    pages.get("/render/") ?? "",
+    projectPlanningHtml,
+  ].every((html) =>
+    html.includes('href="/resources/rendering-hebel-panels-adelaide/"'),
+  ),
+);
+check(
+  "homepage and Adelaide page link every published guide contextually",
+  [homeHtml, adelaideHtml].every((html) =>
+    resourceSlugs.every((slug) =>
+      html.includes(`href="/resources/${slug}/"`),
     ),
   ),
 );

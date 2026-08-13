@@ -46,6 +46,7 @@ export { projectPlanningPage } from "@/content/project-planning";
 export {
   claddingMaintenanceGuide,
   renderCrackingGuide,
+  renderingHebelGuide,
   resourceGuides,
   resourcesHub,
   type ResourceGuide,

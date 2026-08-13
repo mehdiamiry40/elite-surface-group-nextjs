@@ -1,7 +1,8 @@
 export type ResourceGuide = {
   slug:
     | "render-cracking-adelaide"
-    | "cladding-maintenance-coastal-adelaide";
+    | "cladding-maintenance-coastal-adelaide"
+    | "rendering-hebel-panels-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -21,9 +22,9 @@ export type ResourceGuide = {
 
 export const resourcesHub = {
   bannerTitle: "Practical Surface & Walling Guides",
-  metaTitle: "Adelaide Render & Cladding Resources",
+  metaTitle: "Adelaide Render, Cladding & Hebel Guides",
   metaDescription:
-    "Practical Adelaide guides about render, cladding and wall systems, including what to check before seeking assessment, repair advice or a quote.",
+    "Practical Adelaide guides about render, cladding and Hebel wall systems, including what to check before seeking assessment, repair advice or a quote.",
   lead: "Clear information helps you ask better questions about a wall system and its care. These guides explain what to document, which product information to follow and when another professional may need to assess the building.",
 } as const;
 
@@ -73,7 +74,31 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "13 August 2026",
     readingTime: "10 minute read",
   },
+  {
+    slug: "rendering-hebel-panels-adelaide",
+    serviceSlug: "hebel",
+    category: "Hebel & render",
+    title:
+      "Can Hebel Be Rendered? What to Confirm Before an Adelaide Project",
+    metaTitle: "Can Hebel Be Rendered? Adelaide Guide",
+    metaDescription:
+      "Learn how Hebel panels, control joints, compatible coating systems and trade scopes fit together before installation and rendering begin in Adelaide.",
+    summary:
+      "Understand why the exact Hebel system, movement details, coating specification and trade responsibilities need to be coordinated before work begins.",
+    image: "/images/v2/service-hebel-installation.webp",
+    imageAlt:
+      "Installer checking the vertical alignment of AAC wall panels beside steel framing",
+    imageCaption:
+      "Illustrative wall-system image—not a record of a particular Elite Surface Group project or a substitute for the selected system documents.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-08-13",
+    modified: "2026-08-13",
+    publishedDisplay: "13 August 2026",
+    readingTime: "9 minute read",
+  },
 ];
 
 export const renderCrackingGuide = resourceGuides[0];
 export const claddingMaintenanceGuide = resourceGuides[1];
+export const renderingHebelGuide = resourceGuides[2];

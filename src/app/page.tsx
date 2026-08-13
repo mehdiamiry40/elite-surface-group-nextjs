@@ -13,6 +13,7 @@ import {
   trustPoints,
 } from "@/content/home";
 import { featuredProjects, projectCards } from "@/content/projects";
+import { resourceGuides } from "@/content/resources";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -109,6 +110,46 @@ export default function HomePage() {
           <p className="section-cta">
             <Link className="text-link" href="/projects/">
               Explore all projects
+              <ArrowRightIcon />
+            </Link>
+          </p>
+        </div>
+      </section>
+
+      <section
+        className="section section--tint"
+        aria-labelledby="home-resources-title"
+      >
+        <div className="shell">
+          <SectionHead
+            eyebrow="Practical project guidance"
+            title="Resolve the right questions before work begins."
+            intro="Use our source-backed guides to document the issue, identify the selected wall system and prepare a clearer project brief."
+            id="home-resources-title"
+          />
+          <ul className="project-link-grid project-link-grid--3 resource-grid">
+            {resourceGuides.map((guide) => (
+              <li className="project-link-card" key={guide.slug}>
+                <span>{guide.category}</span>
+                <h3>
+                  <Link href={`/resources/${guide.slug}/`}>
+                    {guide.metaTitle}
+                  </Link>
+                </h3>
+                <p>{guide.summary}</p>
+                <Link
+                  className="text-link"
+                  href={`/resources/${guide.slug}/`}
+                >
+                  Read the guide
+                  <ArrowRightIcon />
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <p className="section-cta">
+            <Link className="text-link" href="/resources/">
+              Explore all resources
               <ArrowRightIcon />
             </Link>
           </p>
