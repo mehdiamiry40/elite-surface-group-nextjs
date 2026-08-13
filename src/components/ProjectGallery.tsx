@@ -5,10 +5,17 @@ import Link from "next/link";
 import { useCallback, useState } from "react";
 import { useDialog } from "@/components/useDialog";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons";
-import type { Project } from "@/content/projects";
+import type { ProjectCard } from "@/content/projects";
 
 type ProjectGalleryProps = {
-  items: readonly Project[];
+  items: readonly ProjectCard[];
+};
+
+const serviceLabels: Record<ProjectCard["service"], string> = {
+  cladding: "Cladding",
+  render: "Render",
+  hebel: "Hebel",
+  walling: "Walling",
 };
 
 export default function ProjectGallery({ items }: ProjectGalleryProps) {
@@ -33,11 +40,11 @@ export default function ProjectGallery({ items }: ProjectGalleryProps) {
     <>
       <ul className="gallery">
         {items.map((item, index) => (
-          <li key={item.image}>
+          <li key={item.slug}>
             <button
               type="button"
               onClick={() => setActive(index)}
-              aria-label={`Enlarge project image: ${item.alt}`}
+              aria-label={`Enlarge project photo: ${item.alt}`}
             >
               <Image
                 src={item.image}
@@ -48,6 +55,11 @@ export default function ProjectGallery({ items }: ProjectGalleryProps) {
               />
             </button>
             <div className="gallery__caption">
+              <p className="gallery__meta">
+                <span>{serviceLabels[item.service]}</span>
+                <span aria-hidden="true">•</span>
+                <span>{item.stage}</span>
+              </p>
               <h3>
                 <Link href={`/projects/${item.slug}/`}>{item.title}</Link>
               </h3>

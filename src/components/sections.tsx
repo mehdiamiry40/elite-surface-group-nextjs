@@ -4,6 +4,13 @@ import { ArrowRightIcon, CheckIcon } from "@/components/icons";
 import type { Project } from "@/content/projects";
 import { services, servicesIntro } from "@/content/services";
 
+function projectServiceName(project: Project) {
+  return (
+    services.find((service) => service.slug === project.service)?.name ??
+    project.service
+  );
+}
+
 export { CtaBand } from "@/components/CtaBand";
 
 /* ------------------------------------------------------------ section head */
@@ -66,7 +73,7 @@ export function ProjectLinks({
     <section className="section section--tint project-links" aria-labelledby={id}>
       <div className="shell">
         <SectionHead
-          eyebrow="Completed work"
+          eyebrow="Project portfolio"
           title={title}
           intro={intro}
           id={id}
@@ -74,7 +81,7 @@ export function ProjectLinks({
         <ul className={`project-link-grid project-link-grid--${columns}`}>
           {items.map((project) => (
             <li className="project-link-card" key={project.slug}>
-              <span>{project.service} project</span>
+              <span>{projectServiceName(project)} project</span>
               <h3>
                 <Link href={`/projects/${project.slug}/`}>{project.title}</Link>
               </h3>

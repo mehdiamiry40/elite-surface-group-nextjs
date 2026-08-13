@@ -124,7 +124,7 @@ export default async function ServicePage({ params }: PageProps) {
       <ProjectLinks
         items={relatedProjects}
         title={`${service.name} project details`}
-        intro={`See how the scope, site details and finished result came together on completed ${serviceLabel} work across Adelaide.`}
+        intro={`Review the visible finish and construction details recorded in the public ${serviceLabel} project portfolio.`}
         id={`${service.slug}-project-details`}
       />
 

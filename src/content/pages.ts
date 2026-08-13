@@ -77,9 +77,9 @@ export const servicesPage = {
 } as const;
 
 export const projectsPage = {
-  bannerTitle: "Cladding & Render Projects Across Adelaide",
+  bannerTitle: "Cladding & Render Project Case Studies",
   metaDescription:
-    "See completed cladding and render details from residential projects across Adelaide, including the scope, challenge and finished result.",
+    "Explore image-backed cladding and render case studies from residential work, with the project type, visible details and recorded finish.",
 } as const;
 
 export const contactPage = {

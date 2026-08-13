@@ -52,11 +52,6 @@ export default async function LocationPage({ params }: PageProps) {
     notFound();
   }
 
-  const localProjects = projects.filter((project) =>
-    project.suburb.toLowerCase().includes(location.name.toLowerCase()) ||
-    project.suburb.toLowerCase().includes("adelaide"),
-  );
-
   return (
     <>
       <BreadcrumbSchema
@@ -106,11 +101,15 @@ export default async function LocationPage({ params }: PageProps) {
           </ul>
           <h3>What you can expect</h3>
           <TickList items={location.proof} />
-          {localProjects.length ? (
+          {projects.length ? (
             <>
-              <h3>Project examples</h3>
+              <h3>Related project case studies</h3>
+              <p>
+                Explore photographed render and cladding details from our
+                portfolio. Individual project addresses are not published.
+              </p>
               <ul>
-                {localProjects.map((project) => (
+                {projects.map((project) => (
                   <li key={project.slug}>
                     <Link href={`/projects/${project.slug}/`}>
                       {project.title}

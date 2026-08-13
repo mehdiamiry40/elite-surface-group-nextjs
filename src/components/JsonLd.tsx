@@ -1,7 +1,7 @@
 import { absoluteUrl } from "@/lib/seo";
 import { business } from "@/content/business";
 import type { Project } from "@/content/projects";
-import type { Service, ServiceFaq } from "@/content/services";
+import { services, type Service, type ServiceFaq } from "@/content/services";
 
 /**
  * Structured data helpers.
@@ -92,6 +92,8 @@ export function FAQPageSchema({ faqs }: { faqs: readonly ServiceFaq[] }) {
 
 /** Case-study CreativeWork for project detail pages. */
 export function ProjectSchema({ project }: { project: Project }) {
+  const service = services.find((item) => item.slug === project.service);
+
   return (
     <JsonLd
       data={{
@@ -99,17 +101,21 @@ export function ProjectSchema({ project }: { project: Project }) {
         "@type": "CreativeWork",
         "@id": `${absoluteUrl(`/projects/${project.slug}`)}#project`,
         name: project.title,
-        description: `${project.summary} ${project.scope}`,
-        image: absoluteUrl(project.image),
+        description: project.metaDescription,
+        mainEntityOfPage: absoluteUrl(`/projects/${project.slug}`),
+        image: {
+          "@type": "ImageObject",
+          contentUrl: absoluteUrl(project.image),
+          caption: project.imageCaption,
+          width: project.width,
+          height: project.height,
+        },
         url: absoluteUrl(`/projects/${project.slug}`),
         about: {
           "@type": "Service",
-          name: project.service,
+          "@id": `${absoluteUrl(`/${project.service}`)}#service`,
+          name: service?.name ?? project.service,
           provider: { "@id": `${business.siteUrl}/#organization` },
-        },
-        contentLocation: {
-          "@type": "Place",
-          name: project.suburb,
         },
         creator: { "@id": `${business.siteUrl}/#organization` },
         inLanguage: "en-AU",
@@ -129,7 +135,7 @@ export function ProjectListSchema({
       data={{
         "@context": "https://schema.org",
         "@type": "ItemList",
-        name: `${business.name} Adelaide render and cladding projects`,
+        name: `${business.name} render and cladding case studies`,
         itemListElement: projects.map((project, index) => ({
           "@type": "ListItem",
           position: index + 1,

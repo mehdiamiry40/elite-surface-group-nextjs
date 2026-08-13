@@ -43,6 +43,15 @@ function contentSlugs(relativePath) {
 const serviceSlugs = contentSlugs("src/content/services.ts");
 const projectSlugs = contentSlugs("src/content/projects.ts");
 const locationSlugs = contentSlugs("src/content/locations.ts");
+const projectSource = readFileSync(
+  path.join(projectRoot, "src/content/projects.ts"),
+  "utf8",
+);
+const projectServices = new Map(
+  [...projectSource.matchAll(/slug:\s*"([^"]+)"[\s\S]*?service:\s*"([^"]+)"/g)].map(
+    ([, slug, service]) => [slug, service],
+  ),
+);
 
 /** Full public indexable set — must stay in lockstep with `src/app/sitemap.ts`. */
 const EXPECTED_SITEMAP_PATHS = [
@@ -651,6 +660,18 @@ check(
     (href) => projectsHtml.includes(`href="${href}"`),
   ),
 );
+check(
+  "projects hub identifies service and photographed stage on every card",
+  (projectsHtml.match(/class="gallery__meta"/g) ?? []).length ===
+    projectSlugs.length &&
+    /Finished exterior/.test(projectsHtml) &&
+    /Finished detail/.test(projectsHtml) &&
+    /Work in progress/.test(projectsHtml),
+);
+check(
+  "projects hub explains the public-detail boundary",
+  /Exact addresses, systems and dates are omitted/.test(projectsHtml),
+);
 
 check(
   "render page links to its two-storey case study",
@@ -667,11 +688,73 @@ check(
 
 for (const slug of projectSlugs) {
   const projectHtml = pages.get(`/projects/${slug}/`) ?? "";
+  const service = projectServices.get(slug);
   check(
     `${slug} links to the Adelaide service area`,
     projectHtml.includes('href="/locations/adelaide/"'),
   );
+  check(
+    `${slug} publishes evidence-led case-study sections`,
+    [
+      "Project overview",
+      "Project details",
+      "What the photograph records",
+      "Detail focus",
+      "Visible result",
+      "Visible features",
+    ].every((heading) => projectHtml.includes(heading)) &&
+      /<figcaption>[^<]+<\/figcaption>/.test(projectHtml),
+  );
+  check(
+    `${slug} links to its service, planning guide, hub and enquiry`,
+    Boolean(service) &&
+      [
+        `href="/${service}/"`,
+        'href="/project-planning/"',
+        'href="/projects/"',
+        'href="/contact-us/#contact"',
+      ].every((href) => projectHtml.includes(href)),
+  );
+
+  const projectJsonLd = [
+    ...projectHtml.matchAll(
+      /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g,
+    ),
+  ]
+    .map(([, block]) => {
+      try {
+        return JSON.parse(block);
+      } catch {
+        return null;
+      }
+    })
+    .find((data) => data?.["@type"] === "CreativeWork");
+  check(
+    `${slug} emits matching CreativeWork project schema`,
+    projectJsonLd?.url ===
+      `https://elitesurfacegroup.com.au/projects/${slug}/` &&
+      projectJsonLd?.mainEntityOfPage ===
+        `https://elitesurfacegroup.com.au/projects/${slug}/` &&
+      projectJsonLd?.image?.["@type"] === "ImageObject" &&
+      typeof projectJsonLd?.image?.caption === "string" &&
+      projectJsonLd.image.caption.length > 20 &&
+      projectJsonLd?.image?.width === 1600 &&
+      projectJsonLd?.image?.height === 1067 &&
+      !projectJsonLd?.contentLocation &&
+      projectJsonLd?.about?.["@id"] ===
+        `https://elitesurfacegroup.com.au/${service}/#service`,
+  );
 }
+
+check(
+  "project case studies avoid unsupported material labels and inferred process headings",
+  projectSlugs.every((slug) => {
+    const html = pages.get(`/projects/${slug}/`) ?? "";
+    return !/charcoal|limestone|aluminium-framed|The challenge|The scope/i.test(
+      html,
+    );
+  }),
+);
 
 /* ------------------------------------------------------------------ report */
 
