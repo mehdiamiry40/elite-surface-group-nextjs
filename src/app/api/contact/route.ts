@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import { track } from "@vercel/analytics/server";
 import { business } from "@/content/business";
 import { publicPaths } from "@/content/routes";
 import { services } from "@/content/services";
+import { CONVERSION_EVENT_NAMES } from "@/lib/conversion-analytics";
 import {
   contactLog,
   isAllowedOrigin,
@@ -596,6 +598,21 @@ export async function POST(request: NextRequest) {
       502,
       "unavailable",
     );
+  }
+
+  // Measurement must never change a successfully delivered enquiry into a
+  // visitor-facing failure, but awaiting it lets Vercel finish the dispatch.
+  try {
+    await track(
+      CONVERSION_EVENT_NAMES.enquirySubmitted,
+      {
+        page: sourcePath,
+        service: service || "Not specified",
+      },
+      { request },
+    );
+  } catch {
+    contactLog("contact.analytics.failed", { page: sourcePath });
   }
 
   return contactResponse(

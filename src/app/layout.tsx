@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Figtree } from "next/font/google";
+import ConversionAnalytics from "@/components/ConversionAnalytics";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { QuoteDialogProvider } from "@/components/QuoteDialogProvider";
@@ -156,6 +157,7 @@ export default function RootLayout({
           <Header />
           <main id="main">{children}</main>
           <Footer />
+          <ConversionAnalytics />
         </QuoteDialogProvider>
       </body>
     </html>

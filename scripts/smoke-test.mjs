@@ -47,6 +47,14 @@ const projectSource = readFileSync(
   path.join(projectRoot, "src/content/projects.ts"),
   "utf8",
 );
+const analyticsComponentSource = readFileSync(
+  path.join(projectRoot, "src/components/ConversionAnalytics.tsx"),
+  "utf8",
+);
+const contactRouteSource = readFileSync(
+  path.join(projectRoot, "src/app/api/contact/route.ts"),
+  "utf8",
+);
 const projectServices = new Map(
   [...projectSource.matchAll(/slug:\s*"([^"]+)"[\s\S]*?service:\s*"([^"]+)"/g)].map(
     ([, slug, service]) => [slug, service],
@@ -511,7 +519,49 @@ check(
 );
 check(
   "legal pages do not claim Google Analytics",
-  !/Google Analytics/.test(privacyHtml + termsHtml),
+  !/(?<!do not )use(?:s)? Google Analytics/.test(privacyHtml + termsHtml),
+);
+check(
+  "legal pages disclose Vercel Web Analytics and cookie-free measurement",
+  [privacyHtml, termsHtml].every(
+    (html) =>
+      /Vercel Web Analytics/.test(html) &&
+      /does not use (?:analytics or advertising )?cookies/.test(html),
+  ),
+);
+check(
+  "privacy policy excludes contact details from analytics events",
+  /successful enquiry event may include the allowlisted source page and service category/i.test(
+    privacyHtml,
+  ) &&
+    /do not send names, email addresses, phone numbers, enquiry text or other free-text form values in analytics events/.test(
+    privacyHtml,
+  ),
+);
+check(
+  "analytics redacts URL query strings and fragments before sending",
+  /redactAnalyticsUrl\(event\.url/.test(analyticsComponentSource),
+);
+check(
+  "contact links use fixed analytics events without destination properties",
+  /track\(analyticsEvent\)/.test(analyticsComponentSource) &&
+    !/track\(analyticsEvent,/.test(analyticsComponentSource),
+);
+check(
+  "successful enquiry analytics uses only allowlisted non-personal dimensions",
+  /CONVERSION_EVENT_NAMES\.enquirySubmitted/.test(contactRouteSource) &&
+    /page: sourcePath/.test(contactRouteSource) &&
+    /service: service \|\| "Not specified"/.test(contactRouteSource) &&
+    !/await track\([\s\S]{0,300}(?:name|email|phone|message):/.test(
+      contactRouteSource,
+    ),
+);
+check(
+  "analytics cannot turn an accepted enquiry into a delivery failure",
+  contactRouteSource.indexOf("contact.analytics.failed") >
+    contactRouteSource.indexOf("contact.resend.failed") &&
+    contactRouteSource.indexOf("contact.analytics.failed") <
+      contactRouteSource.lastIndexOf("return contactResponse("),
 );
 check(
   "terms are governed by South Australian / Australian law",

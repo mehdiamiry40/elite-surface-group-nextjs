@@ -4,15 +4,15 @@ import legacyAssets from "./src/content/legacy-assets.json";
 /**
  * Content-Security-Policy.
  *
- * The site loads nothing third-party: `next/font` self-hosts the webfonts,
- * icons are inline SVG, and every image is local. That lets the policy stay at
- * `'self'` for all fetch directives.
+ * Vercel Web Analytics uses same-origin `/_vercel/insights/*` endpoints;
+ * `next/font` self-hosts the webfonts, icons are inline SVG, and every image is
+ * local. That lets the policy stay at `'self'` for all fetch directives.
  *
  * `'unsafe-inline'` is still needed for `style-src` (Next.js injects inline
  * style attributes) and `script-src` (its inline bootstrap plus our JSON-LD
  * block). Tightening those to nonces means routing every response through
- * middleware — worth doing later, but it buys little while there is no
- * third-party script to constrain.
+ * middleware — worth doing later, but it buys little while browser scripts
+ * remain first-party and tightly scoped.
  */
 const csp = [
   "default-src 'self'",

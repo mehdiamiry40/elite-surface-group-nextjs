@@ -212,7 +212,7 @@ These remain the highest-impact blockers for a trustworthy live lead funnel:
 | S3 | Permissioned review program; keep inherited drafts unpublished | Safe social proof; Review schema only when genuine |
 | S4 | Lightweight blog/resources (render cracking, coastal cladding, Hebel vs brick) | Topical authority; Article schema |
 | S5 | Post-deploy synthetic lead + bounce/complaint webhooks | Proves the funnel still delivers |
-| S6 | Optional privacy-safe analytics only after legal update | Measure conversion without contradicting current “no analytics” copy |
+| S6 | Privacy-safe analytics with matching legal disclosure | **Complete** — Vercel Web Analytics measures page views and non-personal conversion events |
 | S7 | Keep Cache Components/PPR off until a CMS/feed exists | Current static SSG is already ideal |
 
 Suggested content URLs (only create when copy/proof is ready):
