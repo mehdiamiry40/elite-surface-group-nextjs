@@ -104,6 +104,8 @@ export const bannerImages: Record<string, string> = {
     "/images/v2/banner-cladding.webp",
   "/resources/rendering-hebel-panels-adelaide":
     "/images/v2/banner-hebel.webp",
+  "/resources/hebel-boundary-walls-adelaide":
+    "/images/v2/banner-hebel.webp",
   "/resources/rendering-over-painted-brick-adelaide":
     "/images/v2/banner-render.webp",
   "/projects": "/images/v2/banner-projects.webp",

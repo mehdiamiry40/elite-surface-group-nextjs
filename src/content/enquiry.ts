@@ -36,6 +36,7 @@ export const enquiryServiceByPath = {
   "/resources/render-cracking-adelaide/": "Render",
   "/resources/cladding-maintenance-coastal-adelaide/": "Cladding",
   "/resources/rendering-hebel-panels-adelaide/": "Hebel",
+  "/resources/hebel-boundary-walls-adelaide/": "Hebel",
   "/resources/rendering-over-painted-brick-adelaide/": "Render",
 } as const satisfies Readonly<Record<string, string>>;
 

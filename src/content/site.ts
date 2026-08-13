@@ -45,6 +45,7 @@ export {
 export { projectPlanningPage } from "@/content/project-planning";
 export {
   claddingMaintenanceGuide,
+  hebelBoundaryWallsGuide,
   renderCrackingGuide,
   renderingHebelGuide,
   renderingPaintedBrickGuide,

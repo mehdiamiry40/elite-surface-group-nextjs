@@ -196,6 +196,10 @@ export const services: readonly Service[] = [
         label: "Can Hebel be rendered?",
         href: "/resources/rendering-hebel-panels-adelaide/",
       },
+      {
+        label: "Hebel boundary-wall planning guide",
+        href: "/resources/hebel-boundary-walls-adelaide/",
+      },
       { label: "Plan your project enquiry", href: "/project-planning/" },
     ],
     faqs: [
@@ -249,6 +253,10 @@ export const services: readonly Service[] = [
     relatedLinks: [
       { label: "Cladding services", href: "/cladding/" },
       { label: "Hebel wall systems", href: "/hebel/" },
+      {
+        label: "Boundary-wall project checks",
+        href: "/resources/hebel-boundary-walls-adelaide/",
+      },
       { label: "Adelaide service area", href: "/locations/adelaide/" },
       { label: "Contact for a quote", href: "/contact-us/#contact" },
       { label: "Plan your project enquiry", href: "/project-planning/" },

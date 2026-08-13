@@ -254,6 +254,7 @@ check(
     /\/resources\/render-cracking-adelaide\//.test(llmsBody) &&
     /\/resources\/cladding-maintenance-coastal-adelaide\//.test(llmsBody) &&
     /\/resources\/rendering-hebel-panels-adelaide\//.test(llmsBody) &&
+    /\/resources\/hebel-boundary-walls-adelaide\//.test(llmsBody) &&
     /\/resources\/rendering-over-painted-brick-adelaide\//.test(llmsBody),
 );
 
@@ -877,6 +878,8 @@ const claddingMaintenanceHtml =
   pages.get("/resources/cladding-maintenance-coastal-adelaide/") ?? "";
 const renderingHebelHtml =
   pages.get("/resources/rendering-hebel-panels-adelaide/") ?? "";
+const hebelBoundaryWallsHtml =
+  pages.get("/resources/hebel-boundary-walls-adelaide/") ?? "";
 const renderingPaintedBrickHtml =
   pages.get("/resources/rendering-over-painted-brick-adelaide/") ?? "";
 const projectPlanningHtml = pages.get("/project-planning/") ?? "";
@@ -1083,6 +1086,7 @@ check(
     "/resources/render-cracking-adelaide/",
     "/resources/cladding-maintenance-coastal-adelaide/",
     "/resources/rendering-hebel-panels-adelaide/",
+    "/resources/hebel-boundary-walls-adelaide/",
     "/resources/rendering-over-painted-brick-adelaide/",
     "/project-planning/",
     "/cladding/",
@@ -1104,6 +1108,9 @@ check(
     ) &&
     renderingHebelHtml.includes(
       "https://elitesurfacegroup.com.au/images/og/og-rendering-hebel-panels-adelaide.jpg",
+    ) &&
+    hebelBoundaryWallsHtml.includes(
+      "https://elitesurfacegroup.com.au/images/og/og-hebel-boundary-walls-adelaide.jpg",
     ) &&
     renderingPaintedBrickHtml.includes(
       "https://elitesurfacegroup.com.au/images/og/og-rendering-over-painted-brick-adelaide.jpg",
@@ -1357,6 +1364,137 @@ check(
     projectPlanningHtml,
   ].every((html) =>
     html.includes('href="/resources/rendering-hebel-panels-adelaide/"'),
+  ),
+);
+check(
+  "Hebel boundary-wall guide publishes its date and evidence boundaries",
+  /<time date[Tt]ime="2026-08-13">Published (?:<!-- -->)?13 August 2026<\/time>/.test(
+    hebelBoundaryWallsHtml,
+  ) &&
+    /AI-generated planning illustration only—not a photograph of an Elite Surface Group project/.test(
+      hebelBoundaryWallsHtml,
+    ) &&
+    /General planning information only/.test(hebelBoundaryWallsHtml) &&
+    /does not select a wall system, locate a legal boundary, determine a setback or fire requirement/.test(
+      hebelBoundaryWallsHtml,
+    ) &&
+    /Hebel® is a registered trademark of the Xella group/.test(
+      hebelBoundaryWallsHtml,
+    ) &&
+    /not represented here as a CSR-authorised, accredited or endorsed installer/.test(
+      hebelBoundaryWallsHtml,
+    ),
+);
+check(
+  "Hebel boundary-wall guide distinguishes systems without generic performance claims",
+  [
+    "External wall on or near an allotment boundary",
+    "Zero-boundary or dual zero-boundary system",
+    "Intertenancy, party or separating wall",
+    "Fence or retaining wall",
+    "Does this guide determine the required setback or fire rating?",
+    "Does an uncoated boundary-side face prove the wall is unfinished or defective?",
+  ].every((copy) => hebelBoundaryWallsHtml.includes(copy)) &&
+    !/three-hour rated|NCC-approved|fireproof/i.test(
+      hebelBoundaryWallsHtml,
+    ) &&
+    /not evidence that every variation[\s\S]{0,180}automatically compliant/.test(
+      hebelBoundaryWallsHtml,
+    ),
+);
+check(
+  "Hebel boundary-wall guide links authoritative current sources",
+  [
+    "hebel.com.au/residential/boundary-walls/",
+    "hebel.com.au/residential/party-walls/",
+    "hebel.com.au/resources/technical-documents/",
+    "PowerPanelXL-Design-and-Installation-Guide_HELIT016.pdf",
+    "PowerPanel-Intertenancy-and-Dual-Zero-Boundary-Walls-Design-and-Installation-Guide_HELIT152.pdf",
+    "CM40165-I03-R00_PowerPanel50mm-Dual-Zero-Residential.pdf",
+    "CM40049-I05-R00.pdf",
+    "plan.sa.gov.au/development_applications/getting_approval/how_applications_are_assessed/types_of_consent",
+    "dhud.sa.gov.au/our-department/office-of-the-surveyor-general/surveying/cadastral-surveying",
+    "legislation.sa.gov.au/__legislation/lz/c/a/planning%20development%20and%20infrastructure%20act%202016/current/2016.14.auth.pdf",
+    "plan.sa.gov.au/resources/building/building_code",
+    "ncc.abcb.gov.au/editions/ncc-2022/adopted/housing-provisions/8-south-australia/92-fire-separation-external-walls",
+    "safework.sa.gov.au/industry/construction/crystalline-silica-substances-regulations",
+    "hebel.com.au/resources/warranty/",
+  ].every((source) => hebelBoundaryWallsHtml.includes(source)) &&
+    /NCC 2022[\s\S]{0,100}Amendment 2[\s\S]{0,180}30[\s\S]{0,30}April 2027/.test(
+      hebelBoundaryWallsHtml,
+    ) &&
+    /expiry date of (?:<!-- -->)?1 March 2027/.test(hebelBoundaryWallsHtml),
+);
+check(
+  "Hebel boundary-wall guide narrows legal and uncoated-wall claims to their primary sources",
+  /planning consent by itself is not full development[\s\S]{0,80}does not by itself authorise construction/.test(
+    hebelBoundaryWallsHtml,
+  ) &&
+    /PowerPanelXL external-wall CodeMark certificate[\s\S]{0,160}specified uncoated boundary-wall sections[\s\S]{0,120}defined infeasibility conditions/.test(
+      hebelBoundaryWallsHtml,
+    ),
+);
+check(
+  "Hebel boundary-wall guide links services, planning, location, finishing and enquiry",
+  [
+    "/hebel/",
+    "/walling/",
+    "/resources/rendering-hebel-panels-adelaide/",
+    "/locations/adelaide/",
+    "/project-planning/",
+    "/resources/",
+    "/contact-us/#contact",
+  ].every((href) => hebelBoundaryWallsHtml.includes(`href="${href}"`)),
+);
+check(
+  "Hebel boundary-wall guide avoids instructional HowTo and FAQ schema",
+  !/"@type":"HowTo"|"@type":"FAQPage"/.test(hebelBoundaryWallsHtml),
+);
+
+const hebelBoundaryWallsJsonLd = [
+  ...hebelBoundaryWallsHtml.matchAll(
+    /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g,
+  ),
+]
+  .map(([, block]) => {
+    try {
+      return JSON.parse(block);
+    } catch {
+      return null;
+    }
+  })
+  .find((data) => data?.["@type"] === "Article");
+check(
+  "Hebel boundary-wall guide emits matching Article schema",
+  hebelBoundaryWallsJsonLd?.["@id"] ===
+    "https://elitesurfacegroup.com.au/resources/hebel-boundary-walls-adelaide/#article" &&
+    hebelBoundaryWallsJsonLd?.url ===
+      "https://elitesurfacegroup.com.au/resources/hebel-boundary-walls-adelaide/" &&
+    hebelBoundaryWallsJsonLd?.mainEntityOfPage?.["@id"] ===
+      "https://elitesurfacegroup.com.au/resources/hebel-boundary-walls-adelaide/" &&
+    hebelBoundaryWallsJsonLd?.datePublished === "2026-08-13" &&
+    hebelBoundaryWallsJsonLd?.dateModified === "2026-08-13" &&
+    hebelBoundaryWallsJsonLd?.image?.contentUrl ===
+      "https://elitesurfacegroup.com.au/images/v2/resource-hebel-boundary-walls-adelaide.webp" &&
+    hebelBoundaryWallsJsonLd?.image?.width === 1536 &&
+    hebelBoundaryWallsJsonLd?.image?.height === 1024 &&
+    hebelBoundaryWallsJsonLd?.about?.["@id"] ===
+      "https://elitesurfacegroup.com.au/hebel/#service" &&
+    hebelBoundaryWallsJsonLd?.author?.["@id"] ===
+      "https://elitesurfacegroup.com.au/#organization" &&
+    hebelBoundaryWallsJsonLd?.publisher?.["@id"] ===
+      "https://elitesurfacegroup.com.au/#organization" &&
+    hebelBoundaryWallsJsonLd?.inLanguage === "en-AU",
+);
+check(
+  "Hebel, walling, planning and finishing pages link to the boundary-wall guide",
+  [
+    pages.get("/hebel/") ?? "",
+    pages.get("/walling/") ?? "",
+    projectPlanningHtml,
+    renderingHebelHtml,
+  ].every((html) =>
+    html.includes('href="/resources/hebel-boundary-walls-adelaide/"'),
   ),
 );
 check(

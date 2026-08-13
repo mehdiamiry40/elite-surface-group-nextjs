@@ -5,7 +5,8 @@ export type ResourceGuide = {
     | "render-cracking-adelaide"
     | "cladding-maintenance-coastal-adelaide"
     | "rendering-hebel-panels-adelaide"
-    | "rendering-over-painted-brick-adelaide";
+    | "rendering-over-painted-brick-adelaide"
+    | "hebel-boundary-walls-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -123,9 +124,49 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "13 August 2026",
     readingTime: "9 minute read",
   },
+  {
+    slug: "hebel-boundary-walls-adelaide",
+    serviceSlug: "hebel",
+    category: "Hebel project planning",
+    title:
+      "Hebel Boundary Walls in Adelaide: What to Confirm Before Installation",
+    metaTitle: "Hebel Boundary Walls Adelaide Guide",
+    metaDescription:
+      "Understand which Hebel boundary-wall system is documented and what Adelaide builders should confirm about design, approvals, access, sequencing and scope.",
+    summary:
+      "Learn how wall terminology, approved documents, access, sequencing and trade responsibilities shape a useful Hebel boundary-wall installation enquiry.",
+    image: "/images/v2/resource-hebel-boundary-walls-adelaide.webp",
+    imageAlt:
+      "AI-generated illustration of a construction professional reviewing drawings beside a full-height pale panel wall between two framed buildings",
+    imageCaption:
+      "AI-generated planning illustration only—not a photograph of an Elite Surface Group project, an approved Hebel detail or evidence that the pictured configuration suits a particular site.",
+    imageWidth: 1536,
+    imageHeight: 1024,
+    published: "2026-08-13",
+    modified: "2026-08-13",
+    publishedDisplay: "13 August 2026",
+    readingTime: "10 minute read",
+  },
 ];
 
-export const renderCrackingGuide = resourceGuides[0];
-export const claddingMaintenanceGuide = resourceGuides[1];
-export const renderingHebelGuide = resourceGuides[2];
-export const renderingPaintedBrickGuide = resourceGuides[3];
+function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
+  const guide = resourceGuides.find((item) => item.slug === slug);
+  if (!guide) {
+    throw new Error(`Missing resource guide: ${slug}`);
+  }
+  return guide;
+}
+
+export const renderCrackingGuide = guideBySlug("render-cracking-adelaide");
+export const claddingMaintenanceGuide = guideBySlug(
+  "cladding-maintenance-coastal-adelaide",
+);
+export const renderingHebelGuide = guideBySlug(
+  "rendering-hebel-panels-adelaide",
+);
+export const renderingPaintedBrickGuide = guideBySlug(
+  "rendering-over-painted-brick-adelaide",
+);
+export const hebelBoundaryWallsGuide = guideBySlug(
+  "hebel-boundary-walls-adelaide",
+);
