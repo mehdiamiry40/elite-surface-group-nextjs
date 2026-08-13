@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { business } from "@/content/business";
-import { locationPages } from "@/content/locations";
-import { projects } from "@/content/projects";
+import { publicPaths } from "@/content/routes";
 import { services } from "@/content/services";
 import {
   contactLog,
@@ -28,19 +27,7 @@ const RESEND_TIMEOUT_MS = 8_000;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX = 6;
 const ALLOWED_SERVICES = new Set(services.map((service) => service.name));
-const ALLOWED_SOURCE_PATHS = new Set([
-  "/",
-  "/about/",
-  "/services/",
-  "/projects/",
-  "/locations/",
-  "/contact-us/",
-  "/privacy-policy/",
-  "/terms-of-service/",
-  ...services.map((service) => `/${service.slug}/`),
-  ...projects.map((project) => `/projects/${project.slug}/`),
-  ...locationPages.map((location) => `/locations/${location.slug}/`),
-]);
+const ALLOWED_SOURCE_PATHS = new Set(publicPaths);
 
 /**
  * Best-effort, per-instance throttle.

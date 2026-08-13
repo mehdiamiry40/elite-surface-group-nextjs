@@ -1,8 +1,6 @@
 import type { MetadataRoute } from "next";
 import { absoluteUrl } from "@/lib/seo";
-import { locationPages } from "@/content/locations";
-import { projects } from "@/content/projects";
-import { services } from "@/content/services";
+import { publicPaths } from "@/content/routes";
 
 /** Updated whenever this typed content release changes public pages. */
 const CONTENT_LAST_MODIFIED = new Date("2026-08-13T00:00:00.000Z");
@@ -21,22 +19,7 @@ const PRIORITY: Record<string, number> = {
 };
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const paths = [
-    "/",
-    "/about/",
-    "/services/",
-    ...services.map((service) => `/${service.slug}/`),
-    "/projects/",
-    ...projects.map((project) => `/projects/${project.slug}/`),
-    "/locations/",
-    "/project-planning/",
-    ...locationPages.map((location) => `/locations/${location.slug}/`),
-    "/contact-us/",
-    "/privacy-policy/",
-    "/terms-of-service/",
-  ];
-
-  return paths.map((path) => ({
+  return publicPaths.map((path) => ({
     url: absoluteUrl(path),
     lastModified: CONTENT_LAST_MODIFIED,
     changeFrequency: "monthly" as const,
