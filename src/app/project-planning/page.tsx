@@ -71,6 +71,16 @@ export default function ProjectPlanningPage() {
             and trade responsibilities that should be clear before work begins.
           </p>
           <p>
+            For a wall on or near an allotment boundary, use our{" "}
+            <Link href="/resources/hebel-boundary-walls-adelaide/">
+              Adelaide Hebel boundary-wall planning guide
+            </Link>{" "}
+            to distinguish the wall configuration, identify the approved system
+            documents and coordinate access, sequencing, interfaces and
+            professional responsibilities before requesting an installation
+            quote.
+          </p>
+          <p>
             For an existing painted-brick exterior, use our {" "}
             <Link href="/resources/rendering-over-painted-brick-adelaide/">
               guide to rendering over painted brick

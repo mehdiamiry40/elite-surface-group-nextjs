@@ -145,6 +145,16 @@ export default function RenderingHebelPanelsGuidePage() {
                 installation guide, coating specification and any approved
                 project-specific details.
               </p>
+              <p>
+                If the drawings describe a zero-boundary, dual zero-boundary or
+                intertenancy application, first use our{" "}
+                <Link href="/resources/hebel-boundary-walls-adelaide/">
+                  Hebel boundary-wall planning guide
+                </Link>{" "}
+                to confirm the wall terminology, approved evidence, access and
+                trade responsibilities. Those configurations are not
+                interchangeable simply because they use AAC panels.
+              </p>
               <p className="article-source">
                 Sources: {" "}
                 <a href="https://hebel.com.au/products/panels/powerpanelxl/">

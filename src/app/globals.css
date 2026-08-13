@@ -2389,6 +2389,14 @@ h3 {
   margin-top: 28px;
 }
 
+.article-prose p a,
+.article-prose dd a,
+.article-visual p a,
+.article-visual dd a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .article-prose .steps h3 {
   margin-top: 0;
 }
