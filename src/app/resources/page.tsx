@@ -90,8 +90,9 @@ export default function ResourcesPage() {
           </p>
           <p>
             When you are ready to discuss a new installation or a clearly
-            scoped finish, review our <Link href="/cladding/">cladding</Link>{" "}
-            and <Link href="/render/">rendering</Link> services, or{" "}
+            scoped finish, review our <Link href="/cladding/">cladding</Link>,{" "}
+            <Link href="/render/">rendering</Link> and{" "}
+            <Link href="/hebel/">Hebel</Link> services, or{" "}
             <Link href="/contact-us/#contact">
               send the team your project details
             </Link>

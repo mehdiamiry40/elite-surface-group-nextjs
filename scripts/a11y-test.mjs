@@ -29,6 +29,7 @@ const ROUTES = [
   "/resources/",
   "/resources/render-cracking-adelaide/",
   "/resources/cladding-maintenance-coastal-adelaide/",
+  "/resources/rendering-hebel-panels-adelaide/",
   "/projects/",
   "/projects/two-storey-exterior-render/",
   "/locations/",

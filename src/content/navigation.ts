@@ -49,6 +49,10 @@ export const mainNav: readonly NavItem[] = [
         href: "/resources/cladding-maintenance-coastal-adelaide",
       },
       {
+        label: "Rendering Hebel panels",
+        href: "/resources/rendering-hebel-panels-adelaide",
+      },
+      {
         label: "Project planning",
         href: "/project-planning",
       },

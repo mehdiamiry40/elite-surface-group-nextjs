@@ -2280,6 +2280,20 @@ h3 {
   color: var(--orange-ink);
 }
 
+.prose .plain-link-list {
+  padding-left: 20px;
+}
+
+.prose .plain-link-list li {
+  display: list-item;
+  list-style: disc;
+}
+
+.prose .plain-link-list a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* ------------------------------------------------------- resource articles */
 
 .resource-grid {

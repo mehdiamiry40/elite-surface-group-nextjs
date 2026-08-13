@@ -129,6 +129,10 @@ export const services: readonly Service[] = [
         label: "What causes render cracking?",
         href: "/resources/render-cracking-adelaide/",
       },
+      {
+        label: "Rendering Hebel panels guide",
+        href: "/resources/rendering-hebel-panels-adelaide/",
+      },
       { label: "Contact for a quote", href: "/contact-us/#contact" },
       { label: "Plan your project enquiry", href: "/project-planning/" },
     ],
@@ -184,6 +188,10 @@ export const services: readonly Service[] = [
       { label: "Walling services", href: "/walling/" },
       { label: "View related projects", href: "/projects/" },
       { label: "Adelaide service area", href: "/locations/adelaide/" },
+      {
+        label: "Can Hebel be rendered?",
+        href: "/resources/rendering-hebel-panels-adelaide/",
+      },
       { label: "Plan your project enquiry", href: "/project-planning/" },
     ],
     faqs: [

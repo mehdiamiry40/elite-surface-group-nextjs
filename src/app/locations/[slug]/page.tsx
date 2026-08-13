@@ -13,6 +13,7 @@ import {
   locationPages,
 } from "@/content/locations";
 import { projects } from "@/content/projects";
+import { resourceGuides } from "@/content/resources";
 import { services } from "@/content/services";
 import { ogCard, pageMetadata } from "@/lib/seo";
 
@@ -90,7 +91,7 @@ export default async function LocationPage({ params }: PageProps) {
             . Contact the team with your suburb and project details so we can
             confirm availability and the next step.
           </p>
-          <ul>
+          <ul className="plain-link-list">
             {services.map((service) => (
               <li key={service.slug}>
                 <Link href={`/${service.slug}/`}>
@@ -99,6 +100,23 @@ export default async function LocationPage({ params }: PageProps) {
               </li>
             ))}
           </ul>
+          <h3>Adelaide wall-system guidance</h3>
+          <p>
+            Our practical guides explain what to record, which product or
+            system documents to find and which questions to resolve before a
+            quote or professional assessment.
+          </p>
+          <nav
+            className="article-related"
+            aria-label="Adelaide wall-system guides"
+          >
+            {resourceGuides.map((guide) => (
+              <Link href={`/resources/${guide.slug}/`} key={guide.slug}>
+                {guide.metaTitle}
+              </Link>
+            ))}
+            <Link href="/resources/">View all resources</Link>
+          </nav>
           <h3>What you can expect</h3>
           <TickList items={location.proof} />
           {projects.length ? (
@@ -108,7 +126,7 @@ export default async function LocationPage({ params }: PageProps) {
                 Explore photographed render and cladding details from our
                 portfolio. Individual project addresses are not published.
               </p>
-              <ul>
+              <ul className="plain-link-list">
                 {projects.map((project) => (
                   <li key={project.slug}>
                     <Link href={`/projects/${project.slug}/`}>
