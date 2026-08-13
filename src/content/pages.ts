@@ -4,14 +4,14 @@ export const contactSection = {
   eyebrow: "Project enquiries",
   title: "Tell us about your project.",
   intro:
-    "Share the suburb, property type and work you have in mind. We’ll review the details and respond within one business day.",
+    "Share the suburb, property type and work you have in mind. We’ll review the details and follow up about the next step.",
   formTitle: "Project details",
   formNote: "A few useful details will help us understand and price the work.",
 } as const;
 
 export const ctaBand = {
   title: "Ready to move your project forward?",
-  body: "Send us your plans, photos or a short brief. We’ll review the work and let you know what we need to prepare an accurate quote.",
+  body: "Tell us what work you have in mind and what plans or photos are available. If supporting files are needed, we’ll arrange how to review them.",
   note: "Quotes are obligation-free.",
   background: "/images/v2/cta-render-action.webp",
 } as const;
@@ -86,7 +86,7 @@ export const contactPage = {
   metaTitle: "Contact Our Salisbury East Team",
   metaDescription: `Contact ${business.name} at ${business.address.formatted} for cladding, render, Hebel and walling enquiries across Adelaide.`,
   intro:
-    "Tell our Salisbury East team what you’re planning and where the project is located. We’ll review the details and respond within one business day.",
+    "Tell our Salisbury East team what you’re planning and where the project is located. We’ll review the details and follow up about the next step.",
 } as const;
 
 /** Banner background images, keyed by route. */

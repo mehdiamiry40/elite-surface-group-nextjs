@@ -508,8 +508,9 @@ export default function RenderingHebelPanelsGuidePage() {
               <div className="faq-list__item">
                 <dt>Can Elite coordinate Hebel installation and rendering?</dt>
                 <dd>
-                  Send the documented system, drawings and proposed finish.
-                  We can confirm whether the installation and coating work sit
+                  Tell us which system documents and drawings are available and
+                  the proposed finish. We can arrange how to review supporting
+                  files, confirm whether the installation and coating work sit
                   within our service scope and identify the information still
                   needed for a quote; project design and certification remain
                   with the responsible professionals.
@@ -577,7 +578,7 @@ export default function RenderingHebelPanelsGuidePage() {
 
       <ContactSection
         defaultService="Hebel"
-        intro="Planning a new Hebel installation with a rendered or coated finish? Send the plans, selected system and scope details so we can confirm what is needed for an obligation-free quote."
+        intro="Planning a new Hebel installation with a rendered or coated finish? Tell us the selected system, scope and what plans are available. If supporting files are needed, we’ll arrange how to review them."
       />
       <CtaBand />
     </>

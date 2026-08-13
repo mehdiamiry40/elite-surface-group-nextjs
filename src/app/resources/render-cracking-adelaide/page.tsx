@@ -500,7 +500,7 @@ export default function RenderCrackingGuidePage() {
               <Link href="/locations/adelaide/">Adelaide service area</Link>
               <Link href="/project-planning/">Plan your project enquiry</Link>
               <Link href="/contact-us/#contact">
-                Send photos and project details
+                Discuss the available project details
               </Link>
             </nav>
           </div>
@@ -509,7 +509,7 @@ export default function RenderCrackingGuidePage() {
 
       <ContactSection
         defaultService="Render"
-        intro="If an appropriate assessment has confirmed a render or coating issue, send us the wall photos, property suburb and any available findings. We’ll review whether the visible work fits our scope."
+        intro="If an appropriate assessment has confirmed a render or coating issue, tell us the property suburb and what wall photos or findings are available. If supporting files are needed, we’ll arrange how to review them."
       />
       <CtaBand />
     </>

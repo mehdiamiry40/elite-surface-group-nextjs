@@ -10,7 +10,16 @@ import {
   type ReactNode,
 } from "react";
 
-const QuoteDialog = dynamic(() => import("@/components/QuoteDialog"), {
+const loadQuoteDialog = () => import("@/components/QuoteDialog");
+
+export function preloadQuoteDialog() {
+  // Preloading is an optional latency improvement. A transient chunk failure
+  // must not surface as an unhandled rejection; opening still uses the
+  // dynamic loader's normal load/error behaviour.
+  void loadQuoteDialog().catch(() => undefined);
+}
+
+const QuoteDialog = dynamic(loadQuoteDialog, {
   ssr: false,
 });
 

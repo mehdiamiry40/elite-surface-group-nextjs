@@ -68,9 +68,39 @@ const servicesSource = readFileSync(
   path.join(projectRoot, "src/content/services.ts"),
   "utf8",
 );
+const resourcesSource = readFileSync(
+  path.join(projectRoot, "src/content/resources.ts"),
+  "utf8",
+);
+const enquiryContextSource = readFileSync(
+  path.join(projectRoot, "src/content/enquiry.ts"),
+  "utf8",
+);
+const servicePageSource = readFileSync(
+  path.join(projectRoot, "src/app/[service]/page.tsx"),
+  "utf8",
+);
+const projectPageSource = readFileSync(
+  path.join(projectRoot, "src/app/projects/[slug]/page.tsx"),
+  "utf8",
+);
+const serviceNamesBySlug = new Map(
+  [
+    ...servicesSource.matchAll(
+      /slug:\s*"([^"]+)"[\s\S]*?name:\s*"([^"]+)"/g,
+    ),
+  ].map(([, slug, name]) => [slug, name]),
+);
 const projectServices = new Map(
   [
     ...projectSource.matchAll(/slug:\s*"([^"]+)"[\s\S]*?service:\s*"([^"]+)"/g),
+  ].map(([, slug, service]) => [slug, service]),
+);
+const resourceServices = new Map(
+  [
+    ...resourcesSource.matchAll(
+      /slug:\s*"([^"]+)"[\s\S]*?serviceSlug:\s*"([^"]+)"/g,
+    ),
   ].map(([, slug, service]) => [slug, service]),
 );
 const projectImages = new Map(
@@ -614,6 +644,66 @@ check(
   `status ${invalidService.status}`,
 );
 
+const invalidProjectType = await get("/api/contact/", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    Origin: baseUrl.origin,
+    "x-real-ip": "198.51.100.13",
+  },
+  body: JSON.stringify({
+    name: "Smoke Tester",
+    email: "smoke@example.com",
+    projectType: "Unsupported project type",
+    message: "Please ignore — smoke suite project-type allowlist check.",
+  }),
+});
+check(
+  "contact endpoint rejects an unknown project type",
+  invalidProjectType.status === 400,
+  `status ${invalidProjectType.status}`,
+);
+
+const invalidProjectTiming = await get("/api/contact/", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    Origin: baseUrl.origin,
+    "x-real-ip": "198.51.100.14",
+  },
+  body: JSON.stringify({
+    name: "Smoke Tester",
+    email: "smoke@example.com",
+    projectTiming: "Yesterday",
+    message: "Please ignore — smoke suite project-timing allowlist check.",
+  }),
+});
+check(
+  "contact endpoint rejects an unknown project timing",
+  invalidProjectTiming.status === 400,
+  `status ${invalidProjectTiming.status}`,
+);
+
+const overlongProjectArea = await get("/api/contact/", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    Origin: baseUrl.origin,
+    "x-real-ip": "198.51.100.15",
+  },
+  body: JSON.stringify({
+    name: "Smoke Tester",
+    email: "smoke@example.com",
+    projectArea: "A".repeat(121),
+    message: "Please ignore — smoke suite project-area length check.",
+  }),
+});
+check(
+  "contact endpoint rejects an overlong project area",
+  overlongProjectArea.status === 422,
+  `status ${overlongProjectArea.status}`,
+);
+
 // The client posts to the trailing-slash form; it must not redirect.
 const noRedirect = await get("/api/contact/", {
   method: "POST",
@@ -643,6 +733,9 @@ const progressiveForm = await get("/api/contact/", {
     lastName: "Tester",
     email: "smoke@example.com",
     service: "",
+    projectArea: "Salisbury East 5109",
+    projectType: "Multi-unit development",
+    projectTiming: "Within 3–6 months",
     message: "Progressive form fallback check.",
     company: "honeypot-check",
     sourcePath: "/contact-us/",
@@ -654,7 +747,9 @@ check(
   "progressive form POST redirects without personal data",
   progressiveForm.status === 303 &&
     /\/contact-us\/#enquiry-sent$/.test(progressiveLocation) &&
-    !/Smoke|smoke%40|message=/.test(progressiveLocation),
+    !/Smoke|smoke%40|message=|Salisbury|Multi-unit|Within/.test(
+      progressiveLocation,
+    ),
   `status ${progressiveForm.status}, location ${progressiveLocation}`,
 );
 
@@ -683,11 +778,14 @@ check(
   ),
 );
 check(
-  "privacy policy excludes contact details from analytics events",
+  "privacy policy discloses project fields and excludes them from analytics",
   /successful enquiry event may include the allowlisted source page and service category/i.test(
     privacyHtml,
   ) &&
-    /do not send names, email addresses, phone numbers, enquiry text or other free-text form values in analytics events/.test(
+    /Project suburb or postcode, project type and target timing/.test(
+      privacyHtml,
+    ) &&
+    /do not send names, email addresses, phone numbers, enquiry text, project suburbs or postcodes, project types or target timing in analytics events/.test(
       privacyHtml,
     ),
 );
@@ -700,14 +798,40 @@ check(
   /track\(analyticsEvent\)/.test(analyticsComponentSource) &&
     !/track\(analyticsEvent,/.test(analyticsComponentSource),
 );
+const enquiryTrackBlock =
+  contactRouteSource.match(
+    /await track\(\s*CONVERSION_EVENT_NAMES\.enquirySubmitted,[\s\S]*?\n\s*\);/,
+  )?.[0] ?? "";
 check(
   "successful enquiry analytics uses only allowlisted non-personal dimensions",
-  /CONVERSION_EVENT_NAMES\.enquirySubmitted/.test(contactRouteSource) &&
-    /page: sourcePath/.test(contactRouteSource) &&
-    /service: service \|\| "Not specified"/.test(contactRouteSource) &&
-    !/await track\([\s\S]{0,300}(?:name|email|phone|message):/.test(
-      contactRouteSource,
+  /CONVERSION_EVENT_NAMES\.enquirySubmitted/.test(enquiryTrackBlock) &&
+    /page: sourcePath/.test(enquiryTrackBlock) &&
+    /service: service \|\| "Not specified"/.test(enquiryTrackBlock) &&
+    !/(?:name|email|phone|message|projectArea|projectType|projectTiming)\s*:/.test(
+      enquiryTrackBlock,
     ),
+);
+const contactLogBodies = [
+  ...contactRouteSource.matchAll(/contactLog\("[^"]+",\s*\{([\s\S]*?)\}\);/g),
+].map(([, body]) => body);
+check(
+  "contact logs exclude enquiry and project details",
+  contactLogBodies.length >= 4 &&
+    contactLogBodies.every(
+      (body) =>
+        !/(?:name|email|phone|message|projectArea|projectType|projectTiming)\s*:/.test(
+          body,
+        ),
+    ),
+);
+check(
+  "project context reaches every email fallback without entering analytics",
+  ["Project area:", "Project type:", "Target timing:"].every(
+    (label) => (contactRouteSource.match(new RegExp(label, "g")) ?? []).length >= 3,
+  ) &&
+    /escapeHtml\(\s*projectArea \|\| "Not provided"/.test(contactRouteSource) &&
+    /escapeHtml\(\s*projectType \|\| "Not specified"/.test(contactRouteSource) &&
+    /escapeHtml\(\s*projectTiming \|\| "Not specified"/.test(contactRouteSource),
 );
 check(
   "analytics cannot turn an accepted enquiry into a delivery failure",
@@ -743,6 +867,64 @@ const renderingHebelHtml =
 const renderingPaintedBrickHtml =
   pages.get("/resources/rendering-over-painted-brick-adelaide/") ?? "";
 const projectPlanningHtml = pages.get("/project-planning/") ?? "";
+check(
+  "contact form collects optional project context with fixed choices",
+  ["projectArea", "projectType", "projectTiming"].every((name) =>
+    contactHtml.includes(`name="${name}"`),
+  ) &&
+    [
+      "Project suburb or postcode (optional)",
+      "Project type (optional)",
+      "Target timing (optional)",
+      "Multi-unit development",
+      "Ready to request a quote",
+      "Planning / not sure",
+    ].every((copy) => contactHtml.includes(copy)),
+);
+check(
+  "enquiry copy does not promise an unverified response time or file upload",
+  ![...pages.values()].some((html) =>
+    /respond within one business day|(?:send (?:us )?|through our contact form)[^.]{0,100}(?:plans|photos|drawings)|type="file"/i.test(
+      html,
+    ),
+  ),
+);
+
+const expectedContextRoutes = [
+  ...serviceSlugs.map((slug) => [
+    `/${slug}/`,
+    serviceNamesBySlug.get(slug),
+  ]),
+  ...projectSlugs.map((slug) => {
+    const serviceSlug = projectServices.get(slug);
+    return [`/projects/${slug}/`, serviceNamesBySlug.get(serviceSlug)];
+  }),
+  ...resourceSlugs.map((slug) => {
+    const serviceSlug = resourceServices.get(slug);
+    return [`/resources/${slug}/`, serviceNamesBySlug.get(serviceSlug)];
+  }),
+];
+check(
+  "quote dialog preserves service intent on every service, project and guide",
+  expectedContextRoutes.every(
+    ([route, service]) =>
+      typeof service === "string" &&
+      enquiryContextSource.includes(`"${route}": "${service}"`),
+  ),
+);
+for (const slug of serviceSlugs) {
+  const serviceHtml = pages.get(`/${slug}/`) ?? "";
+  const name = serviceNamesBySlug.get(slug) ?? slug;
+  check(
+    `${slug} service page offers an early intent-specific quote action`,
+    serviceHtml.includes('class="service-intro__actions"') &&
+      /<a(?=[^>]*class="btn")(?=[^>]*href="\/contact-us\/#contact")[^>]*>/.test(
+        serviceHtml,
+      ) &&
+      enquiryContextSource.includes(`"/${slug}/": "${name}"`) &&
+      /Request a \{serviceLabel\} quote/.test(servicePageSource),
+  );
+}
 check(
   "site publishes the registered entity and ABN",
   /Elite Surface Group Pty Ltd/.test(homeHtml) &&
@@ -830,6 +1012,26 @@ check(
       JSON.stringify(expectedServiceAreas)
     );
   }),
+);
+const offeredServices = organisationJsonLd?.hasOfferCatalog?.itemListElement ?? [];
+check(
+  "organisation schema connects its four verified service offers",
+  organisationJsonLd?.hasOfferCatalog?.["@type"] === "OfferCatalog" &&
+    offeredServices.length === serviceSlugs.length &&
+    serviceSlugs.every((slug) =>
+      offeredServices.some(
+        (offer) =>
+          offer?.["@type"] === "Offer" &&
+          offer?.itemOffered?.["@id"] ===
+            `https://elitesurfacegroup.com.au/${slug}/#service` &&
+          offer?.itemOffered?.url ===
+            `https://elitesurfacegroup.com.au/${slug}/` &&
+          offer?.itemOffered?.name ===
+            (jsonLdByRoute.get(`/${slug}/`) ?? []).find(
+              (data) => data?.["@type"] === "Service",
+            )?.name,
+      ),
+    ),
 );
 check(
   "organisation schema links directions to the verified address",
@@ -1300,6 +1502,7 @@ check(
 for (const slug of projectSlugs) {
   const projectHtml = pages.get(`/projects/${slug}/`) ?? "";
   const service = projectServices.get(slug);
+  const projectServiceName = serviceNamesBySlug.get(service) ?? service;
   const projectOgImage = metaContent(projectHtml, "property", "og:image");
   check(
     `${slug} uses its dedicated 1200x630 social card`,
@@ -1355,6 +1558,19 @@ for (const slug of projectSlugs) {
         'href="/projects/"',
         'href="/contact-us/#contact"',
       ].every((href) => projectHtml.includes(href)),
+  );
+  check(
+    `${slug} promotes a service-specific quote beside its project facts`,
+    typeof projectServiceName === "string" &&
+      /<a(?=[^>]*class="btn project-facts__cta")(?=[^>]*href="\/contact-us\/#contact")[^>]*>/.test(
+        projectHtml,
+      ) &&
+      enquiryContextSource.includes(
+        `"/projects/${slug}/": "${projectServiceName}"`,
+      ) &&
+      /Request a \{service\.name\.toLowerCase\(\)\} quote/.test(
+        projectPageSource,
+      ),
   );
 
   const projectJsonLd = [

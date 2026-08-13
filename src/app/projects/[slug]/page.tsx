@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PageBanner from "@/components/PageBanner";
+import QuoteButton from "@/components/QuoteButton";
 import { CtaBand } from "@/components/CtaBand";
 import { ProjectLinks } from "@/components/sections";
 import { BreadcrumbSchema, ProjectSchema } from "@/components/JsonLd";
@@ -129,6 +130,9 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
                   <li key={feature}>{feature}</li>
                 ))}
               </ul>
+              <QuoteButton className="btn project-facts__cta">
+                Request a {service.name.toLowerCase()} quote
+              </QuoteButton>
             </aside>
           </div>
 

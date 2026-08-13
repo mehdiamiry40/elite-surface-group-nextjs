@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ContactSection from "@/components/ContactSection";
 import PageBanner from "@/components/PageBanner";
+import QuoteButton from "@/components/QuoteButton";
 import { CtaBand } from "@/components/CtaBand";
 import { ProjectLinks, ServiceCards, TickList } from "@/components/sections";
 import { bannerImages } from "@/content/pages";
@@ -98,6 +99,9 @@ export default async function ServicePage({ params }: PageProps) {
             {service.intro.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
+            <div className="service-intro__actions">
+              <QuoteButton>Request a {serviceLabel} quote</QuoteButton>
+            </div>
             <ul className="related-links">
               {service.relatedLinks.map((link) => (
                 <li key={link.href}>

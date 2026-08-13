@@ -386,12 +386,12 @@ export default function CoastalCladdingMaintenanceGuidePage() {
               ]}
             />
             <p>
-              Send Elite Surface Group the plans, Adelaide project location,
-              new-build or replacement status, proposed system if known,
-              elevations, photographs and access notes when requesting an
-              installation quote. We can then check whether the proposed
-              installation is within our service scope and tell you what further
-              information is needed to quote.
+              Tell Elite Surface Group which plans, elevations, photographs and
+              access notes are available, along with the Adelaide project area,
+              new-build or replacement status and proposed system if known. We
+              can arrange how to review supporting files, check whether the
+              proposed installation is within our service scope and identify
+              what further information is needed to quote.
             </p>
 
             <h2 id="cladding-maintenance-faqs">Common questions</h2>
@@ -499,7 +499,7 @@ export default function CoastalCladdingMaintenanceGuidePage() {
                 Render-cracking guide
               </Link>
               <Link href="/contact-us/#contact">
-                Send plans and project details
+                Discuss the available project details
               </Link>
             </nav>
           </div>
@@ -508,7 +508,7 @@ export default function CoastalCladdingMaintenanceGuidePage() {
 
       <ContactSection
         defaultService="Cladding"
-        intro="Planning new cladding or a facade replacement? Send us the plans, site location, proposed system and access details. We’ll review the installation scope for an obligation-free quote."
+        intro="Planning new cladding or a facade replacement? Tell us the site area, proposed system and what plans or access details are available. If supporting files are needed, we’ll arrange how to review them."
       />
       <CtaBand />
     </>

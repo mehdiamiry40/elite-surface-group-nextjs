@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { QuoteDialogProvider } from "@/components/QuoteDialogProvider";
 import { business } from "@/content/business";
+import { services } from "@/content/services";
 import { absoluteUrl, DEFAULT_OG_IMAGE } from "@/lib/seo";
 import "./globals.css";
 
@@ -90,6 +91,19 @@ const organisationSchema = {
     "Walling",
     "Adelaide construction finishes",
   ],
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: `${business.name} services`,
+    itemListElement: services.map((service) => ({
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        "@id": `${absoluteUrl(`/${service.slug}`)}#service`,
+        name: `${service.name} — ${business.name}`,
+        url: absoluteUrl(`/${service.slug}`),
+      },
+    })),
+  },
   areaServed: business.serviceAreas,
   address: {
     "@type": "PostalAddress",

@@ -1,7 +1,10 @@
 "use client";
 
 import type { MouseEvent } from "react";
-import { useQuoteDialog } from "@/components/QuoteDialogProvider";
+import {
+  preloadQuoteDialog,
+  useQuoteDialog,
+} from "@/components/QuoteDialogProvider";
 
 type QuoteButtonProps = {
   className?: string;
@@ -42,7 +45,13 @@ export default function QuoteButton({
   }
 
   return (
-    <a className={className} href={href} onClick={onClick}>
+    <a
+      className={className}
+      href={href}
+      onClick={onClick}
+      onFocus={preloadQuoteDialog}
+      onPointerEnter={preloadQuoteDialog}
+    >
       {children}
     </a>
   );
