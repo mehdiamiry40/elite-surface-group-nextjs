@@ -151,7 +151,8 @@ export default function EnquiryFields({
         {pending ? "Sending…" : submitLabel}
       </button>
       <p className="form__privacy">
-        We’ll only use your details to respond to this enquiry. See our{" "}
+        We’ll only use the contact details you enter to respond to this enquiry.
+        See our{" "}
         <Link href="/privacy-policy/">Privacy Policy</Link>.
       </p>
     </>

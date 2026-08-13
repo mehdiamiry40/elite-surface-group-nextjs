@@ -6,6 +6,10 @@ import {
   redactSensitiveText,
   ResendDeliveryError,
 } from "./contact-security.ts";
+import {
+  contactEventName,
+  redactAnalyticsUrl,
+} from "./conversion-analytics.ts";
 
 describe("isLoopbackHostname", () => {
   it("recognises common loopback hosts", () => {
@@ -106,5 +110,31 @@ describe("ResendDeliveryError", () => {
     assert.equal(error.providerStatus, 422);
     assert.equal(error.providerCode, "validation_error");
     assert.match(error.message, /\[redacted-email\]/);
+  });
+});
+
+describe("conversion analytics", () => {
+  it("classifies contact links without returning their destinations", () => {
+    const directions = "https://www.google.com/maps/dir/?api=1&destination=office";
+    assert.equal(contactEventName("tel:+61413844912", directions), "Phone Click");
+    assert.equal(
+      contactEventName(
+        "mailto:info@example.com?body=private%20enquiry",
+        directions,
+      ),
+      "Email Click",
+    );
+    assert.equal(contactEventName(directions, directions), "Directions Click");
+    assert.equal(contactEventName("https://example.com/", directions), null);
+  });
+
+  it("removes query strings and fragments from analytics URLs", () => {
+    assert.equal(
+      redactAnalyticsUrl(
+        "/contact-us/?email=private%40example.com#message",
+        "https://elitesurfacegroup.com.au",
+      ),
+      "https://elitesurfacegroup.com.au/contact-us/",
+    );
   });
 });

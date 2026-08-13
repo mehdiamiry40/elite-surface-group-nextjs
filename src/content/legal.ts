@@ -2,10 +2,9 @@
  * Legal page copy for Elite Surface Group (South Australia).
  *
  * Written to match what the website actually does: enquiry forms emailed to the
- * business, no analytics, no advertising cookies, no marketing opt-in boxes.
- * This is practical website policy text, not a substitute for advice from a
- * qualified Australian lawyer if the business later adds tracking, online
- * payments or more complex data handling.
+ * business, privacy-focused Vercel Web Analytics, no advertising cookies and no
+ * marketing opt-in boxes. This is practical website policy text, not a
+ * substitute for advice from a qualified Australian lawyer.
  */
 
 export type LegalBlock =
@@ -59,6 +58,10 @@ export const privacyPolicy: readonly LegalBlock[] = [
     text: "If you phone or email us directly, we may also keep a record of that correspondence so we can respond and manage your project.",
   },
   {
+    type: "paragraph",
+    text: "Vercel Web Analytics may also process anonymous usage information, including the page or route visited, referrer, filtered query parameters, event time, approximate location, browser, operating system and device type. A successful enquiry event may include the allowlisted source page and service category. We do not send names, email addresses, phone numbers, enquiry text or other free-text form values in analytics events.",
+  },
+  {
     type: "heading",
     text: "How we use your information",
   },
@@ -72,6 +75,7 @@ export const privacyPolicy: readonly LegalBlock[] = [
       "Respond to your enquiry and provide quotes or project advice",
       "Contact you about work you have asked us to discuss or carry out",
       "Keep basic records needed to run the business and meet legal obligations",
+      "Understand aggregate website use and which contact channels visitors choose",
     ],
   },
   {
@@ -84,7 +88,7 @@ export const privacyPolicy: readonly LegalBlock[] = [
   },
   {
     type: "paragraph",
-    text: "This website does not use third-party analytics, advertising pixels or similar tracking tools. We do not set marketing or analytics cookies. The site may use only the technical storage that your browser and our hosting platform need to deliver pages securely.",
+    text: "We use Vercel Web Analytics to understand anonymous, aggregated website use and measure conversions such as a successful enquiry submission or a click to call, email or get directions. Vercel Web Analytics does not use cookies or create a profile that follows you across different days or websites. We do not use Google Analytics, advertising pixels, marketing cookies or cross-site advertising trackers. A successful enquiry event may include the allowlisted source page and service category, but we do not send names, email addresses, phone numbers, enquiry text or other free-text form values in analytics events.",
   },
   {
     type: "heading",
@@ -100,7 +104,7 @@ export const privacyPolicy: readonly LegalBlock[] = [
   },
   {
     type: "paragraph",
-    text: "We may share personal information with service providers who help us operate the website or communicate with you, including our hosting provider (Vercel) and email delivery provider (Resend), and only as needed for those services. These providers may process or store information outside Australia, including in the United States. We may also disclose information if required by law, or to protect the rights, property or safety of Elite Surface Group, our customers or others.",
+    text: "We may share personal information with service providers who help us operate the website or communicate with you, including our hosting and Web Analytics provider (Vercel) and email delivery provider (Resend), and only as needed for those services. These providers may process or store information outside Australia, including in the United States. We may also disclose information if required by law, or to protect the rights, property or safety of Elite Surface Group, our customers or others.",
   },
   {
     type: "heading",
@@ -192,9 +196,9 @@ export const termsOfService: readonly LegalBlock[] = [
   {
     type: "paragraph",
     content: [
-      "This website does not use third-party analytics or advertising cookies to monitor browsing preferences. See our ",
+      "This website uses Vercel Web Analytics for anonymous, aggregated page views and conversion events. It does not use analytics or advertising cookies, Google Analytics, advertising pixels or cross-site advertising trackers. See our ",
       { text: "Privacy Policy", href: "/privacy-policy/" },
-      " for how we handle personal information from enquiries.",
+      " for the information processed and how enquiry details are handled.",
     ],
   },
   {

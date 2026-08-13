@@ -101,6 +101,7 @@ export function redactSensitiveText(value: string) {
 
 export type ContactLogEvent =
   | "contact.delivery_unconfigured"
+  | "contact.analytics.failed"
   | "contact.resend.accepted"
   | "contact.resend.failed";
 

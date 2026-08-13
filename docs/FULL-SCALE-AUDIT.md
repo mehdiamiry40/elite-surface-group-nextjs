@@ -112,10 +112,11 @@ Also false on the live site (see #3).
 
 **Severity: High · Compliance / Trust**
 
-Terms claim the site “uses cookies to monitor browsing preferences and visitors
-via Google Analytics.” The application loads **no analytics, no cookie banner,
-and no third-party scripts** (CSP is `'self'`-only; confirmed in HTML and
-headers).
+At audit time, terms claimed the site “uses cookies to monitor browsing
+preferences and visitors via Google Analytics,” while the application loaded
+no analytics. The site now uses first-party, cookie-free Vercel Web Analytics
+with legal disclosure; it still loads no Google Analytics or advertising
+pixels.
 
 Privacy policy tells visitors to “tick the relevant box situated on the form”
 to opt out of marketing. The enquiry forms have no such checkbox.
@@ -407,7 +408,7 @@ configuration on Vercel, not an application change.
 | --- | --- | --- |
 | 1 | Contact form cannot deliver email in production | **Open** — set Resend env vars + `REQUIRE_CONTACT_DELIVERY=1` |
 | 2 | Legal pages cite UK law | **Fixed** — Australian Privacy Principles / SA + ACL terms |
-| 3 | Analytics / cookie / consent claims | **Fixed** — legal copy matches the no-analytics site |
+| 3 | Analytics / cookie / consent claims | **Fixed** — legal copy matches cookie-free Vercel Web Analytics |
 | 4 | Mailto fallback looks like success | **Fixed** — warning state + call CTA; form values retained |
 | 5 | Placeholder social links | **Fixed** — empty `business.social`; footer icons hidden |
 | 6 | Rate limiter best-effort | **Partly fixed** — platform IP, hard key cap; shared store still backlog |
