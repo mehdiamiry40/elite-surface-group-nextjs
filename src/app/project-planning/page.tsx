@@ -70,6 +70,15 @@ export default function ProjectPlanningPage() {
             for the system documents, movement details, coating specification
             and trade responsibilities that should be clear before work begins.
           </p>
+          <p>
+            For an existing painted-brick exterior, use our {" "}
+            <Link href="/resources/rendering-over-painted-brick-adelaide/">
+              guide to rendering over painted brick
+            </Link>{" "}
+            to record the coating history, visible wall condition, safety
+            questions and preparation assumptions that need to be resolved
+            before a finish is specified.
+          </p>
           <TickList items={projectPlanningPage.enquiryDetails} />
           <p>
             If you are still comparing options, start with the outcome you want

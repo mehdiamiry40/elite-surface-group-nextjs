@@ -10,6 +10,10 @@ export const business = {
   phoneDisplay: "0413 844 912",
   email: "info@elitesurfacegroup.com.au",
   area: "Adelaide & South Australia",
+  serviceAreas: [
+    { "@type": "City", name: "Adelaide" },
+    { "@type": "AdministrativeArea", name: "South Australia" },
+  ],
   address: {
     street: "22 Robin St",
     suburb: "Salisbury East",

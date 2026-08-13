@@ -17,27 +17,19 @@ const axeSource = require("fs").readFileSync(
 );
 
 const baseUrl = process.env.SMOKE_BASE_URL ?? "http://localhost:3000";
-const ROUTES = [
-  "/",
-  "/about/",
-  "/services/",
-  "/cladding/",
-  "/render/",
-  "/hebel/",
-  "/walling/",
-  "/project-planning/",
-  "/resources/",
-  "/resources/render-cracking-adelaide/",
-  "/resources/cladding-maintenance-coastal-adelaide/",
-  "/resources/rendering-hebel-panels-adelaide/",
-  "/projects/",
-  "/projects/two-storey-exterior-render/",
-  "/locations/",
-  "/locations/adelaide/",
-  "/contact-us/",
-  "/privacy-policy/",
-  "/terms-of-service/",
-];
+const sitemapResponse = await fetch(new URL("/sitemap.xml", baseUrl));
+if (!sitemapResponse.ok) {
+  throw new Error(
+    `Could not load sitemap for accessibility routes: ${sitemapResponse.status}`,
+  );
+}
+const sitemapXml = await sitemapResponse.text();
+const ROUTES = [...sitemapXml.matchAll(/<loc>(.*?)<\/loc>/g)].map(
+  ([, location]) => new URL(location).pathname,
+);
+if (!ROUTES.length) {
+  throw new Error("Sitemap contains no public routes for accessibility checks.");
+}
 const VIEWPORTS = [
   { width: 1440, height: 900, label: "desktop" },
   { width: 390, height: 844, label: "mobile" },

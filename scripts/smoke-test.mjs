@@ -56,10 +56,29 @@ const contactRouteSource = readFileSync(
   path.join(projectRoot, "src/app/api/contact/route.ts"),
   "utf8",
 );
+const routesSource = readFileSync(
+  path.join(projectRoot, "src/content/routes.ts"),
+  "utf8",
+);
+const sitemapSource = readFileSync(
+  path.join(projectRoot, "src/app/sitemap.ts"),
+  "utf8",
+);
+const servicesSource = readFileSync(
+  path.join(projectRoot, "src/content/services.ts"),
+  "utf8",
+);
 const projectServices = new Map(
   [
     ...projectSource.matchAll(/slug:\s*"([^"]+)"[\s\S]*?service:\s*"([^"]+)"/g),
   ].map(([, slug, service]) => [slug, service]),
+);
+const projectImages = new Map(
+  [
+    ...projectSource.matchAll(
+      /slug:\s*"([^"]+)"[\s\S]*?image:\s*"([^"]+)"/g,
+    ),
+  ].map(([, slug, image]) => [slug, image]),
 );
 
 /** Full public indexable set — must stay in lockstep with `src/app/sitemap.ts`. */
@@ -93,12 +112,21 @@ for (const route of ROUTES) {
 
 const homeH1 =
   (pages.get("/") ?? "").match(/<h1[^>]*>([\s\S]*?)<\/h1>/i)?.[1] ?? "";
-const homeH1Text = homeH1.replace(/<[^>]+>/g, " ").toLowerCase();
+const homeH1Text = homeH1
+  .replace(/<[^>]+>/g, " ")
+  .replace(/\s+/g, " ")
+  .trim()
+  .toLowerCase();
 check(
   "homepage H1 describes the core Adelaide services",
   ["adelaide", "cladding", "render", "hebel", "walling"].every((term) =>
     homeH1Text.includes(term),
   ),
+);
+check(
+  "homepage H1 preserves spacing between render and Hebel",
+  homeH1Text.includes("render, hebel"),
+  homeH1Text,
 );
 
 /* -------------------------------------------------------------- retired WP */
@@ -192,7 +220,8 @@ check(
   /\/resources\//.test(llmsBody) &&
     /\/resources\/render-cracking-adelaide\//.test(llmsBody) &&
     /\/resources\/cladding-maintenance-coastal-adelaide\//.test(llmsBody) &&
-    /\/resources\/rendering-hebel-panels-adelaide\//.test(llmsBody),
+    /\/resources\/rendering-hebel-panels-adelaide\//.test(llmsBody) &&
+    /\/resources\/rendering-over-painted-brick-adelaide\//.test(llmsBody),
 );
 
 for (const endpoint of ["/sitemap.xml", "/robots.txt"]) {
@@ -207,6 +236,12 @@ for (const endpoint of ["/sitemap.xml", "/robots.txt"]) {
 const sitemapXml = await (await get("/sitemap.xml")).text();
 const sitemapLocs = [...sitemapXml.matchAll(/<loc>(.*?)<\/loc>/g)].map(
   (match) => match[1],
+);
+const sitemapEntries = [...sitemapXml.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(
+  ([, entry]) => ({
+    loc: entry.match(/<loc>(.*?)<\/loc>/)?.[1] ?? "",
+    lastModified: entry.match(/<lastmod>(.*?)<\/lastmod>/)?.[1] ?? "",
+  }),
 );
 const expectedSitemapLocs = EXPECTED_SITEMAP_PATHS.map((route) =>
   route === "/"
@@ -243,6 +278,42 @@ check(
   "sitemap lastmod is not stale WordPress-era dates",
   !/<lastmod>2026-0[1-4]-/.test(sitemapXml),
 );
+check(
+  "sitemap omits ignored priority and change-frequency hints",
+  !/<priority>|<changefreq>/.test(sitemapXml) &&
+    !/priority|changeFrequency/.test(sitemapSource),
+);
+const todayInAdelaide = new Date().toLocaleDateString("en-CA", {
+  timeZone: "Australia/Adelaide",
+});
+check(
+  "sitemap lastmod values are valid ISO dates and are not in the future",
+  sitemapEntries.length === sitemapLocs.length &&
+    sitemapEntries.every(({ lastModified }) => {
+      const date = lastModified.slice(0, 10);
+      const parsed = new Date(`${date}T00:00:00Z`);
+      return (
+        /^\d{4}-\d{2}-\d{2}$/.test(date) &&
+        !Number.isNaN(parsed.valueOf()) &&
+        parsed.toISOString().slice(0, 10) === date &&
+        date <= todayInAdelaide
+      );
+    }),
+);
+const sitemapLastModified = new Map(
+  sitemapEntries.map(({ loc, lastModified }) => [loc, lastModified.slice(0, 10)]),
+);
+check(
+  "sitemap uses truthful route-specific dates",
+  sitemapLastModified.get("https://elitesurfacegroup.com.au/services/") ===
+    "2026-08-10" &&
+    sitemapLastModified.get(
+      "https://elitesurfacegroup.com.au/resources/rendering-over-painted-brick-adelaide/",
+    ) === "2026-08-13" &&
+    new Set(sitemapLastModified.values()).size > 1 &&
+    /publicRouteRecords/.test(sitemapSource) &&
+    /publicPaths\s*=\s*publicRouteRecords\.map/.test(routesSource),
+);
 
 /* ----------------------------------------------------------------- content */
 
@@ -255,6 +326,38 @@ function decodeHtmlText(value) {
     .replace(/&gt;/g, ">");
 }
 
+function tagAttribute(tag, name) {
+  return decodeHtmlText(
+    tag.match(new RegExp(`(?:^|\\s)${name}="([^"]*)"`))?.[1] ?? "",
+  );
+}
+
+function metaContent(html, attribute, value) {
+  const tag = (html.match(/<meta[^>]*>/g) ?? []).find(
+    (candidate) => tagAttribute(candidate, attribute) === value,
+  );
+  return tag ? tagAttribute(tag, "content") : "";
+}
+
+function jsonLdFor(html) {
+  const data = [];
+  let invalid = 0;
+  for (const [, block] of html.matchAll(
+    /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g,
+  )) {
+    try {
+      data.push(JSON.parse(block));
+    } catch {
+      invalid += 1;
+    }
+  }
+  return { data, invalid };
+}
+
+const titlesByRoute = new Map();
+const descriptionsByRoute = new Map();
+const jsonLdByRoute = new Map();
+
 for (const [route, html] of pages) {
   const h1Count = (html.match(/<h1[\s>]/g) ?? []).length;
   check(`${route} has exactly one <h1>`, h1Count === 1, `found ${h1Count}`);
@@ -262,6 +365,7 @@ for (const [route, html] of pages) {
   const title = decodeHtmlText(
     html.match(/<title>([^<]*)<\/title>/)?.[1] ?? "",
   );
+  titlesByRoute.set(route, title);
   check(
     `${route} title is within the search snippet budget`,
     title.length > 0 && title.length <= 65,
@@ -271,6 +375,7 @@ for (const [route, html] of pages) {
   const description = decodeHtmlText(
     html.match(/<meta name="description" content="([^"]*)"/)?.[1] ?? "",
   );
+  descriptionsByRoute.set(route, description);
   check(
     `${route} description is within the search snippet budget`,
     description.length >= 40 && description.length <= 160,
@@ -282,22 +387,40 @@ for (const [route, html] of pages) {
     /<meta name="description" content="[^"]{40,}"/.test(html),
   );
 
-  check(`${route} has a canonical link`, /<link rel="canonical"/.test(html));
-
-  check(`${route} has an Open Graph image`, /property="og:image"/.test(html));
-
+  const expectedUrl = `https://elitesurfacegroup.com.au${route}`;
+  const canonicalTags = (html.match(/<link[^>]*>/g) ?? []).filter(
+    (tag) => tagAttribute(tag, "rel") === "canonical",
+  );
   check(
-    `${route} og:url matches the page`,
-    html.includes(
-      `property="og:url" content="https://elitesurfacegroup.com.au${
-        route === "/" ? "/" : route
-      }"`,
-    ) ||
-      html.includes(
-        `property="og:url" content="http://localhost:3000${
-          route === "/" ? "/" : route
-        }"`,
-      ),
+    `${route} has one exact self-canonical`,
+    canonicalTags.length === 1 &&
+      tagAttribute(canonicalTags[0], "href") === expectedUrl,
+  );
+
+  const ogTitle = metaContent(html, "property", "og:title");
+  const ogDescription = metaContent(html, "property", "og:description");
+  const ogUrl = metaContent(html, "property", "og:url");
+  const ogImage = metaContent(html, "property", "og:image");
+  const twitterTitle = metaContent(html, "name", "twitter:title");
+  const twitterDescription = metaContent(html, "name", "twitter:description");
+  const twitterImage = metaContent(html, "name", "twitter:image");
+  check(`${route} has an Open Graph image`, Boolean(ogImage));
+  check(`${route} og:url matches the page`, ogUrl === expectedUrl, ogUrl);
+  check(
+    `${route} Open Graph and Twitter metadata match the page metadata`,
+    ogTitle === title &&
+      twitterTitle === title &&
+      ogDescription === description &&
+      twitterDescription === description &&
+      twitterImage === ogImage,
+  );
+
+  const routeJsonLd = jsonLdFor(html);
+  jsonLdByRoute.set(route, routeJsonLd.data);
+  check(
+    `${route} JSON-LD blocks are valid JSON`,
+    routeJsonLd.data.length > 0 && routeJsonLd.invalid === 0,
+    `${routeJsonLd.invalid} invalid`,
   );
 
   // Every tel: link must be the single E.164 number — no placeholders.
@@ -330,6 +453,15 @@ for (const [route, html] of pages) {
     `${missingAlt.length} without alt`,
   );
 }
+
+check(
+  "public pages have unique titles",
+  new Set(titlesByRoute.values()).size === titlesByRoute.size,
+);
+check(
+  "public pages have unique meta descriptions",
+  new Set(descriptionsByRoute.values()).size === descriptionsByRoute.size,
+);
 
 /* ----------------------------------------------------------------- headers */
 
@@ -608,6 +740,8 @@ const claddingMaintenanceHtml =
   pages.get("/resources/cladding-maintenance-coastal-adelaide/") ?? "";
 const renderingHebelHtml =
   pages.get("/resources/rendering-hebel-panels-adelaide/") ?? "";
+const renderingPaintedBrickHtml =
+  pages.get("/resources/rendering-over-painted-brick-adelaide/") ?? "";
 const projectPlanningHtml = pages.get("/project-planning/") ?? "";
 check(
   "site publishes the registered entity and ABN",
@@ -674,6 +808,29 @@ check(
     organisationJsonLd?.address?.postalCode === "5109" &&
     organisationJsonLd?.address?.addressCountry === "AU",
 );
+const expectedServiceAreas = [
+  { "@type": "City", name: "Adelaide" },
+  { "@type": "AdministrativeArea", name: "South Australia" },
+];
+check(
+  "organisation schema uses real City and AdministrativeArea service areas",
+  JSON.stringify(organisationJsonLd?.areaServed) ===
+    JSON.stringify(expectedServiceAreas) &&
+    JSON.stringify(organisationJsonLd?.contactPoint?.[0]?.areaServed) ===
+      JSON.stringify(expectedServiceAreas),
+);
+check(
+  "every service schema uses the same precise service areas",
+  serviceSlugs.every((slug) => {
+    const serviceSchema = (jsonLdByRoute.get(`/${slug}/`) ?? []).find(
+      (data) => data?.["@type"] === "Service",
+    );
+    return (
+      JSON.stringify(serviceSchema?.areaServed) ===
+      JSON.stringify(expectedServiceAreas)
+    );
+  }),
+);
 check(
   "organisation schema links directions to the verified address",
   organisationJsonLd?.hasMap ===
@@ -711,6 +868,7 @@ check(
     "/resources/render-cracking-adelaide/",
     "/resources/cladding-maintenance-coastal-adelaide/",
     "/resources/rendering-hebel-panels-adelaide/",
+    "/resources/rendering-over-painted-brick-adelaide/",
     "/project-planning/",
     "/cladding/",
     "/render/",
@@ -723,11 +881,17 @@ check(
   resourcesHtml.includes(
     "https://elitesurfacegroup.com.au/images/og/og-resources.jpg",
   ) &&
+    renderCrackingHtml.includes(
+      "https://elitesurfacegroup.com.au/images/og/og-render-cracking-adelaide.jpg",
+    ) &&
     claddingMaintenanceHtml.includes(
       "https://elitesurfacegroup.com.au/images/og/og-cladding-maintenance-coastal-adelaide.jpg",
     ) &&
     renderingHebelHtml.includes(
       "https://elitesurfacegroup.com.au/images/og/og-rendering-hebel-panels-adelaide.jpg",
+    ) &&
+    renderingPaintedBrickHtml.includes(
+      "https://elitesurfacegroup.com.au/images/og/og-rendering-over-painted-brick-adelaide.jpg",
     ),
 );
 check(
@@ -981,6 +1145,86 @@ check(
   ),
 );
 check(
+  "painted-brick guide publishes its date, author and evidence boundary",
+  /<time date[Tt]ime="2026-08-13">Published (?:<!-- -->)?13 August 2026<\/time>/.test(
+    renderingPaintedBrickHtml,
+  ) &&
+    /Prepared by (?:<!-- -->)?<a href="\/about\/">Elite Surface Group<\/a>/.test(
+      renderingPaintedBrickHtml,
+    ) &&
+    /AI-generated illustration only—not a photograph of an Elite Surface Group project or an actual property/.test(
+      renderingPaintedBrickHtml,
+    ) &&
+    /Surface appearance alone cannot confirm coating adhesion, masonry condition or a suitable render specification/.test(
+      renderingPaintedBrickHtml,
+    ) &&
+    /not a DIY removal method, product specification, warranty promise or remote wall assessment/.test(
+      renderingPaintedBrickHtml,
+    ),
+);
+check(
+  "painted-brick guide links its authoritative sources",
+  [
+    "dulux.com.au/specifier/products/acratex/substrate-guides/",
+    "dulux.com.au/specifier/products/acratex-texture/acratex-super-trowel-2mm/",
+    "rockcote.com.au/wp-content/uploads/2020/09/Keycote_TDS_September2020.pdf",
+    "sahealth.sa.gov.au/wps/wcm/connect/",
+    "safework.sa.gov.au/industry/construction/silica",
+    "plan.sa.gov.au/",
+    "environment.sa.gov.au/topics/heritage/",
+  ].every((source) => renderingPaintedBrickHtml.includes(source)),
+);
+check(
+  "painted-brick guide links service, cracking, location, planning, hub and enquiry",
+  [
+    "/render/",
+    "/resources/render-cracking-adelaide/",
+    "/locations/adelaide/",
+    "/project-planning/",
+    "/resources/",
+    "/contact-us/#contact",
+  ].every((href) => renderingPaintedBrickHtml.includes(`href="${href}"`)),
+);
+check(
+  "painted-brick guide avoids instructional HowTo schema",
+  !/"@type":"HowTo"/.test(renderingPaintedBrickHtml),
+);
+const renderingPaintedBrickJsonLd = (
+  jsonLdByRoute.get("/resources/rendering-over-painted-brick-adelaide/") ?? []
+).find((data) => data?.["@type"] === "Article");
+check(
+  "painted-brick guide emits matching Article schema",
+  renderingPaintedBrickJsonLd?.["@id"] ===
+    "https://elitesurfacegroup.com.au/resources/rendering-over-painted-brick-adelaide/#article" &&
+    renderingPaintedBrickJsonLd?.url ===
+      "https://elitesurfacegroup.com.au/resources/rendering-over-painted-brick-adelaide/" &&
+    renderingPaintedBrickJsonLd?.mainEntityOfPage?.["@id"] ===
+      "https://elitesurfacegroup.com.au/resources/rendering-over-painted-brick-adelaide/" &&
+    renderingPaintedBrickJsonLd?.datePublished === "2026-08-13" &&
+    renderingPaintedBrickJsonLd?.dateModified === "2026-08-13" &&
+    renderingPaintedBrickJsonLd?.image?.contentUrl ===
+      "https://elitesurfacegroup.com.au/images/v2/resource-rendering-painted-brick.webp" &&
+    renderingPaintedBrickJsonLd?.image?.width === 1536 &&
+    renderingPaintedBrickJsonLd?.image?.height === 1024 &&
+    renderingPaintedBrickJsonLd?.about?.["@id"] ===
+      "https://elitesurfacegroup.com.au/render/#service" &&
+    renderingPaintedBrickJsonLd?.author?.["@id"] ===
+      "https://elitesurfacegroup.com.au/#organization" &&
+    renderingPaintedBrickJsonLd?.author?.url ===
+      "https://elitesurfacegroup.com.au/about/" &&
+    renderingPaintedBrickJsonLd?.publisher?.["@id"] ===
+      "https://elitesurfacegroup.com.au/#organization" &&
+    renderingPaintedBrickJsonLd?.inLanguage === "en-AU",
+);
+check(
+  "render and planning pages link to the painted-brick guide",
+  [pages.get("/render/") ?? "", projectPlanningHtml].every((html) =>
+    html.includes(
+      'href="/resources/rendering-over-painted-brick-adelaide/"',
+    ),
+  ),
+);
+check(
   "homepage and Adelaide page link every published guide contextually",
   [homeHtml, adelaideHtml].every((html) =>
     resourceSlugs.every((slug) =>
@@ -1056,6 +1300,22 @@ check(
 for (const slug of projectSlugs) {
   const projectHtml = pages.get(`/projects/${slug}/`) ?? "";
   const service = projectServices.get(slug);
+  const projectOgImage = metaContent(projectHtml, "property", "og:image");
+  check(
+    `${slug} uses its dedicated 1200x630 social card`,
+    projectOgImage ===
+      `https://elitesurfacegroup.com.au/images/og/og-${slug}.jpg` &&
+      metaContent(projectHtml, "property", "og:image:width") === "1200" &&
+      metaContent(projectHtml, "property", "og:image:height") === "630",
+    projectOgImage,
+  );
+  const preloadTags = (projectHtml.match(/<link[^>]*rel="preload"[^>]*>/g) ?? [])
+    .map((tag) => decodeURIComponent(tag))
+    .join("\n");
+  check(
+    `${slug} does not preload its below-fold proof image`,
+    !preloadTags.includes(projectImages.get(slug) ?? "missing-project-image"),
+  );
   if (service === "render") {
     check(
       `${slug} links to the render-cracking guide`,
@@ -1135,6 +1395,12 @@ check(
       html,
     );
   }),
+);
+check(
+  "service copy avoids unsupported image-locality and portfolio claims",
+  !/on an Adelaide home|on a new Adelaide build/.test(servicesSource) &&
+    /View render and cladding portfolio/.test(servicesSource) &&
+    /Explore our cladding portfolio/.test(servicesSource),
 );
 
 /* ------------------------------------------------------------------ report */

@@ -21,11 +21,6 @@ const sans = Figtree({
 const HOME_DESCRIPTION =
   "Cladding, render, Hebel and walling for homes and commercial projects across Adelaide and South Australia. Request an obligation-free quote.";
 
-const areaServed = [
-  { "@type": "City", name: "Adelaide" },
-  { "@type": "AdministrativeArea", name: "South Australia" },
-];
-
 const sameAs = Object.values(business.social).filter(Boolean);
 
 export const metadata: Metadata = {
@@ -95,7 +90,7 @@ const organisationSchema = {
     "Walling",
     "Adelaide construction finishes",
   ],
-  areaServed,
+  areaServed: business.serviceAreas,
   address: {
     "@type": "PostalAddress",
     streetAddress: business.address.street,
@@ -112,7 +107,7 @@ const organisationSchema = {
       telephone: business.phone,
       email: business.email,
       contactType: "customer service",
-      areaServed,
+      areaServed: business.serviceAreas,
       availableLanguage: ["English"],
     },
   ],

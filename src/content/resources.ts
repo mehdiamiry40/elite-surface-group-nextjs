@@ -1,8 +1,11 @@
+export type IsoDate = `${number}-${number}-${number}`;
+
 export type ResourceGuide = {
   slug:
     | "render-cracking-adelaide"
     | "cladding-maintenance-coastal-adelaide"
-    | "rendering-hebel-panels-adelaide";
+    | "rendering-hebel-panels-adelaide"
+    | "rendering-over-painted-brick-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -14,8 +17,8 @@ export type ResourceGuide = {
   imageCaption: string;
   imageWidth: number;
   imageHeight: number;
-  published: string;
-  modified: string;
+  published: IsoDate;
+  modified: IsoDate;
   publishedDisplay: string;
   readingTime: string;
 };
@@ -97,8 +100,32 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "13 August 2026",
     readingTime: "9 minute read",
   },
+  {
+    slug: "rendering-over-painted-brick-adelaide",
+    serviceSlug: "render",
+    category: "Render preparation",
+    title:
+      "Can You Render Over Painted Brick? What Adelaide Homeowners Should Confirm",
+    metaTitle: "Can You Render Over Painted Brick? Adelaide",
+    metaDescription:
+      "Understand when painted brick may be suitable for render, what must be assessed first and which safety and planning checks matter for Adelaide projects.",
+    summary:
+      "Learn why the paint, masonry, moisture history and selected coating system must be assessed before an existing brick exterior is rendered.",
+    image: "/images/v2/resource-rendering-painted-brick.webp",
+    imageAlt:
+      "Illustrative inspection of a worn area on a white-painted brick exterior",
+    imageCaption:
+      "AI-generated illustration only—not a photograph of an Elite Surface Group project or an actual property. Surface appearance alone cannot confirm coating adhesion, masonry condition or a suitable render specification.",
+    imageWidth: 1536,
+    imageHeight: 1024,
+    published: "2026-08-13",
+    modified: "2026-08-13",
+    publishedDisplay: "13 August 2026",
+    readingTime: "9 minute read",
+  },
 ];
 
 export const renderCrackingGuide = resourceGuides[0];
 export const claddingMaintenanceGuide = resourceGuides[1];
 export const renderingHebelGuide = resourceGuides[2];
+export const renderingPaintedBrickGuide = resourceGuides[3];
