@@ -33,7 +33,7 @@ export const services: readonly Service[] = [
     bannerTitle: "Cladding & Facade Installation Adelaide",
     image: "/images/v2/service-cladding-installation.webp",
     imageAlt:
-      "Installer aligning charcoal vertical cladding on an Adelaide home",
+      "Installer aligning charcoal vertical cladding on a residential exterior",
     imageWidth: 1600,
     imageHeight: 1067,
     summary:
@@ -57,7 +57,7 @@ export const services: readonly Service[] = [
       "A lower-maintenance surface than some painted exterior substrates",
     ],
     closing:
-      "From a single feature elevation to a complete facade, we tailor the installation to the documented design and site conditions. Explore our cladding and mixed-facade projects, or ask us about combining cladding with render for a contrasting finish.",
+      "From a single feature elevation to a complete facade, we tailor the installation to the documented design and site conditions. Explore our cladding portfolio, or ask us about combining cladding with render for a contrasting finish.",
     relatedLinks: [
       { label: "View cladding projects", href: "/projects/" },
       { label: "Rendering services", href: "/render/" },
@@ -130,6 +130,10 @@ export const services: readonly Service[] = [
         href: "/resources/render-cracking-adelaide/",
       },
       {
+        label: "Can painted brick be rendered?",
+        href: "/resources/rendering-over-painted-brick-adelaide/",
+      },
+      {
         label: "Rendering Hebel panels guide",
         href: "/resources/rendering-hebel-panels-adelaide/",
       },
@@ -160,7 +164,7 @@ export const services: readonly Service[] = [
     bannerTitle: "Hebel Installation Adelaide",
     image: "/images/v2/service-hebel-installation.webp",
     imageAlt:
-      "Installer checking lightweight AAC wall panels on a new Adelaide build",
+      "Installer checking lightweight AAC wall panels on a new build",
     imageWidth: 1600,
     imageHeight: 1067,
     summary:
@@ -186,7 +190,7 @@ export const services: readonly Service[] = [
       "We work closely with builders and developers to keep Hebel installation aligned with the programme and surrounding trades. If the project also includes walling or exterior finishes, ask us about bringing the work together under one coordinated package.",
     relatedLinks: [
       { label: "Walling services", href: "/walling/" },
-      { label: "View related projects", href: "/projects/" },
+      { label: "View render and cladding portfolio", href: "/projects/" },
       { label: "Adelaide service area", href: "/locations/adelaide/" },
       {
         label: "Can Hebel be rendered?",

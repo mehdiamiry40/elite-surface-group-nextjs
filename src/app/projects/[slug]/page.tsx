@@ -15,12 +15,6 @@ type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
-const PROJECTS_WITH_MATCHING_SOCIAL_CARDS = new Set([
-  "two-storey-exterior-render",
-  "curved-rendered-wall-detail",
-  "dark-feature-cladding",
-]);
-
 export const dynamicParams = false;
 
 export function generateStaticParams() {
@@ -40,9 +34,7 @@ export async function generateMetadata({
     title: project.metaTitle,
     description: project.metaDescription,
     path: `/projects/${project.slug}`,
-    image: PROJECTS_WITH_MATCHING_SOCIAL_CARDS.has(project.slug)
-      ? ogCard(project.slug, `${project.title} case study`)
-      : undefined,
+    image: ogCard(project.slug, `${project.title} case study`),
   });
 }
 

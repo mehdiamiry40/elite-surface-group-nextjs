@@ -61,7 +61,7 @@ export function ServiceSchema({ service }: { service: Service }) {
         url: absoluteUrl(`/${service.slug}`),
         image: absoluteUrl(service.image),
         provider: { "@id": `${business.siteUrl}/#organization` },
-        areaServed: { "@type": "AdministrativeArea", name: business.area },
+        areaServed: business.serviceAreas,
       }}
     />
   );

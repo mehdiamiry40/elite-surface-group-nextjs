@@ -47,6 +47,7 @@ export {
   claddingMaintenanceGuide,
   renderCrackingGuide,
   renderingHebelGuide,
+  renderingPaintedBrickGuide,
   resourceGuides,
   resourcesHub,
   type ResourceGuide,

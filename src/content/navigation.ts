@@ -53,6 +53,10 @@ export const mainNav: readonly NavItem[] = [
         href: "/resources/rendering-hebel-panels-adelaide",
       },
       {
+        label: "Rendering painted brick",
+        href: "/resources/rendering-over-painted-brick-adelaide",
+      },
+      {
         label: "Project planning",
         href: "/project-planning",
       },

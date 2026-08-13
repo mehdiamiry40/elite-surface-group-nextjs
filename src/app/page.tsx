@@ -127,7 +127,7 @@ export default function HomePage() {
             intro="Use our source-backed guides to document the issue, identify the selected wall system and prepare a clearer project brief."
             id="home-resources-title"
           />
-          <ul className="project-link-grid project-link-grid--3 resource-grid">
+          <ul className="project-link-grid project-link-grid--2 resource-grid">
             {resourceGuides.map((guide) => (
               <li className="project-link-card" key={guide.slug}>
                 <span>{guide.category}</span>

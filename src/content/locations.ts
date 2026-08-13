@@ -35,7 +35,7 @@ export const locationPages: readonly LocationPage[] = [
     servicesLead:
       "Our Adelaide work includes architectural cladding, internal and external render, Hebel systems for new construction, and coordinated walling packages for builders and developers.",
     proof: [
-      "Residential render and cladding work completed across metropolitan Adelaide",
+      "Residential render and cladding services available across metropolitan Adelaide",
       "Practical coordination with builders, developers and owner-builders",
       "Clear quotes covering the work, materials and programme assumptions",
     ],
