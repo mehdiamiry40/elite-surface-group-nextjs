@@ -11,6 +11,10 @@ import { mainNav, type NavItem } from "@/content/navigation";
 
 const desktopNav = mainNav.filter((item) => item.label !== "About");
 
+function normalisePath(path: string) {
+  return path === "/" ? path : path.replace(/\/+$/, "");
+}
+
 export default function Header() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -51,12 +55,16 @@ export default function Header() {
     };
   }, [closeMenu, menuOpen]);
 
-  const isCurrent = (href: string) =>
-    pathname === href || pathname.startsWith(`${href}/`);
+  const isExactCurrent = (href: string) =>
+    normalisePath(pathname) === normalisePath(href);
+
+  const isWithin = (href: string) =>
+    isExactCurrent(href) ||
+    normalisePath(pathname).startsWith(`${normalisePath(href)}/`);
 
   const isItemCurrent = (item: NavItem) =>
-    isCurrent(item.href) ||
-    item.children?.some((child) => isCurrent(child.href)) === true;
+    isWithin(item.href) ||
+    item.children?.some((child) => isWithin(child.href)) === true;
 
   return (
     <header
@@ -71,7 +79,7 @@ export default function Header() {
           </span>
           <Link
             href="/about/"
-            aria-current={isCurrent("/about") ? "page" : undefined}
+            aria-current={isExactCurrent("/about") ? "page" : undefined}
           >
             About
           </Link>
@@ -108,7 +116,7 @@ export default function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                aria-current={isCurrent(item.href) ? "page" : undefined}
+                aria-current={isExactCurrent(item.href) ? "page" : undefined}
                 data-current={isItemCurrent(item) ? "true" : "false"}
               >
                 {item.label}
@@ -151,7 +159,7 @@ export default function Header() {
             <Link
               key={item.href}
               href={item.href}
-              aria-current={isCurrent(item.href) ? "page" : undefined}
+              aria-current={isExactCurrent(item.href) ? "page" : undefined}
               onClick={closeMenu}
             >
               <span>{item.label}</span>

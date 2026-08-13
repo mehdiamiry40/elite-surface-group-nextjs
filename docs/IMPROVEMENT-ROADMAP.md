@@ -210,7 +210,7 @@ These remain the highest-impact blockers for a trustworthy live lead funnel:
 | S1 | Verified E-E-A-T on About (team, credentials, process) | Local trust for Adelaide homeowners/builders |
 | S2 | Google Business Profile + NAP consistency | Local pack visibility; schema only if address is public |
 | S3 | Permissioned review program; keep inherited drafts unpublished | Safe social proof; Review schema only when genuine |
-| S4 | Lightweight blog/resources (render cracking, coastal cladding, Hebel vs brick) | Topical authority; Article schema |
+| S4 | Lightweight, source-backed resources | **Complete for initial launch** — resource hub, Adelaide render-cracking guide and Article schema published; expand only from measured demand |
 | S5 | Post-deploy synthetic lead + bounce/complaint webhooks | Proves the funnel still delivers |
 | S6 | Privacy-safe analytics with matching legal disclosure | **Complete** — Vercel Web Analytics measures page views and non-personal conversion events |
 | S7 | Keep Cache Components/PPR off until a CMS/feed exists | Current static SSG is already ideal |
@@ -218,11 +218,10 @@ These remain the highest-impact blockers for a trustworthy live lead funnel:
 Suggested content URLs (only create when copy/proof is ready):
 
 - `/locations/adelaide/`
-- `/locations/adelaide-hills-hebel/` (or similar proof-backed pages)
 - `/projects/[slug]/` case studies
-- `/blog/render-cracking-causes-adelaide/`
-- `/blog/cladding-maintenance-coastal-adelaide/`
-- `/blog/hebel-vs-brick-adelaide-builds/`
+- `/resources/render-cracking-adelaide/` (published)
+- `/resources/cladding-maintenance-coastal-adelaide/` (only after measuring demand)
+- `/resources/hebel-vs-brick-adelaide-builds/` (only after measuring demand)
 
 Schema opportunities once visible on-page: `FAQPage`, richer `Service` /
 `Offer`, `ContactPoint`, `Article`/`BlogPosting`, case-study `CreativeWork`.

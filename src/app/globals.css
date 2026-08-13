@@ -810,7 +810,9 @@ h3 {
   height: 2px;
   margin: 4px auto;
   background: var(--ink);
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .burger[aria-expanded="true"] span:nth-child(1) {
@@ -1044,7 +1046,9 @@ h3 {
   height: 3px;
   margin: auto;
   background: rgb(255 255 255 / 45%);
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .hero__dots button[aria-pressed="true"]::before {
@@ -1096,8 +1100,12 @@ h3 {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background:
-    linear-gradient(100deg, rgb(10 9 8 / 72%) 0%, rgb(10 9 8 / 42%) 55%, rgb(10 9 8 / 28%) 100%);
+  background: linear-gradient(
+    100deg,
+    rgb(10 9 8 / 72%) 0%,
+    rgb(10 9 8 / 42%) 55%,
+    rgb(10 9 8 / 28%) 100%
+  );
 }
 
 .banner h1 {
@@ -1302,6 +1310,9 @@ h3 {
 .steps {
   display: grid;
   gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
   counter-reset: process;
 }
 
@@ -2083,8 +2094,7 @@ h3 {
 .footer {
   padding-top: 72px;
   border-top: 3px solid var(--orange);
-  background:
-    linear-gradient(180deg, #1a1816 0%, var(--ink) 40%);
+  background: linear-gradient(180deg, #1a1816 0%, var(--ink) 40%);
   color: rgb(255 255 255 / 72%);
   font-size: 15px;
 }
@@ -2268,6 +2278,160 @@ h3 {
 .prose ul svg {
   margin-top: 6px;
   color: var(--orange-ink);
+}
+
+/* ------------------------------------------------------- resource articles */
+
+.resource-grid {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.article-prose {
+  max-width: 860px;
+}
+
+.article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-bottom: 22px;
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.article-meta span:first-child {
+  color: var(--orange-ink);
+  font-weight: 600;
+}
+
+.article-lead {
+  color: var(--ink);
+  font-size: clamp(18px, 2vw, 21px);
+  line-height: 1.65;
+}
+
+.article-note {
+  margin: 30px 0;
+  padding: 24px 26px;
+  border-left: 4px solid var(--orange);
+  background: var(--orange-soft);
+}
+
+.article-note strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--ink);
+  font-size: 17px;
+}
+
+.article-note p {
+  margin: 0;
+}
+
+.article-note--warning {
+  margin-top: 36px;
+}
+
+.article-toc {
+  margin-top: 34px;
+  padding: 26px 28px;
+  background: var(--ink);
+  color: var(--white);
+}
+
+.article-toc strong {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--white);
+}
+
+.article-toc ol {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 28px;
+  margin: 0;
+  padding-left: 20px;
+}
+
+.article-toc a {
+  color: rgb(255 255 255 / 85%);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.article-prose h3 {
+  margin-top: 28px;
+}
+
+.article-prose .steps h3 {
+  margin-top: 0;
+}
+
+.article-source {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.article-visual {
+  align-items: start;
+}
+
+.article-figure {
+  margin: 0;
+}
+
+.article-figure figcaption {
+  margin-top: 12px;
+  color: var(--ink-soft);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.professional-list {
+  margin-top: 26px;
+}
+
+.source-list {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+}
+
+.source-list > div {
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.source-list dt {
+  font-weight: 600;
+}
+
+.source-list dd {
+  margin: 4px 0 0;
+}
+
+.article-related {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  margin-top: 34px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.article-related a {
+  color: var(--orange-ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+  .article-toc ol {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 /* -------------------------------------------------------------- not-found */
@@ -2632,7 +2796,9 @@ h5 {
   color: var(--orange-ink);
   font-size: 15px;
   font-weight: 600;
-  transition: gap 0.25s var(--ease-out), color 0.25s var(--ease-out);
+  transition:
+    gap 0.25s var(--ease-out),
+    color 0.25s var(--ease-out);
 }
 
 .text-link:hover {

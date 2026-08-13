@@ -14,6 +14,8 @@ const PRIORITY: Record<string, number> = {
   "/projects/": 0.8,
   "/locations/": 0.8,
   "/project-planning/": 0.8,
+  "/resources/": 0.8,
+  "/resources/render-cracking-adelaide/": 0.85,
   "/privacy-policy/": 0.3,
   "/terms-of-service/": 0.3,
 };
