@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
 import { CtaBand } from "@/components/CtaBand";
-import {
-  BreadcrumbSchema,
-  FAQPageSchema,
-} from "@/components/JsonLd";
+import { BreadcrumbSchema, FAQPageSchema } from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { ServiceCards, TickList } from "@/components/sections";
 import { bannerImages } from "@/content/pages";
@@ -26,13 +23,19 @@ export default function ProjectPlanningPage() {
   return (
     <>
       <BreadcrumbSchema
-        trail={[{ label: "Project planning", href: "/project-planning" }]}
+        trail={[
+          { label: "Resources", href: "/resources" },
+          { label: "Project planning", href: "/project-planning" },
+        ]}
       />
       <FAQPageSchema faqs={projectPlanningPage.faqs} />
       <PageBanner
         title={projectPlanningPage.bannerTitle}
         image={bannerImages["/project-planning"]}
-        crumbs={[{ label: "Project planning" }]}
+        crumbs={[
+          { label: "Resources", href: "/resources" },
+          { label: "Project planning" },
+        ]}
       />
 
       <section className="section" aria-labelledby="planning-details-title">
@@ -41,6 +44,14 @@ export default function ProjectPlanningPage() {
             What to send with your project enquiry
           </h2>
           <p>{projectPlanningPage.lead}</p>
+          <p>
+            If an existing rendered wall is cracked, first read our{" "}
+            <Link href="/resources/render-cracking-adelaide/">
+              Adelaide render-cracking guide
+            </Link>{" "}
+            for what to record and when another professional may need to assess
+            the building before a repair is scoped.
+          </p>
           <TickList items={projectPlanningPage.enquiryDetails} />
           <p>
             If you are still comparing options, start with the outcome you want
@@ -48,8 +59,8 @@ export default function ProjectPlanningPage() {
             <Link href="/cladding/">cladding</Link>,{" "}
             <Link href="/render/">render</Link>,{" "}
             <Link href="/hebel/">Hebel</Link> and{" "}
-            <Link href="/walling/">walling</Link> services for the questions
-            we consider for each type of work.
+            <Link href="/walling/">walling</Link> services for the questions we
+            consider for each type of work.
           </p>
         </div>
       </section>

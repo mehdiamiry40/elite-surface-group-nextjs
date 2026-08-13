@@ -43,6 +43,7 @@ function contentSlugs(relativePath) {
 const serviceSlugs = contentSlugs("src/content/services.ts");
 const projectSlugs = contentSlugs("src/content/projects.ts");
 const locationSlugs = contentSlugs("src/content/locations.ts");
+const resourceSlugs = contentSlugs("src/content/resources.ts");
 const projectSource = readFileSync(
   path.join(projectRoot, "src/content/projects.ts"),
   "utf8",
@@ -56,9 +57,9 @@ const contactRouteSource = readFileSync(
   "utf8",
 );
 const projectServices = new Map(
-  [...projectSource.matchAll(/slug:\s*"([^"]+)"[\s\S]*?service:\s*"([^"]+)"/g)].map(
-    ([, slug, service]) => [slug, service],
-  ),
+  [
+    ...projectSource.matchAll(/slug:\s*"([^"]+)"[\s\S]*?service:\s*"([^"]+)"/g),
+  ].map(([, slug, service]) => [slug, service]),
 );
 
 /** Full public indexable set — must stay in lockstep with `src/app/sitemap.ts`. */
@@ -71,6 +72,8 @@ const EXPECTED_SITEMAP_PATHS = [
   ...projectSlugs.map((slug) => `/projects/${slug}/`),
   "/locations/",
   "/project-planning/",
+  "/resources/",
+  ...resourceSlugs.map((slug) => `/resources/${slug}/`),
   ...locationSlugs.map((slug) => `/locations/${slug}/`),
   "/contact-us/",
   "/privacy-policy/",
@@ -132,7 +135,10 @@ for (const sitemap of [
 /* ----------------------------------------------------- legacy asset URLs */
 
 const legacyAssets = JSON.parse(
-  readFileSync(path.join(projectRoot, "src/content/legacy-assets.json"), "utf8"),
+  readFileSync(
+    path.join(projectRoot, "src/content/legacy-assets.json"),
+    "utf8",
+  ),
 );
 for (const [legacy, destination] of Object.entries(legacyAssets)) {
   const response = await get(legacy, { redirect: "manual" });
@@ -158,7 +164,11 @@ for (const [legacy, destination] of Object.entries(legacyAssets)) {
 /* --------------------------------------------------------------- 404 + SEO */
 
 const notFound = await get("/this-route-does-not-exist/");
-check("unknown route 404s", notFound.status === 404, `status ${notFound.status}`);
+check(
+  "unknown route 404s",
+  notFound.status === 404,
+  `status ${notFound.status}`,
+);
 const notFoundHtml = await notFound.text();
 check(
   "404 does not canonicalize to the homepage",
@@ -177,10 +187,19 @@ check(
   /cladding|render|hebel|walling/i.test(llmsBody) &&
     /elitesurfacegroup\.com\.au/.test(llmsBody),
 );
+check(
+  "llms.txt references the resources hub and render-cracking guide",
+  /\/resources\//.test(llmsBody) &&
+    /\/resources\/render-cracking-adelaide\//.test(llmsBody),
+);
 
 for (const endpoint of ["/sitemap.xml", "/robots.txt"]) {
   const response = await get(endpoint);
-  check(`GET ${endpoint}`, response.status === 200, `status ${response.status}`);
+  check(
+    `GET ${endpoint}`,
+    response.status === 200,
+    `status ${response.status}`,
+  );
 }
 
 const sitemapXml = await (await get("/sitemap.xml")).text();
@@ -261,15 +280,9 @@ for (const [route, html] of pages) {
     /<meta name="description" content="[^"]{40,}"/.test(html),
   );
 
-  check(
-    `${route} has a canonical link`,
-    /<link rel="canonical"/.test(html),
-  );
+  check(`${route} has a canonical link`, /<link rel="canonical"/.test(html));
 
-  check(
-    `${route} has an Open Graph image`,
-    /property="og:image"/.test(html),
-  );
+  check(`${route} has an Open Graph image`, /property="og:image"/.test(html));
 
   check(
     `${route} og:url matches the page`,
@@ -296,8 +309,10 @@ for (const [route, html] of pages) {
   );
 
   check(
-    `${route} references no wp-content asset`,
-    !/wp-content/.test(html),
+    `${route} references no first-party wp-content asset`,
+    !/(?:src|href)="(?:https:\/\/elitesurfacegroup\.com\.au)?\/wp-content\//.test(
+      html,
+    ),
   );
 
   check(
@@ -438,7 +453,11 @@ const contactChecks = [
 
 for (const [name, expected, init] of contactChecks) {
   const response = await get("/api/contact/", init);
-  check(`contact endpoint ${name}`, response.status === expected, `status ${response.status}`);
+  check(
+    `contact endpoint ${name}`,
+    response.status === expected,
+    `status ${response.status}`,
+  );
 }
 
 const invalidService = await get("/api/contact/", {
@@ -535,8 +554,8 @@ check(
     privacyHtml,
   ) &&
     /do not send names, email addresses, phone numbers, enquiry text or other free-text form values in analytics events/.test(
-    privacyHtml,
-  ),
+      privacyHtml,
+    ),
 );
 check(
   "analytics redacts URL query strings and fragments before sending",
@@ -565,7 +584,8 @@ check(
 );
 check(
   "terms are governed by South Australian / Australian law",
-  /South Australia/.test(termsHtml) && /Australian Consumer Law/.test(termsHtml),
+  /South Australia/.test(termsHtml) &&
+    /Australian Consumer Law/.test(termsHtml),
 );
 check(
   "legal pages identify the registered entity and ABN",
@@ -579,9 +599,14 @@ const homeHtml = pages.get("/") ?? "";
 const aboutHtml = pages.get("/about/") ?? "";
 const contactHtml = pages.get("/contact-us/") ?? "";
 const adelaideHtml = pages.get("/locations/adelaide/") ?? "";
+const resourcesHtml = pages.get("/resources/") ?? "";
+const renderCrackingHtml =
+  pages.get("/resources/render-cracking-adelaide/") ?? "";
+const projectPlanningHtml = pages.get("/project-planning/") ?? "";
 check(
   "site publishes the registered entity and ABN",
-  /Elite Surface Group Pty Ltd/.test(homeHtml) && /35 691 074 567/.test(homeHtml),
+  /Elite Surface Group Pty Ltd/.test(homeHtml) &&
+    /35 691 074 567/.test(homeHtml),
 );
 check(
   "every public page publishes the verified Salisbury East address",
@@ -607,7 +632,9 @@ check(
 );
 check(
   "official Instagram profile is linked from the site",
-  /href="https:\/\/www\.instagram\.com\/elite\.surface\.group\/"/.test(homeHtml),
+  /href="https:\/\/www\.instagram\.com\/elite\.surface\.group\/"/.test(
+    homeHtml,
+  ),
 );
 
 const jsonLdBlocks = [
@@ -673,6 +700,92 @@ check(
   !/\"@type\":\"HowTo\"/.test(homeHtml),
 );
 check(
+  "resources hub links to its published guide and project planning",
+  [
+    "/resources/render-cracking-adelaide/",
+    "/project-planning/",
+    "/render/",
+    "/contact-us/#contact",
+  ].every((href) => resourcesHtml.includes(`href="${href}"`)),
+);
+check(
+  "render-cracking guide publishes visible date and illustration boundary",
+  /<time date[Tt]ime="2026-08-13">Published (?:<!-- -->)?13 August 2026<\/time>/.test(
+    renderCrackingHtml,
+  ) &&
+    /AI-generated illustration only—not a photograph of an Elite Surface Group project or an actual property/.test(
+      renderCrackingHtml,
+    ) &&
+    /crack’s appearance can provide context, but cannot identify the cause by itself/.test(
+      renderCrackingHtml,
+    ),
+);
+check(
+  "render-cracking guide links authoritative sources",
+  [
+    "cdn.environment.sa.gov.au/environment/docs/tech_note3_1.pdf",
+    "research.csiro.au/infratech/",
+    "ncc.abcb.gov.au/editions/",
+    "www.sa.gov.au/topics/housing/",
+    "rockcote.com.au/resources/structural-movement/",
+    "dulux.com.au/specifier/products/acratex/",
+  ].every((source) => renderCrackingHtml.includes(source)),
+);
+check(
+  "render-cracking guide links service, proof, location, planning and enquiry",
+  [
+    "/render/",
+    "/projects/",
+    "/locations/adelaide/",
+    "/project-planning/",
+    "/contact-us/#contact",
+  ].every((href) => renderCrackingHtml.includes(`href="${href}"`)),
+);
+check(
+  "render-cracking guide avoids instructional HowTo schema",
+  !/\"@type\":\"HowTo\"/.test(renderCrackingHtml),
+);
+
+const renderCrackingJsonLd = [
+  ...renderCrackingHtml.matchAll(
+    /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g,
+  ),
+]
+  .map(([, block]) => {
+    try {
+      return JSON.parse(block);
+    } catch {
+      return null;
+    }
+  })
+  .find((data) => data?.["@type"] === "Article");
+check(
+  "render-cracking guide emits matching Article schema",
+  renderCrackingJsonLd?.["@id"] ===
+    "https://elitesurfacegroup.com.au/resources/render-cracking-adelaide/#article" &&
+    renderCrackingJsonLd?.url ===
+      "https://elitesurfacegroup.com.au/resources/render-cracking-adelaide/" &&
+    renderCrackingJsonLd?.mainEntityOfPage?.["@id"] ===
+      "https://elitesurfacegroup.com.au/resources/render-cracking-adelaide/" &&
+    renderCrackingJsonLd?.datePublished === "2026-08-13" &&
+    renderCrackingJsonLd?.dateModified === "2026-08-13" &&
+    renderCrackingJsonLd?.image?.contentUrl ===
+      "https://elitesurfacegroup.com.au/images/v2/resource-render-cracking-adelaide.webp" &&
+    renderCrackingJsonLd?.image?.width === 1536 &&
+    renderCrackingJsonLd?.image?.height === 1024 &&
+    renderCrackingJsonLd?.author?.["@id"] ===
+      "https://elitesurfacegroup.com.au/#organization" &&
+    renderCrackingJsonLd?.publisher?.["@id"] ===
+      "https://elitesurfacegroup.com.au/#organization" &&
+    renderCrackingJsonLd?.inLanguage === "en-AU",
+);
+check(
+  "render and planning pages link to the render-cracking guide",
+  [pages.get("/render/") ?? "", projectPlanningHtml].every((html) =>
+    html.includes('href="/resources/render-cracking-adelaide/"'),
+  ),
+);
+check(
   "homepage shows three featured project case studies",
   (homeHtml.match(/>View case study</g) ?? []).length === 3,
 );
@@ -687,28 +800,29 @@ check(
 );
 check(
   "unverified testimonials and ratings are not published",
-  ![...pages.values()].some((html) => /Rated 5 out of 5|Sarah Mitchell/.test(html)),
+  ![...pages.values()].some((html) =>
+    /Rated 5 out of 5|Sarah Mitchell/.test(html),
+  ),
 );
 check(
   "CTA band is not cladding-only",
-  !/External Cladding Services in Adelaide/.test(
-    [...pages.values()].join(""),
-  ),
+  !/External Cladding Services in Adelaide/.test([...pages.values()].join("")),
 );
 
 const projectsHtml = pages.get("/projects/") ?? "";
 check(
   "projects hub emits an ItemList of case studies",
   /\"@type\":\"ItemList\"/.test(projectsHtml) &&
-    projectSlugs.every((slug) =>
-      projectsHtml.includes(`/projects/${slug}/`),
-    ),
+    projectSlugs.every((slug) => projectsHtml.includes(`/projects/${slug}/`)),
 );
 check(
   "projects hub links to its service, location and planning context",
-  ["/render/", "/cladding/", "/locations/adelaide/", "/project-planning/"].every(
-    (href) => projectsHtml.includes(`href="${href}"`),
-  ),
+  [
+    "/render/",
+    "/cladding/",
+    "/locations/adelaide/",
+    "/project-planning/",
+  ].every((href) => projectsHtml.includes(`href="${href}"`)),
 );
 check(
   "projects hub identifies service and photographed stage on every card",
@@ -739,6 +853,12 @@ check(
 for (const slug of projectSlugs) {
   const projectHtml = pages.get(`/projects/${slug}/`) ?? "";
   const service = projectServices.get(slug);
+  if (service === "render") {
+    check(
+      `${slug} links to the render-cracking guide`,
+      projectHtml.includes('href="/resources/render-cracking-adelaide/"'),
+    );
+  }
   check(
     `${slug} links to the Adelaide service area`,
     projectHtml.includes('href="/locations/adelaide/"'),
@@ -809,7 +929,9 @@ check(
 /* ------------------------------------------------------------------ report */
 
 if (failures.length) {
-  console.error(`\nSmoke test FAILED — ${failures.length} of ${checks} checks:\n`);
+  console.error(
+    `\nSmoke test FAILED — ${failures.length} of ${checks} checks:\n`,
+  );
   for (const failure of failures) {
     console.error(`  ✗ ${failure}`);
   }

@@ -26,6 +26,8 @@ const ROUTES = [
   "/hebel/",
   "/walling/",
   "/project-planning/",
+  "/resources/",
+  "/resources/render-cracking-adelaide/",
   "/projects/",
   "/projects/two-storey-exterior-render/",
   "/locations/",
@@ -72,7 +74,10 @@ async function runAxe(page, label) {
   if (violations.length) {
     failures.push(
       `${label}: ${violations
-        .map((violation) => `${violation.impact} ${violation.id}×${violation.nodes}`)
+        .map(
+          (violation) =>
+            `${violation.impact} ${violation.id}×${violation.nodes}`,
+        )
         .join(", ")}`,
     );
   }
@@ -119,16 +124,17 @@ await runAxe(desktopPage, "desktop static hero");
 await desktopPage.goto(new URL("/about/", baseUrl).toString(), {
   waitUntil: "networkidle",
 });
-await desktopPage
-  .getByRole("button", { name: "Next workshop image" })
-  .click();
+await desktopPage.getByRole("button", { name: "Next workshop image" }).click();
 await desktopPage.waitForTimeout(UI_SETTLE_MS);
 await runAxe(desktopPage, "desktop workshop carousel advanced");
 
 await desktopPage.goto(new URL("/projects/", baseUrl).toString(), {
   waitUntil: "networkidle",
 });
-await desktopPage.getByRole("button", { name: /Enlarge project photo/ }).first().click();
+await desktopPage
+  .getByRole("button", { name: /Enlarge project photo/ })
+  .first()
+  .click();
 await desktopPage.waitForTimeout(UI_SETTLE_MS);
 await runAxe(desktopPage, "desktop project lightbox open");
 await desktop.close();
@@ -154,7 +160,9 @@ await mobile.close();
 await browser.close();
 
 if (failures.length) {
-  console.error(`\nA11y test FAILED — ${failures.length} of ${checks} checks:\n`);
+  console.error(
+    `\nA11y test FAILED — ${failures.length} of ${checks} checks:\n`,
+  );
   for (const failure of failures) {
     console.error(`  ✗ ${failure}`);
   }

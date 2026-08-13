@@ -63,7 +63,8 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
   const relatedProjects = projects
     .filter(
       (candidate) =>
-        candidate.service === project.service && candidate.slug !== project.slug,
+        candidate.service === project.service &&
+        candidate.slug !== project.slug,
     )
     .slice(0, 3);
 
@@ -165,6 +166,11 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
             </Link>
             <Link href="/locations/adelaide/">Adelaide service area</Link>
             <Link href="/project-planning/">Plan a project enquiry</Link>
+            {project.service === "render" ? (
+              <Link href="/resources/render-cracking-adelaide/">
+                Read the render-cracking guide
+              </Link>
+            ) : null}
             <Link href="/projects/">Back to all projects</Link>
             <Link href="/contact-us/#contact">Discuss a similar project</Link>
           </nav>

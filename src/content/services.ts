@@ -32,7 +32,8 @@ export const services: readonly Service[] = [
     name: "Cladding",
     bannerTitle: "Cladding & Facade Installation Adelaide",
     image: "/images/v2/service-cladding-installation.webp",
-    imageAlt: "Installer aligning charcoal vertical cladding on an Adelaide home",
+    imageAlt:
+      "Installer aligning charcoal vertical cladding on an Adelaide home",
     imageWidth: 1600,
     imageHeight: 1067,
     summary:
@@ -47,7 +48,8 @@ export const services: readonly Service[] = [
     detail: [
       "A strong cladding result comes down to what sits behind the finished surface. We focus on substrate readiness, accurate setting-out, aligned panel lines and tidy junctions around windows, corners and adjoining finishes. Product choice, exposure and ongoing maintenance all influence long-term performance, so those details are considered before installation begins.",
     ],
-    benefitsLead: "A well-selected and correctly installed cladding system can offer:",
+    benefitsLead:
+      "A well-selected and correctly installed cladding system can offer:",
     benefits: [
       "A distinctive exterior finish shaped around the architectural design",
       "Added protection for the wall build-up behind the cladding",
@@ -74,7 +76,8 @@ export const services: readonly Service[] = [
           "We install the cladding components included in the agreed facade scope. The quote identifies the selected system, substrate assumptions, material responsibilities and any work by adjoining trades before installation starts.",
       },
       {
-        question: "Is cladding suitable for coastal or wind-exposed Adelaide sites?",
+        question:
+          "Is cladding suitable for coastal or wind-exposed Adelaide sites?",
         answer:
           "Yes, many systems are suitable for exposed sites when the product, fixings and detailing are specified for those conditions. We consider exposure during quoting and follow the relevant system requirements during installation.",
       },
@@ -118,6 +121,10 @@ export const services: readonly Service[] = [
       { label: "View render projects", href: "/projects/" },
       { label: "Cladding installation", href: "/cladding/" },
       { label: "Adelaide service area", href: "/locations/adelaide/" },
+      {
+        label: "What causes render cracking?",
+        href: "/resources/render-cracking-adelaide/",
+      },
       { label: "Contact for a quote", href: "/contact-us/#contact" },
       { label: "Plan your project enquiry", href: "/project-planning/" },
     ],
@@ -144,7 +151,8 @@ export const services: readonly Service[] = [
     name: "Hebel",
     bannerTitle: "Hebel Installation Adelaide",
     image: "/images/v2/service-hebel-installation.webp",
-    imageAlt: "Installer checking lightweight AAC wall panels on a new Adelaide build",
+    imageAlt:
+      "Installer checking lightweight AAC wall panels on a new Adelaide build",
     imageWidth: 1600,
     imageHeight: 1067,
     summary:
@@ -197,7 +205,8 @@ export const services: readonly Service[] = [
     name: "Walling",
     bannerTitle: "Walling Services Adelaide",
     image: "/images/v2/service-walling-installation.webp",
-    imageAlt: "Installer checking internal steel wall framing with a laser level",
+    imageAlt:
+      "Installer checking internal steel wall framing with a laser level",
     imageWidth: 1600,
     imageHeight: 1067,
     summary:

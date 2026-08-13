@@ -1,6 +1,7 @@
 import { absoluteUrl } from "@/lib/seo";
 import { business } from "@/content/business";
 import type { Project } from "@/content/projects";
+import type { ResourceGuide } from "@/content/resources";
 import { services, type Service, type ServiceFaq } from "@/content/services";
 
 /**
@@ -118,6 +119,55 @@ export function ProjectSchema({ project }: { project: Project }) {
           provider: { "@id": `${business.siteUrl}/#organization` },
         },
         creator: { "@id": `${business.siteUrl}/#organization` },
+        inLanguage: "en-AU",
+      }}
+    />
+  );
+}
+
+/** Visible editorial guide authored and published by the business. */
+export function ArticleSchema({ guide }: { guide: ResourceGuide }) {
+  const url = absoluteUrl(`/resources/${guide.slug}`);
+
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "@id": `${url}#article`,
+        url,
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": url,
+        },
+        headline: guide.title,
+        description: guide.metaDescription,
+        image: {
+          "@type": "ImageObject",
+          contentUrl: absoluteUrl(guide.image),
+          caption: guide.imageCaption,
+          width: guide.imageWidth,
+          height: guide.imageHeight,
+        },
+        datePublished: guide.published,
+        dateModified: guide.modified,
+        author: {
+          "@type": "Organization",
+          "@id": `${business.siteUrl}/#organization`,
+          name: business.name,
+          url: business.siteUrl,
+        },
+        publisher: {
+          "@type": "Organization",
+          "@id": `${business.siteUrl}/#organization`,
+          name: business.name,
+          url: business.siteUrl,
+        },
+        about: {
+          "@type": "Service",
+          "@id": `${absoluteUrl("/render")}#service`,
+          name: "Render",
+        },
         inLanguage: "en-AU",
       }}
     />

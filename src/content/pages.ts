@@ -23,8 +23,7 @@ export const aboutPage = {
   metaDescription:
     "Meet our Salisbury East-based team providing cladding, render, Hebel and walling installations across Adelaide and South Australia.",
   lead: "Elite Surface Group brings cladding, render, Hebel and walling together for homeowners, builders and developers across Adelaide and South Australia.",
-  identity:
-    `${business.name} is operated by ${business.legalName} (ABN ${business.abn}) from ${business.address.formatted}. From this Adelaide base, we deliver cladding, render, Hebel and walling work across metropolitan Adelaide and wider South Australia.`,
+  identity: `${business.name} is operated by ${business.legalName} (ABN ${business.abn}) from ${business.address.formatted}. From this Adelaide base, we deliver cladding, render, Hebel and walling work across metropolitan Adelaide and wider South Australia.`,
   gallery: [
     {
       image: "/images/v2/home-team-site-review.webp",
@@ -85,8 +84,7 @@ export const projectsPage = {
 export const contactPage = {
   bannerTitle: "Let’s Talk About Your Project",
   metaTitle: "Contact Our Salisbury East Team",
-  metaDescription:
-    `Contact ${business.name} at ${business.address.formatted} for cladding, render, Hebel and walling enquiries across Adelaide.`,
+  metaDescription: `Contact ${business.name} at ${business.address.formatted} for cladding, render, Hebel and walling enquiries across Adelaide.`,
   intro:
     "Tell our Salisbury East team what you’re planning and where the project is located. We’ll review the details and respond within one business day.",
 } as const;
@@ -100,6 +98,8 @@ export const bannerImages: Record<string, string> = {
   "/hebel": "/images/v2/banner-hebel.webp",
   "/walling": "/images/v2/banner-walling.webp",
   "/project-planning": "/images/v2/banner-services.webp",
+  "/resources": "/images/v2/banner-services.webp",
+  "/resources/render-cracking-adelaide": "/images/v2/banner-render.webp",
   "/projects": "/images/v2/banner-projects.webp",
   "/locations": "/images/v2/banner-locations.webp",
   "/locations/adelaide": "/images/v2/banner-locations.webp",

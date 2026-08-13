@@ -62,6 +62,9 @@ type PageMetadataInput = {
   image?: SocialImage;
   /** When false, omit robots index (used by the 404 page). */
   index?: boolean;
+  openGraphType?: "website" | "article";
+  publishedTime?: string;
+  modifiedTime?: string;
 };
 
 /** Title, description, canonical and matching Open Graph / Twitter tags. */
@@ -71,6 +74,9 @@ export function pageMetadata({
   path,
   image = defaultSocialImage,
   index = true,
+  openGraphType = "website",
+  publishedTime,
+  modifiedTime,
 }: PageMetadataInput): Metadata {
   const url = absoluteUrl(path);
   const imageUrl = absoluteUrl(image.path);
@@ -96,7 +102,7 @@ export function pageMetadata({
         }
       : { index: false, follow: false },
     openGraph: {
-      type: "website",
+      type: openGraphType,
       siteName: business.name,
       locale: "en_AU",
       url,
@@ -110,6 +116,13 @@ export function pageMetadata({
           alt: image.alt,
         },
       ],
+      ...(openGraphType === "article"
+        ? {
+            publishedTime,
+            modifiedTime,
+            authors: [business.name],
+          }
+        : {}),
     },
     twitter: {
       card: "summary_large_image",

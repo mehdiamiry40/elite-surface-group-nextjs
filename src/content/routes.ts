@@ -1,5 +1,6 @@
 import { locationPages } from "@/content/locations";
 import { projects } from "@/content/projects";
+import { resourceGuides } from "@/content/resources";
 import { services } from "@/content/services";
 
 /**
@@ -19,6 +20,8 @@ export const publicPaths = [
   "/locations/",
   ...locationPages.map((location) => `/locations/${location.slug}/`),
   "/project-planning/",
+  "/resources/",
+  ...resourceGuides.map((guide) => `/resources/${guide.slug}/`),
   "/contact-us/",
   "/privacy-policy/",
   "/terms-of-service/",
