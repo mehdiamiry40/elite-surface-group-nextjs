@@ -16,6 +16,9 @@ const projectRoot = path.resolve(
   "..",
 );
 const baseUrl = new URL(process.env.SMOKE_BASE_URL ?? "http://localhost:3000");
+const isLoopbackSmoke = ["localhost", "127.0.0.1", "[::1]"].includes(
+  baseUrl.hostname,
+);
 
 const failures = [];
 let checks = 0;
@@ -600,19 +603,23 @@ const contactChecks = [
       body: "{}",
     },
   ],
-  [
-    "rejects a malformed body",
-    400,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Origin: baseUrl.origin,
-        "x-real-ip": "198.51.100.10",
-      },
-      body: "null",
-    },
-  ],
+  ...(isLoopbackSmoke
+    ? [
+        [
+          "rejects a malformed body",
+          400,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Origin: baseUrl.origin,
+              "x-real-ip": "198.51.100.10",
+            },
+            body: "null",
+          },
+        ],
+      ]
+    : []),
 ];
 
 for (const [name, expected, init] of contactChecks) {
@@ -624,7 +631,12 @@ for (const [name, expected, init] of contactChecks) {
   );
 }
 
-const invalidService = await get("/api/contact/", {
+// Detailed validation probes deliberately consume the endpoint's rate-limit
+// budget. Run them against the isolated local/CI server, where the test IPs are
+// controllable; a remote smoke run keeps to the pre-rate-limit 415/403 probes
+// above so verification cannot temporarily throttle real visitors.
+if (isLoopbackSmoke) {
+  const invalidService = await get("/api/contact/", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
@@ -752,6 +764,7 @@ check(
     ),
   `status ${progressiveForm.status}, location ${progressiveLocation}`,
 );
+}
 
 /* ------------------------------------------- content / compliance guards */
 
