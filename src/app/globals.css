@@ -1721,11 +1721,21 @@ h3 {
   margin-top: 26px;
 }
 
+.contact-details,
+.footer__address {
+  font-style: normal;
+}
+
 .contact-list__row {
   display: grid;
   grid-template-columns: 42px 1fr;
   gap: 4px 14px;
   align-items: center;
+}
+
+.contact-list__row--plain {
+  padding-left: 56px;
+  grid-template-columns: 1fr;
 }
 
 .contact-list__icon {
@@ -1944,8 +1954,10 @@ h3 {
 .footer__contact {
   display: grid;
   gap: 12px;
+  margin-top: 12px;
 }
 
+.footer__service-area,
 .footer__hours {
   margin-top: 16px;
 }

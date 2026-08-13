@@ -517,9 +517,93 @@ check(
 );
 
 const homeHtml = pages.get("/") ?? "";
+const aboutHtml = pages.get("/about/") ?? "";
+const contactHtml = pages.get("/contact-us/") ?? "";
+const adelaideHtml = pages.get("/locations/adelaide/") ?? "";
 check(
   "site publishes the registered entity and ABN",
   /Elite Surface Group Pty Ltd/.test(homeHtml) && /35 691 074 567/.test(homeHtml),
+);
+check(
+  "every public page publishes the verified Salisbury East address",
+  [...pages.values()].every((html) =>
+    /22 Robin St, Salisbury East SA 5109/.test(html),
+  ),
+);
+check(
+  "contact page publishes complete local contact details",
+  /Contact our Salisbury East team/.test(contactHtml) &&
+    /22 Robin St, Salisbury East SA 5109/.test(contactHtml) &&
+    /0413 844 912/.test(contactHtml) &&
+    /info@elitesurfacegroup\.com\.au/.test(contactHtml) &&
+    /Adelaide &amp; South Australia/.test(contactHtml),
+);
+check(
+  "about and Adelaide pages identify the Salisbury East base",
+  /Salisbury East/.test(aboutHtml) && /Salisbury East/.test(adelaideHtml),
+);
+check(
+  "footer links directly to the Adelaide service area",
+  /href="\/locations\/adelaide\/?"/.test(homeHtml),
+);
+check(
+  "official Instagram profile is linked from the site",
+  /href="https:\/\/www\.instagram\.com\/elite\.surface\.group\/"/.test(homeHtml),
+);
+
+const jsonLdBlocks = [
+  ...homeHtml.matchAll(
+    /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g,
+  ),
+];
+const parsedJsonLd = [];
+for (const [, block] of jsonLdBlocks) {
+  try {
+    parsedJsonLd.push(JSON.parse(block));
+  } catch {
+    check("homepage JSON-LD blocks are valid JSON", false);
+  }
+}
+const organisationJsonLd = parsedJsonLd.find((data) => {
+  const types = Array.isArray(data?.["@type"])
+    ? data["@type"]
+    : [data?.["@type"]];
+  return types.includes("HomeAndConstructionBusiness");
+});
+check(
+  "organisation schema publishes the verified local NAP",
+  organisationJsonLd?.name === "Elite Surface Group" &&
+    organisationJsonLd?.legalName === "Elite Surface Group Pty Ltd" &&
+    organisationJsonLd?.telephone === "+61413844912" &&
+    organisationJsonLd?.email === "info@elitesurfacegroup.com.au" &&
+    organisationJsonLd?.address?.streetAddress === "22 Robin St" &&
+    organisationJsonLd?.address?.addressLocality === "Salisbury East" &&
+    organisationJsonLd?.address?.addressRegion === "SA" &&
+    organisationJsonLd?.address?.postalCode === "5109" &&
+    organisationJsonLd?.address?.addressCountry === "AU",
+);
+check(
+  "organisation schema links directions to the verified address",
+  organisationJsonLd?.hasMap ===
+    "https://www.google.com/maps/dir/?api=1&destination=22%20Robin%20St%2C%20Salisbury%20East%20SA%205109",
+);
+check(
+  "organisation schema and visible footer publish the same business hours",
+  organisationJsonLd?.openingHoursSpecification?.opens === "09:00" &&
+    organisationJsonLd?.openingHoursSpecification?.closes === "17:00" &&
+    organisationJsonLd?.openingHoursSpecification?.dayOfWeek?.length === 6 &&
+    organisationJsonLd?.openingHoursSpecification?.dayOfWeek?.includes(
+      "Saturday",
+    ) &&
+    [...pages.values()].every((html) =>
+      /Monday–Saturday, 9:00 am–5:00 pm/.test(html),
+    ),
+);
+check(
+  "organisation schema links the official Instagram entity",
+  organisationJsonLd?.sameAs?.includes(
+    "https://www.instagram.com/elite.surface.group/",
+  ),
 );
 check(
   "homepage links directly to the Adelaide service area",

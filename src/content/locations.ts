@@ -1,3 +1,5 @@
+import { business } from "@/content/business";
+
 export type LocationPage = {
   slug: string;
   name: string;
@@ -25,9 +27,9 @@ export const locationPages: readonly LocationPage[] = [
     bannerTitle: "Cladding, Render, Hebel & Walling in Adelaide",
     metaTitle: "Cladding & Rendering Adelaide",
     metaDescription:
-      "Cladding, render, Hebel and walling installation across Adelaide, with clear quotes, practical coordination and careful finishes.",
+      "Salisbury East-based cladding, render, Hebel and walling installation across Adelaide, with clear quotes and practical project coordination.",
     intro: [
-      "Elite Surface Group delivers cladding, render, Hebel and walling for homes, renovations, multi-unit developments and commercial builds across metropolitan Adelaide and wider South Australia.",
+      `Based in ${business.address.suburb}, ${business.name} delivers cladding, render, Hebel and walling for homes, renovations, multi-unit developments and commercial builds across metropolitan Adelaide and wider South Australia.`,
       "Whether you need one feature elevation or a coordinated facade and walling package, we quote from the plans and site information, then install to the agreed specification. Explore our Adelaide project details or send us your brief for an obligation-free quote.",
     ],
     servicesLead:
