@@ -1,0 +1,102 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import ContactSection from "@/components/ContactSection";
+import { CtaBand } from "@/components/CtaBand";
+import {
+  BreadcrumbSchema,
+  FAQPageSchema,
+} from "@/components/JsonLd";
+import PageBanner from "@/components/PageBanner";
+import { ServiceCards, TickList } from "@/components/sections";
+import { bannerImages } from "@/content/pages";
+import { projectPlanningPage } from "@/content/project-planning";
+import { ogCard, pageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = pageMetadata({
+  title: projectPlanningPage.metaTitle,
+  description: projectPlanningPage.metaDescription,
+  path: "/project-planning",
+  image: ogCard(
+    "services",
+    "Plan a cladding, render, Hebel or walling project in Adelaide",
+  ),
+});
+
+export default function ProjectPlanningPage() {
+  return (
+    <>
+      <BreadcrumbSchema
+        trail={[{ label: "Project planning", href: "/project-planning" }]}
+      />
+      <FAQPageSchema faqs={projectPlanningPage.faqs} />
+      <PageBanner
+        title={projectPlanningPage.bannerTitle}
+        image={bannerImages["/project-planning"]}
+        crumbs={[{ label: "Project planning" }]}
+      />
+
+      <section className="section" aria-labelledby="planning-details-title">
+        <div className="shell prose">
+          <h2 id="planning-details-title">
+            What to send with your project enquiry
+          </h2>
+          <p>{projectPlanningPage.lead}</p>
+          <TickList items={projectPlanningPage.enquiryDetails} />
+          <p>
+            If you are still comparing options, start with the outcome you want
+            and the information you already have. Explore our{" "}
+            <Link href="/cladding/">cladding</Link>,{" "}
+            <Link href="/render/">render</Link>,{" "}
+            <Link href="/hebel/">Hebel</Link> and{" "}
+            <Link href="/walling/">walling</Link> services for the questions
+            we consider for each type of work.
+          </p>
+        </div>
+      </section>
+
+      <section
+        className="section section--tint"
+        aria-labelledby="planning-review-title"
+      >
+        <div className="shell prose">
+          <h2 id="planning-review-title">What we review before quoting</h2>
+          {projectPlanningPage.reviewPoints.map((point) => (
+            <div key={point.title}>
+              <h3>{point.title}</h3>
+              <p>{point.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="section" aria-labelledby="planning-quote-title">
+        <div className="shell prose">
+          <h2 id="planning-quote-title">What a clear quote should explain</h2>
+          <p>
+            Once the available information has been reviewed, the written quote
+            should make the agreed scope and its main assumptions easy to find.
+            Our quotes set out:
+          </p>
+          <TickList items={projectPlanningPage.quoteIncludes} />
+
+          <h2 id="planning-faqs">Project planning FAQs</h2>
+          <dl className="faq-list" aria-labelledby="planning-faqs">
+            {projectPlanningPage.faqs.map((faq) => (
+              <div key={faq.question} className="faq-list__item">
+                <dt>{faq.question}</dt>
+                <dd>{faq.answer}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
+      <ServiceCards title="Explore the right service for your project" />
+      <ContactSection
+        withDetails
+        intro="Send us the plans, photos and project details you have. We’ll review the information and let you know what is still needed for an obligation-free quote."
+      />
+      <CtaBand />
+    </>
+  );
+}

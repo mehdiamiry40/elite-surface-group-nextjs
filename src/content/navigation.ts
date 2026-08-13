@@ -33,6 +33,7 @@ export const mainNav: readonly NavItem[] = [
     ],
   },
   { label: "Projects", href: "/projects" },
+  { label: "Project planning", href: "/project-planning" },
   { label: "Service areas", href: "/locations" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact-us" },
@@ -42,6 +43,7 @@ export const footerNav = {
   quickLinks: [
     { label: "About Us", href: "/about" },
     { label: "Projects", href: "/projects" },
+    { label: "Project planning", href: "/project-planning" },
     { label: "Service areas", href: "/locations" },
     { label: "Contact Us", href: "/contact-us" },
   ],
