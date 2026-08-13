@@ -522,6 +522,10 @@ check(
   /Elite Surface Group Pty Ltd/.test(homeHtml) && /35 691 074 567/.test(homeHtml),
 );
 check(
+  "homepage links directly to the Adelaide service area",
+  /href="\/locations\/adelaide\/"/.test(homeHtml),
+);
+check(
   "homepage does not emit instructional HowTo schema",
   !/\"@type\":\"HowTo\"/.test(homeHtml),
 );
@@ -548,6 +552,42 @@ check(
     [...pages.values()].join(""),
   ),
 );
+
+const projectsHtml = pages.get("/projects/") ?? "";
+check(
+  "projects hub emits an ItemList of case studies",
+  /\"@type\":\"ItemList\"/.test(projectsHtml) &&
+    projectSlugs.every((slug) =>
+      projectsHtml.includes(`/projects/${slug}/`),
+    ),
+);
+check(
+  "projects hub links to its service, location and planning context",
+  ["/render/", "/cladding/", "/locations/adelaide/", "/project-planning/"].every(
+    (href) => projectsHtml.includes(`href="${href}"`),
+  ),
+);
+
+check(
+  "render page links to its two-storey case study",
+  (pages.get("/render/") ?? "").includes(
+    'href="/projects/two-storey-exterior-render/"',
+  ),
+);
+check(
+  "cladding page links to its feature-cladding case study",
+  (pages.get("/cladding/") ?? "").includes(
+    'href="/projects/dark-feature-cladding/"',
+  ),
+);
+
+for (const slug of projectSlugs) {
+  const projectHtml = pages.get(`/projects/${slug}/`) ?? "";
+  check(
+    `${slug} links to the Adelaide service area`,
+    projectHtml.includes('href="/locations/adelaide/"'),
+  );
+}
 
 /* ------------------------------------------------------------------ report */
 

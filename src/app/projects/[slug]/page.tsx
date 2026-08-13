@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import PageBanner from "@/components/PageBanner";
 import { CtaBand } from "@/components/CtaBand";
+import { ProjectLinks } from "@/components/sections";
 import { BreadcrumbSchema, ProjectSchema } from "@/components/JsonLd";
 import { bannerImages } from "@/content/pages";
 import { getProject, projects } from "@/content/projects";
@@ -51,6 +52,13 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
     notFound();
   }
 
+  const relatedProjects = projects
+    .filter(
+      (candidate) =>
+        candidate.service === project.service && candidate.slug !== project.slug,
+    )
+    .slice(0, 3);
+
   return (
     <>
       <BreadcrumbSchema
@@ -86,7 +94,8 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
             <h2 id="case-study-title">{project.title}</h2>
             <p>{project.summary}</p>
             <p>
-              <strong>Location:</strong> {project.suburb}
+              <strong>Location:</strong>{" "}
+              <Link href="/locations/adelaide/">{project.suburb}</Link>
               <br />
               <strong>Service:</strong>{" "}
               <Link href={`/${project.service}/`}>{project.service}</Link>
@@ -105,6 +114,13 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      <ProjectLinks
+        items={relatedProjects}
+        title={`More ${project.service} project details`}
+        intro={`Compare the scope, site challenges and finished details from other completed ${project.service} work across Adelaide.`}
+        id="related-project-details"
+      />
 
       <CtaBand />
     </>

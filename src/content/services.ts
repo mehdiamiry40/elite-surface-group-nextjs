@@ -30,19 +30,19 @@ export const services: readonly Service[] = [
   {
     slug: "cladding",
     name: "Cladding",
-    bannerTitle: "Cladding Installation Adelaide",
+    bannerTitle: "Cladding & Facade Installation Adelaide",
     image: "/images/v2/service-cladding-installation.webp",
     imageAlt: "Installer aligning charcoal vertical cladding on an Adelaide home",
     imageWidth: 1600,
     imageHeight: 1067,
     summary:
       "Architectural cladding installed with careful setting-out, clean junctions and close attention to the system details.",
-    metaTitle: "Cladding Installation Adelaide",
+    metaTitle: "Cladding & Facade Installation Adelaide",
     metaDescription:
-      "Architectural cladding installation across Adelaide for homes and commercial builds, planned around the design, substrate, exposure and budget.",
+      "Architectural cladding and facade installation across Adelaide for homes and commercial builds, planned around the design, substrate, exposure and budget.",
     intro: [
       "The right cladding can completely change the character of a building while adding another layer of protection to the wall behind it. We install architectural cladding for new homes, renovations and commercial projects across Adelaide and South Australia.",
-      "Every project starts with the building, not a one-size-fits-all product. We consider the design, substrate, site exposure and budget, then install the selected system to the manufacturer’s requirements and project specification.",
+      "Every cladding and facade installation starts with the building, not a one-size-fits-all product. We consider the design, substrate, site exposure and budget, then install the selected system to the manufacturer’s requirements and project specification.",
     ],
     detail: [
       "A strong cladding result comes down to what sits behind the finished surface. We focus on substrate readiness, accurate setting-out, aligned panel lines and tidy junctions around windows, corners and adjoining finishes. Product choice, exposure and ongoing maintenance all influence long-term performance, so those details are considered before installation begins.",
@@ -67,6 +67,11 @@ export const services: readonly Service[] = [
         question: "Which cladding systems do you install in Adelaide?",
         answer:
           "We install a range of residential and commercial cladding systems. The best fit depends on the design, substrate, site exposure and budget, so we confirm the system after reviewing the project details.",
+      },
+      {
+        question: "Do you handle complete facade and cladding installation?",
+        answer:
+          "We install the cladding components included in the agreed facade scope. The quote identifies the selected system, substrate assumptions, material responsibilities and any work by adjoining trades before installation starts.",
       },
       {
         question: "Is cladding suitable for coastal or wind-exposed Adelaide sites?",
@@ -112,6 +117,7 @@ export const services: readonly Service[] = [
     relatedLinks: [
       { label: "View render projects", href: "/projects/" },
       { label: "Cladding installation", href: "/cladding/" },
+      { label: "Adelaide service area", href: "/locations/adelaide/" },
       { label: "Contact for a quote", href: "/contact-us/#contact" },
       { label: "Plan your project enquiry", href: "/project-planning/" },
     ],
@@ -136,14 +142,14 @@ export const services: readonly Service[] = [
   {
     slug: "hebel",
     name: "Hebel",
-    bannerTitle: "Hebel Wall Systems Adelaide",
+    bannerTitle: "Hebel Installation Adelaide",
     image: "/images/v2/service-hebel-installation.webp",
     imageAlt: "Installer checking lightweight AAC wall panels on a new Adelaide build",
     imageWidth: 1600,
     imageHeight: 1067,
     summary:
       "Hebel wall systems installed with accurate panel placement, secure fixing and careful junction detailing.",
-    metaTitle: "Hebel Wall Systems Adelaide",
+    metaTitle: "Hebel Installation Adelaide",
     metaDescription:
       "Hebel wall system installation across Adelaide for residential and commercial projects, completed to the specified fixing and performance details.",
     intro: [
@@ -180,9 +186,9 @@ export const services: readonly Service[] = [
           "Yes. Hebel is used across homes, multi-residential developments and commercial projects. Its suitability depends on the structural design, required finishes and full project specification.",
       },
       {
-        question: "Do you only supply labour, or full Hebel installation?",
+        question: "Do you supply and install Hebel in Adelaide?",
         answer:
-          "We install Hebel wall systems to an agreed scope. The quote confirms who supplies the panels, accessories and finishing components so every responsibility is clear before work starts.",
+          "We install Hebel wall systems to an agreed scope. The quote confirms whether panels, accessories and finishing components are supplied by us, the builder or another party, so every responsibility is clear before work starts.",
       },
     ],
   },
@@ -218,6 +224,7 @@ export const services: readonly Service[] = [
     relatedLinks: [
       { label: "Cladding services", href: "/cladding/" },
       { label: "Hebel wall systems", href: "/hebel/" },
+      { label: "Adelaide service area", href: "/locations/adelaide/" },
       { label: "Contact for a quote", href: "/contact-us/#contact" },
       { label: "Plan your project enquiry", href: "/project-planning/" },
     ],
