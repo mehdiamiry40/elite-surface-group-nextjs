@@ -60,6 +60,7 @@ export const services: readonly Service[] = [
       { label: "View cladding projects", href: "/projects/" },
       { label: "Rendering services", href: "/render/" },
       { label: "Adelaide service area", href: "/locations/adelaide/" },
+      { label: "Plan your project enquiry", href: "/project-planning/" },
     ],
     faqs: [
       {
@@ -112,6 +113,7 @@ export const services: readonly Service[] = [
       { label: "View render projects", href: "/projects/" },
       { label: "Cladding installation", href: "/cladding/" },
       { label: "Contact for a quote", href: "/contact-us/#contact" },
+      { label: "Plan your project enquiry", href: "/project-planning/" },
     ],
     faqs: [
       {
@@ -164,6 +166,7 @@ export const services: readonly Service[] = [
       { label: "Walling services", href: "/walling/" },
       { label: "View related projects", href: "/projects/" },
       { label: "Adelaide service area", href: "/locations/adelaide/" },
+      { label: "Plan your project enquiry", href: "/project-planning/" },
     ],
     faqs: [
       {
@@ -216,6 +219,7 @@ export const services: readonly Service[] = [
       { label: "Cladding services", href: "/cladding/" },
       { label: "Hebel wall systems", href: "/hebel/" },
       { label: "Contact for a quote", href: "/contact-us/#contact" },
+      { label: "Plan your project enquiry", href: "/project-planning/" },
     ],
     faqs: [
       {

@@ -2352,6 +2352,14 @@ h5 {
   text-decoration: none;
 }
 
+.text-link--light {
+  color: #ffb58f;
+}
+
+.text-link--light:hover {
+  color: var(--white);
+}
+
 /* two-tier sticky navigation */
 
 .header {

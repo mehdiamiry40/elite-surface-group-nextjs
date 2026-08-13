@@ -5,7 +5,7 @@ import { projects } from "@/content/projects";
 import { services } from "@/content/services";
 
 /** Updated whenever this typed content release changes public pages. */
-const CONTENT_LAST_MODIFIED = new Date("2026-08-07T00:00:00.000Z");
+const CONTENT_LAST_MODIFIED = new Date("2026-08-13T00:00:00.000Z");
 
 const PRIORITY: Record<string, number> = {
   "/": 1,
@@ -15,6 +15,7 @@ const PRIORITY: Record<string, number> = {
   "/about/": 0.8,
   "/projects/": 0.8,
   "/locations/": 0.8,
+  "/project-planning/": 0.8,
   "/privacy-policy/": 0.3,
   "/terms-of-service/": 0.3,
 };
@@ -28,6 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/projects/",
     ...projects.map((project) => `/projects/${project.slug}/`),
     "/locations/",
+    "/project-planning/",
     ...locationPages.map((location) => `/locations/${location.slug}/`),
     "/contact-us/",
     "/privacy-policy/",

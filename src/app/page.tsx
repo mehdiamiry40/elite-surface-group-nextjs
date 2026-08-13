@@ -131,6 +131,15 @@ export default function HomePage() {
               </li>
             ))}
           </ol>
+          <p className="section-cta">
+            <Link
+              className="text-link text-link--light"
+              href="/project-planning/"
+            >
+              See what to send for a clearer quote
+              <ArrowRightIcon />
+            </Link>
+          </p>
         </div>
       </section>
 

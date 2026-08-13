@@ -25,6 +25,7 @@ const ROUTES = [
   "/render/",
   "/hebel/",
   "/walling/",
+  "/project-planning/",
   "/projects/",
   "/projects/two-storey-exterior-render/",
   "/locations/",

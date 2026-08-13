@@ -47,3 +47,4 @@ export {
   locationsHub,
   type LocationPage,
 } from "@/content/locations";
+export { projectPlanningPage } from "@/content/project-planning";

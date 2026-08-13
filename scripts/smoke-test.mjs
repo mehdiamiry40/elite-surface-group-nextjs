@@ -53,6 +53,7 @@ const EXPECTED_SITEMAP_PATHS = [
   "/projects/",
   ...projectSlugs.map((slug) => `/projects/${slug}/`),
   "/locations/",
+  "/project-planning/",
   ...locationSlugs.map((slug) => `/locations/${slug}/`),
   "/contact-us/",
   "/privacy-policy/",
@@ -69,6 +70,16 @@ for (const route of ROUTES) {
   pages.set(route, html);
   check(`GET ${route}`, response.status === 200, `status ${response.status}`);
 }
+
+const homeH1 =
+  (pages.get("/") ?? "").match(/<h1[^>]*>([\s\S]*?)<\/h1>/i)?.[1] ?? "";
+const homeH1Text = homeH1.replace(/<[^>]+>/g, " ").toLowerCase();
+check(
+  "homepage H1 describes the core Adelaide services",
+  ["adelaide", "cladding", "render", "hebel", "walling"].every((term) =>
+    homeH1Text.includes(term),
+  ),
+);
 
 /* -------------------------------------------------------------- retired WP */
 
@@ -197,19 +208,31 @@ check(
 
 /* ----------------------------------------------------------------- content */
 
+function decodeHtmlText(value) {
+  return value
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&#x27;/gi, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">");
+}
+
 for (const [route, html] of pages) {
   const h1Count = (html.match(/<h1[\s>]/g) ?? []).length;
   check(`${route} has exactly one <h1>`, h1Count === 1, `found ${h1Count}`);
 
-  const title = html.match(/<title>([^<]*)<\/title>/)?.[1] ?? "";
+  const title = decodeHtmlText(
+    html.match(/<title>([^<]*)<\/title>/)?.[1] ?? "",
+  );
   check(
     `${route} title is within the search snippet budget`,
     title.length > 0 && title.length <= 65,
     `${title.length} characters: ${title}`,
   );
 
-  const description =
-    html.match(/<meta name="description" content="([^"]*)"/)?.[1] ?? "";
+  const description = decodeHtmlText(
+    html.match(/<meta name="description" content="([^"]*)"/)?.[1] ?? "",
+  );
   check(
     `${route} description is within the search snippet budget`,
     description.length >= 40 && description.length <= 160,

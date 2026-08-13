@@ -10,7 +10,10 @@ export const heroSlides = [
 
 export const heroCopy = {
   eyebrow: "Cladding, render, Hebel & walling across Adelaide",
-  titleLines: ["Built with care.", "Finished with precision."],
+  titleLines: [
+    "Adelaide cladding, render,",
+    "Hebel & walling specialists.",
+  ],
   body: "One team for carefully planned, professionally installed walling and exterior finishes—from the first quote through to handover.",
 } as const;
 
