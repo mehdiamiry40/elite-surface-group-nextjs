@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import EnquiryFields from "@/components/EnquiryFields";
 import { useDialog } from "@/components/useDialog";
 import { useEnquiryForm } from "@/components/useEnquiryForm";
-import { services } from "@/content/services";
+import { defaultEnquiryService } from "@/content/enquiry";
 
 type QuoteDialogProps = {
   open: boolean;
@@ -15,10 +15,7 @@ export default function QuoteDialog({ open, onClose }: QuoteDialogProps) {
   const { submit, pending, status } = useEnquiryForm();
   const dialogRef = useDialog(open, onClose);
   const pathname = usePathname();
-  const defaultService = services.find(
-    (service) =>
-      pathname === `/${service.slug}` || pathname === `/${service.slug}/`,
-  )?.name;
+  const defaultService = defaultEnquiryService(pathname);
 
   return (
     <div

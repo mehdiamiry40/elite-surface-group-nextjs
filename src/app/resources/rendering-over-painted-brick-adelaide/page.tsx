@@ -475,12 +475,13 @@ export default function RenderingPaintedBrickGuidePage() {
                 </dd>
               </div>
               <div className="faq-list__item">
-                <dt>What should I send Elite Surface Group?</dt>
+                <dt>What should I tell Elite Surface Group?</dt>
                 <dd>
-                  Send the suburb, property age if known, coating history,
-                  dated photos, affected elevations, access notes and the
-                  finish you are considering. We can then identify what else is
-                  needed to confirm whether the work sits within our scope.
+                  Tell us the suburb, property age if known, coating history,
+                  affected elevations, access notes, proposed finish and what
+                  dated photos are available. We can arrange how to review
+                  supporting files, then identify what else is needed to
+                  confirm whether the work sits within our scope.
                 </dd>
               </div>
             </dl>
@@ -547,7 +548,7 @@ export default function RenderingPaintedBrickGuidePage() {
 
       <ContactSection
         defaultService="Render"
-        intro="Considering a rendered or textured finish over existing painted brick? Send the suburb, coating history, dated photos and affected elevations so we can identify what is needed for a properly scoped enquiry."
+        intro="Considering a rendered or textured finish over existing painted brick? Tell us the suburb, coating history and what dated photos or elevation details are available. If supporting files are needed, we’ll arrange how to review them."
       />
       <CtaBand />
     </>

@@ -132,7 +132,7 @@ export default function ProjectPlanningPage() {
       <ServiceCards title="Explore the right service for your project" />
       <ContactSection
         withDetails
-        intro="Send us the plans, photos and project details you have. We’ll review the information and let you know what is still needed for an obligation-free quote."
+        intro="Tell us about the project and what plans or photos are available. If supporting files are needed, we’ll arrange how to review them before preparing an obligation-free quote."
       />
       <CtaBand />
     </>

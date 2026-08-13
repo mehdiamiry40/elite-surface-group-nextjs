@@ -1629,6 +1629,16 @@ h3 {
   background: var(--orange-ink);
 }
 
+.project-facts__cta {
+  width: 100%;
+  margin-top: 28px;
+  text-align: center;
+}
+
+.service-intro__actions {
+  margin-top: 24px;
+}
+
 .project-case__story {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

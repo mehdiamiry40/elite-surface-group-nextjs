@@ -50,4 +50,5 @@ jobs:
           curl --fail --silent http://localhost:3000/ > /dev/null
           npm run smoke
           npm run analytics-test
+          npm run enquiry-test
           npm run a11y

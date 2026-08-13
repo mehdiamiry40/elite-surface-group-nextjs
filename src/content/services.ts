@@ -267,7 +267,7 @@ export const services: readonly Service[] = [
       {
         question: "How do I get a walling quote?",
         answer:
-          "Send your plans, photos and project brief through our contact form, or call us directly. We’ll review the details and prepare an obligation-free quote outlining the work, materials and timing assumptions.",
+          "Tell us about the project and what plans or photos are available, or call us directly. If supporting files are needed, we’ll arrange how to review them before preparing an obligation-free quote.",
       },
     ],
   },

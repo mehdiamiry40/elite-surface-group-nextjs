@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { track } from "@vercel/analytics/server";
 import { business } from "@/content/business";
+import {
+  projectTimingOptions,
+  projectTypeOptions,
+} from "@/content/enquiry";
 import { publicPaths } from "@/content/routes";
 import { services } from "@/content/services";
 import { CONVERSION_EVENT_NAMES } from "@/lib/conversion-analytics";
@@ -19,6 +23,9 @@ const MAX = {
   email: 254,
   phone: 50,
   service: 80,
+  projectType: 80,
+  projectArea: 120,
+  projectTiming: 80,
   message: 5000,
   sourcePath: 250,
   company: 120,
@@ -29,6 +36,8 @@ const RESEND_TIMEOUT_MS = 8_000;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX = 6;
 const ALLOWED_SERVICES = new Set(services.map((service) => service.name));
+const ALLOWED_PROJECT_TYPES = new Set<string>(projectTypeOptions);
+const ALLOWED_PROJECT_TIMINGS = new Set<string>(projectTimingOptions);
 const ALLOWED_SOURCE_PATHS = new Set(publicPaths);
 
 /**
@@ -248,12 +257,18 @@ function mailtoUrl({
   email,
   phone,
   service,
+  projectType,
+  projectArea,
+  projectTiming,
   message,
 }: {
   name: string;
   email: string;
   phone: string;
   service: string;
+  projectType: string;
+  projectArea: string;
+  projectTiming: string;
   message: string;
 }) {
   const recipient = process.env.CONTACT_TO_EMAIL || business.email;
@@ -267,6 +282,9 @@ function mailtoUrl({
     `Email: ${email}`,
     `Phone: ${phone || "Not provided"}`,
     `Service: ${service || "Not specified"}`,
+    `Project type: ${projectType || "Not specified"}`,
+    `Project area: ${projectArea || "Not provided"}`,
+    `Target timing: ${projectTiming || "Not specified"}`,
     "",
     fallbackMessage,
   ].join("\n");
@@ -448,6 +466,9 @@ export async function POST(request: NextRequest) {
   const email = singleLine(body.email);
   const phone = singleLine(body.phone);
   const service = singleLine(body.service);
+  const projectType = singleLine(body.projectType);
+  const projectArea = singleLine(body.projectArea);
+  const projectTiming = singleLine(body.projectTiming);
   const message = text(body.message);
   const requestedSourcePath = singleLine(body.sourcePath);
   const sourcePath = ALLOWED_SOURCE_PATHS.has(requestedSourcePath)
@@ -470,6 +491,9 @@ export async function POST(request: NextRequest) {
     tooLong(email, MAX.email) ||
     tooLong(phone, MAX.phone) ||
     tooLong(service, MAX.service) ||
+    tooLong(projectType, MAX.projectType) ||
+    tooLong(projectArea, MAX.projectArea) ||
+    tooLong(projectTiming, MAX.projectTiming) ||
     tooLong(message, MAX.message) ||
     tooLong(sourcePath, MAX.sourcePath) ||
     tooLong(company, MAX.company)
@@ -508,6 +532,26 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  if (projectType && !ALLOWED_PROJECT_TYPES.has(projectType)) {
+    return contactResponse(
+      request,
+      isBrowserForm,
+      { message: "Please choose a valid project type." },
+      400,
+      "invalid",
+    );
+  }
+
+  if (projectTiming && !ALLOWED_PROJECT_TIMINGS.has(projectTiming)) {
+    return contactResponse(
+      request,
+      isBrowserForm,
+      { message: "Please choose a valid target timing." },
+      400,
+      "invalid",
+    );
+  }
+
   const resendKey = process.env.RESEND_API_KEY;
   const from = process.env.CONTACT_FROM_EMAIL;
   const to = process.env.CONTACT_TO_EMAIL;
@@ -524,7 +568,16 @@ export async function POST(request: NextRequest) {
       {
         message:
           "Email delivery is unavailable right now. You can call us on 0413 844 912, or continue in your email app.",
-        mailto: mailtoUrl({ name, email, phone, service, message }),
+        mailto: mailtoUrl({
+          name,
+          email,
+          phone,
+          service,
+          projectType,
+          projectArea,
+          projectTiming,
+          message,
+        }),
       },
       503,
       "unavailable",
@@ -547,6 +600,9 @@ export async function POST(request: NextRequest) {
         `Email: ${email}`,
         `Phone: ${phone || "Not provided"}`,
         `Service: ${service || "Not specified"}`,
+        `Project type: ${projectType || "Not specified"}`,
+        `Project area: ${projectArea || "Not provided"}`,
+        `Target timing: ${projectTiming || "Not specified"}`,
         `Page: ${sourcePath || "Unknown"}`,
         "",
         message,
@@ -558,6 +614,15 @@ export async function POST(request: NextRequest) {
         <p><strong>Phone:</strong> ${escapeHtml(phone || "Not provided")}</p>
         <p><strong>Service:</strong> ${escapeHtml(
           service || "Not specified",
+        )}</p>
+        <p><strong>Project type:</strong> ${escapeHtml(
+          projectType || "Not specified",
+        )}</p>
+        <p><strong>Project area:</strong> ${escapeHtml(
+          projectArea || "Not provided",
+        )}</p>
+        <p><strong>Target timing:</strong> ${escapeHtml(
+          projectTiming || "Not specified",
         )}</p>
         <p><strong>Page:</strong> ${escapeHtml(sourcePath || "Unknown")}</p>
         <hr />
@@ -593,7 +658,16 @@ export async function POST(request: NextRequest) {
       {
         message:
           "Email delivery is unavailable right now. You can call us on 0413 844 912, or continue in your email app.",
-        mailto: mailtoUrl({ name, email, phone, service, message }),
+        mailto: mailtoUrl({
+          name,
+          email,
+          phone,
+          service,
+          projectType,
+          projectArea,
+          projectTiming,
+          message,
+        }),
       },
       502,
       "unavailable",

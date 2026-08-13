@@ -48,6 +48,7 @@ export const privacyPolicy: readonly LegalBlock[] = [
       "Email address",
       "Phone number (if you provide one)",
       "The service you are interested in",
+      "Project suburb or postcode, project type and target timing (if you provide them)",
       "Details of your project or message",
       "The page you submitted the form from",
       "Your IP address and basic request information used temporarily for security, rate limiting and hosting logs",
@@ -59,7 +60,7 @@ export const privacyPolicy: readonly LegalBlock[] = [
   },
   {
     type: "paragraph",
-    text: "Vercel Web Analytics may also process anonymous usage information, including the page or route visited, referrer, filtered query parameters, event time, approximate location, browser, operating system and device type. A successful enquiry event may include the allowlisted source page and service category. We do not send names, email addresses, phone numbers, enquiry text or other free-text form values in analytics events.",
+    text: "Vercel Web Analytics may also process anonymous usage information, including the page or route visited, referrer, filtered query parameters, event time, approximate location, browser, operating system and device type. A successful enquiry event may include the allowlisted source page and service category. We do not send names, email addresses, phone numbers, enquiry text, project suburbs or postcodes, project types or target timing in analytics events.",
   },
   {
     type: "heading",
@@ -88,7 +89,7 @@ export const privacyPolicy: readonly LegalBlock[] = [
   },
   {
     type: "paragraph",
-    text: "We use Vercel Web Analytics to understand anonymous, aggregated website use and measure conversions such as a successful enquiry submission or a click to call, email or get directions. Vercel Web Analytics does not use cookies or create a profile that follows you across different days or websites. We do not use Google Analytics, advertising pixels, marketing cookies or cross-site advertising trackers. A successful enquiry event may include the allowlisted source page and service category, but we do not send names, email addresses, phone numbers, enquiry text or other free-text form values in analytics events.",
+    text: "We use Vercel Web Analytics to understand anonymous, aggregated website use and measure conversions such as a successful enquiry submission or a click to call, email or get directions. Vercel Web Analytics does not use cookies or create a profile that follows you across different days or websites. We do not use Google Analytics, advertising pixels, marketing cookies or cross-site advertising trackers. A successful enquiry event may include the allowlisted source page and service category, but we do not send names, email addresses, phone numbers, enquiry text, project suburbs or postcodes, project types or target timing in analytics events.",
   },
   {
     type: "heading",

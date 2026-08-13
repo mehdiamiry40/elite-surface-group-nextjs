@@ -3,6 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { serviceOptions, type EnquiryStatus } from "@/components/useEnquiryForm";
+import {
+  projectTimingOptions,
+  projectTypeOptions,
+} from "@/content/enquiry";
 
 type EnquiryFieldsProps = {
   /** Prefixes field ids so the two forms can coexist on one page. */
@@ -49,7 +53,7 @@ export default function EnquiryFields({
       </div>
 
       <div className="field">
-        <label htmlFor={id("last-name")}>Last name</label>
+        <label htmlFor={id("last-name")}>Last name (optional)</label>
         <input
           id={id("last-name")}
           name="lastName"
@@ -75,7 +79,7 @@ export default function EnquiryFields({
       </div>
 
       <div className="field">
-        <label htmlFor={id("phone")}>Phone number</label>
+        <label htmlFor={id("phone")}>Phone number (optional)</label>
         <input
           id={id("phone")}
           name="phone"
@@ -87,8 +91,8 @@ export default function EnquiryFields({
         />
       </div>
 
-      <div className="field field--full">
-        <label htmlFor={id("service")}>Service needed</label>
+      <div className="field">
+        <label htmlFor={id("service")}>Service needed (optional)</label>
         <select
           key={`${pathname}:${selected}`}
           id={id("service")}
@@ -105,6 +109,53 @@ export default function EnquiryFields({
         </select>
       </div>
 
+      <div className="field">
+        <label htmlFor={id("project-type")}>Project type (optional)</label>
+        <select
+          id={id("project-type")}
+          name="projectType"
+          autoComplete="off"
+          defaultValue=""
+        >
+          <option value="">Choose a project type / not sure yet</option>
+          {projectTypeOptions.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="field">
+        <label htmlFor={id("project-location")}>
+          Project suburb or postcode (optional)
+        </label>
+        <input
+          id={id("project-location")}
+          name="projectArea"
+          autoComplete="off"
+          placeholder="Suburb and postcode if known"
+          maxLength={120}
+        />
+      </div>
+
+      <div className="field">
+        <label htmlFor={id("target-start")}>Target timing (optional)</label>
+        <select
+          id={id("target-start")}
+          name="projectTiming"
+          autoComplete="off"
+          defaultValue=""
+        >
+          <option value="">Choose a timeframe / not sure yet</option>
+          {projectTimingOptions.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <div className="field field--full">
         <label htmlFor={id("message")}>Project details</label>
         <textarea
@@ -112,7 +163,7 @@ export default function EnquiryFields({
           name="message"
           rows={4}
           maxLength={5000}
-          placeholder="Tell us the suburb, property type, timing and work you have in mind."
+          placeholder="Tell us about the work, access, plans or site details that may help."
           required
         />
       </div>
@@ -151,8 +202,8 @@ export default function EnquiryFields({
         {pending ? "Sending…" : submitLabel}
       </button>
       <p className="form__privacy">
-        We’ll only use the contact details you enter to respond to this enquiry.
-        See our{" "}
+        We use the contact and project details you enter to respond to your
+        enquiry and manage any resulting quote. See our{" "}
         <Link href="/privacy-policy/">Privacy Policy</Link>.
       </p>
     </>
