@@ -1,3 +1,5 @@
+import { business } from "@/content/business";
+
 export const contactSection = {
   eyebrow: "Project enquiries",
   title: "Tell us about your project.",
@@ -19,10 +21,10 @@ export const aboutPage = {
   metaTitle: "About Our Adelaide Team",
   title: "Practical expertise, from planning to handover",
   metaDescription:
-    "Meet the Adelaide team providing cladding, render, Hebel and walling installations for residential and commercial projects.",
+    "Meet our Salisbury East-based team providing cladding, render, Hebel and walling installations across Adelaide and South Australia.",
   lead: "Elite Surface Group brings cladding, render, Hebel and walling together for homeowners, builders and developers across Adelaide and South Australia.",
   identity:
-    "Elite Surface Group is operated by Elite Surface Group Pty Ltd (ABN 35 691 074 567), with its main business location in South Australia.",
+    `${business.name} is operated by ${business.legalName} (ABN ${business.abn}) from ${business.address.formatted}. From this Adelaide base, we deliver cladding, render, Hebel and walling work across metropolitan Adelaide and wider South Australia.`,
   gallery: [
     {
       image: "/images/v2/home-team-site-review.webp",
@@ -82,11 +84,11 @@ export const projectsPage = {
 
 export const contactPage = {
   bannerTitle: "Let’s Talk About Your Project",
-  metaTitle: "Contact Our Adelaide Team",
+  metaTitle: "Contact Our Salisbury East Team",
   metaDescription:
-    "Contact Elite Surface Group for an obligation-free quote on cladding, render, Hebel and walling work across Adelaide.",
+    `Contact ${business.name} at ${business.address.formatted} for cladding, render, Hebel and walling enquiries across Adelaide.`,
   intro:
-    "Tell us what you’re planning and where the project is located. We’ll review the details and respond within one business day.",
+    "Tell our Salisbury East team what you’re planning and where the project is located. We’ll review the details and respond within one business day.",
 } as const;
 
 /** Banner background images, keyed by route. */

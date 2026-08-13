@@ -20,6 +20,13 @@ const sans = Figtree({
 const HOME_DESCRIPTION =
   "Cladding, render, Hebel and walling for homes and commercial projects across Adelaide and South Australia. Request an obligation-free quote.";
 
+const areaServed = [
+  { "@type": "City", name: "Adelaide" },
+  { "@type": "AdministrativeArea", name: "South Australia" },
+];
+
+const sameAs = Object.values(business.social).filter(Boolean);
+
 export const metadata: Metadata = {
   metadataBase: new URL(business.siteUrl),
   title: {
@@ -87,38 +94,32 @@ const organisationSchema = {
     "Walling",
     "Adelaide construction finishes",
   ],
-  areaServed: [
-    { "@type": "City", name: "Adelaide" },
-    { "@type": "AdministrativeArea", name: "South Australia" },
-  ],
+  areaServed,
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Adelaide",
-    addressRegion: "SA",
-    addressCountry: "AU",
+    streetAddress: business.address.street,
+    addressLocality: business.address.suburb,
+    addressRegion: business.address.region,
+    postalCode: business.address.postcode,
+    addressCountry: business.address.country,
   },
+  hasMap: business.address.directionsUrl,
+  ...(sameAs.length ? { sameAs } : {}),
   contactPoint: [
     {
       "@type": "ContactPoint",
       telephone: business.phone,
       email: business.email,
       contactType: "customer service",
-      areaServed: "AU",
+      areaServed,
       availableLanguage: ["English"],
     },
   ],
   openingHoursSpecification: {
     "@type": "OpeningHoursSpecification",
-    dayOfWeek: [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ],
-    opens: "09:00",
-    closes: "17:00",
+    dayOfWeek: business.hours.days,
+    opens: business.hours.opens,
+    closes: business.hours.closes,
   },
 };
 

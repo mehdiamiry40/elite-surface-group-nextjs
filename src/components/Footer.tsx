@@ -98,22 +98,34 @@ export default function Footer() {
 
           <div>
             <h2 id="footer-contact">Contact Us</h2>
-            <ul className="footer__contact" aria-labelledby="footer-contact">
-              <li>
-                <PhoneIcon />
-                <a href={`tel:${business.phone}`}>{business.phoneDisplay}</a>
-              </li>
-              <li>
-                <MailIcon />
-                <a href={`mailto:${business.email}`}>{business.email}</a>
-              </li>
-              <li>
-                <PinIcon />
-                <span>{business.area}</span>
-              </li>
-            </ul>
+            <address className="footer__address" aria-labelledby="footer-contact">
+              <strong>{business.legalName}</strong>
+              <ul className="footer__contact">
+                <li>
+                  <PhoneIcon />
+                  <a href={`tel:${business.phone}`}>{business.phoneDisplay}</a>
+                </li>
+                <li>
+                  <MailIcon />
+                  <a href={`mailto:${business.email}`}>{business.email}</a>
+                </li>
+                <li>
+                  <PinIcon />
+                  <a
+                    href={business.address.directionsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {business.address.formatted}
+                  </a>
+                </li>
+              </ul>
+            </address>
+            <p className="footer__service-area">
+              Serving {business.area}.
+            </p>
             <p className="footer__hours">
-              <strong>Hours:</strong> {business.openingHoursDisplay}
+              <strong>Hours:</strong> {business.hours.display}
             </p>
           </div>
         </div>

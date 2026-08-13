@@ -44,7 +44,7 @@ export const footerNav = {
     { label: "About Us", href: "/about" },
     { label: "Projects", href: "/projects" },
     { label: "Project planning", href: "/project-planning" },
-    { label: "Service areas", href: "/locations" },
+    { label: "Adelaide service area", href: "/locations/adelaide" },
     { label: "Contact Us", href: "/contact-us" },
   ],
   services: [
