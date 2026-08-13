@@ -128,7 +128,7 @@ await runAxe(desktopPage, "desktop workshop carousel advanced");
 await desktopPage.goto(new URL("/projects/", baseUrl).toString(), {
   waitUntil: "networkidle",
 });
-await desktopPage.getByRole("button", { name: /Enlarge project image/ }).first().click();
+await desktopPage.getByRole("button", { name: /Enlarge project photo/ }).first().click();
 await desktopPage.waitForTimeout(UI_SETTLE_MS);
 await runAxe(desktopPage, "desktop project lightbox open");
 await desktop.close();

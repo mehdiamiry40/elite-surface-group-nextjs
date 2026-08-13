@@ -8,6 +8,7 @@ import { ProjectLinks } from "@/components/sections";
 import { BreadcrumbSchema, ProjectSchema } from "@/components/JsonLd";
 import { bannerImages } from "@/content/pages";
 import { getProject, projects } from "@/content/projects";
+import { services } from "@/content/services";
 import { ogCard, pageMetadata } from "@/lib/seo";
 
 type PageProps = {
@@ -16,6 +17,7 @@ type PageProps = {
 
 const PROJECTS_WITH_MATCHING_SOCIAL_CARDS = new Set([
   "two-storey-exterior-render",
+  "curved-rendered-wall-detail",
   "dark-feature-cladding",
 ]);
 
@@ -36,10 +38,10 @@ export async function generateMetadata({
 
   return pageMetadata({
     title: project.metaTitle,
-    description: `${project.summary} ${project.suburb} project detail from Elite Surface Group.`,
+    description: project.metaDescription,
     path: `/projects/${project.slug}`,
     image: PROJECTS_WITH_MATCHING_SOCIAL_CARDS.has(project.slug)
-      ? ogCard(project.slug, `${project.title} — ${project.suburb}`)
+      ? ogCard(project.slug, `${project.title} case study`)
       : undefined,
   });
 }
@@ -49,6 +51,12 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
   const project = getProject(slug);
 
   if (!project) {
+    notFound();
+  }
+
+  const service = services.find((item) => item.slug === project.service);
+
+  if (!service) {
     notFound();
   }
 
@@ -77,48 +85,96 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
         ]}
       />
 
-      <section className="section" aria-labelledby="case-study-title">
-        <div className="shell split">
-          <div className="split__media">
-            <Image
-              src={project.image}
-              alt={project.alt}
-              width={project.width}
-              height={project.height}
-              sizes="(max-width: 767px) 100vw, 560px"
-              priority
-              fetchPriority="high"
-            />
-          </div>
-          <div className="split__body prose">
-            <h2 id="case-study-title">{project.title}</h2>
+      <section
+        className="section project-case"
+        aria-labelledby="case-study-title"
+      >
+        <div className="shell">
+          <header className="project-case__intro">
+            <span className="eyebrow">{service.name} case study</span>
+            <h2 id="case-study-title">Project overview</h2>
             <p>{project.summary}</p>
-            <p>
-              <strong>Location:</strong>{" "}
-              <Link href="/locations/adelaide/">{project.suburb}</Link>
-              <br />
-              <strong>Service:</strong>{" "}
-              <Link href={`/${project.service}/`}>{project.service}</Link>
-            </p>
-            <h3>The scope</h3>
-            <p>{project.scope}</p>
-            <h3>The challenge</h3>
-            <p>{project.challenge}</p>
-            <h3>The result</h3>
-            <p>{project.outcome}</p>
-            <p>
-              <Link href="/projects/">Back to all projects</Link>
-              {" · "}
-              <Link href="/contact-us/#contact">Discuss a similar project</Link>
-            </p>
+          </header>
+
+          <div className="project-case__proof">
+            <figure className="project-case__figure">
+              <Image
+                src={project.image}
+                alt={project.alt}
+                width={project.width}
+                height={project.height}
+                sizes="(max-width: 767px) 100vw, (max-width: 1200px) 65vw, 780px"
+                priority
+                fetchPriority="high"
+              />
+              <figcaption>{project.imageCaption}</figcaption>
+            </figure>
+
+            <aside
+              className="project-facts"
+              aria-labelledby="project-facts-title"
+            >
+              <span className="eyebrow">At a glance</span>
+              <h3 id="project-facts-title">Project details</h3>
+              <dl>
+                <div>
+                  <dt>Project type</dt>
+                  <dd>{project.projectType}</dd>
+                </div>
+                <div>
+                  <dt>Service</dt>
+                  <dd>
+                    <Link href={`/${project.service}/`}>{service.name}</Link>
+                  </dd>
+                </div>
+                <div>
+                  <dt>Stage shown</dt>
+                  <dd>{project.stage}</dd>
+                </div>
+              </dl>
+              <h4>Visible features</h4>
+              <ul>
+                {project.features.map((feature) => (
+                  <li key={feature}>{feature}</li>
+                ))}
+              </ul>
+            </aside>
           </div>
+
+          <div className="project-case__story">
+            <article>
+              <span aria-hidden="true">01</span>
+              <h3>What the photograph records</h3>
+              <p>{project.overview}</p>
+            </article>
+            <article>
+              <span aria-hidden="true">02</span>
+              <h3>Detail focus</h3>
+              <p>{project.detailFocus}</p>
+            </article>
+            <article>
+              <span aria-hidden="true">03</span>
+              <h3>Visible result</h3>
+              <p>{project.visibleResult}</p>
+            </article>
+          </div>
+
+          <nav className="project-case__links" aria-label="Project links">
+            <Link href={`/${project.service}/`}>
+              Explore {service.name.toLowerCase()} services
+            </Link>
+            <Link href="/locations/adelaide/">Adelaide service area</Link>
+            <Link href="/project-planning/">Plan a project enquiry</Link>
+            <Link href="/projects/">Back to all projects</Link>
+            <Link href="/contact-us/#contact">Discuss a similar project</Link>
+          </nav>
         </div>
       </section>
 
       <ProjectLinks
         items={relatedProjects}
-        title={`More ${project.service} project details`}
-        intro={`Compare the scope, site challenges and finished details from other completed ${project.service} work across Adelaide.`}
+        title={`More ${service.name.toLowerCase()} project details`}
+        intro={`Compare the visible finishes and construction details recorded in other ${service.name.toLowerCase()} work from the project portfolio.`}
         id="related-project-details"
       />
 

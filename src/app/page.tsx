@@ -12,7 +12,7 @@ import {
   process,
   trustPoints,
 } from "@/content/home";
-import { featuredProjects, projects } from "@/content/projects";
+import { featuredProjects, projectCards } from "@/content/projects";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -105,7 +105,7 @@ export default function HomePage() {
             intro={featuredProjects.intro}
             id="featured-title"
           />
-          <ProjectGallery items={projects.slice(0, 3)} />
+          <ProjectGallery items={projectCards.slice(0, 3)} />
           <p className="section-cta">
             <Link className="text-link" href="/projects/">
               Explore all projects
