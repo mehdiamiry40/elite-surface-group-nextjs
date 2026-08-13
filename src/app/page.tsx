@@ -52,8 +52,8 @@ export default function HomePage() {
             <span className="eyebrow">{coverage.eyebrow}</span>
             <h2 id="coverage-title">{coverage.title}</h2>
             <p>{coverage.body}</p>
-            <Link className="text-link" href="/locations/">
-              View our service areas
+            <Link className="text-link" href="/locations/adelaide/">
+              Explore our Adelaide service area
               <ArrowRightIcon />
             </Link>
           </div>

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon, CheckIcon } from "@/components/icons";
+import type { Project } from "@/content/projects";
 import { services, servicesIntro } from "@/content/services";
 
 export { CtaBand } from "@/components/CtaBand";
@@ -39,6 +40,54 @@ export function TickList({ items }: { items: readonly string[] }) {
         </li>
       ))}
     </ul>
+  );
+}
+
+/* ---------------------------------------------------------- project links */
+
+export function ProjectLinks({
+  items,
+  title,
+  intro,
+  id,
+}: {
+  items: readonly Project[];
+  title: string;
+  intro: string;
+  id: string;
+}) {
+  if (!items.length) {
+    return null;
+  }
+
+  const columns = Math.min(items.length, 3);
+
+  return (
+    <section className="section section--tint project-links" aria-labelledby={id}>
+      <div className="shell">
+        <SectionHead
+          eyebrow="Completed work"
+          title={title}
+          intro={intro}
+          id={id}
+        />
+        <ul className={`project-link-grid project-link-grid--${columns}`}>
+          {items.map((project) => (
+            <li className="project-link-card" key={project.slug}>
+              <span>{project.service} project</span>
+              <h3>
+                <Link href={`/projects/${project.slug}/`}>{project.title}</Link>
+              </h3>
+              <p>{project.summary}</p>
+              <Link className="text-link" href={`/projects/${project.slug}/`}>
+                View project details
+                <ArrowRightIcon />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
   );
 }
 

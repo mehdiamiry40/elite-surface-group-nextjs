@@ -118,6 +118,29 @@ export function ProjectSchema({ project }: { project: Project }) {
   );
 }
 
+/** ItemList of case studies for the projects hub. */
+export function ProjectListSchema({
+  projects,
+}: {
+  projects: readonly Project[];
+}) {
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        name: `${business.name} Adelaide render and cladding projects`,
+        itemListElement: projects.map((project, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: project.title,
+          url: absoluteUrl(`/projects/${project.slug}`),
+        })),
+      }}
+    />
+  );
+}
+
 /** ItemList of services for the services hub. */
 export function ServiceListSchema({
   services,

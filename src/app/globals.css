@@ -528,6 +528,10 @@ textarea {
   text-align: left;
 }
 
+.projects-context {
+  margin: -20px 0 40px;
+}
+
 .eyebrow {
   display: block;
   margin-bottom: 12px;
@@ -1817,6 +1821,59 @@ h3 {
   text-underline-offset: 3px;
 }
 
+.project-link-grid {
+  display: grid;
+  gap: 22px;
+}
+
+.project-link-grid--1 {
+  max-width: 480px;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.project-link-grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.project-link-grid--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.project-link-card {
+  padding: 28px;
+  background: var(--white);
+  box-shadow: var(--shadow-card);
+}
+
+.project-link-card > span {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--orange-ink);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.project-link-card h3 {
+  margin-bottom: 10px;
+  font-size: 21px;
+}
+
+.project-link-card h3 a {
+  color: var(--ink);
+}
+
+.project-link-card h3 a:hover {
+  color: var(--orange-ink);
+  text-decoration: none;
+}
+
+.project-link-card p {
+  margin-bottom: 20px;
+  color: var(--ink-soft);
+}
+
 .faq-list {
   display: grid;
   gap: 22px;
@@ -2098,7 +2155,9 @@ h3 {
   .grid--4,
   .grid--3,
   .grid--2,
-  .gallery {
+  .gallery,
+  .project-link-grid--2,
+  .project-link-grid--3 {
     grid-template-columns: 1fr;
   }
 
