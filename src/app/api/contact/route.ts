@@ -9,6 +9,10 @@ import { publicPaths } from "@/content/routes";
 import { services } from "@/content/services";
 import { CONVERSION_EVENT_NAMES } from "@/lib/conversion-analytics";
 import {
+  contactFromAddress,
+  contactToAddress,
+} from "@/lib/contact-delivery";
+import {
   contactLog,
   isAllowedOrigin,
   redactSensitiveText,
@@ -290,7 +294,10 @@ function mailtoUrl({
   projectTiming: string;
   message: string;
 }) {
-  const recipient = process.env.CONTACT_TO_EMAIL || business.email;
+  const recipient = contactToAddress(
+    process.env.CONTACT_TO_EMAIL,
+    business.email,
+  );
   const subject = `Website enquiry${service ? ` — ${service}` : ""}`;
   // Keep the fallback below common URL-length limits. The full message remains
   // in the on-page form so the visitor can copy it or retry.
@@ -572,11 +579,15 @@ export async function POST(request: NextRequest) {
   }
 
   const resendKey = process.env.RESEND_API_KEY;
-  const from = process.env.CONTACT_FROM_EMAIL;
-  const to = process.env.CONTACT_TO_EMAIL;
+  const from = contactFromAddress(
+    process.env.CONTACT_FROM_EMAIL,
+    business.name,
+    business.email,
+  );
+  const to = contactToAddress(process.env.CONTACT_TO_EMAIL, business.email);
 
-  if (!resendKey || !from || !to) {
-    // Loud on purpose: without these variables no enquiry is ever delivered,
+  if (!resendKey) {
+    // Loud on purpose: without a provider key no enquiry is ever delivered,
     // and the visitor-side mailto fallback is easy to miss on mobile.
     contactLog("contact.delivery_unconfigured", {
       page: sourcePath || "unknown",

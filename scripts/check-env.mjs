@@ -3,17 +3,17 @@
 /**
  * Reports whether contact-form delivery is configured.
  *
- * Without RESEND_API_KEY, CONTACT_FROM_EMAIL and CONTACT_TO_EMAIL the API
- * answers 503 and offers direct call/email options. That is acceptable during
- * local development, but not for a production deployment whose primary purpose
- * is lead generation.
+ * Without RESEND_API_KEY the API answers 503 and offers direct call/email
+ * options. CONTACT_FROM_EMAIL and CONTACT_TO_EMAIL default to the public
+ * Gmail inbox when unset. That is acceptable during local development, but
+ * not for a production deployment whose primary purpose is lead generation.
  *
  * Production Vercel builds fail by default when configuration is absent.
  * REQUIRE_CONTACT_DELIVERY=1 applies the same rule elsewhere. The emergency
  * ALLOW_UNCONFIGURED_CONTACT=1 override must be explicit.
  */
 
-const REQUIRED = ["RESEND_API_KEY", "CONTACT_FROM_EMAIL", "CONTACT_TO_EMAIL"];
+const REQUIRED = ["RESEND_API_KEY"];
 
 const target = process.env.VERCEL_ENV ?? process.env.NODE_ENV ?? "development";
 const missing = REQUIRED.filter((name) => !process.env[name]?.trim());
@@ -30,8 +30,9 @@ console.warn(
     `${banner}\n` +
     `Missing: ${missing.join(", ")}\n\n` +
     "The form will show direct phone/email options instead of delivering.\n\n" +
-    "Set these in the Vercel project settings (or .env.local locally) before\n" +
-    "this site serves real traffic.\n" +
+    "Set RESEND_API_KEY in the Vercel project settings (or .env.local locally)\n" +
+    "before this site serves real traffic. CONTACT_FROM_EMAIL and\n" +
+    "CONTACT_TO_EMAIL default to elite.surfacegroup@gmail.com when unset.\n" +
     `${banner}\n`,
 );
 

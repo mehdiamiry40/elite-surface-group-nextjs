@@ -1,3 +1,5 @@
+import { business } from "./business";
+
 /**
  * Legal page copy for Elite Surface Group (South Australia).
  *
@@ -30,7 +32,7 @@ export const privacyPolicy: readonly LegalBlock[] = [
     content: [
       "Elite Surface Group Pty Ltd (ABN 35 691 074 567), trading as Elite Surface Group, provides cladding, render, Hebel and walling services across Adelaide and South Australia. You can contact us about privacy matters using our ",
       { text: "Contact Us page", href: "/contact-us/" },
-      ", by email at info@elitesurfacegroup.com.au, or by phone on 0413 844 912.",
+      `, by email at ${business.email}, or by phone on ${business.phoneDisplay}.`,
     ],
   },
   {

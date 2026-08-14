@@ -8,7 +8,7 @@ export const business = {
   phone: "+61413844912",
   /** Human-readable form of the same number. */
   phoneDisplay: "0413 844 912",
-  email: "info@elitesurfacegroup.com.au",
+  email: "elite.surfacegroup@gmail.com",
   area: "Adelaide & South Australia",
   serviceAreas: [
     { "@type": "City", name: "Adelaide" },
