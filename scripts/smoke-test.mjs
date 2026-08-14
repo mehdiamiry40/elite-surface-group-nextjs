@@ -638,133 +638,133 @@ for (const [name, expected, init] of contactChecks) {
 // above so verification cannot temporarily throttle real visitors.
 if (isLoopbackSmoke) {
   const invalidService = await get("/api/contact/", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    Origin: baseUrl.origin,
-    "x-real-ip": "198.51.100.11",
-  },
-  body: JSON.stringify({
-    name: "Smoke Tester",
-    email: "smoke@example.com",
-    service: "Not A Real Service",
-    message: "Please ignore — smoke suite service allowlist check.",
-  }),
-});
-check(
-  "contact endpoint rejects an unknown service",
-  invalidService.status === 400,
-  `status ${invalidService.status}`,
-);
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Origin: baseUrl.origin,
+      "x-real-ip": "198.51.100.11",
+    },
+    body: JSON.stringify({
+      name: "Smoke Tester",
+      email: "smoke@example.com",
+      service: "Not A Real Service",
+      message: "Please ignore — smoke suite service allowlist check.",
+    }),
+  });
+  check(
+    "contact endpoint rejects an unknown service",
+    invalidService.status === 400,
+    `status ${invalidService.status}`,
+  );
 
-const invalidProjectType = await get("/api/contact/", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    Origin: baseUrl.origin,
-    "x-real-ip": "198.51.100.13",
-  },
-  body: JSON.stringify({
-    name: "Smoke Tester",
-    email: "smoke@example.com",
-    projectType: "Unsupported project type",
-    message: "Please ignore — smoke suite project-type allowlist check.",
-  }),
-});
-check(
-  "contact endpoint rejects an unknown project type",
-  invalidProjectType.status === 400,
-  `status ${invalidProjectType.status}`,
-);
+  const invalidProjectType = await get("/api/contact/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Origin: baseUrl.origin,
+      "x-real-ip": "198.51.100.13",
+    },
+    body: JSON.stringify({
+      name: "Smoke Tester",
+      email: "smoke@example.com",
+      projectType: "Unsupported project type",
+      message: "Please ignore — smoke suite project-type allowlist check.",
+    }),
+  });
+  check(
+    "contact endpoint rejects an unknown project type",
+    invalidProjectType.status === 400,
+    `status ${invalidProjectType.status}`,
+  );
 
-const invalidProjectTiming = await get("/api/contact/", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    Origin: baseUrl.origin,
-    "x-real-ip": "198.51.100.14",
-  },
-  body: JSON.stringify({
-    name: "Smoke Tester",
-    email: "smoke@example.com",
-    projectTiming: "Yesterday",
-    message: "Please ignore — smoke suite project-timing allowlist check.",
-  }),
-});
-check(
-  "contact endpoint rejects an unknown project timing",
-  invalidProjectTiming.status === 400,
-  `status ${invalidProjectTiming.status}`,
-);
+  const invalidProjectTiming = await get("/api/contact/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Origin: baseUrl.origin,
+      "x-real-ip": "198.51.100.14",
+    },
+    body: JSON.stringify({
+      name: "Smoke Tester",
+      email: "smoke@example.com",
+      projectTiming: "Yesterday",
+      message: "Please ignore — smoke suite project-timing allowlist check.",
+    }),
+  });
+  check(
+    "contact endpoint rejects an unknown project timing",
+    invalidProjectTiming.status === 400,
+    `status ${invalidProjectTiming.status}`,
+  );
 
-const overlongProjectArea = await get("/api/contact/", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    Origin: baseUrl.origin,
-    "x-real-ip": "198.51.100.15",
-  },
-  body: JSON.stringify({
-    name: "Smoke Tester",
-    email: "smoke@example.com",
-    projectArea: "A".repeat(121),
-    message: "Please ignore — smoke suite project-area length check.",
-  }),
-});
-check(
-  "contact endpoint rejects an overlong project area",
-  overlongProjectArea.status === 422,
-  `status ${overlongProjectArea.status}`,
-);
+  const overlongProjectArea = await get("/api/contact/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Origin: baseUrl.origin,
+      "x-real-ip": "198.51.100.15",
+    },
+    body: JSON.stringify({
+      name: "Smoke Tester",
+      email: "smoke@example.com",
+      projectArea: "A".repeat(121),
+      message: "Please ignore — smoke suite project-area length check.",
+    }),
+  });
+  check(
+    "contact endpoint rejects an overlong project area",
+    overlongProjectArea.status === 422,
+    `status ${overlongProjectArea.status}`,
+  );
 
-// The client posts to the trailing-slash form; it must not redirect.
-const noRedirect = await get("/api/contact/", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    Origin: baseUrl.origin,
-    "x-real-ip": "198.51.100.12",
-  },
-  body: "null",
-  redirect: "manual",
-});
-check(
-  "contact endpoint does not redirect",
-  ![307, 308].includes(noRedirect.status),
-  `status ${noRedirect.status}`,
-);
+  // The client posts to the trailing-slash form; it must not redirect.
+  const noRedirect = await get("/api/contact/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Origin: baseUrl.origin,
+      "x-real-ip": "198.51.100.12",
+    },
+    body: "null",
+    redirect: "manual",
+  });
+  check(
+    "contact endpoint does not redirect",
+    ![307, 308].includes(noRedirect.status),
+    `status ${noRedirect.status}`,
+  );
 
-const progressiveForm = await get("/api/contact/", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/x-www-form-urlencoded",
-    Origin: baseUrl.origin,
-    "x-real-ip": "198.51.100.22",
-  },
-  body: new URLSearchParams({
-    firstName: "Smoke",
-    lastName: "Tester",
-    email: "smoke@example.com",
-    service: "",
-    projectArea: "Salisbury East 5109",
-    projectType: "Multi-unit development",
-    projectTiming: "Within 3–6 months",
-    message: "Progressive form fallback check.",
-    company: "honeypot-check",
-    sourcePath: "/contact-us/",
-  }),
-  redirect: "manual",
-});
-const progressiveLocation = progressiveForm.headers.get("location") ?? "";
-check(
-  "progressive form POST redirects without personal data",
-  progressiveForm.status === 303 &&
-    /\/contact-us\/#enquiry-sent$/.test(progressiveLocation) &&
-    !/Smoke|smoke%40|message=|Salisbury|Multi-unit|Within/.test(
-      progressiveLocation,
-    ),
-  `status ${progressiveForm.status}, location ${progressiveLocation}`,
-);
+  const progressiveForm = await get("/api/contact/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Origin: baseUrl.origin,
+      "x-real-ip": "198.51.100.22",
+    },
+    body: new URLSearchParams({
+      firstName: "Smoke",
+      lastName: "Tester",
+      email: "smoke@example.com",
+      service: "",
+      projectArea: "Salisbury East 5109",
+      projectType: "Multi-unit development",
+      projectTiming: "Within 3–6 months",
+      message: "Progressive form fallback check.",
+      company: "honeypot-check",
+      sourcePath: "/contact-us/",
+    }),
+    redirect: "manual",
+  });
+  const progressiveLocation = progressiveForm.headers.get("location") ?? "";
+  check(
+    "progressive form POST redirects without personal data",
+    progressiveForm.status === 303 &&
+      /\/contact-us\/#enquiry-sent$/.test(progressiveLocation) &&
+      !/Smoke|smoke%40|message=|Salisbury|Multi-unit|Within/.test(
+        progressiveLocation,
+      ),
+    `status ${progressiveForm.status}, location ${progressiveLocation}`,
+  );
 }
 
 /* ------------------------------------------- content / compliance guards */
@@ -1050,9 +1050,9 @@ check(
     ),
 );
 check(
-  "organisation schema links directions to the verified address",
+  "organisation schema maps the verified address, not a route from nowhere",
   organisationJsonLd?.hasMap ===
-    "https://www.google.com/maps/dir/?api=1&destination=22%20Robin%20St%2C%20Salisbury%20East%20SA%205109",
+    "https://www.google.com/maps/search/?api=1&query=22%20Robin%20St%2C%20Salisbury%20East%20SA%205109",
 );
 check(
   "organisation schema and visible footer publish the same business hours",

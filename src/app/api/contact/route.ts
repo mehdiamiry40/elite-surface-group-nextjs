@@ -143,22 +143,29 @@ function originIsAllowed(request: NextRequest) {
 }
 
 /**
- * Prefer platform-provided client IP over the first X-Forwarded-For hop, which
- * a client can spoof.
+ * Rate-limit bucket key.
+ *
+ * Both headers below are only meaningful when the proxy in front of this route
+ * writes them: on Vercel `x-vercel-forwarded-for` and `x-real-ip` are set by the
+ * platform and a client cannot forge them. Behind any other proxy — or none —
+ * a client sends whatever it likes and rotates the value for a fresh bucket, so
+ * the limiter is a speed bump there rather than a control. Deploy this route
+ * behind a proxy that overwrites both headers, or move the limit to a shared
+ * store keyed on something the client does not choose.
+ *
+ * `x-vercel-forwarded-for` carries the client first, so read that end — the last
+ * hop is the nearest proxy, not the visitor.
  */
 function clientKey(request: NextRequest) {
+  const forwarded = request.headers.get("x-vercel-forwarded-for");
+  const client = forwarded?.split(",")[0]?.trim();
+  if (client) {
+    return client;
+  }
+
   const realIp = request.headers.get("x-real-ip")?.trim();
   if (realIp) {
     return realIp;
-  }
-
-  const vercelForwarded = request.headers.get("x-vercel-forwarded-for");
-  if (vercelForwarded) {
-    const parts = vercelForwarded.split(",").map((part) => part.trim());
-    const last = parts[parts.length - 1];
-    if (last) {
-      return last;
-    }
   }
 
   return "unknown";
@@ -187,6 +194,20 @@ function memoryRateLimit(request: NextRequest) {
   return true;
 }
 
+/** Reads one numeric reply out of an Upstash pipeline response. */
+function pipelineNumber(result: unknown, index: number) {
+  if (!Array.isArray(result)) {
+    return Number.NaN;
+  }
+
+  const entry: unknown = result[index];
+  if (!entry || typeof entry !== "object" || !("result" in entry)) {
+    return Number.NaN;
+  }
+
+  return Number(entry.result);
+}
+
 /**
  * Optional shared limiter via Upstash Redis REST.
  * When UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN are unset, falls back
@@ -200,6 +221,7 @@ async function sharedRateLimit(request: NextRequest) {
   }
 
   const key = `contact:${clientKey(request)}`;
+  const windowSeconds = Math.ceil(RATE_LIMIT_WINDOW_MS / 1000);
   try {
     const response = await fetch(`${url}/pipeline`, {
       method: "POST",
@@ -207,9 +229,13 @@ async function sharedRateLimit(request: NextRequest) {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
+      // `SET … NX EX` seeds the counter with a TTL only when the window is not
+      // already open, then `INCR` counts without touching that TTL. Expiring the
+      // key on every request instead would push the deadline forward each time,
+      // so a visitor who kept retrying would never leave the penalty box.
       body: JSON.stringify([
+        ["SET", key, "0", "EX", String(windowSeconds), "NX"],
         ["INCR", key],
-        ["EXPIRE", key, Math.ceil(RATE_LIMIT_WINDOW_MS / 1000)],
       ]),
       signal: AbortSignal.timeout(1_500),
       cache: "no-store",
@@ -220,14 +246,7 @@ async function sharedRateLimit(request: NextRequest) {
     }
 
     const result: unknown = await response.json();
-    const count =
-      Array.isArray(result) &&
-      result[0] &&
-      typeof result[0] === "object" &&
-      result[0] !== null &&
-      "result" in result[0]
-        ? Number(result[0].result)
-        : Number.NaN;
+    const count = pipelineNumber(result, 1);
 
     if (!Number.isFinite(count)) {
       return memoryRateLimit(request);
