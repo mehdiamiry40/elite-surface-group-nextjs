@@ -70,7 +70,7 @@ try {
     window.__analyticsTestEvents = [];
   });
   await page
-    .getByRole("link", { name: "info@elitesurfacegroup.com.au" })
+    .getByRole("link", { name: "elite.surfacegroup@gmail.com" })
     .first()
     .click();
   const emailQueue = await page.evaluate(

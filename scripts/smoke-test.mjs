@@ -772,8 +772,22 @@ if (isLoopbackSmoke) {
 const privacyHtml = pages.get("/privacy-policy/") ?? "";
 const termsHtml = pages.get("/terms-of-service/") ?? "";
 check(
+  "privacy policy publishes the public business email",
+  privacyHtml.includes("elite.surfacegroup@gmail.com"),
+);
+check(
   "privacy policy cites Australian Privacy Principles",
   /Australian Privacy Principles|Privacy Act 1988/.test(privacyHtml),
+);
+check(
+  "llms.txt publishes the public business email",
+  llmsBody.includes("elite.surfacegroup@gmail.com"),
+);
+check(
+  "the retired info@ inbox is not published",
+  ![...pages.values(), llmsBody].some((html) =>
+    html.includes("info@elitesurfacegroup.com.au"),
+  ),
 );
 check(
   "legal pages do not cite UK Data Protection Act 1998",
@@ -957,7 +971,7 @@ check(
   /Contact our Salisbury East team/.test(contactHtml) &&
     /22 Robin St, Salisbury East SA 5109/.test(contactHtml) &&
     /0413 844 912/.test(contactHtml) &&
-    /info@elitesurfacegroup\.com\.au/.test(contactHtml) &&
+    /elite\.surfacegroup@gmail\.com/.test(contactHtml) &&
     /Adelaide &amp; South Australia/.test(contactHtml),
 );
 check(
@@ -999,7 +1013,7 @@ check(
   organisationJsonLd?.name === "Elite Surface Group" &&
     organisationJsonLd?.legalName === "Elite Surface Group Pty Ltd" &&
     organisationJsonLd?.telephone === "+61413844912" &&
-    organisationJsonLd?.email === "info@elitesurfacegroup.com.au" &&
+    organisationJsonLd?.email === "elite.surfacegroup@gmail.com" &&
     organisationJsonLd?.address?.streetAddress === "22 Robin St" &&
     organisationJsonLd?.address?.addressLocality === "Salisbury East" &&
     organisationJsonLd?.address?.addressRegion === "SA" &&

@@ -56,12 +56,13 @@ Enquiries are emailed through [Resend](https://resend.com). Copy
 `.env.example` to `.env.local` and set:
 
 - `RESEND_API_KEY`
-- `CONTACT_FROM_EMAIL` — a sender on a domain verified with Resend
-- `CONTACT_TO_EMAIL` — where enquiries should land
+- `CONTACT_FROM_EMAIL` — sender address (`Elite Surface Group <elite.surfacegroup@gmail.com>` by default)
+- `CONTACT_TO_EMAIL` — enquiry inbox (`elite.surfacegroup@gmail.com` by default)
 
 Set the same three in the Vercel project settings.
 
-**Without them nothing is delivered.** The endpoint answers 503 and gives the
+**Without `RESEND_API_KEY` nothing is delivered.** From and to fall back to
+the public inbox when unset. The endpoint then answers 503 and gives the
 visitor explicit call and email links without discarding the form contents.
 
 `npm run prebuild` warns during local development and fails Vercel Production
@@ -146,9 +147,9 @@ pull request nobody checked.
 
 Open items that still need a human decision outside the codebase:
 
-- **Resend delivery** — set `RESEND_API_KEY`, `CONTACT_FROM_EMAIL` and
-  `CONTACT_TO_EMAIL` in Vercel, then confirm provider acceptance and mailbox
-  receipt.
+- **Resend delivery** — set `RESEND_API_KEY` in Vercel. Quote mail now
+  defaults to `elite.surfacegroup@gmail.com` for both from and to; confirm
+  provider acceptance and mailbox receipt.
 - **Optional shared rate limit** — set `UPSTASH_REDIS_REST_URL` and
   `UPSTASH_REDIS_REST_TOKEN` if a hard global contact quota is required.
 - **Social profiles** — add real Facebook / Instagram URLs to `business.social`
