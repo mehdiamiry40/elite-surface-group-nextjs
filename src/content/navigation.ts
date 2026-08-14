@@ -13,7 +13,8 @@ export const mainNav: readonly NavItem[] = [
       {
         label: "Cladding",
         href: "/cladding",
-        description: "Architectural cladding installed for a clean, refined finish.",
+        description:
+          "Architectural cladding installed for a clean, refined finish.",
       },
       {
         label: "Render",
@@ -23,16 +24,48 @@ export const mainNav: readonly NavItem[] = [
       {
         label: "Hebel",
         href: "/hebel",
-        description: "Lightweight wall systems installed to the project specification.",
+        description:
+          "Lightweight wall systems installed to the project specification.",
       },
       {
         label: "Walling",
         href: "/walling",
-        description: "Internal and external walling for new builds and renovations.",
+        description:
+          "Internal and external walling for new builds and renovations.",
       },
     ],
   },
   { label: "Projects", href: "/projects" },
+  {
+    label: "Resources",
+    href: "/resources",
+    children: [
+      {
+        label: "Render cracking guide",
+        href: "/resources/render-cracking-adelaide",
+      },
+      {
+        label: "Coastal cladding care",
+        href: "/resources/cladding-maintenance-coastal-adelaide",
+      },
+      {
+        label: "Rendering Hebel panels",
+        href: "/resources/rendering-hebel-panels-adelaide",
+      },
+      {
+        label: "Hebel boundary walls",
+        href: "/resources/hebel-boundary-walls-adelaide",
+      },
+      {
+        label: "Rendering painted brick",
+        href: "/resources/rendering-over-painted-brick-adelaide",
+      },
+      {
+        label: "Project planning",
+        href: "/project-planning",
+      },
+    ],
+  },
   { label: "Service areas", href: "/locations" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact-us" },
@@ -42,7 +75,9 @@ export const footerNav = {
   quickLinks: [
     { label: "About Us", href: "/about" },
     { label: "Projects", href: "/projects" },
-    { label: "Service areas", href: "/locations" },
+    { label: "Resources", href: "/resources" },
+    { label: "Project planning", href: "/project-planning" },
+    { label: "Adelaide service area", href: "/locations/adelaide" },
     { label: "Contact Us", href: "/contact-us" },
   ],
   services: [

@@ -1,7 +1,8 @@
 import { absoluteUrl } from "@/lib/seo";
 import { business } from "@/content/business";
 import type { Project } from "@/content/projects";
-import type { Service, ServiceFaq } from "@/content/services";
+import type { ResourceGuide } from "@/content/resources";
+import { services, type Service, type ServiceFaq } from "@/content/services";
 
 /**
  * Structured data helpers.
@@ -60,7 +61,7 @@ export function ServiceSchema({ service }: { service: Service }) {
         url: absoluteUrl(`/${service.slug}`),
         image: absoluteUrl(service.image),
         provider: { "@id": `${business.siteUrl}/#organization` },
-        areaServed: { "@type": "AdministrativeArea", name: business.area },
+        areaServed: business.serviceAreas,
       }}
     />
   );
@@ -92,6 +93,8 @@ export function FAQPageSchema({ faqs }: { faqs: readonly ServiceFaq[] }) {
 
 /** Case-study CreativeWork for project detail pages. */
 export function ProjectSchema({ project }: { project: Project }) {
+  const service = services.find((item) => item.slug === project.service);
+
   return (
     <JsonLd
       data={{
@@ -99,20 +102,97 @@ export function ProjectSchema({ project }: { project: Project }) {
         "@type": "CreativeWork",
         "@id": `${absoluteUrl(`/projects/${project.slug}`)}#project`,
         name: project.title,
-        description: `${project.summary} ${project.scope}`,
-        image: absoluteUrl(project.image),
+        description: project.metaDescription,
+        mainEntityOfPage: absoluteUrl(`/projects/${project.slug}`),
+        image: {
+          "@type": "ImageObject",
+          contentUrl: absoluteUrl(project.image),
+          caption: project.imageCaption,
+          width: project.width,
+          height: project.height,
+        },
         url: absoluteUrl(`/projects/${project.slug}`),
         about: {
           "@type": "Service",
-          name: project.service,
+          "@id": `${absoluteUrl(`/${project.service}`)}#service`,
+          name: service?.name ?? project.service,
           provider: { "@id": `${business.siteUrl}/#organization` },
-        },
-        contentLocation: {
-          "@type": "Place",
-          name: project.suburb,
         },
         creator: { "@id": `${business.siteUrl}/#organization` },
         inLanguage: "en-AU",
+      }}
+    />
+  );
+}
+
+/** Visible editorial guide authored and published by the business. */
+export function ArticleSchema({ guide }: { guide: ResourceGuide }) {
+  const url = absoluteUrl(`/resources/${guide.slug}`);
+  const service = services.find((item) => item.slug === guide.serviceSlug);
+
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "@id": `${url}#article`,
+        url,
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": url,
+        },
+        headline: guide.title,
+        description: guide.metaDescription,
+        image: {
+          "@type": "ImageObject",
+          contentUrl: absoluteUrl(guide.image),
+          caption: guide.imageCaption,
+          width: guide.imageWidth,
+          height: guide.imageHeight,
+        },
+        datePublished: guide.published,
+        dateModified: guide.modified,
+        author: {
+          "@type": "Organization",
+          "@id": `${business.siteUrl}/#organization`,
+          name: business.name,
+          url: absoluteUrl("/about"),
+        },
+        publisher: {
+          "@type": "Organization",
+          "@id": `${business.siteUrl}/#organization`,
+          name: business.name,
+          url: business.siteUrl,
+        },
+        about: {
+          "@type": "Service",
+          "@id": `${absoluteUrl(`/${guide.serviceSlug}`)}#service`,
+          name: service?.name ?? guide.serviceSlug,
+        },
+        inLanguage: "en-AU",
+      }}
+    />
+  );
+}
+
+/** ItemList of case studies for the projects hub. */
+export function ProjectListSchema({
+  projects,
+}: {
+  projects: readonly Project[];
+}) {
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        name: `${business.name} render and cladding case studies`,
+        itemListElement: projects.map((project, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: project.title,
+          url: absoluteUrl(`/projects/${project.slug}`),
+        })),
       }}
     />
   );

@@ -97,10 +97,48 @@ reject bad input safely.
 
 Point either suite at a deployment with `SMOKE_BASE_URL=https://…`.
 
+```bash
+npm run link-check   # every external source the guides cite still resolves
+```
+
+The resource guides are built on primary manufacturer and South Australian
+government documents, and those documents move. `link-check` fetches each cited
+URL and fails only on a definite 404 or 410 — hosts that block automated
+clients, rate-limit or time out are reported and skipped, because failing on
+them would train everyone to ignore the check. Redirects are reported too: not
+a failure, but a permanent move is worth writing into the citation while it is
+known.
+
+It runs weekly rather than per pull request (`.github/workflows/link-check.yml`,
+also runnable on demand from the Actions tab). Reaching 40-odd third-party hosts
+on every pull request would let one unrelated outage block unrelated work.
+
+## Contributing
+
+Branches use one prefix per source, so history stays attributable at a glance:
+
+| Prefix | Source |
+| --- | --- |
+| `agent/` | Any coding agent (Codex, Claude Code, Cursor) |
+| `dependabot/` | Dependabot |
+| anything else | A person, named for the work |
+
+Pull requests describe what changed and why, and list the checks that were
+actually run. Only claim a result that someone else can reproduce from the
+branch: `npm run check`, smoke and axe counts, and bundle-budget output all
+qualify. Numbers that leave no trace — ad-hoc Lighthouse runs, "independent
+reviews" — either land as a committed artifact or stay out of the description.
+
+Nothing merges into `main` red, including a merge by the repository owner —
+enforce it with a branch-protection rule requiring the `verify` check, rather
+than by remembering to wait. A pull request merged before CI reports is a
+pull request nobody checked.
+
 ## Audits
 
 | Document | Covers |
 | --- | --- |
+| [`docs/CODEX-CONTRIBUTION-AUDIT.md`](docs/CODEX-CONTRIBUTION-AUDIT.md) | Independent verification pass over the agent-authored PRs merged through 14 August, with findings and fixes |
 | [`docs/IMPROVEMENT-ROADMAP.md`](docs/IMPROVEMENT-ROADMAP.md) | Current full-scale audit, residual findings, and prioritized improvement suggestions |
 | [`docs/POST-MERGE-AUDIT.md`](docs/POST-MERGE-AUDIT.md) | Post-merge audit and remediation record for the prior fix wave |
 | [`docs/FULL-SCALE-AUDIT.md`](docs/FULL-SCALE-AUDIT.md) | Pre-merge audit and resolution history |

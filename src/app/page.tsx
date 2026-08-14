@@ -12,7 +12,8 @@ import {
   process,
   trustPoints,
 } from "@/content/home";
-import { featuredProjects, projects } from "@/content/projects";
+import { featuredProjects, projectCards } from "@/content/projects";
+import { resourceGuides } from "@/content/resources";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -52,8 +53,8 @@ export default function HomePage() {
             <span className="eyebrow">{coverage.eyebrow}</span>
             <h2 id="coverage-title">{coverage.title}</h2>
             <p>{coverage.body}</p>
-            <Link className="text-link" href="/locations/">
-              View our service areas
+            <Link className="text-link" href="/locations/adelaide/">
+              Explore our Adelaide service area
               <ArrowRightIcon />
             </Link>
           </div>
@@ -105,10 +106,50 @@ export default function HomePage() {
             intro={featuredProjects.intro}
             id="featured-title"
           />
-          <ProjectGallery items={projects.slice(0, 3)} />
+          <ProjectGallery items={projectCards.slice(0, 3)} />
           <p className="section-cta">
             <Link className="text-link" href="/projects/">
               Explore all projects
+              <ArrowRightIcon />
+            </Link>
+          </p>
+        </div>
+      </section>
+
+      <section
+        className="section section--tint"
+        aria-labelledby="home-resources-title"
+      >
+        <div className="shell">
+          <SectionHead
+            eyebrow="Practical project guidance"
+            title="Resolve the right questions before work begins."
+            intro="Use our source-backed guides to document the issue, identify the selected wall system and prepare a clearer project brief."
+            id="home-resources-title"
+          />
+          <ul className="project-link-grid project-link-grid--2 resource-grid">
+            {resourceGuides.map((guide) => (
+              <li className="project-link-card" key={guide.slug}>
+                <span>{guide.category}</span>
+                <h3>
+                  <Link href={`/resources/${guide.slug}/`}>
+                    {guide.metaTitle}
+                  </Link>
+                </h3>
+                <p>{guide.summary}</p>
+                <Link
+                  className="text-link"
+                  href={`/resources/${guide.slug}/`}
+                >
+                  Read the guide
+                  <ArrowRightIcon />
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <p className="section-cta">
+            <Link className="text-link" href="/resources/">
+              Explore all resources
               <ArrowRightIcon />
             </Link>
           </p>
@@ -131,6 +172,15 @@ export default function HomePage() {
               </li>
             ))}
           </ol>
+          <p className="section-cta">
+            <Link
+              className="text-link text-link--light"
+              href="/project-planning/"
+            >
+              See what to send for a clearer quote
+              <ArrowRightIcon />
+            </Link>
+          </p>
         </div>
       </section>
 

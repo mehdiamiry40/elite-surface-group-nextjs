@@ -20,12 +20,7 @@ export {
   type Service,
   type ServiceFaq,
 } from "@/content/services";
-export {
-  aboutTeaser,
-  heroCopy,
-  heroSlides,
-  process,
-} from "@/content/home";
+export { aboutTeaser, heroCopy, heroSlides, process } from "@/content/home";
 export {
   featuredProjects,
   getProject,
@@ -47,3 +42,14 @@ export {
   locationsHub,
   type LocationPage,
 } from "@/content/locations";
+export { projectPlanningPage } from "@/content/project-planning";
+export {
+  claddingMaintenanceGuide,
+  hebelBoundaryWallsGuide,
+  renderCrackingGuide,
+  renderingHebelGuide,
+  renderingPaintedBrickGuide,
+  resourceGuides,
+  resourcesHub,
+  type ResourceGuide,
+} from "@/content/resources";

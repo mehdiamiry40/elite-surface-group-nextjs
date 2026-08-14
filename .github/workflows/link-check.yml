@@ -1,0 +1,37 @@
+name: Link check
+
+# The resource guides cite primary manufacturer and South Australian government
+# documents, and those move without telling anyone. This runs on a schedule
+# rather than per pull request: it reaches 40-odd third-party hosts, so wiring
+# it into CI would let one unrelated outage block unrelated work.
+on:
+  schedule:
+    # Mondays 20:00 UTC — Tuesday morning in Adelaide, so a dead link is waiting
+    # at the start of the week rather than discovered mid-change.
+    - cron: "0 20 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: link-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@e51e5fe84fc33b4c73ebe40526b2694712b5b858 # v7 post-7.0.0 security fix
+        with:
+          node-version-file: .nvmrc
+
+      # No `npm ci`: the checker uses only Node builtins, so the scheduled job
+      # neither waits on an install nor pulls dependencies it does not need.
+      - run: npm run link-check

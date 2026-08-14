@@ -17,22 +17,19 @@ const axeSource = require("fs").readFileSync(
 );
 
 const baseUrl = process.env.SMOKE_BASE_URL ?? "http://localhost:3000";
-const ROUTES = [
-  "/",
-  "/about/",
-  "/services/",
-  "/cladding/",
-  "/render/",
-  "/hebel/",
-  "/walling/",
-  "/projects/",
-  "/projects/two-storey-exterior-render/",
-  "/locations/",
-  "/locations/adelaide/",
-  "/contact-us/",
-  "/privacy-policy/",
-  "/terms-of-service/",
-];
+const sitemapResponse = await fetch(new URL("/sitemap.xml", baseUrl));
+if (!sitemapResponse.ok) {
+  throw new Error(
+    `Could not load sitemap for accessibility routes: ${sitemapResponse.status}`,
+  );
+}
+const sitemapXml = await sitemapResponse.text();
+const ROUTES = [...sitemapXml.matchAll(/<loc>(.*?)<\/loc>/g)].map(
+  ([, location]) => new URL(location).pathname,
+);
+if (!ROUTES.length) {
+  throw new Error("Sitemap contains no public routes for accessibility checks.");
+}
 const VIEWPORTS = [
   { width: 1440, height: 900, label: "desktop" },
   { width: 390, height: 844, label: "mobile" },
@@ -71,7 +68,10 @@ async function runAxe(page, label) {
   if (violations.length) {
     failures.push(
       `${label}: ${violations
-        .map((violation) => `${violation.impact} ${violation.id}×${violation.nodes}`)
+        .map(
+          (violation) =>
+            `${violation.impact} ${violation.id}×${violation.nodes}`,
+        )
         .join(", ")}`,
     );
   }
@@ -118,16 +118,17 @@ await runAxe(desktopPage, "desktop static hero");
 await desktopPage.goto(new URL("/about/", baseUrl).toString(), {
   waitUntil: "networkidle",
 });
-await desktopPage
-  .getByRole("button", { name: "Next workshop image" })
-  .click();
+await desktopPage.getByRole("button", { name: "Next workshop image" }).click();
 await desktopPage.waitForTimeout(UI_SETTLE_MS);
 await runAxe(desktopPage, "desktop workshop carousel advanced");
 
 await desktopPage.goto(new URL("/projects/", baseUrl).toString(), {
   waitUntil: "networkidle",
 });
-await desktopPage.getByRole("button", { name: /Enlarge project image/ }).first().click();
+await desktopPage
+  .getByRole("button", { name: /Enlarge project photo/ })
+  .first()
+  .click();
 await desktopPage.waitForTimeout(UI_SETTLE_MS);
 await runAxe(desktopPage, "desktop project lightbox open");
 await desktop.close();
@@ -153,7 +154,9 @@ await mobile.close();
 await browser.close();
 
 if (failures.length) {
-  console.error(`\nA11y test FAILED — ${failures.length} of ${checks} checks:\n`);
+  console.error(
+    `\nA11y test FAILED — ${failures.length} of ${checks} checks:\n`,
+  );
   for (const failure of failures) {
     console.error(`  ✗ ${failure}`);
   }

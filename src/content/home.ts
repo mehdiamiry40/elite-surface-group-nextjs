@@ -10,7 +10,10 @@ export const heroSlides = [
 
 export const heroCopy = {
   eyebrow: "Cladding, render, Hebel & walling across Adelaide",
-  titleLines: ["Built with care.", "Finished with precision."],
+  titleLines: [
+    "Adelaide cladding, render,",
+    "Hebel & walling specialists.",
+  ],
   body: "One team for carefully planned, professionally installed walling and exterior finishes—from the first quote through to handover.",
 } as const;
 
@@ -79,7 +82,7 @@ export const audiences = [
   {
     eyebrow: "For homeowners & renovators",
     title: "Turn your ideas into a clear plan.",
-    body: "Share your plans, photos and preferred finish. We’ll help define what needs to be inspected, allowed for and quoted before work begins.",
+    body: "Tell us what plans or photos are available and the finish you have in mind. If supporting files are needed, we’ll arrange how to review them before work is scoped.",
     image: "/images/v2/homeowner-consultation.webp",
     imageAlt: "Homeowner and estimator reviewing exterior renovation materials",
     href: "/contact-us/#contact",
@@ -88,7 +91,7 @@ export const audiences = [
   {
     eyebrow: "For builders & developers",
     title: "A trade partner who works to the programme.",
-    body: "Send the drawings, specification and programme. We’ll review the boundaries, system details and handover points that keep adjoining trades moving.",
+    body: "Tell us what drawings, specifications and programme information are available. We’ll arrange how to review what is needed to clarify scope and adjoining-trade handovers.",
     image: "/images/v2/builders-plan-review.webp",
     imageAlt: "Builder and tradesperson reviewing elevation drawings on site",
     href: "/services/",

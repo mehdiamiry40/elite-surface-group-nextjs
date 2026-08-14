@@ -14,13 +14,17 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit --incremental false",
-    "test": "node --experimental-strip-types --test src/lib/contact-security.test.ts",
+    "test": "node --experimental-strip-types --test src/lib/*.test.ts",
     "smoke": "node scripts/smoke-test.mjs",
     "a11y": "node scripts/a11y-test.mjs",
+    "analytics-test": "node scripts/analytics-test.mjs",
+    "enquiry-test": "node scripts/enquiry-test.mjs",
     "bundle-budget": "node scripts/check-bundle-budget.mjs",
+    "link-check": "node scripts/link-check.mjs",
     "check": "npm run typecheck && npm run lint && npm run test && npm run build && npm run bundle-budget"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "next": "16.3.0",
     "react": "19.2.8",
     "react-dom": "19.2.8"

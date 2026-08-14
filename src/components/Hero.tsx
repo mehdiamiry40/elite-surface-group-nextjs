@@ -5,7 +5,7 @@ import { ArrowRightIcon } from "@/components/icons";
 import { heroCopy, heroSlides } from "@/content/home";
 
 export default function Hero() {
-  const mobileHeroSizes = "130vw";
+  const mobileHeroSizes = "100vw";
   const {
     props: { srcSet: mobileHeroSrcSet },
   } = getImageProps({
@@ -13,7 +13,7 @@ export default function Hero() {
     alt: heroSlides[0].alt,
     fill: true,
     sizes: mobileHeroSizes,
-    quality: 90,
+    quality: 75,
   });
 
   return (
@@ -30,7 +30,7 @@ export default function Hero() {
           alt={heroSlides[0].alt}
           fill
           sizes="100vw"
-          quality={90}
+          quality={75}
           loading="eager"
           fetchPriority="high"
         />
@@ -45,7 +45,7 @@ export default function Hero() {
           <h1>
             {heroCopy.titleLines.map((line) => (
               <span className="hero__headline-line" key={line}>
-                {line}
+                {line}{" "}
               </span>
             ))}
           </h1>

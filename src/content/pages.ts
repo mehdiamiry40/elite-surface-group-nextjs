@@ -1,15 +1,17 @@
+import { business } from "@/content/business";
+
 export const contactSection = {
   eyebrow: "Project enquiries",
   title: "Tell us about your project.",
   intro:
-    "Share the suburb, property type and work you have in mind. We’ll review the details and respond within one business day.",
+    "Share the suburb, property type and work you have in mind. We’ll review the details and follow up about the next step.",
   formTitle: "Project details",
   formNote: "A few useful details will help us understand and price the work.",
 } as const;
 
 export const ctaBand = {
   title: "Ready to move your project forward?",
-  body: "Send us your plans, photos or a short brief. We’ll review the work and let you know what we need to prepare an accurate quote.",
+  body: "Tell us what work you have in mind and what plans or photos are available. If supporting files are needed, we’ll arrange how to review them.",
   note: "Quotes are obligation-free.",
   background: "/images/v2/cta-render-action.webp",
 } as const;
@@ -19,10 +21,9 @@ export const aboutPage = {
   metaTitle: "About Our Adelaide Team",
   title: "Practical expertise, from planning to handover",
   metaDescription:
-    "Meet the Adelaide team providing cladding, render, Hebel and walling installations for residential and commercial projects.",
+    "Meet our Salisbury East-based team providing cladding, render, Hebel and walling installations across Adelaide and South Australia.",
   lead: "Elite Surface Group brings cladding, render, Hebel and walling together for homeowners, builders and developers across Adelaide and South Australia.",
-  identity:
-    "Elite Surface Group is operated by Elite Surface Group Pty Ltd (ABN 35 691 074 567), with its main business location in South Australia.",
+  identity: `${business.name} is operated by ${business.legalName} (ABN ${business.abn}) from ${business.address.formatted}. From this Adelaide base, we deliver cladding, render, Hebel and walling work across metropolitan Adelaide and wider South Australia.`,
   gallery: [
     {
       image: "/images/v2/home-team-site-review.webp",
@@ -75,18 +76,17 @@ export const servicesPage = {
 } as const;
 
 export const projectsPage = {
-  bannerTitle: "Cladding & Render Projects Across Adelaide",
+  bannerTitle: "Cladding & Render Project Case Studies",
   metaDescription:
-    "See completed cladding and render details from residential projects across Adelaide, including the scope, challenge and finished result.",
+    "Explore image-backed cladding and render case studies from residential work, with the project type, visible details and recorded finish.",
 } as const;
 
 export const contactPage = {
   bannerTitle: "Let’s Talk About Your Project",
-  metaTitle: "Contact Our Adelaide Team",
-  metaDescription:
-    "Contact Elite Surface Group for an obligation-free quote on cladding, render, Hebel and walling work across Adelaide.",
+  metaTitle: "Contact Our Salisbury East Team",
+  metaDescription: `Contact ${business.name} at ${business.address.formatted} for cladding, render, Hebel and walling enquiries across Adelaide.`,
   intro:
-    "Tell us what you’re planning and where the project is located. We’ll review the details and respond within one business day.",
+    "Tell our Salisbury East team what you’re planning and where the project is located. We’ll review the details and follow up about the next step.",
 } as const;
 
 /** Banner background images, keyed by route. */
@@ -97,6 +97,17 @@ export const bannerImages: Record<string, string> = {
   "/render": "/images/v2/banner-render.webp",
   "/hebel": "/images/v2/banner-hebel.webp",
   "/walling": "/images/v2/banner-walling.webp",
+  "/project-planning": "/images/v2/banner-services.webp",
+  "/resources": "/images/v2/banner-services.webp",
+  "/resources/render-cracking-adelaide": "/images/v2/banner-render.webp",
+  "/resources/cladding-maintenance-coastal-adelaide":
+    "/images/v2/banner-cladding.webp",
+  "/resources/rendering-hebel-panels-adelaide":
+    "/images/v2/banner-hebel.webp",
+  "/resources/hebel-boundary-walls-adelaide":
+    "/images/v2/banner-hebel.webp",
+  "/resources/rendering-over-painted-brick-adelaide":
+    "/images/v2/banner-render.webp",
   "/projects": "/images/v2/banner-projects.webp",
   "/locations": "/images/v2/banner-locations.webp",
   "/locations/adelaide": "/images/v2/banner-locations.webp",

@@ -37,43 +37,62 @@ export default function ContactSection({
         <div className={withDetails ? "split" : "contact-form-wrap"}>
           {withDetails ? (
             <div className="split__body">
-              <h3>Talk to us directly</h3>
+              <h3>Contact our Salisbury East team</h3>
               <p>
-                Call us during business hours, or email your suburb, plans and
-                a short description of the work.
+                Our customer-facing location is in Salisbury East. Call or
+                email us with your suburb, plans and a short description of the
+                work.
               </p>
               {/* A <dl> may only contain dt/dd (optionally wrapped in a single
                   div per group), so the icon lives inside the group div rather
                   than as a sibling of dt/dd. */}
-              <dl className="contact-list">
-                <div className="contact-list__row">
-                  <span className="contact-list__icon" aria-hidden="true">
-                    <PhoneIcon />
-                  </span>
-                  <dt>Phone</dt>
-                  <dd>
-                    <a href={`tel:${business.phone}`}>
-                      {business.phoneDisplay}
-                    </a>
-                  </dd>
-                </div>
-                <div className="contact-list__row">
-                  <span className="contact-list__icon" aria-hidden="true">
-                    <MailIcon />
-                  </span>
-                  <dt>Email</dt>
-                  <dd>
-                    <a href={`mailto:${business.email}`}>{business.email}</a>
-                  </dd>
-                </div>
-                <div className="contact-list__row">
-                  <span className="contact-list__icon" aria-hidden="true">
-                    <PinIcon />
-                  </span>
-                  <dt>Service area</dt>
-                  <dd>{business.area}</dd>
-                </div>
-              </dl>
+              <address className="contact-details">
+                <dl className="contact-list">
+                  <div className="contact-list__row">
+                    <span className="contact-list__icon" aria-hidden="true">
+                      <PhoneIcon />
+                    </span>
+                    <dt>Phone</dt>
+                    <dd>
+                      <a href={`tel:${business.phone}`}>
+                        {business.phoneDisplay}
+                      </a>
+                    </dd>
+                  </div>
+                  <div className="contact-list__row">
+                    <span className="contact-list__icon" aria-hidden="true">
+                      <MailIcon />
+                    </span>
+                    <dt>Email</dt>
+                    <dd>
+                      <a href={`mailto:${business.email}`}>{business.email}</a>
+                    </dd>
+                  </div>
+                  <div className="contact-list__row">
+                    <span className="contact-list__icon" aria-hidden="true">
+                      <PinIcon />
+                    </span>
+                    <dt>Visit us</dt>
+                    <dd>
+                      <a
+                        href={business.address.directionsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {business.address.formatted}
+                      </a>
+                    </dd>
+                  </div>
+                  <div className="contact-list__row contact-list__row--plain">
+                    <dt>Service area</dt>
+                    <dd>{business.area}</dd>
+                  </div>
+                  <div className="contact-list__row contact-list__row--plain">
+                    <dt>Hours</dt>
+                    <dd>{business.hours.display}</dd>
+                  </div>
+                </dl>
+              </address>
             </div>
           ) : null}
 
