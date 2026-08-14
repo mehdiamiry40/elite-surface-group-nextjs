@@ -20,6 +20,7 @@
     "analytics-test": "node scripts/analytics-test.mjs",
     "enquiry-test": "node scripts/enquiry-test.mjs",
     "bundle-budget": "node scripts/check-bundle-budget.mjs",
+    "link-check": "node scripts/link-check.mjs",
     "check": "npm run typecheck && npm run lint && npm run test && npm run build && npm run bundle-budget"
   },
   "dependencies": {

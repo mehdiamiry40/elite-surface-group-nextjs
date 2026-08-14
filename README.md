@@ -97,6 +97,22 @@ reject bad input safely.
 
 Point either suite at a deployment with `SMOKE_BASE_URL=https://…`.
 
+```bash
+npm run link-check   # every external source the guides cite still resolves
+```
+
+The resource guides are built on primary manufacturer and South Australian
+government documents, and those documents move. `link-check` fetches each cited
+URL and fails only on a definite 404 or 410 — hosts that block automated
+clients, rate-limit or time out are reported and skipped, because failing on
+them would train everyone to ignore the check. Redirects are reported too: not
+a failure, but a permanent move is worth writing into the citation while it is
+known.
+
+It runs weekly rather than per pull request (`.github/workflows/link-check.yml`,
+also runnable on demand from the Actions tab). Reaching 40-odd third-party hosts
+on every pull request would let one unrelated outage block unrelated work.
+
 ## Contributing
 
 Branches use one prefix per source, so history stays attributable at a glance:
