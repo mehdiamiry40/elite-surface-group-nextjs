@@ -113,7 +113,7 @@ const organisationSchema = {
     postalCode: business.address.postcode,
     addressCountry: business.address.country,
   },
-  hasMap: business.address.directionsUrl,
+  hasMap: business.address.mapUrl,
   ...(sameAs.length ? { sameAs } : {}),
   contactPoint: [
     {

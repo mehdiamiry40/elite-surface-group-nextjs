@@ -21,8 +21,16 @@ export const business = {
     postcode: "5109",
     country: "AU",
     formatted: "22 Robin St, Salisbury East SA 5109",
+    /** Visitor-facing "get directions" link — routes from wherever they are. */
     directionsUrl:
       "https://www.google.com/maps/dir/?api=1&destination=22%20Robin%20St%2C%20Salisbury%20East%20SA%205109",
+    /**
+     * Map of the place itself, for schema.org `hasMap`. That property expects a
+     * map, not a route: a directions URL describes a journey from an unknown
+     * origin, which is not what a consumer of the schema is asking for.
+     */
+    mapUrl:
+      "https://www.google.com/maps/search/?api=1&query=22%20Robin%20St%2C%20Salisbury%20East%20SA%205109",
   },
   siteUrl: "https://elitesurfacegroup.com.au",
   hours: {

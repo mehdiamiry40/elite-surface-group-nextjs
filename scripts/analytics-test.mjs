@@ -27,6 +27,26 @@ try {
   );
   await page.waitForFunction(() => typeof window.va === "function");
 
+  // Every link asserted below would navigate: `tel:`/`mailto:` hand off to an
+  // external protocol and the directions link leaves the origin entirely. Both
+  // break the assertions — a cross-origin load discards the queue before it can
+  // be read, and after an external-protocol hand-off some Chromium builds drop
+  // the next synthesized click before it reaches the page. Cancelling the
+  // default in the capture phase leaves the site's own delegated click listener
+  // untouched, so the measurement under test still runs.
+  await page.evaluate(() => {
+    document.addEventListener(
+      "click",
+      (event) => {
+        const target = event.target;
+        if (target instanceof Element && target.closest("a[href]")) {
+          event.preventDefault();
+        }
+      },
+      true,
+    );
+  });
+
   await page.getByRole("link", { name: "0413 844 912" }).first().click();
   const queuedEvents = await page.evaluate(
     () => window.__analyticsTestEvents ?? [],

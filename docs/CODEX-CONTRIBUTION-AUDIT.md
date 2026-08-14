@@ -5,7 +5,8 @@ the focus on the most recent batch: **PRs #31–#42, merged 13–14 August 2026*
 (`49a450c…66cb442`, 70 files, **+6,875 / −425**).
 
 Audited at `66cb442`. Every check below was re-run locally against that commit
-rather than taken from the PR descriptions.
+rather than taken from the PR descriptions. The fixes are in the same change as
+this document; each finding records what happened to it.
 
 ## Verdict
 
@@ -13,10 +14,21 @@ rather than taken from the PR descriptions.
 each with green CI before merge, and the tree at `66cb442` passes every gate the
 repository defines. No shipped defect was found in the application code.
 
-The problems worth acting on are one **environmental break that is red right
-now** (an npm advisory published after the batch landed), one **conditional
-runtime bug** in the contact rate limiter, one **fragile regression test**, and
-a set of **process gaps** that let a red build reach `main` earlier in the month.
+Six findings were actioned: one environmental break that was red at audit time,
+one conditional runtime bug, one fragile regression test, and three smaller
+corrections. One finding (F6) was **retracted** — it did not survive
+verification. Two items need the repository owner and cannot be fixed from
+inside the codebase.
+
+| # | Finding | Status |
+|---|---|---|
+| F1 | `npm audit` fails on the pinned `nanoid` — CI red on every branch | **Fixed** |
+| F2 | Upstash rate limiter never releases a blocked visitor | **Fixed** |
+| F3 | Analytics test depends on browser build and click order | **Fixed** |
+| F4 | A red build reached `main` and stayed three days | **Needs owner** — branch protection |
+| F5 | Rate-limit key read the wrong end of the forwarded chain | **Fixed** |
+| F6 | "Route-specific" sitemap dates are one release date | **Retracted** — the claim was wrong |
+| F7 | Housekeeping: stale PRs, prefixes, indentation, `hasMap` | **Fixed / actioned** |
 
 ## Attribution
 
@@ -35,29 +47,30 @@ tool. Of 42 pull requests to date:
 `codex/*` and `agent/*` carry the same PR-body template and the same commit
 style, so both are treated as Codex here: **25 PRs, 24 merged**.
 
-## Verification run at `66cb442`
+## Verification
 
-| Check | Result |
-|---|---|
-| `npm run typecheck` | Pass |
-| `npm run lint` | Pass |
-| `npm test` | Pass — 14 tests, 7 suites |
-| `npm run build` | Pass |
-| `npm run bundle-budget` | Pass — 19 routes, all under 575,000 bytes |
-| `npm run smoke` | Pass — **841 checks** across 25 routes, 67 images |
-| `npm run a11y` | Pass — **57 axe-core runs**, desktop + mobile + interactive states |
-| `npm run enquiry-test` | Pass |
-| `npm run analytics-test` | **Fail** — see F3 (environment-dependent, not a site defect) |
-| `npm audit --omit=dev --audit-level=high` | **Fail** — see F1 |
-| Sitemap vs filesystem routes | 25/25 match, all trailing-slash, no orphans |
-| `/not-a-real-page/`, `/resources/not-real/` | 404 (`dynamicParams = false`) |
+Run at `66cb442` before the fixes, and again after them.
+
+| Check | Before | After |
+|---|---|---|
+| `npm run typecheck` | Pass | Pass |
+| `npm run lint` | Pass | Pass |
+| `npm test` | Pass — 14 tests | Pass — 14 tests |
+| `npm run build` | Pass | Pass |
+| `npm run bundle-budget` | Pass — 19 routes | Pass — 19 routes |
+| `npm run smoke` | Pass — 841 checks, 25 routes, 67 images | Pass — 841 checks |
+| `npm run a11y` | Pass — 57 axe-core runs | Pass — 57 axe-core runs |
+| `npm run enquiry-test` | Pass | Pass |
+| `npm run analytics-test` | **Fail** (F3) | Pass — 3 of 3 runs |
+| `npm audit --omit=dev --audit-level=high` | **Fail** (F1) | Pass — 0 vulnerabilities |
+| Sitemap vs filesystem routes | 25/25, unknown routes 404 | 25/25 |
 
 ## Findings
 
-### F1 — CI on `main` is red today: npm advisory on pinned `nanoid` (high)
+### F1 — CI was red on every branch: npm advisory on pinned `nanoid` — **fixed**
 
-`npm audit --omit=dev --audit-level=high` exits 1, which is step 5 of the CI
-workflow, so **the next push or PR fails before it reaches the test suite**.
+`npm audit --omit=dev --audit-level=high` is step 5 of the CI workflow, so any
+push or pull request failed before reaching the test suite.
 
 ```
 nanoid  <3.3.18   high
@@ -65,70 +78,59 @@ GHSA-2v37-7h3g-55p8 — custom generators can loop indefinitely when size is zer
 elite-surface-group-nextjs → next@16.3.0 → postcss@8.5.25 (override) → nanoid@3.3.17
 ```
 
-`nanoid` is pinned at 3.3.17 by the `overrides.next.postcss` entry in
+`nanoid` was pinned at 3.3.17 by the `overrides.next.postcss` entry in
 `package.json`, set on 8 August in response to the *previous* nanoid advisory.
-The new advisory raises the floor to 3.3.18. This is not caused by the Codex
-batch — it is time-based drift — but it blocks everything that comes next.
+The new advisory raises the floor to 3.3.18. Not caused by the Codex batch —
+time-based drift — but it blocked everything that came after it.
 
-Verified fix (tested on an isolated copy of `package.json` + `package-lock.json`):
+**Fix:** `npm audit fix --package-lock-only`. Lockfile only: `nanoid` 3.3.17 →
+3.3.18 and `js-yaml` patched, with `postcss` still pinned at 8.5.25 by the
+override. `npm audit --omit=dev --audit-level=high` now reports zero
+vulnerabilities and exits 0.
+
+### F2 — Contact rate limiter never released a blocked visitor — **fixed**
+
+`src/app/api/contact/route.ts` issued `INCR` and `EXPIRE` on every request.
+`EXPIRE` was unconditional, so each attempt reset the TTL to a full ten minutes:
+a visitor who tripped the limit and retried every few minutes kept pushing the
+expiry forward and stayed blocked indefinitely, instead of being released ten
+minutes after their *first* request. The in-memory fallback filters timestamps
+against a true sliding window, so the two limiters disagreed on behaviour.
+
+**Fix:** seed the counter with `SET key 0 EX <window> NX`, then `INCR`. The TTL
+is written only when the window is not already open, and counting no longer
+touches it.
+
+Verified against a stub Upstash REST endpoint implementing `SET NX EX` / `INCR`
+/ `EXPIRE` with real TTLs:
 
 ```
-npm audit fix --package-lock-only   # nanoid 3.3.17 → 3.3.18, js-yaml patched
-                                    # postcss stays at the pinned 8.5.25
-                                    # re-audit: found 0 vulnerabilities
+8 sequential submissions, limit 6 → 503 503 503 503 503 503 429 429
+TTL immediately after the burst   → 600s
+retry while blocked, 5s later     → 429, TTL 595s   (decays; previously reset to 600s)
 ```
 
-Lockfile-only; no source change and no override change required.
-
-### F2 — Contact rate limiter never releases a blocked client (Upstash path)
-
-`src/app/api/contact/route.ts:204` issues `INCR` and `EXPIRE` on every request:
-
-```ts
-body: JSON.stringify([
-  ["INCR", key],
-  ["EXPIRE", key, Math.ceil(RATE_LIMIT_WINDOW_MS / 1000)],
-]),
-```
-
-`EXPIRE` is unconditional, so each attempt resets the TTL to a full ten minutes.
-A visitor who trips the limit and retries every few minutes keeps pushing the
-expiry forward and stays blocked indefinitely, instead of being released ten
-minutes after their *first* request. The in-memory fallback
-(`memoryRateLimit`) does not have this problem — it filters timestamps against a
-true sliding window — so the two limiters disagree on behaviour.
-
-Only active when `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` are set;
-harmless otherwise. Fix: set the TTL only when the counter is new (`SET key 1 NX
-EX <window>` + `INCR`, or `EXPIRE key <window> NX`).
-
-### F3 — The analytics regression test is browser-build dependent and order-sensitive
+### F3 — Analytics regression test depended on browser build and click order — **fixed**
 
 `scripts/analytics-test.mjs` is the only automated guard on the conversion
-tracking added in #35. It fails deterministically (3/3 runs) against the
-Chromium build in this environment:
+tracking added in #35. It failed deterministically — three runs of three —
+against a full Chromium build: `Expected one Email Click event, got []`.
 
-```
-Error: Expected one Email Click event, got []
-```
+The cause was the test, not the site. Instrumented in isolation, clicking the
+`mailto:` link *first* emits `Email Click` correctly; clicking it *after* the
+`tel:` click means no click event reaches the page listener at all — the
+synthesized input is dropped while the renderer holds a pending
+external-protocol navigation. CI's `chrome-headless-shell` build does not behave
+this way, which is why the suite passed there. The third assertion had a related
+weakness: it clicked the Google Maps link — a real cross-origin navigation —
+then read the event queue without waiting, passing on a timing race.
 
-Root cause is the test, not the site. Instrumented in isolation:
+**Fix:** cancel the default action for anchors in the capture phase before the
+assertions run. No navigation is ever started, so neither failure mode is
+reachable, and the site's own delegated click listener still runs untouched.
+Three consecutive passes on the build that previously failed three of three.
 
-- clicking the `mailto:` link **first** emits `Email Click` correctly;
-- clicking it **after** the `tel:` click, no `click` event reaches the page's
-  listener at all — the synthesized input is swallowed while the renderer holds
-  a pending external-protocol navigation. CI's `chrome-headless-shell` build
-  does not exhibit this; a full Chromium build does.
-
-The third assertion has a related weakness: it clicks the Google Maps directions
-link — a real cross-origin navigation — then reads `window.__analyticsTestEvents`
-without waiting. It passes on a timing race; when navigation wins, the queue is
-gone and the check fails for the wrong reason.
-
-Suggested: assert each event on a fresh page load, or call `preventDefault()` on
-the anchors under test so no navigation is ever started.
-
-### F4 — Process: a red build reached `main` and stayed there for three days
+### F4 — A red build reached `main` and stayed there for three days — **needs owner**
 
 PR #28 (`agent/improve-website-copy`, 10 August) was **merged 18 seconds after it
 was opened**, before CI could report. Both the PR run and the resulting `main`
@@ -144,71 +146,83 @@ title was fixed in #31.
 
 By contrast the 13–14 August batch was disciplined: every one of #31–#42 was
 merged **after** its CI run completed green, typically 15–60 seconds later. The
-gap is enforcement, not intent — required status checks on `main` would have
-made #28 impossible.
+gap is enforcement, not intent.
 
-### F5 — Rate-limit key trusts client-settable headers
+**Not fixable from the codebase.** Requires a branch-protection rule on `main`
+requiring the `verify` check — GitHub repository settings, not a file. The
+expectation is now written into `README.md` under *Contributing*.
 
-`clientKey()` reads `x-real-ip` first, then the **last** hop of
-`x-vercel-forwarded-for`. On Vercel both are platform-set, so this is correct in
-production. Anywhere else — self-hosted `next start`, a preview proxy that does
-not overwrite them — the limiter key is fully attacker-controlled and the limit
-is bypassed by rotating a header. The smoke suite relies on exactly this
-spoofability (`"x-real-ip": "198.51.100.10"`), which is a reasonable local trick
-but confirms the exposure. The file's own comment documents the limiter as
-best-effort, so treat this as a deployment constraint to record rather than a
-bug: the contact endpoint's protection against Resend spend is only as good as
-the proxy in front of it.
+### F5 — Rate-limit key read the wrong end of the forwarded chain — **fixed**
 
-Note also that the last hop of a forwarded-for chain is the nearest proxy, not
-the client; the first entry is the client. With Vercel's single-value header the
-distinction does not currently bite.
+`clientKey()` read `x-real-ip` first, then the **last** hop of
+`x-vercel-forwarded-for`. In a forwarded chain the client is the *first* entry;
+the last is the nearest proxy. With Vercel's single-value header the distinction
+does not currently bite, but it would silently bucket every visitor together
+behind any proxy that appends.
 
-### F6 — "Route-specific" sitemap dates are effectively one release date
+**Fix:** read the first entry of `x-vercel-forwarded-for`, falling back to
+`x-real-ip`, and document the deployment constraint in place — on Vercel both
+headers are platform-set and unforgeable, but behind any other proxy (or none) a
+client can rotate them for a fresh bucket, which makes the limiter a speed bump
+rather than a control. The smoke suite relies on exactly that spoofability
+locally, which is a reasonable test trick and also the proof of the exposure.
 
-#39 states it moved to per-route `lastModified`. `src/content/routes.ts` does
-give guides their own `modified` date, but 24 of 25 routes resolve to the same
-`RELEASE_DATES.verifiedContentRelease` (`2026-08-13`), which is what the file's
-own comment warns against:
+### F6 — "Route-specific" sitemap dates — **retracted**
 
-> Dates belong to individual route content; do not replace them with build time
-> or one site-wide release date.
+The original finding claimed that #39's route-specific `lastModified` was
+effectively one site-wide release date, since 24 of 25 routes resolve to the same
+constant, and that nothing enforced the invariant. Verification refuted both
+halves:
 
-Hard-coded constants also go stale silently — nothing fails when a page's copy
-changes and its date does not. Low SEO impact (search engines treat `lastmod` as
-a hint), but the claim in the PR body overstates what shipped.
+- **The dates are accurate.** The `2026-08-14` timestamps that suggested drift
+  are Adelaide-local (UTC+9:30/10:30) renderings of commits that are **13 August
+  in UTC**. The entire content batch genuinely landed on one release day, so one
+  shared date is the truthful value, not a placeholder.
+- **The invariant is already enforced.** The smoke suite checks that every URL
+  carries a `lastmod`, that each is a valid ISO date, that none is in the future,
+  that more than one distinct date exists, and it pins two specific routes by
+  value.
 
-### F7 — Housekeeping
+The only change kept is a comment in `src/content/routes.ts`: the previous
+wording forbade "one site-wide release date", which reads as a prohibition the
+code appears to violate. It now states the actual rule — dates are editorial,
+never derived from build time or file mtimes, and several routes sharing a date
+is correct when their content really did land together.
 
-- **Stale open PRs.** #26 (hero colour, draft) and #29 (1,431-line content
-  rewrite, draft) are both `mergeable_state: dirty` and superseded by merged
-  work — #26 by #27, #29 by the #31–#39 content batch. Close them or rebase.
-- **#30 (Dependabot, axe-core) is red only because of its stale base** — it
-  branched from `main` while the `/services/` title failure was live. A rebase
-  clears it; F1 must land first.
-- **Branch prefixes are inconsistent** — `codex/*` and `agent/*` for the same
-  tool makes attribution and filtering unreliable. Pick one.
-- **Unverifiable claims in PR bodies.** Several PRs cite Lighthouse runs
-  ("93–95 performance") and "three independent technical, editorial and
-  safety/privacy audits". Nothing in the repository records these, and they
-  cannot be reproduced after the fact. Attach artifacts or drop the claim.
-- **Indentation left stale in `scripts/smoke-test.mjs`.** #41 wrapped a large
-  block in `if (isLoopbackSmoke) {` without re-indenting its body; the block now
-  reads as if it were top-level.
-- **`hasMap` holds a directions URL** (`layout.tsx`), not a map page. Harmless,
-  slightly off-spec.
-- **One guide's image provenance is vague.** Four of five resource guides label
-  their hero precisely ("AI-generated illustration only…"). The Hebel-panels
-  guide says "Illustrative wall-system image", which does not say whether the
-  photo is an Elite Surface Group project.
+### F7 — Housekeeping — **fixed / actioned**
+
+- **`hasMap` pointed at a directions URL** rather than a map of the place.
+  `business.address.mapUrl` now holds a Maps *search* URL for the address and
+  feeds `hasMap`; `directionsUrl` stays as the visitor-facing "get directions"
+  link. The smoke assertion was updated with it.
+- **Stale indentation in `scripts/smoke-test.mjs`.** #41 wrapped a 128-line
+  block in `if (isLoopbackSmoke) {` and indented only the first line of the
+  body. Re-indented against the pre-#41 formatting; exactly one line differed,
+  confirming nothing else moved.
+- **Branch prefixes and PR claims** are now documented in `README.md` under
+  *Contributing*: one prefix per source (`agent/` for any coding agent), and
+  results in a PR description must be reproducible from the branch. Several PRs
+  cited Lighthouse runs and "three independent audits" that nothing in the
+  repository records.
+- **Stale open PRs.** #26 (hero colour) and #29 (1,431-line content rewrite) were
+  both conflicting drafts superseded by merged work — #26 by #27, #29 by the
+  #31–#39 batch — and have been closed with an explanation.
+- **Dependabot #30** is red only because it branched from `main` while the
+  `/services/` title failure was live. It needs a rebase once F1 is on `main`;
+  until then a rebase would simply hit the audit failure instead.
+- **One guide's image provenance is still vague.** Four of five resource guides
+  label their hero precisely ("AI-generated illustration only…"). The
+  Hebel-panels guide says "Illustrative wall-system image", which does not say
+  whether the photograph is an Elite Surface Group project. Only the owner knows
+  the provenance, so the caption is unchanged.
 
 ### Owner decision, not a defect
 
-The site now publishes a full street address — **22 Robin St, Salisbury East SA
-5109** — in the footer, the `PostalAddress` schema, and a Google Maps directions
-link (#33). If that is a residential address, confirm this is intended before it
-is indexed further; a service-area business can publish a suburb and service
-radius without a street address.
+The site publishes a full street address — **22 Robin St, Salisbury East SA
+5109** — in the footer, the `PostalAddress` schema, and a Google Maps link (#33).
+If that is a residential address, confirm this is intended before it is indexed
+further; a service-area business can publish a suburb and service radius without
+a street address.
 
 ## What held up well
 
@@ -241,8 +255,9 @@ Worth recording, because the batch got a lot right:
 
 - **External citations.** The five guides cite 42 unique authoritative URLs
   (hebel.com.au, ncc.abcb.gov.au, plan.sa.gov.au, dulux.com.au, safework.sa.gov.au
-  and others). This environment's egress policy blocks all of them, so neither
-  liveness nor content accuracy could be confirmed. A link check belongs in CI.
+  and others). The audit environment's egress policy blocks all of them, so
+  neither liveness nor content accuracy could be confirmed. A link check belongs
+  in CI.
 - **Factual accuracy of the guides' technical and regulatory claims** — reviewing
   the NCC/SA planning statements against the primary sources requires the same
   blocked access.
@@ -250,13 +265,11 @@ Worth recording, because the batch got a lot right:
 - **Production configuration** — whether `RESEND_API_KEY`, `CONTACT_*` and the
   Upstash variables are actually set on Vercel.
 
-## Recommended order
+## Still open
 
-1. `npm audit fix --package-lock-only` — unblocks CI (F1).
-2. Enable branch protection on `main`: require the `verify` check, no merge on
-   red (F4).
-3. Fix the Upstash TTL reset (F2).
-4. Make `analytics-test.mjs` navigation-proof (F3).
-5. Rebase #30; close or rebase #26 and #29 (F7).
-6. Add an external link check to the smoke suite so the guides' citations cannot
-   rot unnoticed.
+1. **Branch protection on `main`** requiring `verify` (F4) — owner action.
+2. **Rebase Dependabot #30** once F1 is on `main`.
+3. **Confirm the street address** is intended for publication.
+4. **Clarify the Hebel-panels guide image caption** once its provenance is known.
+5. **Add an external link check** to the smoke suite so the guides' citations
+   cannot rot unnoticed.

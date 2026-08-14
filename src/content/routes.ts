@@ -23,8 +23,17 @@ const RELEASE_DATES = {
  *
  * The sitemap and contact-form source attribution both consume this list so a
  * newly published page cannot be indexable while being recorded as "unknown"
- * in enquiry logs and email notifications. Dates belong to individual route
- * content; do not replace them with build time or one site-wide release date.
+ * in enquiry logs and email notifications.
+ *
+ * Dates are editorial, not automatic: each one records when that route's
+ * visible content last changed. Never derive them from build time or file
+ * mtimes — a rebuild is not a content change, and a `lastmod` that moves
+ * without the copy moving is a signal search engines learn to ignore. Several
+ * routes sharing a date is expected and correct when their content genuinely
+ * landed in the same release; what matters is that the date moves only when the
+ * page does. `routes.test.ts` guards the shape of this list, but only a human
+ * can decide that a given edit was substantial, so update the date in the same
+ * change as the copy.
  */
 export const publicRouteRecords = [
   publicRoute("/", RELEASE_DATES.verifiedContentRelease),
