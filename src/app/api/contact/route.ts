@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { track } from "@vercel/analytics/server";
+import { business } from "@/content/business";
 import {
   projectTimingOptions,
   projectTypeOptions,
@@ -293,7 +294,10 @@ function mailtoUrl({
   projectTiming: string;
   message: string;
 }) {
-  const recipient = contactToAddress();
+  const recipient = contactToAddress(
+    process.env.CONTACT_TO_EMAIL,
+    business.email,
+  );
   const subject = `Website enquiry${service ? ` — ${service}` : ""}`;
   // Keep the fallback below common URL-length limits. The full message remains
   // in the on-page form so the visitor can copy it or retry.
@@ -575,8 +579,12 @@ export async function POST(request: NextRequest) {
   }
 
   const resendKey = process.env.RESEND_API_KEY;
-  const from = contactFromAddress();
-  const to = contactToAddress();
+  const from = contactFromAddress(
+    process.env.CONTACT_FROM_EMAIL,
+    business.name,
+    business.email,
+  );
+  const to = contactToAddress(process.env.CONTACT_TO_EMAIL, business.email);
 
   if (!resendKey) {
     // Loud on purpose: without a provider key no enquiry is ever delivered,
