@@ -101,6 +101,7 @@ export function redactSensitiveText(value: string) {
 
 export type ContactLogEvent =
   | "contact.delivery_unconfigured"
+  | "contact.delivery_logged_locally"
   | "contact.analytics.failed"
   | "contact.resend.accepted"
   | "contact.resend.failed";
@@ -110,7 +111,10 @@ export function contactLog(
   fields: Record<string, string | number | undefined>,
 ) {
   const payload = { event, ...fields };
-  if (event === "contact.resend.accepted") {
+  if (
+    event === "contact.resend.accepted" ||
+    event === "contact.delivery_logged_locally"
+  ) {
     console.info("[contact]", payload);
   } else {
     console.error("[contact]", payload);

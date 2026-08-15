@@ -765,6 +765,27 @@ if (isLoopbackSmoke) {
       ),
     `status ${progressiveForm.status}, location ${progressiveLocation}`,
   );
+
+  if (!process.env.RESEND_API_KEY?.trim()) {
+    const unconfigured = await get("/api/contact/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: baseUrl.origin,
+        "x-real-ip": "198.51.100.23",
+      },
+      body: JSON.stringify({
+        name: "Smoke Tester",
+        email: "smoke@example.com",
+        message: "Please ignore — unconfigured-delivery check.",
+      }),
+    });
+    check(
+      "contact endpoint reports unconfigured delivery without a provider key",
+      unconfigured.status === 503,
+      `status ${unconfigured.status}`,
+    );
+  }
 }
 
 /* ------------------------------------------- content / compliance guards */

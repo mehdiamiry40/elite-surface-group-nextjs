@@ -56,7 +56,8 @@ Enquiries are emailed through [Resend](https://resend.com). Copy
 `.env.example` to `.env.local` and set:
 
 - `RESEND_API_KEY`
-- `CONTACT_FROM_EMAIL` — sender, on a domain verified with Resend
+- `CONTACT_FROM_EMAIL` — sender, on a domain verified with Resend (optional;
+  defaults to `Elite Surface Group <info@elitesurfacegroup.com.au>`)
 - `CONTACT_TO_EMAIL` — enquiry inbox (optional; `elite.surfacegroup@gmail.com`
   by default)
 
@@ -66,19 +67,20 @@ Set the same values in the Vercel project settings.
 domain you have verified with it by adding its DNS records, so
 `CONTACT_FROM_EMAIL` has to be an address on `elitesurfacegroup.com.au` (or
 another verified domain). A Gmail address cannot be a sender — `gmail.com` is
-not a domain anyone outside Google can verify — so the built-in default exists
-only to keep the code total, and delivery fails at the provider while it is in
-use. `npm run prebuild` treats an unset `CONTACT_FROM_EMAIL` as unconfigured
-delivery for that reason.
+not a domain anyone outside Google can verify. The built-in default is
+therefore the business domain, not the public Gmail inbox. `npm run prebuild`
+treats a Gmail `CONTACT_FROM_EMAIL` as unconfigured delivery.
 
 The recipient is more forgiving: it defaults to `business.email`, and a
 `CONTACT_TO_EMAIL` still pointing at the retired `@elitesurfacegroup.com.au`
 mailbox is ignored rather than obeyed, so a stale deployment variable cannot
 quietly swallow leads.
 
-**Without `RESEND_API_KEY` nothing is delivered.** The endpoint then answers 503
-and gives the visitor explicit call and email links without discarding the form
-contents.
+**Without `RESEND_API_KEY` nothing is emailed.** On Vercel and `npm run start`
+the endpoint answers 503 and gives the visitor explicit call and email links
+without discarding the form contents. During `npm run dev` only, the same
+missing key captures the enquiry in the server log and the form still shows
+success, so the quote flow can be tested without secrets.
 
 `npm run prebuild` warns during local development and fails Vercel Production
 builds when delivery is unconfigured. `REQUIRE_CONTACT_DELIVERY=1` applies the
@@ -163,8 +165,9 @@ pull request nobody checked.
 Open items that still need a human decision outside the codebase:
 
 - **Resend delivery** — verify `elitesurfacegroup.com.au` in the Resend
-  dashboard (add its DNS records), then set `RESEND_API_KEY` and a
-  `CONTACT_FROM_EMAIL` on that domain in Vercel. Enquiries land in
+  dashboard (add its DNS records), then set `RESEND_API_KEY` in Vercel.
+  `CONTACT_FROM_EMAIL` defaults to `info@elitesurfacegroup.com.au` on that
+  domain; do not set it to Gmail. Enquiries land in
   `elite.surfacegroup@gmail.com`; confirm provider acceptance and mailbox
   receipt with a real submission.
 - **Optional shared rate limit** — set `UPSTASH_REDIS_REST_URL` and
