@@ -56,14 +56,29 @@ Enquiries are emailed through [Resend](https://resend.com). Copy
 `.env.example` to `.env.local` and set:
 
 - `RESEND_API_KEY`
-- `CONTACT_FROM_EMAIL` — sender address (`Elite Surface Group <elite.surfacegroup@gmail.com>` by default)
-- `CONTACT_TO_EMAIL` — enquiry inbox (`elite.surfacegroup@gmail.com` by default)
+- `CONTACT_FROM_EMAIL` — sender, on a domain verified with Resend
+- `CONTACT_TO_EMAIL` — enquiry inbox (optional; `elite.surfacegroup@gmail.com`
+  by default)
 
-Set the same three in the Vercel project settings.
+Set the same values in the Vercel project settings.
 
-**Without `RESEND_API_KEY` nothing is delivered.** From and to fall back to
-the public inbox when unset. The endpoint then answers 503 and gives the
-visitor explicit call and email links without discarding the form contents.
+**The sender is the part that catches people out.** Resend delivers only from a
+domain you have verified with it by adding its DNS records, so
+`CONTACT_FROM_EMAIL` has to be an address on `elitesurfacegroup.com.au` (or
+another verified domain). A Gmail address cannot be a sender — `gmail.com` is
+not a domain anyone outside Google can verify — so the built-in default exists
+only to keep the code total, and delivery fails at the provider while it is in
+use. `npm run prebuild` treats an unset `CONTACT_FROM_EMAIL` as unconfigured
+delivery for that reason.
+
+The recipient is more forgiving: it defaults to `business.email`, and a
+`CONTACT_TO_EMAIL` still pointing at the retired `@elitesurfacegroup.com.au`
+mailbox is ignored rather than obeyed, so a stale deployment variable cannot
+quietly swallow leads.
+
+**Without `RESEND_API_KEY` nothing is delivered.** The endpoint then answers 503
+and gives the visitor explicit call and email links without discarding the form
+contents.
 
 `npm run prebuild` warns during local development and fails Vercel Production
 builds when delivery is unconfigured. `REQUIRE_CONTACT_DELIVERY=1` applies the
@@ -147,9 +162,11 @@ pull request nobody checked.
 
 Open items that still need a human decision outside the codebase:
 
-- **Resend delivery** — set `RESEND_API_KEY` in Vercel. Quote mail now
-  defaults to `elite.surfacegroup@gmail.com` for both from and to; confirm
-  provider acceptance and mailbox receipt.
+- **Resend delivery** — verify `elitesurfacegroup.com.au` in the Resend
+  dashboard (add its DNS records), then set `RESEND_API_KEY` and a
+  `CONTACT_FROM_EMAIL` on that domain in Vercel. Enquiries land in
+  `elite.surfacegroup@gmail.com`; confirm provider acceptance and mailbox
+  receipt with a real submission.
 - **Optional shared rate limit** — set `UPSTASH_REDIS_REST_URL` and
   `UPSTASH_REDIS_REST_TOKEN` if a hard global contact quota is required.
 - **Social profiles** — add real Facebook / Instagram URLs to `business.social`
