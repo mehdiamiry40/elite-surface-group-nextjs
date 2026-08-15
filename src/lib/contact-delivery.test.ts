@@ -33,16 +33,17 @@ describe("contactFromAddress", () => {
     assert.equal(business.email, "elite.surfacegroup@gmail.com");
   });
 
-  it("replaces former domain senders", () => {
-    const expected = defaultFromAddress(business.name, business.email);
-    assert.equal(from("info@elitesurfacegroup.com.au"), expected);
+  // The sender is the one place the business domain must survive: it is the
+  // domain that can be verified with Resend, and the Gmail default cannot send
+  // at all. Rejecting it here fails every enquiry at the provider.
+  it("keeps a configured sender on the business domain", () => {
     assert.equal(
-      from("Elite Surface Group Website <info@elitesurfacegroup.com.au>"),
-      expected,
+      from("Elite Surface Group <info@elitesurfacegroup.com.au>"),
+      "Elite Surface Group <info@elitesurfacegroup.com.au>",
     );
     assert.equal(
-      from("Elite Surface Group <website@elitesurfacegroup.com.au>"),
-      expected,
+      from("website@elitesurfacegroup.com.au"),
+      "website@elitesurfacegroup.com.au",
     );
   });
 
