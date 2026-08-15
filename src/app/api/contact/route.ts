@@ -11,6 +11,8 @@ import { CONVERSION_EVENT_NAMES } from "@/lib/conversion-analytics";
 import {
   contactFromAddress,
   contactToAddress,
+  isResendCompatibleFrom,
+  shouldCaptureEnquiryLocally,
 } from "@/lib/contact-delivery";
 import {
   contactLog,
@@ -582,13 +584,51 @@ export async function POST(request: NextRequest) {
   const from = contactFromAddress(
     process.env.CONTACT_FROM_EMAIL,
     business.name,
-    business.email,
   );
   const to = contactToAddress(process.env.CONTACT_TO_EMAIL, business.email);
+  const mailtoFields = {
+    name,
+    email,
+    phone,
+    service,
+    projectType,
+    projectArea,
+    projectTiming,
+    message,
+  };
 
   if (!resendKey) {
-    // Loud on purpose: without a provider key no enquiry is ever delivered,
-    // and the visitor-side mailto fallback is easy to miss on mobile.
+    // `next dev` captures the enquiry so the form can be tested without
+    // secrets. Vercel and `next start` stay loud: without a provider key no
+    // enquiry is ever delivered, and the visitor-side mailto fallback is easy
+    // to miss on mobile.
+    if (shouldCaptureEnquiryLocally()) {
+      contactLog("contact.delivery_logged_locally", {
+        page: sourcePath || "unknown",
+      });
+      console.info("[contact] captured locally (not emailed)", {
+        name,
+        email,
+        phone,
+        service,
+        projectType,
+        projectArea,
+        projectTiming,
+        sourcePath,
+        message,
+      });
+      return contactResponse(
+        request,
+        isBrowserForm,
+        {
+          ok: true,
+          message:
+            "Thanks—your enquiry has been sent. We’ll be in touch soon.",
+        },
+        200,
+        "sent",
+      );
+    }
     contactLog("contact.delivery_unconfigured", {
       page: sourcePath || "unknown",
     });
@@ -598,16 +638,27 @@ export async function POST(request: NextRequest) {
       {
         message:
           "Email delivery is unavailable right now. You can call us on 0413 844 912, or continue in your email app.",
-        mailto: mailtoUrl({
-          name,
-          email,
-          phone,
-          service,
-          projectType,
-          projectArea,
-          projectTiming,
-          message,
-        }),
+        mailto: mailtoUrl(mailtoFields),
+      },
+      503,
+      "unavailable",
+    );
+  }
+
+  if (!isResendCompatibleFrom(from)) {
+    // A Gmail (or other public-mailbox) From is not delivery — Resend rejects
+    // it. Fail the same way as a missing key rather than posting to the API
+    // and turning a config mistake into a 502.
+    contactLog("contact.delivery_unconfigured", {
+      page: sourcePath || "unknown",
+    });
+    return contactResponse(
+      request,
+      isBrowserForm,
+      {
+        message:
+          "Email delivery is unavailable right now. You can call us on 0413 844 912, or continue in your email app.",
+        mailto: mailtoUrl(mailtoFields),
       },
       503,
       "unavailable",
