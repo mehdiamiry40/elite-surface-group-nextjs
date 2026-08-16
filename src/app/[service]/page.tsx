@@ -17,6 +17,7 @@ import {
 } from "@/components/JsonLd";
 import { business } from "@/content/business";
 import { ogCard, pageMetadata } from "@/lib/seo";
+import { blurProps } from "@/lib/lcp-blur";
 
 type PageProps = {
   params: Promise<{ service: string }>;
@@ -92,6 +93,7 @@ export default async function ServicePage({ params }: PageProps) {
               width={service.imageWidth}
               height={service.imageHeight}
               sizes="(max-width: 767px) 100vw, 560px"
+              {...blurProps(service.image)}
             />
           </div>
           <div className="split__body">

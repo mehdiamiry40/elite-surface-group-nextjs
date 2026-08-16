@@ -8,6 +8,7 @@ import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
 import { bannerImages } from "@/content/pages";
 import { renderCrackingGuide } from "@/content/resources";
+import { blurProps } from "@/lib/lcp-blur";
 import { ogCard, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
@@ -205,6 +206,7 @@ export default function RenderCrackingGuidePage() {
                 width={renderCrackingGuide.imageWidth}
                 height={renderCrackingGuide.imageHeight}
                 sizes="(max-width: 767px) 100vw, 560px"
+                {...blurProps(renderCrackingGuide.image)}
               />
               <figcaption>{renderCrackingGuide.imageCaption}</figcaption>
             </figure>

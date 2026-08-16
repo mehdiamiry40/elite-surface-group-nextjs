@@ -8,6 +8,7 @@ import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
 import { bannerImages } from "@/content/pages";
 import { renderingHebelGuide } from "@/content/resources";
+import { blurProps } from "@/lib/lcp-blur";
 import { ogCard, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
@@ -116,6 +117,7 @@ export default function RenderingHebelPanelsGuidePage() {
                 width={renderingHebelGuide.imageWidth}
                 height={renderingHebelGuide.imageHeight}
                 sizes="(max-width: 767px) 100vw, 560px"
+                {...blurProps(renderingHebelGuide.image)}
               />
               <figcaption>{renderingHebelGuide.imageCaption}</figcaption>
             </figure>

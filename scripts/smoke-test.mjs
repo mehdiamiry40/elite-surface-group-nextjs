@@ -919,6 +919,45 @@ const hebelBoundaryWallsHtml =
 const renderingPaintedBrickHtml =
   pages.get("/resources/rendering-over-painted-brick-adelaide/") ?? "";
 const projectPlanningHtml = pages.get("/project-planning/") ?? "";
+
+function preloadMarkup(html) {
+  return (html.match(/<link[^>]*rel="preload"[^>]*>/g) ?? [])
+    .map((tag) => tag.replaceAll("&amp;", "&"))
+    .join("\n");
+}
+
+const homePreloads = preloadMarkup(homeHtml);
+check(
+  "home preloads the art-directed hero photograph",
+  homePreloads.includes("home-hero-adelaide.webp") &&
+    homePreloads.includes("home-hero-adelaide-mobile-v2.webp") &&
+    homePreloads.includes('media="(max-width: 767px)"') &&
+    homePreloads.includes('media="(min-width: 768px)"'),
+);
+check(
+  "home does not preload the header logo ahead of the hero",
+  !homePreloads.includes("esg-logo-1.webp"),
+);
+check(
+  "image srcsets cap below 4K widths",
+  !/w=3840/.test(homeHtml) && !/w=2048/.test(homeHtml),
+);
+check(
+  "header logo is the static webp, not an optimiser URL",
+  homeHtml.includes('src="/images/esg-logo-1.webp"'),
+);
+
+const renderPreloads = preloadMarkup(pages.get("/render/") ?? "");
+check(
+  "render preloads its banner photograph, not the header logo",
+  renderPreloads.includes("banner-render.webp") &&
+    !renderPreloads.includes("esg-logo-1.webp"),
+);
+check(
+  "render does not preload its below-fold service photograph",
+  !renderPreloads.includes("service-render-application.webp"),
+);
+
 check(
   "contact form collects optional project context with fixed choices",
   ["projectArea", "projectType", "projectTiming"].every((name) =>

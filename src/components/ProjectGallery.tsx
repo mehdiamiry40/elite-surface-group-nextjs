@@ -6,6 +6,7 @@ import { useCallback, useState } from "react";
 import { useDialog } from "@/components/useDialog";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons";
 import type { ProjectCard } from "@/content/projects";
+import { blurProps } from "@/lib/lcp-blur";
 
 type ProjectGalleryProps = {
   items: readonly ProjectCard[];
@@ -52,6 +53,7 @@ export default function ProjectGallery({ items }: ProjectGalleryProps) {
                 width={item.width}
                 height={item.height}
                 sizes="(max-width: 767px) 100vw, (max-width: 1024px) 50vw, 380px"
+                {...blurProps(item.image)}
               />
             </button>
             <div className="gallery__caption">
@@ -129,6 +131,7 @@ export default function ProjectGallery({ items }: ProjectGalleryProps) {
               width={current.width}
               height={current.height}
               sizes="92vw"
+              {...blurProps(current.image)}
             />
           ) : null}
         </div>

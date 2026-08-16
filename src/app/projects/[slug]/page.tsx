@@ -11,6 +11,7 @@ import { bannerImages } from "@/content/pages";
 import { getProject, projects } from "@/content/projects";
 import { services } from "@/content/services";
 import { ogCard, pageMetadata } from "@/lib/seo";
+import { blurProps } from "@/lib/lcp-blur";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -98,6 +99,7 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
                 width={project.width}
                 height={project.height}
                 sizes="(max-width: 767px) 100vw, (max-width: 1200px) 65vw, 780px"
+                {...blurProps(project.image)}
               />
               <figcaption>{project.imageCaption}</figcaption>
             </figure>

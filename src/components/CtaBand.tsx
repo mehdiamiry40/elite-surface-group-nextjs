@@ -3,6 +3,7 @@ import QuoteButton from "@/components/QuoteButton";
 import { PhoneIcon } from "@/components/icons";
 import { business } from "@/content/business";
 import { ctaBand } from "@/content/pages";
+import { blurProps } from "@/lib/lcp-blur";
 
 export function CtaBand() {
   return (
@@ -13,7 +14,9 @@ export function CtaBand() {
         alt=""
         fill
         sizes="100vw"
+        loading="lazy"
         aria-hidden
+        {...blurProps(ctaBand.background)}
       />
       <div className="shell cta__inner">
         <div>

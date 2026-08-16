@@ -64,11 +64,14 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
     qualities: [75, 90],
-    // deviceSizes/imageSizes are left at their defaults on purpose: the
-    // optimiser only accepts widths from that allowlist and 400s on anything
-    // else, so narrowing it to the widths the current layout happens to ask for
-    // turns any future `sizes` change into a broken image. Variants are built
-    // lazily per request, so a longer list costs nothing.
+    // Photographs are 1600–1920px masters. The default 2048/3840 slots make
+    // retina desktops request those widths, which only re-encodes the same
+    // pixels and delays LCP. Next.js emits srcset from this allowlist, so our
+    // <Image> tags cannot 400; a future `sizes` change just picks 1920.
+    deviceSizes: [640, 750, 828, 1080, 1200, 1600, 1920],
+    // Cached per deployment (`dpl` on Vercel). A month avoids re-transforming
+    // the same variant for returning visitors.
+    minimumCacheTTL: 2678400,
   },
 
   async headers() {
