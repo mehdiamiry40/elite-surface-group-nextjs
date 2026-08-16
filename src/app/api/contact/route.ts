@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { track } from "@vercel/analytics/server";
-import { business } from "@/content/business";
+import { business, unavailableDeliveryCopy } from "@/content/business";
 import {
   projectTimingOptions,
   projectTypeOptions,
@@ -636,8 +636,7 @@ export async function POST(request: NextRequest) {
       request,
       isBrowserForm,
       {
-        message:
-          "Email delivery is unavailable right now. You can call us on 0413 844 912, or continue in your email app.",
+        message: unavailableDeliveryCopy,
         mailto: mailtoUrl(mailtoFields),
       },
       503,
@@ -656,8 +655,7 @@ export async function POST(request: NextRequest) {
       request,
       isBrowserForm,
       {
-        message:
-          "Email delivery is unavailable right now. You can call us on 0413 844 912, or continue in your email app.",
+        message: unavailableDeliveryCopy,
         mailto: mailtoUrl(mailtoFields),
       },
       503,
@@ -737,8 +735,7 @@ export async function POST(request: NextRequest) {
       request,
       isBrowserForm,
       {
-        message:
-          "Email delivery is unavailable right now. You can call us on 0413 844 912, or continue in your email app.",
+        message: unavailableDeliveryCopy,
         mailto: mailtoUrl({
           name,
           email,

@@ -107,13 +107,10 @@ const organisationSchema = {
   areaServed: business.serviceAreas,
   address: {
     "@type": "PostalAddress",
-    streetAddress: business.address.street,
     addressLocality: business.address.suburb,
     addressRegion: business.address.region,
-    postalCode: business.address.postcode,
     addressCountry: business.address.country,
   },
-  hasMap: business.address.mapUrl,
   ...(sameAs.length ? { sameAs } : {}),
   contactPoint: [
     {

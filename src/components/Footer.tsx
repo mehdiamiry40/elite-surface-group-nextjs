@@ -6,7 +6,6 @@ import {
   InstagramIcon,
   MailIcon,
   PhoneIcon,
-  PinIcon,
 } from "@/components/icons";
 import { business } from "@/content/business";
 import { footerBlurb, footerNav } from "@/content/navigation";
@@ -108,16 +107,6 @@ export default function Footer() {
                 <li>
                   <MailIcon />
                   <a href={`mailto:${business.email}`}>{business.email}</a>
-                </li>
-                <li>
-                  <PinIcon />
-                  <a
-                    href={business.address.directionsUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {business.address.formatted}
-                  </a>
                 </li>
               </ul>
             </address>

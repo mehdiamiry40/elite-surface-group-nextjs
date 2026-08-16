@@ -460,9 +460,9 @@ for (const [route, html] of pages) {
   // Every tel: link must be the single E.164 number — no placeholders.
   const telLinks = [...html.matchAll(/href="tel:([^"]+)"/g)].map((m) => m[1]);
   check(`${route} has at least one tel: link`, telLinks.length > 0);
-  const badTel = telLinks.filter((value) => value !== "+61413844912");
+  const badTel = telLinks.filter((value) => value !== "+61470353225");
   check(
-    `${route} tel: links are all +61413844912`,
+    `${route} tel: links are all +61470353225`,
     badTel.length === 0,
     badTel.join(", "),
   );
@@ -801,8 +801,9 @@ check(
   /Australian Privacy Principles|Privacy Act 1988/.test(privacyHtml),
 );
 check(
-  "llms.txt publishes the public business email",
-  llmsBody.includes("elite.surfacegroup@gmail.com"),
+  "llms.txt publishes the public business email and phone",
+  llmsBody.includes("elite.surfacegroup@gmail.com") &&
+    llmsBody.includes("0470 353 225"),
 );
 check(
   "the retired info@ inbox is not published",
@@ -982,16 +983,25 @@ check(
     /35 691 074 567/.test(homeHtml),
 );
 check(
-  "every public page publishes the verified Salisbury East address",
-  [...pages.values()].every((html) =>
-    /22 Robin St, Salisbury East SA 5109/.test(html),
+  "no public page publishes the former house address",
+  ![...pages.values(), llmsBody].some((html) =>
+    /22 Robin St|Robin St, Salisbury East|Salisbury East SA 5109/.test(html),
   ),
+);
+check(
+  "the retired phone number is not published",
+  ![...pages.values(), llmsBody].some((html) =>
+    /0413 844 912|\+61413844912/.test(html),
+  ),
+);
+check(
+  "every public page publishes the current phone number",
+  [...pages.values()].every((html) => /0470 353 225/.test(html)),
 );
 check(
   "contact page publishes complete local contact details",
   /Contact our Salisbury East team/.test(contactHtml) &&
-    /22 Robin St, Salisbury East SA 5109/.test(contactHtml) &&
-    /0413 844 912/.test(contactHtml) &&
+    /0470 353 225/.test(contactHtml) &&
     /elite\.surfacegroup@gmail\.com/.test(contactHtml) &&
     /Adelaide &amp; South Australia/.test(contactHtml),
 );
@@ -1033,12 +1043,12 @@ check(
   "organisation schema publishes the verified local NAP",
   organisationJsonLd?.name === "Elite Surface Group" &&
     organisationJsonLd?.legalName === "Elite Surface Group Pty Ltd" &&
-    organisationJsonLd?.telephone === "+61413844912" &&
+    organisationJsonLd?.telephone === "+61470353225" &&
     organisationJsonLd?.email === "elite.surfacegroup@gmail.com" &&
-    organisationJsonLd?.address?.streetAddress === "22 Robin St" &&
+    organisationJsonLd?.address?.streetAddress === undefined &&
+    organisationJsonLd?.address?.postalCode === undefined &&
     organisationJsonLd?.address?.addressLocality === "Salisbury East" &&
     organisationJsonLd?.address?.addressRegion === "SA" &&
-    organisationJsonLd?.address?.postalCode === "5109" &&
     organisationJsonLd?.address?.addressCountry === "AU",
 );
 const expectedServiceAreas = [
@@ -1085,9 +1095,9 @@ check(
     ),
 );
 check(
-  "organisation schema maps the verified address, not a route from nowhere",
-  organisationJsonLd?.hasMap ===
-    "https://www.google.com/maps/search/?api=1&query=22%20Robin%20St%2C%20Salisbury%20East%20SA%205109",
+  "organisation schema does not publish a house map or street address",
+  organisationJsonLd?.hasMap === undefined &&
+    organisationJsonLd?.address?.streetAddress === undefined,
 );
 check(
   "organisation schema and visible footer publish the same business hours",

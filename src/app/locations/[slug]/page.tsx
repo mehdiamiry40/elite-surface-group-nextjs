@@ -7,7 +7,6 @@ import ContactSection from "@/components/ContactSection";
 import { TickList } from "@/components/sections";
 import { BreadcrumbSchema } from "@/components/JsonLd";
 import { bannerImages } from "@/content/pages";
-import { business } from "@/content/business";
 import {
   getLocation,
   locationPages,
@@ -79,18 +78,6 @@ export default async function LocationPage({ params }: PageProps) {
             <p key={paragraph}>{paragraph}</p>
           ))}
           <p>{location.servicesLead}</p>
-          <p>
-            Our customer-facing location is at{" "}
-            <a
-              href={business.address.directionsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {business.address.formatted}
-            </a>
-            . Contact the team with your suburb and project details so we can
-            confirm availability and the next step.
-          </p>
           <ul className="plain-link-list">
             {services.map((service) => (
               <li key={service.slug}>

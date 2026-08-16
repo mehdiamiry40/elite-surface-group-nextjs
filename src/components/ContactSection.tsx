@@ -2,7 +2,7 @@
 
 import EnquiryFields from "@/components/EnquiryFields";
 import { useEnquiryForm } from "@/components/useEnquiryForm";
-import { MailIcon, PhoneIcon, PinIcon } from "@/components/icons";
+import { MailIcon, PhoneIcon } from "@/components/icons";
 import { business } from "@/content/business";
 import { contactSection } from "@/content/pages";
 
@@ -39,9 +39,8 @@ export default function ContactSection({
             <div className="split__body">
               <h3>Contact our Salisbury East team</h3>
               <p>
-                Our customer-facing location is in Salisbury East. Call or
-                email us with your suburb, plans and a short description of the
-                work.
+                We’re based in Salisbury East. Call or email us with your
+                suburb, plans and a short description of the work.
               </p>
               {/* A <dl> may only contain dt/dd (optionally wrapped in a single
                   div per group), so the icon lives inside the group div rather
@@ -66,21 +65,6 @@ export default function ContactSection({
                     <dt>Email</dt>
                     <dd>
                       <a href={`mailto:${business.email}`}>{business.email}</a>
-                    </dd>
-                  </div>
-                  <div className="contact-list__row">
-                    <span className="contact-list__icon" aria-hidden="true">
-                      <PinIcon />
-                    </span>
-                    <dt>Visit us</dt>
-                    <dd>
-                      <a
-                        href={business.address.directionsUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {business.address.formatted}
-                      </a>
                     </dd>
                   </div>
                   <div className="contact-list__row contact-list__row--plain">

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { serviceNames } from "@/content/services";
+import { business } from "@/content/business";
 
 export type EnquiryStatus = {
   state: "success" | "error" | "warning";
@@ -79,7 +80,7 @@ export function useEnquiryForm() {
             state: "warning",
             message:
               payload.message ??
-              "Email delivery is unavailable. Please call 0413 844 912, or send the message from your email app.",
+              `Email delivery is unavailable. Please call ${business.phoneDisplay}, or send the message from your email app.`,
             mailto: payload.mailto,
           });
           return;
@@ -105,7 +106,7 @@ export function useEnquiryForm() {
             ? "The request was cancelled. Please try again."
             : error instanceof Error
             ? error.message
-            : "The message could not be sent. Please call 0413 844 912.",
+            : `The message could not be sent. Please call ${business.phoneDisplay}.`,
       });
     } finally {
       if (mountedRef.current && controllerRef.current === controller) {
