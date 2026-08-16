@@ -5,32 +5,23 @@ export const business = {
   abn: "35 691 074 567",
   tagline: "Adelaide Cladding, Render, Hebel & Walling Specialists",
   /** E.164 for `tel:` hrefs — never hand-write a `tel:` link anywhere else. */
-  phone: "+61413844912",
+  phone: "+61470353225",
   /** Human-readable form of the same number. */
-  phoneDisplay: "0413 844 912",
+  phoneDisplay: "0470 353 225",
   email: "elite.surfacegroup@gmail.com",
   area: "Adelaide & South Australia",
   serviceAreas: [
     { "@type": "City", name: "Adelaide" },
     { "@type": "AdministrativeArea", name: "South Australia" },
   ],
+  /**
+   * Public locality only. No street, postcode or map URL is published — this
+   * is a service-area contractor, not a customer-facing shopfront.
+   */
   address: {
-    street: "22 Robin St",
     suburb: "Salisbury East",
     region: "SA",
-    postcode: "5109",
     country: "AU",
-    formatted: "22 Robin St, Salisbury East SA 5109",
-    /** Visitor-facing "get directions" link — routes from wherever they are. */
-    directionsUrl:
-      "https://www.google.com/maps/dir/?api=1&destination=22%20Robin%20St%2C%20Salisbury%20East%20SA%205109",
-    /**
-     * Map of the place itself, for schema.org `hasMap`. That property expects a
-     * map, not a route: a directions URL describes a journey from an unknown
-     * origin, which is not what a consumer of the schema is asking for.
-     */
-    mapUrl:
-      "https://www.google.com/maps/search/?api=1&query=22%20Robin%20St%2C%20Salisbury%20East%20SA%205109",
   },
   siteUrl: "https://elitesurfacegroup.com.au",
   hours: {
@@ -55,3 +46,5 @@ export const business = {
     instagram: "https://www.instagram.com/elite.surface.group/",
   },
 } as const;
+
+export const unavailableDeliveryCopy = `Email delivery is unavailable right now. You can call us on ${business.phoneDisplay}, or continue in your email app.`;

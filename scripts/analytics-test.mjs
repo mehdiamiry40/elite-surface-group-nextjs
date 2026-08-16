@@ -28,12 +28,11 @@ try {
   await page.waitForFunction(() => typeof window.va === "function");
 
   // Every link asserted below would navigate: `tel:`/`mailto:` hand off to an
-  // external protocol and the directions link leaves the origin entirely. Both
-  // break the assertions — a cross-origin load discards the queue before it can
-  // be read, and after an external-protocol hand-off some Chromium builds drop
-  // the next synthesized click before it reaches the page. Cancelling the
-  // default in the capture phase leaves the site's own delegated click listener
-  // untouched, so the measurement under test still runs.
+  // external protocol. That breaks the assertions — after an external-protocol
+  // hand-off some Chromium builds drop the next synthesized click before it
+  // reaches the page. Cancelling the default in the capture phase leaves the
+  // site's own delegated click listener untouched, so the measurement under
+  // test still runs.
   await page.evaluate(() => {
     document.addEventListener(
       "click",
@@ -47,7 +46,7 @@ try {
     );
   });
 
-  await page.getByRole("link", { name: "0413 844 912" }).first().click();
+  await page.getByRole("link", { name: "0470 353 225" }).first().click();
   const queuedEvents = await page.evaluate(
     () => window.__analyticsTestEvents ?? [],
   );
@@ -87,31 +86,6 @@ try {
   if (Object.keys(emailEvents[0][1]).sort().join(",") !== "name,options") {
     throw new Error(
       `Email Click must not contain destination data: ${JSON.stringify(emailEvents[0])}`,
-    );
-  }
-
-  await page.evaluate(() => {
-    window.__analyticsTestEvents = [];
-  });
-  await page
-    .getByRole("link", { name: "22 Robin St, Salisbury East SA 5109" })
-    .first()
-    .click();
-  const directionsQueue = await page.evaluate(
-    () => window.__analyticsTestEvents ?? [],
-  );
-  const directionsEvents = directionsQueue.filter(
-    ([event, payload]) =>
-      event === "event" && payload?.name === "Directions Click",
-  );
-  if (directionsEvents.length !== 1) {
-    throw new Error(
-      `Expected one Directions Click event, got ${JSON.stringify(directionsEvents)}`,
-    );
-  }
-  if (Object.keys(directionsEvents[0][1]).sort().join(",") !== "name,options") {
-    throw new Error(
-      `Directions Click must not contain destination data: ${JSON.stringify(directionsEvents[0])}`,
     );
   }
 

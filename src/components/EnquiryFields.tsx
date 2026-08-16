@@ -7,6 +7,7 @@ import {
   projectTimingOptions,
   projectTypeOptions,
 } from "@/content/enquiry";
+import { business } from "@/content/business";
 
 type EnquiryFieldsProps = {
   /** Prefixes field ids so the two forms can coexist on one page. */
@@ -86,7 +87,7 @@ export default function EnquiryFields({
           type="tel"
           inputMode="tel"
           autoComplete="tel"
-          placeholder="0413 844 912"
+          placeholder={business.phoneDisplay}
           maxLength={50}
         />
       </div>

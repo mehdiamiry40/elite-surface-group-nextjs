@@ -3,7 +3,6 @@
 import { Analytics, type BeforeSendEvent } from "@vercel/analytics/next";
 import { track } from "@vercel/analytics";
 import { useEffect } from "react";
-import { business } from "@/content/business";
 import {
   contactEventName,
   redactAnalyticsUrl,
@@ -16,7 +15,7 @@ import {
  */
 function classifyContactLink(link: HTMLAnchorElement) {
   const href = link.getAttribute("href") ?? "";
-  return contactEventName(href, business.address.directionsUrl);
+  return contactEventName(href);
 }
 
 export default function ConversionAnalytics() {

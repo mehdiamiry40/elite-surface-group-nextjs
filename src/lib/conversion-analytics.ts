@@ -17,14 +17,14 @@ export function redactAnalyticsUrl(value: string, origin: string) {
   return url.toString();
 }
 
-export function contactEventName(href: string, directionsUrl: string) {
+export function contactEventName(href: string, directionsUrl?: string) {
   if (href.startsWith("tel:")) {
     return CONVERSION_EVENT_NAMES.phoneClick;
   }
   if (href.startsWith("mailto:")) {
     return CONVERSION_EVENT_NAMES.emailClick;
   }
-  if (href === directionsUrl) {
+  if (directionsUrl && href === directionsUrl) {
     return CONVERSION_EVENT_NAMES.directionsClick;
   }
   return null;
