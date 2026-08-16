@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRightIcon, CheckIcon } from "@/components/icons";
 import type { Project } from "@/content/projects";
 import { services, servicesIntro } from "@/content/services";
+import { blurProps } from "@/lib/lcp-blur";
 
 function projectServiceName(project: Project) {
   return (
@@ -134,6 +135,7 @@ export function ServiceCards({
                     width={480}
                     height={360}
                     sizes="(max-width: 767px) 100vw, (max-width: 1024px) 50vw, 280px"
+                    {...blurProps(service.image)}
                   />
                 </div>
                 <div className="service-card__body">

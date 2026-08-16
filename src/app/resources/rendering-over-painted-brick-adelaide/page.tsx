@@ -8,6 +8,7 @@ import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
 import { bannerImages } from "@/content/pages";
 import { renderingPaintedBrickGuide } from "@/content/resources";
+import { blurProps } from "@/lib/lcp-blur";
 import { ogCard, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
@@ -118,6 +119,7 @@ export default function RenderingPaintedBrickGuidePage() {
                 width={renderingPaintedBrickGuide.imageWidth}
                 height={renderingPaintedBrickGuide.imageHeight}
                 sizes="(max-width: 767px) 100vw, 560px"
+                {...blurProps(renderingPaintedBrickGuide.image)}
               />
               <figcaption>{renderingPaintedBrickGuide.imageCaption}</figcaption>
             </figure>

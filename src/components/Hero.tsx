@@ -1,19 +1,45 @@
 import Image, { getImageProps } from "next/image";
+import { preload } from "react-dom";
 import Link from "next/link";
 import QuoteButton from "@/components/QuoteButton";
 import { ArrowRightIcon } from "@/components/icons";
 import { heroCopy, heroSlides } from "@/content/home";
+import { blurProps } from "@/lib/lcp-blur";
+
+const HERO_SIZES = "100vw";
+const HERO_QUALITY = 75;
 
 export default function Hero() {
-  const mobileHeroSizes = "100vw";
-  const {
-    props: { srcSet: mobileHeroSrcSet },
-  } = getImageProps({
-    src: heroSlides[0].mobileImage,
-    alt: heroSlides[0].alt,
+  const slide = heroSlides[0];
+  const shared = {
+    alt: slide.alt,
     fill: true,
-    sizes: mobileHeroSizes,
-    quality: 75,
+    sizes: HERO_SIZES,
+    quality: HERO_QUALITY,
+  } as const;
+
+  const { props: desktop } = getImageProps({ ...shared, src: slide.image });
+  const { props: mobile } = getImageProps({
+    ...shared,
+    src: slide.mobileImage,
+  });
+
+  // `priority` on the <img> would preload the desktop source with no media
+  // query, so phones would download both crops. Art-directed preloads keep
+  // LCP to a single photograph.
+  preload(desktop.src, {
+    as: "image",
+    imageSrcSet: desktop.srcSet,
+    imageSizes: desktop.sizes,
+    media: "(min-width: 768px)",
+    fetchPriority: "high",
+  });
+  preload(mobile.src, {
+    as: "image",
+    imageSrcSet: mobile.srcSet,
+    imageSizes: mobile.sizes,
+    media: "(max-width: 767px)",
+    fetchPriority: "high",
   });
 
   return (
@@ -21,18 +47,19 @@ export default function Hero() {
       <picture>
         <source
           media="(max-width: 767px)"
-          sizes={mobileHeroSizes}
-          srcSet={mobileHeroSrcSet}
+          sizes={mobile.sizes}
+          srcSet={mobile.srcSet}
         />
         <Image
           className="hero__image"
-          src={heroSlides[0].image}
-          alt={heroSlides[0].alt}
+          src={slide.image}
+          alt={slide.alt}
           fill
-          sizes="100vw"
-          quality={75}
+          sizes={HERO_SIZES}
+          quality={HERO_QUALITY}
           loading="eager"
           fetchPriority="high"
+          {...blurProps(slide.image)}
         />
       </picture>
 

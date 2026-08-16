@@ -29,7 +29,10 @@ hand-write a `tel:` link; the smoke suite fails the build if you do.
 
 Images live in `public/images/` as WebP. `next/image` handles resizing and
 format negotiation, so add the largest version you have and let the optimiser
-derive the rest.
+derive the rest. Srcset widths cap at 1920px — the photographs are not 4K
+masters, and larger variants only delay LCP. After replacing a hero, banner
+or other photograph referenced from `src/content/`, run
+`npm run generate-lcp-blur` so the tiny placeholder stays in sync.
 
 `public/images/og/` holds the 1200×630 share cards used for link previews on
 social platforms and in chat apps — the 1.91:1 ratio those scrapers crop to.

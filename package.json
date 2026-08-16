@@ -15,6 +15,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit --incremental false",
     "test": "node --experimental-strip-types --test src/lib/*.test.ts",
+    "generate-lcp-blur": "node scripts/generate-lcp-blur.mjs",
     "smoke": "node scripts/smoke-test.mjs",
     "a11y": "node scripts/a11y-test.mjs",
     "analytics-test": "node scripts/analytics-test.mjs",

@@ -14,6 +14,7 @@ import {
 } from "@/content/home";
 import { featuredProjects, projectCards } from "@/content/projects";
 import { resourceGuides } from "@/content/resources";
+import { blurProps } from "@/lib/lcp-blur";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -65,6 +66,7 @@ export default function HomePage() {
               width={1600}
               height={1200}
               sizes="(max-width: 767px) 100vw, 55vw"
+              {...blurProps(coverage.image)}
             />
           </div>
         </div>
@@ -82,6 +84,7 @@ export default function HomePage() {
               width={1600}
               height={1200}
               sizes="(max-width: 767px) 100vw, 55vw"
+              {...blurProps(aboutTeaser.image)}
             />
           </div>
           <div className="home-story__copy">
@@ -202,6 +205,7 @@ export default function HomePage() {
                     width={1600}
                     height={900}
                     sizes="(max-width: 767px) 100vw, 50vw"
+                    {...blurProps(audience.image)}
                   />
                 </div>
                 <div className="audience-card__body">

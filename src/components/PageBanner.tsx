@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { blurProps } from "@/lib/lcp-blur";
 
 type Crumb = {
   label: string;
@@ -24,6 +25,7 @@ export default function PageBanner({ title, image, crumbs }: PageBannerProps) {
         priority
         fetchPriority="high"
         aria-hidden
+        {...blurProps(image)}
       />
       <div className="shell">
         <h1>{title}</h1>

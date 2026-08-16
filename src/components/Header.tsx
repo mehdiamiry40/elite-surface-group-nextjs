@@ -107,7 +107,9 @@ export default function Header() {
               alt=""
               width={123}
               height={67}
-              priority
+              sizes="108px"
+              loading="eager"
+              unoptimized
             />
           </Link>
 

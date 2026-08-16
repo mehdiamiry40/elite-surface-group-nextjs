@@ -49,6 +49,8 @@ export default function Footer() {
                 alt={business.name}
                 width={123}
                 height={67}
+                sizes="108px"
+                unoptimized
               />
             </div>
             <p>{footerBlurb}</p>

@@ -6,6 +6,7 @@ import { CtaBand } from "@/components/CtaBand";
 import { TickList } from "@/components/sections";
 import { aboutPage, bannerImages } from "@/content/site";
 import { BreadcrumbSchema } from "@/components/JsonLd";
+import { blurProps } from "@/lib/lcp-blur";
 import { ogCard, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
@@ -42,6 +43,7 @@ export default function AboutPage() {
                 width={item.width}
                 height={item.height}
                 sizes="(max-width: 767px) 100vw, (max-width: 1024px) 50vw, 620px"
+                {...blurProps(item.image)}
               />
             ))}
           </Carousel>
