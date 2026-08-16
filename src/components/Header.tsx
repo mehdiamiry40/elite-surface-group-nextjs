@@ -102,13 +102,14 @@ export default function Header() {
             aria-label={`${business.name} home`}
             onClick={closeMenu}
           >
+            {/* Static WebP at display size. Do not set priority/eager — that
+                preloads the logo and races the page LCP photograph. */}
             <Image
               src="/images/esg-logo-1.webp"
               alt=""
               width={123}
               height={67}
               sizes="108px"
-              loading="eager"
               unoptimized
             />
           </Link>
