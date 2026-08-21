@@ -6,7 +6,8 @@ export type ResourceGuide = {
     | "cladding-maintenance-coastal-adelaide"
     | "rendering-hebel-panels-adelaide"
     | "rendering-over-painted-brick-adelaide"
-    | "hebel-boundary-walls-adelaide";
+    | "hebel-boundary-walls-adelaide"
+    | "steel-frame-vs-timber-frame-walls-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -147,6 +148,29 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "13 August 2026",
     readingTime: "10 minute read",
   },
+  {
+    slug: "steel-frame-vs-timber-frame-walls-adelaide",
+    serviceSlug: "walling",
+    category: "Wall framing",
+    title:
+      "Steel Frame or Timber Frame Walls? What Adelaide Projects Should Confirm First",
+    metaTitle: "Steel Frame vs Timber Frame Walls Adelaide",
+    metaDescription:
+      "Compare steel and timber wall framing for Adelaide projects, including termite exposure, coastal corrosion class and reactive-clay footing considerations.",
+    summary:
+      "See how termite exposure, coastal corrosion, bushfire zoning and reactive clay change what a documented steel or timber wall-framing choice should confirm.",
+    image: "/images/v2/service-walling-installation.webp",
+    imageAlt:
+      "Installer checking internal steel wall framing with a laser level",
+    imageCaption:
+      "Illustrative wall-framing image—not a record of a particular Elite Surface Group project, framing material selection or site condition.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-08-21",
+    modified: "2026-08-21",
+    publishedDisplay: "21 August 2026",
+    readingTime: "9 minute read",
+  },
 ];
 
 function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
@@ -169,4 +193,7 @@ export const renderingPaintedBrickGuide = guideBySlug(
 );
 export const hebelBoundaryWallsGuide = guideBySlug(
   "hebel-boundary-walls-adelaide",
+);
+export const steelVsTimberFramingGuide = guideBySlug(
+  "steel-frame-vs-timber-frame-walls-adelaide",
 );

@@ -38,6 +38,7 @@ export const enquiryServiceByPath = {
   "/resources/rendering-hebel-panels-adelaide/": "Hebel",
   "/resources/hebel-boundary-walls-adelaide/": "Hebel",
   "/resources/rendering-over-painted-brick-adelaide/": "Render",
+  "/resources/steel-frame-vs-timber-frame-walls-adelaide/": "Walling",
 } as const satisfies Readonly<Record<string, string>>;
 
 export function defaultEnquiryService(pathname: string) {
