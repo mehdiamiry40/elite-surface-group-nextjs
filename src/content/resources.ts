@@ -6,7 +6,8 @@ export type ResourceGuide = {
     | "cladding-maintenance-coastal-adelaide"
     | "rendering-hebel-panels-adelaide"
     | "rendering-over-painted-brick-adelaide"
-    | "hebel-boundary-walls-adelaide";
+    | "hebel-boundary-walls-adelaide"
+    | "fibre-cement-vs-weatherboard-cladding-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -147,6 +148,29 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "13 August 2026",
     readingTime: "10 minute read",
   },
+  {
+    slug: "fibre-cement-vs-weatherboard-cladding-adelaide",
+    serviceSlug: "cladding",
+    category: "Cladding selection",
+    title:
+      "Fibre Cement or Timber Weatherboard? What Adelaide Homes Should Confirm First",
+    metaTitle: "Fibre Cement vs Weatherboard Cladding SA",
+    metaDescription:
+      "Compare fibre cement and weatherboard cladding for Adelaide homes, covering bushfire zoning, coastal exposure and upkeep to confirm before you choose.",
+    summary:
+      "See how bushfire-prone zoning, coastal salt exposure and repaint cycles separate fibre cement from timber weatherboard cladding before a system is chosen.",
+    image: "/images/v2/service-cladding-installation.webp",
+    imageAlt:
+      "Installer aligning charcoal vertical cladding on a residential exterior wall",
+    imageCaption:
+      "An Elite Surface Group cladding installation, shown as a general example—not a photograph of fibre cement weatherboard, timber weatherboard or a particular bushfire or coastal exposure category.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-08-22",
+    modified: "2026-08-22",
+    publishedDisplay: "22 August 2026",
+    readingTime: "9 minute read",
+  },
 ];
 
 function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
@@ -169,4 +193,7 @@ export const renderingPaintedBrickGuide = guideBySlug(
 );
 export const hebelBoundaryWallsGuide = guideBySlug(
   "hebel-boundary-walls-adelaide",
+);
+export const claddingMaterialComparisonGuide = guideBySlug(
+  "fibre-cement-vs-weatherboard-cladding-adelaide",
 );
