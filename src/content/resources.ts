@@ -8,7 +8,8 @@ export type ResourceGuide = {
     | "rendering-over-painted-brick-adelaide"
     | "hebel-boundary-walls-adelaide"
     | "fibre-cement-vs-weatherboard-cladding-adelaide"
-    | "load-bearing-wall-removal-adelaide";
+    | "load-bearing-wall-removal-adelaide"
+    | "steel-frame-vs-timber-frame-walls-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -195,6 +196,29 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "23 August 2026",
     readingTime: "9 minute read",
   },
+  {
+    slug: "steel-frame-vs-timber-frame-walls-adelaide",
+    serviceSlug: "walling",
+    category: "Wall framing",
+    title:
+      "Steel Frame or Timber Frame Walls? What Adelaide Projects Should Confirm First",
+    metaTitle: "Steel Frame vs Timber Frame Walls Adelaide",
+    metaDescription:
+      "Compare steel and timber wall framing for Adelaide projects, including compliance pathways, termite scope, coastal exposure and footing design.",
+    summary:
+      "Compare the compliance pathways, termite scope, coastal exposure, footing design and bushfire requirements that shape a documented steel or timber wall-framing choice.",
+    image: "/images/v2/service-walling-installation.webp",
+    imageAlt:
+      "Installer checking internal steel wall framing with a laser level",
+    imageCaption:
+      "Illustrative wall-framing image—not a record of a particular Elite Surface Group project, framing material selection or site condition.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-08-21",
+    modified: "2026-08-24",
+    publishedDisplay: "21 August 2026",
+    readingTime: "9 minute read",
+  },
 ];
 
 function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
@@ -223,4 +247,7 @@ export const claddingMaterialComparisonGuide = guideBySlug(
 );
 export const loadBearingWallRemovalGuide = guideBySlug(
   "load-bearing-wall-removal-adelaide",
+);
+export const steelVsTimberFramingGuide = guideBySlug(
+  "steel-frame-vs-timber-frame-walls-adelaide",
 );

@@ -53,5 +53,6 @@ export {
   renderingPaintedBrickGuide,
   resourceGuides,
   resourcesHub,
+  steelVsTimberFramingGuide,
   type ResourceGuide,
 } from "@/content/resources";
