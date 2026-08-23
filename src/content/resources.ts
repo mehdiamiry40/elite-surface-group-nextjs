@@ -7,7 +7,8 @@ export type ResourceGuide = {
     | "rendering-hebel-panels-adelaide"
     | "rendering-over-painted-brick-adelaide"
     | "hebel-boundary-walls-adelaide"
-    | "fibre-cement-vs-weatherboard-cladding-adelaide";
+    | "fibre-cement-vs-weatherboard-cladding-adelaide"
+    | "load-bearing-wall-removal-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -171,6 +172,29 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "22 August 2026",
     readingTime: "9 minute read",
   },
+  {
+    slug: "load-bearing-wall-removal-adelaide",
+    serviceSlug: "walling",
+    category: "Renovation walling",
+    title:
+      "Removing a Load-Bearing Wall in Adelaide: What to Confirm Before Work Begins",
+    metaTitle: "Load-Bearing Wall Removal Adelaide Guide",
+    metaDescription:
+      "Planning a load-bearing wall removal in Adelaide? See what engineering, consent and reframing steps to confirm before an opening or renovation begins.",
+    summary:
+      "Removing or opening up an internal wall changes how loads travel through a house. See what engineering assessment, approvals and reframing sequencing an Adelaide renovation should confirm first.",
+    image: "/images/v2/service-walling-installation.webp",
+    imageAlt:
+      "Installer checking internal steel wall framing with a laser level",
+    imageCaption:
+      "An Elite Surface Group walling installation, shown as a general example—not a photograph of a load-bearing wall removal, temporary propping system or a particular Adelaide property.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-08-23",
+    modified: "2026-08-23",
+    publishedDisplay: "23 August 2026",
+    readingTime: "9 minute read",
+  },
 ];
 
 function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
@@ -196,4 +220,7 @@ export const hebelBoundaryWallsGuide = guideBySlug(
 );
 export const claddingMaterialComparisonGuide = guideBySlug(
   "fibre-cement-vs-weatherboard-cladding-adelaide",
+);
+export const loadBearingWallRemovalGuide = guideBySlug(
+  "load-bearing-wall-removal-adelaide",
 );
