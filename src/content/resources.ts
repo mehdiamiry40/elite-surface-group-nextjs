@@ -7,6 +7,8 @@ export type ResourceGuide = {
     | "rendering-hebel-panels-adelaide"
     | "rendering-over-painted-brick-adelaide"
     | "hebel-boundary-walls-adelaide"
+    | "fibre-cement-vs-weatherboard-cladding-adelaide"
+    | "load-bearing-wall-removal-adelaide"
     | "steel-frame-vs-timber-frame-walls-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
@@ -149,6 +151,52 @@ export const resourceGuides: readonly ResourceGuide[] = [
     readingTime: "10 minute read",
   },
   {
+    slug: "fibre-cement-vs-weatherboard-cladding-adelaide",
+    serviceSlug: "cladding",
+    category: "Cladding selection",
+    title:
+      "Fibre Cement or Timber Weatherboard? What Adelaide Homes Should Confirm First",
+    metaTitle: "Fibre Cement vs Weatherboard Cladding SA",
+    metaDescription:
+      "Compare fibre cement and weatherboard cladding for Adelaide homes, covering bushfire zoning, coastal exposure and upkeep to confirm before you choose.",
+    summary:
+      "See how bushfire-prone zoning, coastal salt exposure and repaint cycles separate fibre cement from timber weatherboard cladding before a system is chosen.",
+    image: "/images/v2/service-cladding-installation.webp",
+    imageAlt:
+      "Installer aligning charcoal vertical cladding on a residential exterior wall",
+    imageCaption:
+      "An Elite Surface Group cladding installation, shown as a general example—not a photograph of fibre cement weatherboard, timber weatherboard or a particular bushfire or coastal exposure category.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-08-22",
+    modified: "2026-08-22",
+    publishedDisplay: "22 August 2026",
+    readingTime: "9 minute read",
+  },
+  {
+    slug: "load-bearing-wall-removal-adelaide",
+    serviceSlug: "walling",
+    category: "Renovation walling",
+    title:
+      "Removing a Load-Bearing Wall in Adelaide: What to Confirm Before Work Begins",
+    metaTitle: "Load-Bearing Wall Removal Adelaide Guide",
+    metaDescription:
+      "Planning a load-bearing wall removal in Adelaide? See what engineering, consent and reframing steps to confirm before an opening or renovation begins.",
+    summary:
+      "Removing or opening up an internal wall changes how loads travel through a house. See what engineering assessment, approvals and reframing sequencing an Adelaide renovation should confirm first.",
+    image: "/images/v2/service-walling-installation.webp",
+    imageAlt:
+      "Installer checking internal steel wall framing with a laser level",
+    imageCaption:
+      "An Elite Surface Group walling installation, shown as a general example—not a photograph of a load-bearing wall removal, temporary propping system or a particular Adelaide property.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-08-23",
+    modified: "2026-08-23",
+    publishedDisplay: "23 August 2026",
+    readingTime: "9 minute read",
+  },
+  {
     slug: "steel-frame-vs-timber-frame-walls-adelaide",
     serviceSlug: "walling",
     category: "Wall framing",
@@ -156,9 +204,9 @@ export const resourceGuides: readonly ResourceGuide[] = [
       "Steel Frame or Timber Frame Walls? What Adelaide Projects Should Confirm First",
     metaTitle: "Steel Frame vs Timber Frame Walls Adelaide",
     metaDescription:
-      "Compare steel and timber wall framing for Adelaide projects, including termite exposure, coastal corrosion class and reactive-clay footing considerations.",
+      "Compare steel and timber wall framing for Adelaide projects, including compliance pathways, termite scope, coastal exposure and footing design.",
     summary:
-      "See how termite exposure, coastal corrosion, bushfire zoning and reactive clay change what a documented steel or timber wall-framing choice should confirm.",
+      "Compare the compliance pathways, termite scope, coastal exposure, footing design and bushfire requirements that shape a documented steel or timber wall-framing choice.",
     image: "/images/v2/service-walling-installation.webp",
     imageAlt:
       "Installer checking internal steel wall framing with a laser level",
@@ -167,7 +215,7 @@ export const resourceGuides: readonly ResourceGuide[] = [
     imageWidth: 1600,
     imageHeight: 1067,
     published: "2026-08-21",
-    modified: "2026-08-21",
+    modified: "2026-08-24",
     publishedDisplay: "21 August 2026",
     readingTime: "9 minute read",
   },
@@ -193,6 +241,12 @@ export const renderingPaintedBrickGuide = guideBySlug(
 );
 export const hebelBoundaryWallsGuide = guideBySlug(
   "hebel-boundary-walls-adelaide",
+);
+export const claddingMaterialComparisonGuide = guideBySlug(
+  "fibre-cement-vs-weatherboard-cladding-adelaide",
+);
+export const loadBearingWallRemovalGuide = guideBySlug(
+  "load-bearing-wall-removal-adelaide",
 );
 export const steelVsTimberFramingGuide = guideBySlug(
   "steel-frame-vs-timber-frame-walls-adelaide",
