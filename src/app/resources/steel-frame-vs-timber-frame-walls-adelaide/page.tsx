@@ -70,6 +70,17 @@ export default function SteelVsTimberFramingGuidePage() {
               and budget already assume. The documented system—not a general
               preference—should decide the framing material.
             </p>
+            <p>
+              In practical terms, steel framing is not susceptible to termite
+              attack, but its coating, enclosure and thermal detailing must
+              suit the site and wall build-up. Timber framing has established
+              residential span-table pathways and broad trade familiarity,
+              but susceptible primary elements may require a termite
+              management system. Supply, fabrication and labour pricing vary
+              by design and market conditions, so compare project-specific
+              quotes for the complete compliant frame rather than material
+              prices alone.
+            </p>
             <aside className="article-note" aria-label="Important guidance">
               <strong>Design decision, not an installer decision.</strong>
               <p>
@@ -129,32 +140,27 @@ export default function SteelVsTimberFramingGuidePage() {
                 Steel frame vs timber frame walls: what actually differs
               </h2>
               <p>
-                Timber wall framing for houses is usually documented against
-                AS 1684 Residential Timber-Framed Construction, which the NCC
-                treats as a deemed-to-satisfy pathway: match the wind
-                classification, stress grade and member spacing to the
-                published span tables and the framing is taken to meet the
-                Code without a separate engineering design.
+                For Class 1 and 10 buildings, the NCC recognises several
+                compliance pathways for each material. Timber framing can be
+                designed and built to the applicable parts of AS 1684 or AS
+                1720. Steel framing can use NASH Residential and Low-Rise
+                Steel Framing Parts 1 or 2, AS 4100, or AS/NZS 4600, as
+                applicable to the project.
               </p>
               <p>
-                Steel wall framing does not have one equivalent national
-                span-table standard in the same way. Light-gauge steel
-                systems are typically supplied and documented by a specific
-                manufacturer—locally, Adelaide-based Stratco publishes its
-                own steel wall-framing profiles and design guides—engineered
-                to AS/NZS 4600 cold-formed steel structures. That means the
-                selected steel system, its published span data and its
-                fixing details need to be confirmed for the actual project,
-                not assumed from a different manufacturer&rsquo;s literature.
+                Both materials therefore have standards-based design
+                solutions; steel is not limited to project-specific
+                engineering. The selected pathway still has to fit the
+                building geometry, wind classification, loads and member
+                system. For a proprietary light-gauge steel frame, use the
+                supplier&rsquo;s compatible members, span information,
+                connections and fabrication details rather than mixing
+                literature from different systems.
               </p>
               <p className="article-source">
-                Sources:{" "}
-                <a href="https://www.woodsolutions.com.au/resources/standards-codes/as1684-code-compliance">
-                  WoodSolutions, AS 1684 code compliance
-                </a>{" "}
-                and{" "}
-                <a href="https://www.stratco.com.au/au/building-hardware/steel-framing/steel-wall-framing/">
-                  Stratco steel wall framing
+                Source:{" "}
+                <a href="https://ncc.abcb.gov.au/editions/ncc-2022/adopted/volume-two/h-class-1-and-10-buildings/part-h1-structure">
+                  ABCB, NCC Volume Two Part H1 Structure
                 </a>
                 .
               </p>
@@ -166,33 +172,33 @@ export default function SteelVsTimberFramingGuidePage() {
           <div className="shell prose article-prose">
             <h2 id="termites">Termite exposure across Adelaide</h2>
             <p>
-              The NCC&rsquo;s termite risk-management provisions treat steel,
-              aluminium and other metals, along with fibre-reinforced cement
-              and specified naturally durable or preservative-treated
-              timbers, as materials not subject to termite attack. Where
-              those materials make up the primary building elements, a
-              termite management system is not required for them. Ordinary
-              structural timber framing, by contrast, needs a documented
-              termite management system under AS 3660.1—typically a
-              chemical or physical barrier, or a termite-resistant timber
-              species—unless it is specified as one of the exempt materials.
+              The NCC termite provisions apply when a Class 1 or 10 building
+              is in an area where subterranean termites are known to present
+              a potential risk and a primary building element is susceptible
+              to attack. Steel, concrete, masonry, fibre-reinforced cement,
+              and timber that meets the NCC&rsquo;s naturally resistant or
+              preservative-treated criteria are treated as not subject to
+              termite attack for this purpose.
             </p>
             <p>
-              South Australia carries lower termite pressure than
-              subtropical and tropical parts of Australia, but termite
-              activity is still recorded across metropolitan Adelaide and
-              the Hills, and the NCC requirement is not waived by location
-              alone. If timber framing is selected, confirm which termite
-              management system is documented for the project and how it
-              will be inspected and maintained over the building&rsquo;s
-              life; if steel framing is selected, confirm that any timber
-              elements remaining in the wall—door jambs, battens, trims—are
-              still covered.
+              Steel framing can therefore remove susceptibility from the
+              frame itself, but it does not automatically resolve every
+              termite question in a building containing other timber primary
+              elements. If susceptible timber is selected, confirm whether a
+              termite management system is required, what AS 3660.1-compliant
+              method is documented, and what inspection and maintenance the
+              system needs. South Australian guidance recommends following
+              the approved system and its manufacturer&rsquo;s maintenance
+              instructions.
             </p>
             <p className="article-source">
-              Source:{" "}
+              Sources:{" "}
               <a href="https://ncc.abcb.gov.au/editions/ncc-2022/adopted/housing-provisions/3-site-preparation/part-34-termite-risk-management">
                 ABCB, NCC Housing Provisions Part 3.4 Termite risk management
+              </a>
+              {" "}and{" "}
+              <a href="https://www.sa.gov.au/topics/business-and-trade/building-industry/building-rules-regulations-and-information/building-safety-information/managing-the-risk-of-termite-damage-to-your-building">
+                SA.GOV.AU, Managing the risk of termite damage
               </a>
               .
             </p>
@@ -209,38 +215,38 @@ export default function SteelVsTimberFramingGuidePage() {
             </h2>
             <p>
               A steel-frame vs timber-frame comparison changes near the
-              coast. Steel framing manufacturers classify corrosion
-              exposure by distance from active surf and airborne salt, not
-              by suburb name. Stratco&rsquo;s published guidance describes
-              conditions within roughly 200 metres of active surf or
-              industrial pollution as very severe, 200 to 1,000 metres as
-              severe, and areas that can still carry salt-laden air out to
-              about 1,000 metres as moderate—each calling for a different
-              coating or steel base.
+              coast. Steel-framing durability guidance classifies atmospheric
+              corrosivity using the marine source, distance inland and local
+              exposure. It also distinguishes between ventilated and
+              unventilated framing and whether components are accessible for
+              maintenance. Distance from the shoreline is therefore a useful
+              input, not a complete corrosion specification.
             </p>
             <p>
               That matters directly for coastal Adelaide sites at Semaphore,
               Grange, Henley Beach, Glenelg and Brighton, where a standard
-              galvanised or zinc/aluminium coating suited to an inland
-              suburb may not be the coating documented for a near-shore
-              site. Timber framing avoids that particular corrosion
-              question, but still needs the termite and moisture detailing
-              covered above, plus correct flashing and drainage at every
-              wall junction regardless of the framing material chosen.
+              framing product or enclosure detail should not be assumed
+              suitable from the suburb name alone. Confirm the actual steel
+              product, protective coating, ventilation or enclosure, fixings
+              and any isolation details against the frame supplier&rsquo;s
+              current marine guidance. Timber framing avoids corrosion of
+              the studs themselves, but connectors and fixings still need
+              exposure-appropriate protection, and the wall still needs
+              correct moisture detailing.
             </p>
             <TickList
               items={[
-                "The exact distance from active surf or salt-laden air, not just the suburb",
-                "The steel coating class or base metal specified for that exposure",
-                "Whether fixings, flashings and connectors match the same corrosion class",
-                "Manufacturer maintenance guidance for the specified coating system",
+                "The marine source, approximate distance and local shelter or prevailing exposure",
+                "Whether the frame is ventilated, enclosed and accessible for maintenance",
+                "The steel coating and isolation details specified for that exposure",
+                "Whether fixings, flashings and connectors suit the same environment",
               ]}
             />
             <p className="article-source">
               Source:{" "}
-              <a href="https://www.stratco.com.au/siteassets/pdfs/selection_use_and_maintenance.pdf">
-                Stratco, Selection, Use and Maintenance of Stratco Steel
-                Products (PDF)
+              <a href="https://www.nash.asn.au/wp-content/uploads/2022/04/Durability-design-of-steel-framing-in-residential-and-low-rise-construction-Final-ASEC-2014_1411525018.pdf">
+                NASH, Durability design of steel framing in residential and
+                low-rise construction (PDF)
               </a>
               .
             </p>
@@ -254,17 +260,22 @@ export default function SteelVsTimberFramingGuidePage() {
             </h2>
             <p>
               Neither steel nor timber wall framing resolves footing
-              movement on reactive clay. Much of the Adelaide Plains sits
-              on reactive clay that swells as it wets and shrinks as it
-              dries, and that seasonal movement is managed through site
-              classification and footing design—stiffened rafts, deepened
-              or articulated footings—not by the framing material bolted or
-              nailed on top of them. Choosing steel framing for its own
-              stiffness does not substitute for a site-specific
-              geotechnical assessment where reactive soil is present.
+              movement on reactive clay. South Australian technical guidance
+              identifies concentrations of reactive clay across the Adelaide
+              Plain; these soils swell when wet and shrink as they dry.
+              Site classification, the documented footing or slab design,
+              drainage and foundation maintenance manage that movement—not
+              the framing material fixed above. Choosing steel framing does
+              not substitute for the site and structural information required
+              for the footing design.
             </p>
             <p className="article-source">
-              Source:{" "}
+              Sources:{" "}
+              <a href="https://cdn.environment.sa.gov.au/environment/docs/tech_note3_1.pdf">
+                South Australian Department for Environment and Heritage,
+                Maintenance and Repair of Older Buildings in South Australia
+              </a>{" "}
+              and{" "}
               <a href="https://research.csiro.au/infratech/wp-content/uploads/sites/38/2024/12/2979_FoundationMaintenanceandFootingPerformance_WCAG.pdf">
                 CSIRO, <cite>Foundation Maintenance and Footing Performance</cite>
               </a>{" "}
@@ -279,26 +290,30 @@ export default function SteelVsTimberFramingGuidePage() {
               Bushfire-prone zoning in the Hills and hinterland
             </h2>
             <p>
-              Properties within a designated bushfire-prone or high
-              bushfire-risk area—common across parts of the Adelaide Hills
-              and outer fringe suburbs—may need a site-specific Bushfire
-              Attack Level (BAL) assessment under AS 3959 before the NCC&rsquo;s
-              construction requirements for that BAL rating can be
-              confirmed. Non-combustible construction only becomes mandatory
-              at the highest rating, BAL-FZ; lower ratings allow a wider mix
-              of materials provided the assessed construction requirements
-              are met. Framing material is one input into that assessment,
-              not the outcome of it.
+              For Class 1 homes in a designated bushfire-prone area, NCC
+              Volume Two H7D4 recognises construction to AS 3959 or the NASH
+              steel-framed bushfire standard. South Australia&rsquo;s H7D4
+              variation assigns BAL-Low to general-risk areas and BAL-12.5 to
+              medium-risk areas. High-risk areas, and urban-interface sites
+              within 100 metres of a high-risk area, require the site BAL to
+              be assessed under AS 3959.
+            </p>
+            <p>
+              The applicable BAL and chosen compliance pathway determine the
+              complete construction details. A steel frame alone does not
+              make a wall bushfire-compliant, and timber is not automatically
+              excluded: cladding, membranes, insulation, openings, gaps,
+              junctions and fixings must work as the documented system.
             </p>
             <aside className="article-note article-note--warning">
-              <strong>Arrange a BAL assessment, don&rsquo;t assume one.</strong>
+              <strong>Confirm the applicable BAL; don&rsquo;t assume one.</strong>
               <p>
-                If a site sits within a bushfire overlay, ask the project
-                designer or a bushfire consultant to confirm the assessed
-                BAL rating and the resulting construction requirements
-                before wall framing, cladding or window systems are
-                finalised. This guide does not determine a rating or certify
-                compliance.
+                Ask the project designer, building surveyor or bushfire
+                consultant to confirm the risk-area mapping, applicable BAL
+                under the South Australian variation, and resulting
+                construction pathway before wall framing, cladding or window
+                systems are finalised. This guide does not determine a rating
+                or certify compliance.
               </p>
             </aside>
             <p className="article-source">
@@ -307,8 +322,9 @@ export default function SteelVsTimberFramingGuidePage() {
                 SA.GOV.AU, Bushfire building regulations
               </a>{" "}
               and{" "}
-              <a href="https://ncc.abcb.gov.au/editions/ncc-2022/adopted/volume-one/g-ancillary-provisions/part-g5-construction-bushfire-prone-areas">
-                ABCB, NCC Part G5 Construction in bushfire-prone areas
+              <a href="https://ncc.abcb.gov.au/editions/ncc-2022/adopted/volume-two/h-class-1-and-10-buildings/part-h7-ancillary-provisions-and-additional-construction-requirements">
+                ABCB, NCC Volume Two Part H7, including the South Australian
+                H7D4 variation
               </a>
               .
             </p>
@@ -332,32 +348,36 @@ export default function SteelVsTimberFramingGuidePage() {
                 <p>
                   For timber, confirm the AS 1684 wind classification, stress
                   grade and span table used, or that an engineer has designed
-                  the frame. For steel, confirm the specific manufacturer
-                  system, published span data and connection details.
+                  the frame. For steel, confirm the applicable NASH or
+                  engineered pathway, member system, span information and
+                  connection details.
                 </p>
               </li>
               <li>
                 <h3>Confirm termite management scope</h3>
                 <p>
-                  Identify which elements are exempt materials and which
-                  need a documented AS 3660.1 termite management system, and
-                  who is responsible for its ongoing inspection.
+                  Identify which primary elements the NCC treats as not
+                  subject to attack, which susceptible elements need a
+                  documented AS 3660.1 termite management system, and who is
+                  responsible for its ongoing inspection.
                 </p>
               </li>
               <li>
                 <h3>Match corrosion class to the actual site</h3>
                 <p>
-                  For steel near the coast, confirm the coating or base
-                  metal specified matches the site&rsquo;s measured distance
-                  from surf and salt exposure—not a general assumption.
+                  For steel near the coast, confirm the framing product,
+                  coating and enclosure details match the marine source,
+                  distance, local exposure and ventilation—not a general
+                  assumption based on suburb.
                 </p>
               </li>
               <li>
                 <h3>Check the bushfire overlay status</h3>
                 <p>
-                  Confirm whether the site sits within a bushfire-prone
-                  area, and if so, obtain the assessed BAL rating before the
-                  wall system is finalised.
+                  Confirm whether the site sits within a designated
+                  bushfire-prone area, which BAL applies under the South
+                  Australian variation, and whether a site assessment is
+                  required before the wall system is finalised.
                 </p>
               </li>
               <li>
@@ -403,9 +423,9 @@ export default function SteelVsTimberFramingGuidePage() {
                 <dd>
                   No. Footing movement on reactive clay is managed through
                   site classification and footing design, not the wall
-                  framing material. A geotechnical or structural assessment
-                  should still confirm the footing system regardless of
-                  which framing is chosen.
+                  framing material. The required site and structural
+                  information should still confirm the footing system
+                  regardless of which framing is chosen.
                 </dd>
               </div>
               <div className="faq-list__item">
@@ -427,33 +447,43 @@ export default function SteelVsTimberFramingGuidePage() {
               <div>
                 <dt>Australian Building Codes Board</dt>
                 <dd>
+                  <a href="https://ncc.abcb.gov.au/editions/ncc-2022/adopted/volume-two/h-class-1-and-10-buildings/part-h1-structure">
+                    NCC Volume Two Part H1 Structure
+                  </a>
+                  ,{" "}
                   <a href="https://ncc.abcb.gov.au/editions/ncc-2022/adopted/housing-provisions/3-site-preparation/part-34-termite-risk-management">
                     NCC Housing Provisions, Part 3.4 Termite risk management
                   </a>{" "}
                   and{" "}
-                  <a href="https://ncc.abcb.gov.au/editions/ncc-2022/adopted/volume-one/g-ancillary-provisions/part-g5-construction-bushfire-prone-areas">
-                    NCC Part G5 Construction in bushfire-prone areas
+                  <a href="https://ncc.abcb.gov.au/editions/ncc-2022/adopted/volume-two/h-class-1-and-10-buildings/part-h7-ancillary-provisions-and-additional-construction-requirements">
+                    NCC Volume Two Part H7, including the South Australian
+                    H7D4 variation
                   </a>
                 </dd>
               </div>
               <div>
-                <dt>WoodSolutions</dt>
+                <dt>National Association of Steel-Framed Housing</dt>
                 <dd>
-                  <a href="https://www.woodsolutions.com.au/resources/standards-codes/as1684-code-compliance">
-                    AS 1684 code compliance
+                  <a href="https://www.nash.asn.au/wp-content/uploads/2022/04/Durability-design-of-steel-framing-in-residential-and-low-rise-construction-Final-ASEC-2014_1411525018.pdf">
+                    Durability design of steel framing in residential and
+                    low-rise construction (PDF)
                   </a>
                 </dd>
               </div>
               <div>
-                <dt>Stratco</dt>
+                <dt>South Australian Government</dt>
                 <dd>
-                  <a href="https://www.stratco.com.au/au/building-hardware/steel-framing/steel-wall-framing/">
-                    Steel wall framing
+                  <a href="https://www.sa.gov.au/topics/business-and-trade/building-industry/building-rules-regulations-and-information/building-safety-information/managing-the-risk-of-termite-damage-to-your-building">
+                    Managing the risk of termite damage
+                  </a>
+                  ,{" "}
+                  <a href="https://www.sa.gov.au/topics/business-and-trade/building-industry/building-rules-regulations-and-information/bushfire">
+                    Bushfire building regulations
                   </a>{" "}
                   and{" "}
-                  <a href="https://www.stratco.com.au/siteassets/pdfs/selection_use_and_maintenance.pdf">
-                    Selection, Use and Maintenance of Stratco Steel Products
-                    (PDF)
+                  <a href="https://cdn.environment.sa.gov.au/environment/docs/tech_note3_1.pdf">
+                    Maintenance and Repair of Older Buildings in South
+                    Australia (PDF)
                   </a>
                 </dd>
               </div>
@@ -463,14 +493,6 @@ export default function SteelVsTimberFramingGuidePage() {
                   <a href="https://research.csiro.au/infratech/wp-content/uploads/sites/38/2024/12/2979_FoundationMaintenanceandFootingPerformance_WCAG.pdf">
                     <cite>Foundation Maintenance and Footing Performance</cite>{" "}
                     (PDF)
-                  </a>
-                </dd>
-              </div>
-              <div>
-                <dt>SA.GOV.AU</dt>
-                <dd>
-                  <a href="https://www.sa.gov.au/topics/business-and-trade/building-industry/building-rules-regulations-and-information/bushfire">
-                    Bushfire building regulations
                   </a>
                 </dd>
               </div>
