@@ -110,6 +110,8 @@ export const bannerImages: Record<string, string> = {
     "/images/v2/banner-render.webp",
   "/resources/fibre-cement-vs-weatherboard-cladding-adelaide":
     "/images/v2/banner-cladding.webp",
+  "/resources/load-bearing-wall-removal-adelaide":
+    "/images/v2/banner-walling.webp",
   "/projects": "/images/v2/banner-projects.webp",
   "/locations": "/images/v2/banner-locations.webp",
   "/locations/adelaide": "/images/v2/banner-locations.webp",
