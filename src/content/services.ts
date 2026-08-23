@@ -254,10 +254,6 @@ export const services: readonly Service[] = [
       { label: "Cladding services", href: "/cladding/" },
       { label: "Hebel wall systems", href: "/hebel/" },
       {
-        label: "Steel vs timber wall framing guide",
-        href: "/resources/steel-frame-vs-timber-frame-walls-adelaide/",
-      },
-      {
         label: "Boundary-wall project checks",
         href: "/resources/hebel-boundary-walls-adelaide/",
       },
