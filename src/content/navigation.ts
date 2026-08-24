@@ -37,9 +37,13 @@ export const mainNav: readonly NavItem[] = [
   },
   { label: "Projects", href: "/projects" },
   {
-    label: "Resources",
-    href: "/resources",
+    label: "Blog",
+    href: "/blog",
     children: [
+      {
+        label: "Resource library",
+        href: "/resources",
+      },
       {
         label: "Render cracking guide",
         href: "/resources/render-cracking-adelaide",
@@ -75,7 +79,7 @@ export const footerNav = {
   quickLinks: [
     { label: "About Us", href: "/about" },
     { label: "Projects", href: "/projects" },
-    { label: "Resources", href: "/resources" },
+    { label: "Blog", href: "/blog" },
     { label: "Project planning", href: "/project-planning" },
     { label: "Adelaide service area", href: "/locations/adelaide" },
     { label: "Contact Us", href: "/contact-us" },

@@ -175,6 +175,32 @@ export function ArticleSchema({ guide }: { guide: ResourceGuide }) {
   );
 }
 
+
+/** Chronological list of editorial guides shown on the blog index. */
+export function BlogListSchema({
+  guides,
+}: {
+  guides: readonly ResourceGuide[];
+}) {
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        name: `${business.name} cladding, render and walling articles`,
+        itemListOrder: "https://schema.org/ItemListOrderDescending",
+        numberOfItems: guides.length,
+        itemListElement: guides.map((guide, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: guide.title,
+          url: absoluteUrl(`/resources/${guide.slug}`),
+        })),
+      }}
+    />
+  );
+}
+
 /** ItemList of case studies for the projects hub. */
 export function ProjectListSchema({
   projects,
