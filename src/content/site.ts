@@ -44,6 +44,7 @@ export {
 } from "@/content/locations";
 export { projectPlanningPage } from "@/content/project-planning";
 export {
+  acrylicVsCementRenderGuide,
   claddingMaintenanceGuide,
   claddingMaterialComparisonGuide,
   hebelBoundaryWallsGuide,
