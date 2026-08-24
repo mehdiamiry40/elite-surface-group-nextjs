@@ -9,7 +9,8 @@ export type ResourceGuide = {
     | "hebel-boundary-walls-adelaide"
     | "fibre-cement-vs-weatherboard-cladding-adelaide"
     | "load-bearing-wall-removal-adelaide"
-    | "steel-frame-vs-timber-frame-walls-adelaide";
+    | "steel-frame-vs-timber-frame-walls-adelaide"
+    | "acrylic-render-vs-cement-render-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -219,6 +220,27 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "21 August 2026",
     readingTime: "9 minute read",
   },
+  {
+    slug: "acrylic-render-vs-cement-render-adelaide",
+    serviceSlug: "render",
+    category: "Render selection",
+    title: "Acrylic Render vs Cement Render: What Should Adelaide Homes Choose?",
+    metaTitle: "Acrylic Render vs Cement Render in Adelaide",
+    metaDescription:
+      "Weighing acrylic render against cement render for an Adelaide home? Compare flexibility, substrate fit and coastal durability before you choose a system.",
+    summary:
+      "Acrylic and cement render behave differently under Adelaide's clay soils, coastal salt air and dry summers—see what actually separates the two before you commit to a system.",
+    image: "/images/v2/service-render-application.webp",
+    imageAlt: "Tradesperson applying an even render finish to an exterior wall",
+    imageCaption:
+      "An Elite Surface Group render application, shown as a general example—not a photograph of a particular acrylic or cement render system or substrate.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-08-24",
+    modified: "2026-08-24",
+    publishedDisplay: "24 August 2026",
+    readingTime: "9 minute read",
+  },
 ];
 
 function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
@@ -250,4 +272,7 @@ export const loadBearingWallRemovalGuide = guideBySlug(
 );
 export const steelVsTimberFramingGuide = guideBySlug(
   "steel-frame-vs-timber-frame-walls-adelaide",
+);
+export const acrylicVsCementRenderGuide = guideBySlug(
+  "acrylic-render-vs-cement-render-adelaide",
 );

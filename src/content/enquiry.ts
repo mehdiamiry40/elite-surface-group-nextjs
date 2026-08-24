@@ -41,6 +41,7 @@ export const enquiryServiceByPath = {
   "/resources/fibre-cement-vs-weatherboard-cladding-adelaide/": "Cladding",
   "/resources/load-bearing-wall-removal-adelaide/": "Walling",
   "/resources/steel-frame-vs-timber-frame-walls-adelaide/": "Walling",
+  "/resources/acrylic-render-vs-cement-render-adelaide/": "Render",
 } as const satisfies Readonly<Record<string, string>>;
 
 export function defaultEnquiryService(pathname: string) {
