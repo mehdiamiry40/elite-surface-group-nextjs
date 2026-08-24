@@ -124,6 +124,7 @@ const EXPECTED_SITEMAP_PATHS = [
   ...projectSlugs.map((slug) => `/projects/${slug}/`),
   "/locations/",
   "/project-planning/",
+  "/blog/",
   "/resources/",
   ...resourceSlugs.map((slug) => `/resources/${slug}/`),
   ...locationSlugs.map((slug) => `/locations/${slug}/`),

@@ -98,6 +98,7 @@ export const bannerImages: Record<string, string> = {
   "/hebel": "/images/v2/banner-hebel.webp",
   "/walling": "/images/v2/banner-walling.webp",
   "/project-planning": "/images/v2/banner-services.webp",
+  "/blog": "/images/v2/banner-services.webp",
   "/resources": "/images/v2/banner-services.webp",
   "/resources/render-cracking-adelaide": "/images/v2/banner-render.webp",
   "/resources/cladding-maintenance-coastal-adelaide":

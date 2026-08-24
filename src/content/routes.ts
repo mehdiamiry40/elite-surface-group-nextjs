@@ -60,6 +60,7 @@ export const publicRouteRecords = [
     ),
   ),
   publicRoute("/project-planning/", RELEASE_DATES.verifiedContentRelease),
+  publicRoute("/blog/", "2026-08-24"),
   publicRoute("/resources/", RELEASE_DATES.verifiedContentRelease),
   ...resourceGuides.map((guide) =>
     publicRoute(`/resources/${guide.slug}/`, guide.modified),
