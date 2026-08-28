@@ -117,6 +117,8 @@ export const bannerImages: Record<string, string> = {
     "/images/v2/banner-walling.webp",
   "/resources/acrylic-render-vs-cement-render-adelaide":
     "/images/v2/banner-render.webp",
+  "/resources/vertical-vs-horizontal-cladding-adelaide":
+    "/images/v2/banner-cladding.webp",
   "/resources/second-storey-addition-adelaide":
     "/images/v2/banner-walling.webp",
   "/resources/repainting-render-adelaide": "/images/v2/banner-render.webp",

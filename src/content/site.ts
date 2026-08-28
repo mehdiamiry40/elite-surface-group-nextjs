@@ -48,6 +48,7 @@ export {
   asbestosCladdingReplacementGuide,
   claddingMaintenanceGuide,
   claddingMaterialComparisonGuide,
+  claddingOrientationGuide,
   claddingOverBrickGuide,
   claddingVsRenderGuide,
   hebelBoundaryWallsGuide,

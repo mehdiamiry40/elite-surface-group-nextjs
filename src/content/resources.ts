@@ -11,6 +11,7 @@ export type ResourceGuide = {
     | "load-bearing-wall-removal-adelaide"
     | "steel-frame-vs-timber-frame-walls-adelaide"
     | "acrylic-render-vs-cement-render-adelaide"
+    | "vertical-vs-horizontal-cladding-adelaide"
     | "second-storey-addition-adelaide"
     | "repainting-render-adelaide"
     | "salt-damp-adelaide"
@@ -249,6 +250,29 @@ export const resourceGuides: readonly ResourceGuide[] = [
     readingTime: "9 minute read",
   },
   {
+    slug: "vertical-vs-horizontal-cladding-adelaide",
+    serviceSlug: "cladding",
+    category: "Cladding design",
+    title:
+      "Vertical vs Horizontal Cladding: Which Suits Your Adelaide Home?",
+    metaTitle: "Vertical vs Horizontal Cladding Adelaide",
+    metaDescription:
+      "Choosing vertical vs horizontal cladding for an Adelaide home? Compare batten orientation, drainage cavities and coastal detailing before you commit.",
+    summary:
+      "Vertical and horizontal cladding rely on different batten orientations and drainage-cavity details, and the wrong combination can trap moisture behind the wall. See what to confirm before choosing a direction.",
+    image: "/images/v2/service-cladding-installation.webp",
+    imageAlt:
+      "Installer aligning vertical cladding boards on a residential exterior wall",
+    imageCaption:
+      "An Elite Surface Group cladding installation, shown as a general example of vertical board alignment—not a photograph of a horizontal system or a particular batten or cavity detail.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-08-28",
+    modified: "2026-08-28",
+    publishedDisplay: "28 August 2026",
+    readingTime: "9 minute read",
+  },
+  {
     slug: "second-storey-addition-adelaide",
     serviceSlug: "walling",
     category: "Second-storey additions",
@@ -443,6 +467,9 @@ export const steelVsTimberFramingGuide = guideBySlug(
 );
 export const acrylicVsCementRenderGuide = guideBySlug(
   "acrylic-render-vs-cement-render-adelaide",
+);
+export const claddingOrientationGuide = guideBySlug(
+  "vertical-vs-horizontal-cladding-adelaide",
 );
 export const secondStoreyAdditionGuide = guideBySlug(
   "second-storey-addition-adelaide",
