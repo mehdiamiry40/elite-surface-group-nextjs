@@ -106,6 +106,13 @@ const resourceServices = new Map(
     ),
   ].map(([, slug, service]) => [slug, service]),
 );
+const resourceModifiedDates = new Map(
+  [
+    ...resourcesSource.matchAll(
+      /slug:\s*"([^"]+)"[\s\S]*?modified:\s*"([^"]+)"/g,
+    ),
+  ].map(([, slug, modified]) => [slug, modified]),
+);
 const projectImages = new Map(
   [
     ...projectSource.matchAll(
@@ -338,16 +345,74 @@ check(
 const sitemapLastModified = new Map(
   sitemapEntries.map(({ loc, lastModified }) => [loc, lastModified.slice(0, 10)]),
 );
+const latestResourceModified = [...resourceModifiedDates.values()].reduce(
+  (latest, candidate) => (candidate > latest ? candidate : latest),
+  "0000-00-00",
+);
+const resourceAggregatePaths = [
+  "/",
+  "/resources/",
+  ...locationSlugs.map((slug) => `/locations/${slug}/`),
+];
+const expectedSitemapDates = new Map([
+  ["/", latestResourceModified],
+  ["/about/", "2026-08-13"],
+  ["/services/", "2026-08-10"],
+  ...serviceSlugs.map((slug) => [`/${slug}/`, "2026-08-13"]),
+  ["/projects/", "2026-08-13"],
+  ...projectSlugs.map((slug) => [`/projects/${slug}/`, "2026-08-13"]),
+  ["/locations/", "2026-08-13"],
+  ...locationSlugs.map((slug) => [
+    `/locations/${slug}/`,
+    latestResourceModified,
+  ]),
+  ["/project-planning/", "2026-08-13"],
+  ["/blog/", "2026-08-24"],
+  ["/resources/", latestResourceModified],
+  ...resourceSlugs.map((slug) => [
+    `/resources/${slug}/`,
+    resourceModifiedDates.get(slug) ?? "",
+  ]),
+  ["/contact-us/", "2026-08-13"],
+  ["/privacy-policy/", "2026-08-13"],
+  ["/terms-of-service/", "2026-08-13"],
+]);
+const sitemapDateMismatches = [...expectedSitemapDates].filter(
+  ([route, expected]) => {
+    const loc =
+      route === "/"
+        ? "https://elitesurfacegroup.com.au/"
+        : `https://elitesurfacegroup.com.au${route}`;
+    return sitemapLastModified.get(loc) !== expected;
+  },
+);
 check(
-  "sitemap uses truthful route-specific dates",
-  sitemapLastModified.get("https://elitesurfacegroup.com.au/services/") ===
-    "2026-08-10" &&
-    sitemapLastModified.get(
-      "https://elitesurfacegroup.com.au/resources/rendering-over-painted-brick-adelaide/",
-    ) === "2026-08-13" &&
+  "resource metadata extraction covers every published guide",
+  resourceModifiedDates.size === resourceSlugs.length &&
+    latestResourceModified !== "0000-00-00",
+  `found ${resourceModifiedDates.size}, expected ${resourceSlugs.length}`,
+);
+check(
+  "every aggregate sitemap date tracks the newest rendered resource",
+  resourceAggregatePaths.every((route) => {
+    const loc =
+      route === "/"
+        ? "https://elitesurfacegroup.com.au/"
+        : `https://elitesurfacegroup.com.au${route}`;
+    return sitemapLastModified.get(loc) === latestResourceModified;
+  }),
+  `expected ${latestResourceModified} for ${resourceAggregatePaths.join(", ")}`,
+);
+check(
+  "sitemap uses truthful dates for every route",
+  expectedSitemapDates.size === sitemapEntries.length &&
+    sitemapDateMismatches.length === 0 &&
     new Set(sitemapLastModified.values()).size > 1 &&
     /publicRouteRecords/.test(sitemapSource) &&
     /publicPaths\s*=\s*publicRouteRecords\.map/.test(routesSource),
+  sitemapDateMismatches
+    .map(([route, expected]) => `${route} should be ${expected}`)
+    .join(", "),
 );
 
 /* ----------------------------------------------------------------- content */
@@ -366,6 +431,40 @@ function tagAttribute(tag, name) {
     tag.match(new RegExp(`(?:^|\\s)${name}="([^"]*)"`))?.[1] ?? "",
   );
 }
+
+function publicRouteFor(pathname) {
+  return pathname === "/" ? "/" : `${pathname.replace(/\/+$/, "")}/`;
+}
+
+function decodedFragment(hash) {
+  try {
+    return decodeURIComponent(hash.slice(1));
+  } catch {
+    return hash.slice(1);
+  }
+}
+
+const tagsByRoute = new Map(
+  [...pages].map(([route, html]) => [
+    route,
+    html.match(/<[a-z][^<>]*>/gi) ?? [],
+  ]),
+);
+const idsByRoute = new Map(
+  [...tagsByRoute].map(([route, tags]) => [
+    route,
+    tags.map((tag) => tagAttribute(tag, "id")).filter(Boolean),
+  ]),
+);
+const ariaIdReferenceAttributes = [
+  "aria-activedescendant",
+  "aria-controls",
+  "aria-describedby",
+  "aria-details",
+  "aria-errormessage",
+  "aria-labelledby",
+  "aria-owns",
+];
 
 function metaContent(html, attribute, value) {
   const tag = (html.match(/<meta[^>]*>/g) ?? []).find(
@@ -394,6 +493,69 @@ const descriptionsByRoute = new Map();
 const jsonLdByRoute = new Map();
 
 for (const [route, html] of pages) {
+  const tags = tagsByRoute.get(route) ?? [];
+  const ids = idsByRoute.get(route) ?? [];
+  const idSet = new Set(ids);
+  check(
+    `${route} has unique element IDs`,
+    idSet.size === ids.length,
+    ids.filter((id, index) => ids.indexOf(id) !== index).join(", "),
+  );
+
+  const unresolvedAriaReferences = [];
+  for (const tag of tags) {
+    for (const attribute of ariaIdReferenceAttributes) {
+      const value = tagAttribute(tag, attribute);
+      if (!value) {
+        continue;
+      }
+      for (const referencedId of value.split(/\s+/).filter(Boolean)) {
+        if (!idSet.has(referencedId)) {
+          unresolvedAriaReferences.push(`${attribute}=${referencedId}`);
+        }
+      }
+    }
+  }
+  check(
+    `${route} ARIA ID references resolve`,
+    unresolvedAriaReferences.length === 0,
+    [...new Set(unresolvedAriaReferences)].join(", "),
+  );
+
+  const unresolvedFragments = [];
+  for (const tag of tags.filter((candidate) => /^<a(?:\s|>)/i.test(candidate))) {
+    const href = tagAttribute(tag, "href");
+    if (!href) {
+      continue;
+    }
+
+    let target;
+    try {
+      target = new URL(href, new URL(route, baseUrl));
+    } catch {
+      continue;
+    }
+
+    const isInternal =
+      target.origin === baseUrl.origin ||
+      target.hostname.replace(/^www\./, "") === "elitesurfacegroup.com.au";
+    if (!isInternal || !target.hash || target.hash === "#") {
+      continue;
+    }
+
+    const targetRoute = publicRouteFor(target.pathname);
+    const targetIds = idsByRoute.get(targetRoute);
+    const fragment = decodedFragment(target.hash);
+    if (!targetIds || !targetIds.includes(fragment)) {
+      unresolvedFragments.push(`${href} -> ${targetRoute}#${fragment}`);
+    }
+  }
+  check(
+    `${route} internal fragment targets resolve`,
+    unresolvedFragments.length === 0,
+    [...new Set(unresolvedFragments)].join(", "),
+  );
+
   const h1Count = (html.match(/<h1[\s>]/g) ?? []).length;
   check(`${route} has exactly one <h1>`, h1Count === 1, `found ${h1Count}`);
 
@@ -1380,7 +1542,7 @@ check(
   "Hebel finishing guide links authoritative sources",
   [
     "hebel.com.au/resources/technical-documents/",
-    "hebel.com.au/wp-content/uploads/downloads/Houses-and-Low-Rise-Multi-Residential-External-Walls-PowerPanelXL-Design-and-Installation-Guide_HELIT016.pdf",
+    "hebel.com.au/wp-content/uploads/2025/12/Hebel-Houses-and-Low-Rise-Multi-Residential-External-Walls-PowerPanelXL-Design-and-Installation-Guide_HELIT016_MAY24-1.pdf",
     "hebel.com.au/coatings/",
     "hebel.com.au/resources/warranty/",
     "hebel.com.au/resources/safety/",
@@ -1388,7 +1550,10 @@ check(
     "plan.sa.gov.au/resources/building/building_code",
     "safework.sa.gov.au/industry/construction/silica",
   ].every((source) => renderingHebelHtml.includes(source)) &&
-    !renderingHebelHtml.includes("2016/11/Installer-Checklist.pdf"),
+    !renderingHebelHtml.includes("2016/11/Installer-Checklist.pdf") &&
+    !renderingHebelHtml.includes(
+      "wp-content/uploads/downloads/Houses-and-Low-Rise-Multi-Residential-External-Walls-PowerPanelXL-Design-and-Installation-Guide_HELIT016.pdf",
+    ),
 );
 check(
   "Hebel finishing guide links services, location, planning, resources and enquiry",
@@ -1428,7 +1593,7 @@ check(
     renderingHebelJsonLd?.mainEntityOfPage?.["@id"] ===
       "https://elitesurfacegroup.com.au/resources/rendering-hebel-panels-adelaide/" &&
     renderingHebelJsonLd?.datePublished === "2026-08-13" &&
-    renderingHebelJsonLd?.dateModified === "2026-08-13" &&
+    renderingHebelJsonLd?.dateModified === "2026-08-31" &&
     renderingHebelJsonLd?.image?.contentUrl ===
       "https://elitesurfacegroup.com.au/images/v2/service-hebel-installation.webp" &&
     renderingHebelJsonLd?.image?.width === 1600 &&
@@ -1493,10 +1658,10 @@ check(
     "hebel.com.au/residential/boundary-walls/",
     "hebel.com.au/residential/party-walls/",
     "hebel.com.au/resources/technical-documents/",
-    "PowerPanelXL-Design-and-Installation-Guide_HELIT016.pdf",
+    "Hebel-Houses-and-Low-Rise-Multi-Residential-External-Walls-PowerPanelXL-Design-and-Installation-Guide_HELIT016_MAY24-1.pdf",
     "PowerPanel-Intertenancy-and-Dual-Zero-Boundary-Walls-Design-and-Installation-Guide_HELIT152.pdf",
     "CM40165-I03-R00_PowerPanel50mm-Dual-Zero-Residential.pdf",
-    "CM40049-I05-R00.pdf",
+    "PowerPanelXL-PowerPattern-Track-and-PowerProfile-External-Walls-CodeMark-Certificate_CM40049.pdf",
     "plan.sa.gov.au/development_applications/getting_approval/how_applications_are_assessed/types_of_consent",
     "dhud.sa.gov.au/our-department/office-of-the-surveyor-general/surveying/cadastral-surveying",
     "legislation.sa.gov.au/__legislation/lz/c/a/planning%20development%20and%20infrastructure%20act%202016/current/2016.14.auth.pdf",
@@ -1505,17 +1670,20 @@ check(
     "safework.sa.gov.au/industry/construction/crystalline-silica-substances-regulations",
     "hebel.com.au/resources/warranty/",
   ].every((source) => hebelBoundaryWallsHtml.includes(source)) &&
+    !hebelBoundaryWallsHtml.includes("CM40049-I05-R00.pdf") &&
     /NCC 2022[\s\S]{0,100}Amendment 2[\s\S]{0,180}30[\s\S]{0,30}April 2027/.test(
       hebelBoundaryWallsHtml,
     ) &&
-    /expiry date of (?:<!-- -->)?1 March 2027/.test(hebelBoundaryWallsHtml),
+    /PowerPanel50 Dual Zero Boundary certificate expires (?:<!-- -->)?1 March 2027/.test(
+      hebelBoundaryWallsHtml,
+    ),
 );
 check(
   "Hebel boundary-wall guide narrows legal and uncoated-wall claims to their primary sources",
   /planning consent by itself is not full development[\s\S]{0,80}does not by itself authorise construction/.test(
     hebelBoundaryWallsHtml,
   ) &&
-    /PowerPanelXL external-wall CodeMark certificate[\s\S]{0,160}specified uncoated boundary-wall sections[\s\S]{0,120}defined infeasibility conditions/.test(
+    /PowerPanelXL guide HELIT016AUG26[\s\S]{0,300}CodeMark certificate CM40049-I05-R01[\s\S]{0,180}require the documented external coating system[\s\S]{0,180}does not make appearance alone proof/.test(
       hebelBoundaryWallsHtml,
     ),
 );
@@ -1558,7 +1726,7 @@ check(
     hebelBoundaryWallsJsonLd?.mainEntityOfPage?.["@id"] ===
       "https://elitesurfacegroup.com.au/resources/hebel-boundary-walls-adelaide/" &&
     hebelBoundaryWallsJsonLd?.datePublished === "2026-08-13" &&
-    hebelBoundaryWallsJsonLd?.dateModified === "2026-08-13" &&
+    hebelBoundaryWallsJsonLd?.dateModified === "2026-08-31" &&
     hebelBoundaryWallsJsonLd?.image?.contentUrl ===
       "https://elitesurfacegroup.com.au/images/v2/resource-hebel-boundary-walls-adelaide.webp" &&
     hebelBoundaryWallsJsonLd?.image?.width === 1536 &&

@@ -185,11 +185,12 @@ export default function RenderingHebelPanelsGuidePage() {
               behind it.
             </p>
             <p>
-              CSR’s current PowerPanelXL design and installation guide shows
-              why the exact system matters: it addresses project design,
-              building setout, wind design, framing, openings, control joints,
-              flashings, sealants and coatings. The applicable requirements
-              still come from the selected system guide and project drawings.
+              CSR’s PowerPanelXL design and installation guidance shows why the
+              exact system matters: it addresses project design, building
+              setout, wind design, framing, openings, control joints, flashings,
+              sealants and coatings. Confirm the applicable guide version
+              through CSR’s technical-document library; the project requirements
+              still come from that guide and the approved drawings.
             </p>
             <TickList
               items={[
@@ -211,8 +212,9 @@ export default function RenderingHebelPanelsGuidePage() {
             </p>
             <p className="article-source">
               Source: {" "}
-              <a href="https://hebel.com.au/wp-content/uploads/downloads/Houses-and-Low-Rise-Multi-Residential-External-Walls-PowerPanelXL-Design-and-Installation-Guide_HELIT016.pdf">
-                CSR Hebel PowerPanelXL Design and Installation Guide (PDF)
+              <a href="https://hebel.com.au/wp-content/uploads/2025/12/Hebel-Houses-and-Low-Rise-Multi-Residential-External-Walls-PowerPanelXL-Design-and-Installation-Guide_HELIT016_MAY24-1.pdf">
+                CSR Hebel PowerPanelXL Design and Installation Guide,
+                HELIT016AUG26 (PDF)
               </a>
               .
             </p>
@@ -572,7 +574,7 @@ export default function RenderingHebelPanelsGuidePage() {
               </div>
             </dl>
             <p className="article-source">
-              Source pages reviewed 13 August 2026. Always check the current
+              Source pages reviewed 31 August 2026. Always check the current
               product, project and regulatory documents before work begins.
             </p>
 

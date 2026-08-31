@@ -6,6 +6,8 @@ with Next.js 16 (App Router) and React 19.
 ## Local development
 
 ```bash
+nvm install       # Node 22.23.2 with its bundled npm 10.9.8
+nvm use
 npm ci
 npx playwright install chromium
 npm run dev
@@ -64,7 +66,12 @@ Enquiries are emailed through [Resend](https://resend.com). Copy
 - `CONTACT_TO_EMAIL` — enquiry inbox (optional; `elite.surfacegroup@gmail.com`
   by default)
 
-Set the same values in the Vercel project settings.
+Set the values separately for each Vercel environment. Production should use
+the live Resend key and enquiry inbox; Preview should use a separate Resend key
+and a test recipient so a branch deployment cannot send test leads to the live
+mailbox. Keep the Vercel project runtime on Node `22.x`: Vercel manages its
+patches, while `.nvmrc` pins CI and local development to `22.23.2` and the
+repository declares the bundled npm `10.9.8`.
 
 **The sender is the part that catches people out.** Resend delivers only from a
 domain you have verified with it by adding its DNS records, so
@@ -72,7 +79,8 @@ domain you have verified with it by adding its DNS records, so
 another verified domain). A Gmail address cannot be a sender — `gmail.com` is
 not a domain anyone outside Google can verify. The built-in default is
 therefore the business domain, not the public Gmail inbox. `npm run prebuild`
-treats a Gmail `CONTACT_FROM_EMAIL` as unconfigured delivery.
+uses the same sender validator as the runtime and treats a malformed or
+public-mailbox `CONTACT_FROM_EMAIL` as unconfigured delivery.
 
 The recipient is more forgiving: it defaults to `business.email`, and a
 `CONTACT_TO_EMAIL` still pointing at the retired `@elitesurfacegroup.com.au`
@@ -85,10 +93,14 @@ without discarding the form contents. During `npm run dev` only, the same
 missing key captures the enquiry in the server log and the form still shows
 success, so the quote flow can be tested without secrets.
 
-`npm run prebuild` warns during local development and fails Vercel Production
+`npm run prebuild` warns during local development and fails production-mode
 builds when delivery is unconfigured. `REQUIRE_CONTACT_DELIVERY=1` applies the
-same rule in another environment. `ALLOW_UNCONFIGURED_CONTACT=1` is an
-emergency-only override.
+same rule in another environment. Production has no configuration bypass: fix
+the delivery settings before deploying.
+
+The optional Upstash rate limiter is also fail-closed at build time when only
+one of `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` is present. Set
+both values or leave both unset to use the per-instance local limiter.
 
 ## Checks
 
@@ -173,8 +185,9 @@ Open items that still need a human decision outside the codebase:
   domain; do not set it to Gmail. Enquiries land in
   `elite.surfacegroup@gmail.com`; confirm provider acceptance and mailbox
   receipt with a real submission.
-- **Optional shared rate limit** — set `UPSTASH_REDIS_REST_URL` and
-  `UPSTASH_REDIS_REST_TOKEN` if a hard global contact quota is required.
+- **Optional shared rate limit** — set both `UPSTASH_REDIS_REST_URL` and
+  `UPSTASH_REDIS_REST_TOKEN` if a hard global contact quota is required; a
+  partial pair is rejected by the production build gate.
 - **Social profiles** — add real Facebook / Instagram URLs to `business.social`
   in `src/content/business.ts` when they exist (icons stay hidden while empty).
 - **Legal review** — privacy and terms are now Australian-oriented and match

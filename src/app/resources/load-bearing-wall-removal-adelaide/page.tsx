@@ -378,7 +378,11 @@ export default function LoadBearingWallRemovalGuidePage() {
           </div>
         </section>
 
-        <section className="section section--tint" aria-labelledby="faqs-and-sources">
+        <section
+          id="faqs-and-sources"
+          className="section section--tint"
+          aria-labelledby="load-bearing-wall-faqs"
+        >
           <div className="shell prose article-prose">
             <h2 id="load-bearing-wall-faqs">Common questions</h2>
             <dl className="faq-list" aria-labelledby="load-bearing-wall-faqs">

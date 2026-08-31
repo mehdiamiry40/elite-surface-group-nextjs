@@ -18,6 +18,22 @@ const RELEASE_DATES = {
   verifiedContentRelease: "2026-08-13",
 } as const;
 
+/** Keep an aggregate page current when any content it renders becomes newer. */
+function latestIsoDate(
+  baseline: IsoDate,
+  dates: readonly IsoDate[],
+): IsoDate {
+  return dates.reduce(
+    (latest, candidate) => (candidate > latest ? candidate : latest),
+    baseline,
+  );
+}
+
+const RESOURCE_AGGREGATE_LAST_MODIFIED = latestIsoDate(
+  RELEASE_DATES.verifiedContentRelease,
+  resourceGuides.map((guide) => guide.modified),
+);
+
 /**
  * Canonical public route inventory.
  *
@@ -25,18 +41,17 @@ const RELEASE_DATES = {
  * newly published page cannot be indexable while being recorded as "unknown"
  * in enquiry logs and email notifications.
  *
- * Dates are editorial, not automatic: each one records when that route's
- * visible content last changed. Never derive them from build time or file
- * mtimes — a rebuild is not a content change, and a `lastmod` that moves
- * without the copy moving is a signal search engines learn to ignore. Several
- * routes sharing a date is expected and correct when their content genuinely
- * landed in the same release; what matters is that the date moves only when the
- * page does. `routes.test.ts` guards the shape of this list, but only a human
- * can decide that a given edit was substantial, so update the date in the same
- * change as the copy.
+ * Base dates are editorial, not build timestamps: each one records when that
+ * route's visible content last changed. Aggregate pages that render the full
+ * resource inventory derive their date from those editorial guide dates, so a
+ * published guide cannot leave an index page stale. Never derive dates from
+ * build time or file mtimes — a rebuild is not a content change, and a
+ * `lastmod` that moves without the copy moving is a signal search engines learn
+ * to ignore. Several routes sharing a date is expected and correct when their
+ * content genuinely landed in the same release.
  */
 export const publicRouteRecords = [
-  publicRoute("/", RELEASE_DATES.verifiedContentRelease),
+  publicRoute("/", RESOURCE_AGGREGATE_LAST_MODIFIED),
   publicRoute("/about/", RELEASE_DATES.verifiedContentRelease),
   publicRoute("/services/", RELEASE_DATES.initialServiceHub),
   ...services.map((service) =>
@@ -56,12 +71,12 @@ export const publicRouteRecords = [
   ...locationPages.map((location) =>
     publicRoute(
       `/locations/${location.slug}/`,
-      RELEASE_DATES.verifiedContentRelease,
+      RESOURCE_AGGREGATE_LAST_MODIFIED,
     ),
   ),
   publicRoute("/project-planning/", RELEASE_DATES.verifiedContentRelease),
   publicRoute("/blog/", "2026-08-24"),
-  publicRoute("/resources/", RELEASE_DATES.verifiedContentRelease),
+  publicRoute("/resources/", RESOURCE_AGGREGATE_LAST_MODIFIED),
   ...resourceGuides.map((guide) =>
     publicRoute(`/resources/${guide.slug}/`, guide.modified),
   ),

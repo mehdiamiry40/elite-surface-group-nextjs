@@ -227,7 +227,7 @@ export default function HebelBoundaryWallsGuidePage() {
             <aside className="article-note">
               <strong>Current South Australian code timing</strong>
               <p>
-                As checked on 13 August 2026, PlanSA states that NCC 2022
+                As checked on 31 August 2026, PlanSA states that NCC 2022
                 Amendment 2 remains South Australia’s Building Code until 30
                 April 2027, with the Building Code within NCC 2025 scheduled
                 for adoption on 1 May 2027. Transitional and project-specific
@@ -281,25 +281,25 @@ export default function HebelBoundaryWallsGuidePage() {
               system and configuration apply.
             </p>
             <p>
-              For example, CSR’s PowerPanelXL external-wall guide contains
-              zero-boundary details, while its PowerPanel50 low-rise guide
-              covers intertenancy and dual zero-boundary systems. That is not a
-              universal product-selection rule. It demonstrates why a generic
-              table cannot replace the selected design-and-installation guide,
-              evidence of suitability and approved project detail.
+              For example, CSR publishes separate PowerPanelXL external-wall
+              guidance and PowerPanel50 guidance for intertenancy and dual
+              zero-boundary systems. That is not a universal product-selection
+              rule. It demonstrates why a generic table cannot replace the
+              applicable design-and-installation guide, evidence of suitability
+              and approved project detail.
             </p>
             <p>
               Some CSR system documents provide installation methods where
               outside access is limited or unavailable. That does not make
               every Hebel product suitable for every boundary condition. Check
-              the current version on CSR’s technical-document library, the
-              exact system identifier on the drawings and all limitations in
-              any CodeMark certificate or project-specific evidence.
+              the applicable version through CSR’s technical-document library,
+              the exact system identifier on the drawings and all limitations
+              in any CodeMark certificate or project-specific evidence.
             </p>
             <TickList
               items={[
                 "Exact manufacturer, product and documented wall-system name",
-                "Current design-and-installation guide and detail reference",
+                "Applicable design-and-installation guide and detail reference",
                 "Project drawings that match the proposed configuration",
                 "Evidence of suitability and every stated limitation or condition",
                 "Structural, fire, weatherproofing and condensation inputs assigned to the responsible designers",
@@ -320,8 +320,9 @@ export default function HebelBoundaryWallsGuidePage() {
                 CSR Hebel technical documents
               </a>
               , {" "}
-              <a href="https://hebel.com.au/wp-content/uploads/downloads/Houses-and-Low-Rise-Multi-Residential-External-Walls-PowerPanelXL-Design-and-Installation-Guide_HELIT016.pdf">
-                PowerPanelXL External Walls Design and Installation Guide (PDF)
+              <a href="https://hebel.com.au/wp-content/uploads/2025/12/Hebel-Houses-and-Low-Rise-Multi-Residential-External-Walls-PowerPanelXL-Design-and-Installation-Guide_HELIT016_MAY24-1.pdf">
+                PowerPanelXL External Walls Design and Installation Guide,
+                HELIT016AUG26 (PDF)
               </a>
               , {" "}
               <a href="https://hebel.com.au/wp-content/uploads/downloads/Low-Rise-Multi-Residential-PowerPanel-Intertenancy-and-Dual-Zero-Boundary-Walls-Design-and-Installation-Guide_HELIT152.pdf">
@@ -330,8 +331,7 @@ export default function HebelBoundaryWallsGuidePage() {
               </a>{" "}
               and {" "}
               <a href="https://hebel.com.au/wp-content/uploads/downloads/CM40165-I03-R00_PowerPanel50mm-Dual-Zero-Residential.pdf">
-                current linked PowerPanel50 Dual Zero Boundary CodeMark
-                certificate (PDF)
+                PowerPanel50 Dual Zero Boundary CodeMark certificate (PDF)
               </a>
               .
             </p>
@@ -561,15 +561,20 @@ export default function HebelBoundaryWallsGuidePage() {
                   unfinished or defective?
                 </dt>
                 <dd>
-                  Not by appearance alone. The current {" "}
-                  <a href="https://hebel.com.au/wp-content/uploads/2025/02/CM40049-I05-R00.pdf">
-                    PowerPanelXL external-wall CodeMark certificate
+                  Not by appearance alone. The linked {" "}
+                  <a href="https://hebel.com.au/wp-content/uploads/2025/12/Hebel-Houses-and-Low-Rise-Multi-Residential-External-Walls-PowerPanelXL-Design-and-Installation-Guide_HELIT016_MAY24-1.pdf">
+                    PowerPanelXL guide HELIT016AUG26
                   </a>{" "}
-                  provides for specified uncoated boundary-wall sections only
-                  under defined infeasibility conditions and assigns
-                  moisture-risk assessment and mitigation to the project
-                  designer or engineer. Confirm the exact approved system,
-                  certificate and project detail before reaching a conclusion.
+                  and {" "}
+                  <a href="https://hebel.com.au/wp-content/uploads/2025/12/PowerPanelXL-PowerPattern-Track-and-PowerProfile-External-Walls-CodeMark-Certificate_CM40049.pdf">
+                    CodeMark certificate CM40049-I05-R01
+                  </a>{" "}
+                  require the documented external coating system. The guide
+                  identifies inside-fixing details where outside access is
+                  limited; it does not make appearance alone proof of compliance
+                  or non-compliance. Confirm the approved system, coating
+                  specification, certificate and project documents with the
+                  responsible professionals before reaching a conclusion.
                 </dd>
               </div>
               <div className="faq-list__item">
@@ -640,10 +645,11 @@ export default function HebelBoundaryWallsGuidePage() {
                 </dd>
               </div>
               <div>
-                <dt>Current technical evidence checked</dt>
+                <dt>Technical evidence reviewed 31 August 2026</dt>
                 <dd>
-                  <a href="https://hebel.com.au/wp-content/uploads/2025/02/CM40049-I05-R00.pdf">
-                    PowerPanelXL external-wall CodeMark certificate (PDF)
+                  <a href="https://hebel.com.au/wp-content/uploads/2025/12/PowerPanelXL-PowerPattern-Track-and-PowerProfile-External-Walls-CodeMark-Certificate_CM40049.pdf">
+                    PowerPanelXL external-wall CodeMark certificate
+                    CM40049-I05-R01 (PDF)
                   </a>{" "}
                   and {" "}
                   <a href="https://hebel.com.au/wp-content/uploads/downloads/CM40165-I03-R00_PowerPanel50mm-Dual-Zero-Residential.pdf">
@@ -677,11 +683,12 @@ export default function HebelBoundaryWallsGuidePage() {
               </div>
             </dl>
             <p className="article-source">
-              Sources reviewed 13 August 2026. Recheck the current system guide,
-              certificate and South Australian rules for every project. The
-              linked PowerPanel50 Dual Zero Boundary certificate shows an
-              expiry date of 1 March 2027, and PlanSA schedules NCC 2025
-              Building Code adoption for 1 May 2027.
+              Sources reviewed 31 August 2026. Recheck the applicable system
+              guide, certificate and South Australian rules for every project.
+              The linked PowerPanelXL certificate CM40049-I05-R01 was issued 14
+              August 2026 and expires 29 April 2028. The linked PowerPanel50
+              Dual Zero Boundary certificate expires 1 March 2027, and PlanSA
+              schedules NCC 2025 Building Code adoption for 1 May 2027.
             </p>
             <p className="article-source">
               Hebel® is a registered trademark of the Xella group. CSR Building
