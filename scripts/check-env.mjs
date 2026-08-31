@@ -1,79 +1,52 @@
 #!/usr/bin/env node
 
 /**
- * Reports whether contact-form delivery is configured.
+ * Validate the contact-form environment before Next.js builds the site.
  *
- * Without RESEND_API_KEY the API answers 503 (except local `next dev`, which
- * captures the enquiry in the server log). CONTACT_FROM_EMAIL is optional: the
- * runtime defaults to info@elitesurfacegroup.com.au, which Resend can send
- * from once that domain is verified. A Gmail From is never delivery — Resend
- * rejects public-mailbox senders — so a CONTACT_FROM_EMAIL set to one is
- * treated as unconfigured. CONTACT_TO_EMAIL stays optional; its default is the
- * inbox enquiries should reach anyway.
- *
- * Production Vercel builds fail by default when configuration is absent.
- * REQUIRE_CONTACT_DELIVERY=1 applies the same rule elsewhere. The emergency
- * ALLOW_UNCONFIGURED_CONTACT=1 override must be explicit.
+ * The sender check is imported from the contact route's runtime module so a
+ * value cannot pass here and then fail every enquiry at runtime. Local builds
+ * retain a conspicuous warning; production and explicitly delivery-required
+ * builds fail closed. There is intentionally no production bypass.
  */
 
-const REQUIRED = ["RESEND_API_KEY"];
+import {
+  contactEnvironmentProblems,
+  requiresContactDelivery,
+} from "../src/lib/contact-delivery.ts";
 
-const target = process.env.VERCEL_ENV ?? process.env.NODE_ENV ?? "development";
-const missing = REQUIRED.filter((name) => !process.env[name]?.trim());
-const configuredFrom = process.env.CONTACT_FROM_EMAIL?.trim() ?? "";
-const fromCannotSend = Boolean(
-  configuredFrom && senderCannotSend(configuredFrom),
-);
+const target =
+  process.env.VERCEL_ENV ?? process.env.NODE_ENV ?? "development";
+const problems = contactEnvironmentProblems(process.env);
 
-if (!missing.length && !fromCannotSend) {
-  console.log("check-env: contact-form delivery is configured.");
+if (!problems.length) {
+  console.log("check-env: contact-form environment is configured.");
   process.exit(0);
 }
-
-const problems = [
-  ...missing,
-  ...(fromCannotSend
-    ? [
-        "CONTACT_FROM_EMAIL (must be on a Resend-verified domain, not Gmail)",
-      ]
-    : []),
-];
 
 const banner = "=".repeat(72);
 console.warn(
   `\n${banner}\n` +
-    `check-env: CONTACT FORM CANNOT DELIVER EMAIL (${target} build)\n` +
+    `check-env: CONTACT ENVIRONMENT IS INVALID (${target} build)\n` +
     `${banner}\n` +
     `Missing or invalid: ${problems.join(", ")}\n\n` +
-    "The form will show direct phone/email options instead of delivering.\n\n" +
-    "Set RESEND_API_KEY in the Vercel project settings (or .env.local locally)\n" +
-    "before this site serves real traffic. CONTACT_FROM_EMAIL is optional and\n" +
-    "defaults to Elite Surface Group <info@elitesurfacegroup.com.au>; do not set\n" +
-    "it to a Gmail address — Resend cannot send as gmail.com. CONTACT_TO_EMAIL\n" +
-    "is optional and defaults to elite.surfacegroup@gmail.com.\n" +
+    "Set RESEND_API_KEY in the Vercel project settings (or .env.local locally).\n" +
+    "CONTACT_FROM_EMAIL is optional and defaults to Elite Surface Group\n" +
+    "<info@elitesurfacegroup.com.au>; if set, it must be a valid mailbox on a\n" +
+    "domain verified in Resend, never a public Gmail/Outlook-style mailbox.\n" +
+    "CONTACT_TO_EMAIL is optional and defaults to elite.surfacegroup@gmail.com.\n" +
+    "The two UPSTASH_REDIS_REST_* values are optional, but must be set together.\n" +
     `${banner}\n`,
 );
 
-const mustDeliver =
-  process.env.VERCEL_ENV === "production" ||
-  process.env.REQUIRE_CONTACT_DELIVERY === "1";
-const emergencyOverride = process.env.ALLOW_UNCONFIGURED_CONTACT === "1";
-
-if (mustDeliver && !emergencyOverride) {
+if (requiresContactDelivery(process.env)) {
   console.error(
-    "check-env: failing a delivery-required build. Configure Resend or set " +
-      "ALLOW_UNCONFIGURED_CONTACT=1 only for an emergency deployment.\n",
+    "check-env: failing a production or delivery-required build. Configure " +
+      "the missing values before deployment.\n",
   );
   process.exit(1);
 }
 
+console.warn(
+  "check-env: continuing only because this is a local development build.\n",
+);
 process.exit(0);
-
-/** True when the From header is on a domain Resend can never verify. */
-function senderCannotSend(value) {
-  const email = /<([^>]+)>/.exec(value)?.[1] ?? value;
-  const domain = email.split("@")[1]?.trim().toLowerCase() ?? "";
-  return /^(gmail|googlemail|outlook|hotmail|live|msn|yahoo|icloud|me)\.com$/.test(
-    domain,
-  );
-}

@@ -38,18 +38,130 @@ const UNSENDABLE_FROM_DOMAINS = new Set([
   "me.com",
 ]);
 
+const EMAIL_LOCAL_PART = /^[a-z0-9!#$%&'*+/=?^_`{|}~.-]+$/i;
+const DOMAIN_LABEL = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/i;
+
+/**
+ * Parse the deliberately small From-header surface accepted by the contact
+ * route: either `mailbox@example.com` or `Display name <mailbox@example.com>`.
+ *
+ * Resend still decides whether the domain is verified. This parser prevents a
+ * malformed or header-injection value from passing the build gate only to be
+ * rejected for every enquiry at runtime.
+ */
+function parseEmailAddressFromHeader(value: string) {
+  const header = value.trim();
+  if (!header || header.length > 320 || /[\r\n\0]/.test(header)) {
+    return null;
+  }
+
+  let address = header;
+  if (header.includes("<") || header.includes(">")) {
+    const mailbox =
+      /^(?:(?:"(?:[^"\\\r\n]|\\.)*"|[^<>"\r\n]+?)\s*)?<([^<>]+)>$/.exec(
+        header,
+      );
+    if (!mailbox) {
+      return null;
+    }
+    address = mailbox[1];
+  }
+
+  const email = address.trim().toLowerCase();
+  if (!email || email.length > 254) {
+    return null;
+  }
+
+  const at = email.lastIndexOf("@");
+  if (at <= 0 || at !== email.indexOf("@") || at === email.length - 1) {
+    return null;
+  }
+
+  const localPart = email.slice(0, at);
+  const domain = email.slice(at + 1);
+  if (
+    localPart.length > 64 ||
+    localPart.startsWith(".") ||
+    localPart.endsWith(".") ||
+    localPart.includes("..") ||
+    !EMAIL_LOCAL_PART.test(localPart)
+  ) {
+    return null;
+  }
+
+  const labels = domain.split(".");
+  if (
+    domain.length > 253 ||
+    labels.length < 2 ||
+    labels.some((label) => !DOMAIN_LABEL.test(label))
+  ) {
+    return null;
+  }
+
+  return email;
+}
+
 export function emailAddressFromHeader(value: string) {
-  const angled = value.match(/<([^>]+)>/);
-  return (angled ? angled[1] : value).trim().toLowerCase();
+  return parseEmailAddressFromHeader(value) ?? "";
 }
 
 export function isResendCompatibleFrom(from: string) {
   const email = emailAddressFromHeader(from);
-  const at = email.lastIndexOf("@");
-  if (at <= 0 || at === email.length - 1) {
+  if (!email) {
     return false;
   }
-  return !UNSENDABLE_FROM_DOMAINS.has(email.slice(at + 1));
+  return !UNSENDABLE_FROM_DOMAINS.has(email.slice(email.lastIndexOf("@") + 1));
+}
+
+type ContactEnvironment = Partial<
+  Record<
+    | "RESEND_API_KEY"
+    | "CONTACT_FROM_EMAIL"
+    | "UPSTASH_REDIS_REST_URL"
+    | "UPSTASH_REDIS_REST_TOKEN"
+    | "VERCEL_ENV"
+    | "NODE_ENV"
+    | "REQUIRE_CONTACT_DELIVERY",
+    string
+  >
+>;
+
+/** Problems that would make delivery fail or silently weaken rate limiting. */
+export function contactEnvironmentProblems(
+  env: ContactEnvironment = process.env,
+) {
+  const problems: string[] = [];
+  if (!env.RESEND_API_KEY?.trim()) {
+    problems.push("RESEND_API_KEY (required)");
+  }
+
+  const configuredFrom = env.CONTACT_FROM_EMAIL?.trim();
+  if (configuredFrom && !isResendCompatibleFrom(configuredFrom)) {
+    problems.push(
+      "CONTACT_FROM_EMAIL (must be a valid mailbox on a Resend-verified domain, not a public-mailbox provider)",
+    );
+  }
+
+  const hasUpstashUrl = Boolean(env.UPSTASH_REDIS_REST_URL?.trim());
+  const hasUpstashToken = Boolean(env.UPSTASH_REDIS_REST_TOKEN?.trim());
+  if (hasUpstashUrl !== hasUpstashToken) {
+    problems.push(
+      "UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN (set both or neither)",
+    );
+  }
+
+  return problems;
+}
+
+/** Environments where an invalid delivery configuration must stop the build. */
+export function requiresContactDelivery(
+  env: ContactEnvironment = process.env,
+) {
+  return (
+    env.VERCEL_ENV?.trim().toLowerCase() === "production" ||
+    env.NODE_ENV?.trim().toLowerCase() === "production" ||
+    env.REQUIRE_CONTACT_DELIVERY === "1"
+  );
 }
 
 /**

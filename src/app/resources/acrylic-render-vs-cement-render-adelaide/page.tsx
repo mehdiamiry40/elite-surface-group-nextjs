@@ -373,7 +373,11 @@ export default function AcrylicVsCementRenderGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="faqs-and-sources">
+        <section
+          id="faqs-and-sources"
+          className="section"
+          aria-labelledby="render-comparison-faqs"
+        >
           <div className="shell prose article-prose">
             <h2 id="render-comparison-faqs">Common questions</h2>
             <dl className="faq-list" aria-labelledby="render-comparison-faqs">

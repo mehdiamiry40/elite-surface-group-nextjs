@@ -79,7 +79,21 @@ describe("isResendCompatibleFrom", () => {
     );
     assert.equal(isResendCompatibleFrom("owner@googlemail.com"), false);
     assert.equal(isResendCompatibleFrom("owner@outlook.com"), false);
+  });
+
+  it("rejects malformed mailboxes and header injection", () => {
     assert.equal(isResendCompatibleFrom("not-an-email"), false);
+    assert.equal(isResendCompatibleFrom("owner@@example.com"), false);
+    assert.equal(isResendCompatibleFrom("owner@example"), false);
+    assert.equal(isResendCompatibleFrom("owner..name@example.com"), false);
+    assert.equal(
+      isResendCompatibleFrom("Elite <owner@example.com> trailing"),
+      false,
+    );
+    assert.equal(
+      isResendCompatibleFrom("owner@example.com\r\nBcc: victim@example.com"),
+      false,
+    );
   });
 });
 
