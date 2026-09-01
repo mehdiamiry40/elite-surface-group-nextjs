@@ -205,11 +205,19 @@ export function contactEnvironmentProblems(
 export function requiresContactDelivery(
   env: ContactEnvironment = process.env,
 ) {
-  return (
-    env.VERCEL_ENV?.trim().toLowerCase() === "production" ||
-    env.NODE_ENV?.trim().toLowerCase() === "production" ||
-    env.REQUIRE_CONTACT_DELIVERY === "1"
-  );
+  if (env.REQUIRE_CONTACT_DELIVERY === "1") {
+    return true;
+  }
+
+  const vercelEnvironment = env.VERCEL_ENV?.trim().toLowerCase();
+  if (vercelEnvironment) {
+    // Vercel builds Preview with NODE_ENV=production. The explicit deployment
+    // target is authoritative so Preview can stay isolated from live mail
+    // credentials while Production remains fail-closed.
+    return vercelEnvironment === "production";
+  }
+
+  return env.NODE_ENV?.trim().toLowerCase() === "production";
 }
 
 /**

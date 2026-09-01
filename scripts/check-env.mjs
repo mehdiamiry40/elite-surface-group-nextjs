@@ -50,6 +50,7 @@ if (requiresContactDelivery(process.env)) {
 }
 
 console.warn(
-  "check-env: continuing only because this is a local development build.\n",
+  "check-env: continuing because this build is not Production or explicitly " +
+    "delivery-required.\n",
 );
 process.exit(0);

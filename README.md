@@ -69,7 +69,10 @@ Enquiries are emailed through [Resend](https://resend.com). Copy
 Set the values separately for each Vercel environment. Production should use
 the live Resend key and enquiry inbox; Preview should use a separate Resend key
 and a test recipient so a branch deployment cannot send test leads to the live
-mailbox. Keep the Vercel project runtime on Node `22.x`: Vercel manages its
+mailbox. Preview may also omit delivery credentials entirely: the build warns
+and succeeds, while its contact endpoint remains visibly unavailable rather
+than sending or capturing a lead. Keep the Vercel project runtime on Node
+`22.x`: Vercel manages its
 patches, while `.nvmrc` pins CI and local development to `22.23.2` and the
 repository declares the bundled npm `10.9.8`.
 

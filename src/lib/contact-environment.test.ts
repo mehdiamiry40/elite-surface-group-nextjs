@@ -42,7 +42,18 @@ describe("contact environment build gate", () => {
 
     assert.equal(result.status, 0);
     assert.match(result.stderr, /RESEND_API_KEY \(required\)/);
-    assert.match(result.stderr, /local development build/);
+    assert.match(result.stderr, /not Production/);
+  });
+
+  it("allows an isolated Vercel Preview without production delivery secrets", () => {
+    const result = runCheck({
+      VERCEL_ENV: "preview",
+      NODE_ENV: "production",
+    });
+
+    assert.equal(result.status, 0);
+    assert.match(result.stderr, /preview build/);
+    assert.match(result.stderr, /not Production/);
   });
 
   it("fails production for a malformed sender", () => {
