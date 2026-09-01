@@ -929,6 +929,15 @@ if (isLoopbackSmoke) {
     `status ${progressiveForm.status}, location ${progressiveLocation}`,
   );
 
+  const publicContactPageHtml = pages.get("/contact-us/") ?? "";
+  check(
+    "queued confirmation is not forgeable through a public contact-page fragment",
+    !publicContactPageHtml.includes('id="enquiry-received"') &&
+      !publicContactPageHtml.includes(
+        "Your enquiry has been safely received and queued",
+      ),
+  );
+
   if (!process.env.RESEND_API_KEY?.trim()) {
     const unconfigured = await get("/api/contact/", {
       method: "POST",

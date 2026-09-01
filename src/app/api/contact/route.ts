@@ -31,6 +31,7 @@ import { deliverOutboxSubmission } from "@/lib/contact-worker";
 import {
   progressiveContactHeaders,
   renderProgressiveContactFailure,
+  renderProgressiveContactReceived,
   type ProgressiveContactFields,
 } from "@/lib/progressive-contact";
 
@@ -349,6 +350,18 @@ function contactResponse(
   outcome: FormOutcome,
 ) {
   if (isBrowserForm) {
+    if (outcome === "received") {
+      return new NextResponse(
+        renderProgressiveContactReceived({
+          message: payload.message,
+          businessName: business.name,
+          businessPhone: business.phone,
+          businessPhoneDisplay: business.phoneDisplay,
+        }),
+        { status, headers: progressiveContactHeaders },
+      );
+    }
+
     const destination = new URL("/contact-us/", request.url);
     destination.hash = `enquiry-${outcome}`;
     return NextResponse.redirect(destination, 303);

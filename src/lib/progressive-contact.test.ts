@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import {
   progressiveContactHeaders,
   renderProgressiveContactFailure,
+  renderProgressiveContactReceived,
   type ProgressiveContactFields,
 } from "./progressive-contact.ts";
 
@@ -67,6 +68,28 @@ describe("progressive contact recovery", () => {
     assert.doesNotMatch(
       render({ mailto: "javascript:alert(1)" }),
       /Continue with this enquiry/,
+    );
+  });
+});
+
+describe("progressive queued confirmation", () => {
+  it("renders only a PII-free, no-store POST result", () => {
+    const html = renderProgressiveContactReceived({
+      message:
+        "Thanks—your enquiry has been received and queued for delivery.",
+      businessName: "Elite Surface Group",
+      businessPhone: "+61470353225",
+      businessPhoneDisplay: "0470 353 225",
+    });
+
+    assert.match(html, /Your enquiry is safely queued/);
+    assert.match(html, /received and queued for delivery/);
+    assert.match(html, /You do not need to submit it again/);
+    assert.match(html, /href="tel:\+61470353225"/);
+    assert.doesNotMatch(html, /firstName|submissionId|example\.com/);
+    assert.equal(
+      progressiveContactHeaders["Cache-Control"],
+      "private, no-store, max-age=0",
     );
   });
 });

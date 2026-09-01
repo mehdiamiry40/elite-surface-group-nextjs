@@ -34,16 +34,6 @@ export default function ContactPage() {
           Thanks—your enquiry has been sent. We’ll be in touch soon.
         </p>
         <p
-          id="enquiry-received"
-          className="form__status"
-          data-state="warning"
-          tabIndex={-1}
-        >
-          Your enquiry has been safely received and queued for delivery. You do
-          not need to submit it again. If the matter is urgent, please{" "}
-          <a href={`tel:${business.phone}`}>call {business.phoneDisplay}</a>.
-        </p>
-        <p
           id="enquiry-unavailable"
           className="form__status"
           data-state="warning"

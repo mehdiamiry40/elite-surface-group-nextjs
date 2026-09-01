@@ -25,6 +25,11 @@ type ProgressiveContactPageOptions = {
   businessPhoneDisplay: string;
 };
 
+type ProgressiveContactReceivedOptions = Pick<
+  ProgressiveContactPageOptions,
+  "message" | "businessName" | "businessPhone" | "businessPhoneDisplay"
+>;
+
 export const progressiveContactHeaders = {
   "Cache-Control": "private, no-store, max-age=0",
   Pragma: "no-cache",
@@ -96,6 +101,49 @@ function select({
     <label for="${id}">${escapeHtml(label)}</label>
     <select id="${id}" name="${name}">${optionMarkup}</select>
   </div>`;
+}
+
+/**
+ * POST-bound success document for a durably queued native form submission.
+ *
+ * This message must not live in an unconditional GET page where a caller can
+ * forge it with a query string or fragment. The enhanced JSON flow remains a
+ * normal 202 response and does not use this document.
+ */
+export function renderProgressiveContactReceived({
+  message,
+  businessName,
+  businessPhone,
+  businessPhoneDisplay,
+}: ProgressiveContactReceivedOptions) {
+  return `<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow,noarchive" />
+    <title>Enquiry received — ${escapeHtml(businessName)}</title>
+    <style>
+      :root{font-family:Arial,sans-serif;color:#142125;background:#faf8f3;color-scheme:light}
+      *{box-sizing:border-box}body{margin:0}header,main{width:min(720px,calc(100% - 32px));margin-inline:auto}
+      header{padding:24px 0 8px}header a{color:#7f2f13;font-weight:700;text-decoration:none}
+      main{padding:48px 0 72px}h1{font-size:clamp(1.9rem,6vw,2.8rem);line-height:1.1;margin:0 0 16px}
+      .notice{border-left:5px solid #415f54;background:#fff;padding:20px;margin:24px 0}
+      .notice p{margin:0 0 12px}.notice p:last-child{margin-bottom:0}a{color:#7f2f13}
+    </style>
+  </head>
+  <body>
+    <header><a href="/">${escapeHtml(businessName)} home</a></header>
+    <main>
+      <h1>Your enquiry is safely queued</h1>
+      <div class="notice" role="status">
+        <p>${escapeHtml(message)}</p>
+        <p>You do not need to submit it again. If the matter is urgent, <a href="tel:${escapeHtml(businessPhone)}">call ${escapeHtml(businessPhoneDisplay)}</a>.</p>
+      </div>
+      <p><a href="/">Return to the website</a></p>
+    </main>
+  </body>
+</html>`;
 }
 
 /**

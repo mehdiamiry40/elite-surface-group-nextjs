@@ -144,12 +144,15 @@ try {
       await route.abort("failed");
       return;
     }
+    const queued = retryPayloads.length === 2;
     await route.fulfill({
-      status: 200,
+      status: queued ? 202 : 200,
       contentType: "application/json",
       body: JSON.stringify({
         ok: true,
-        message: "Thanks—your enquiry has been sent.",
+        message: queued
+          ? "Thanks—your enquiry has been received and queued for delivery."
+          : "Thanks—your enquiry has been sent.",
       }),
     });
   });
@@ -186,7 +189,9 @@ try {
     .getByRole("button", { name: "Send enquiry" })
     .click();
   await acceptedRetryDialog
-    .getByText("Thanks—your enquiry has been sent.")
+    .getByText(
+      "Thanks—your enquiry has been received and queued for delivery.",
+    )
     .waitFor();
   await acceptedRetryDialog
     .getByRole("button", { name: "Close quote form" })

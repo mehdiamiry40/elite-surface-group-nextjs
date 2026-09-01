@@ -19,6 +19,7 @@ try {
   await page.addInitScript(() => {
     window.__analyticsTestEvents = [];
     window.__beforeSend = undefined;
+    window.__speedBeforeSend = undefined;
     const analyticsSpy = (event, payload) => {
       if (event === "beforeSend") {
         window.__beforeSend = payload;
@@ -32,6 +33,17 @@ try {
       get: () => analyticsSpy,
       set: () => {},
     });
+    const speedInsightsSpy = (event, payload) => {
+      if (event === "beforeSend") {
+        window.__speedBeforeSend = payload;
+      }
+    };
+    Object.defineProperty(window, "si", {
+      configurable: false,
+      enumerable: true,
+      get: () => speedInsightsSpy,
+      set: () => {},
+    });
   });
 
   await page.goto(
@@ -41,7 +53,9 @@ try {
     },
   );
   await page.waitForFunction(() => typeof window.__beforeSend === "function");
-  await page.waitForFunction(() => typeof window.si === "function");
+  await page.waitForFunction(
+    () => typeof window.__speedBeforeSend === "function",
+  );
 
   // Every link asserted below would navigate: `tel:`/`mailto:` hand off to an
   // external protocol. That breaks the assertions — after an external-protocol
@@ -113,8 +127,25 @@ try {
   if (redactedUrl !== new URL("/contact-us/", baseUrl).toString()) {
     throw new Error(`Expected query and hash redaction, got ${redactedUrl}`);
   }
+
+  const redactedVital = await page.evaluate(() =>
+    window.__speedBeforeSend?.({
+      type: "vital",
+      url: window.location.href,
+      route: "/contact-us/",
+    }),
+  );
+  if (
+    redactedVital?.url !== new URL("/contact-us/", baseUrl).toString() ||
+    redactedVital?.type !== "vital" ||
+    redactedVital?.route !== "/contact-us/"
+  ) {
+    throw new Error(
+      `Speed Insights must redact only the URL: ${JSON.stringify(redactedVital)}`,
+    );
+  }
   console.log(
-    "Analytics test passed: contact clicks emit fixed, property-free events.",
+    "Analytics test passed: contact clicks are property-free and both telemetry URLs are redacted.",
   );
 } finally {
   await browser.close();
