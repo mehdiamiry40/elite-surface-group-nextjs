@@ -1,0 +1,34 @@
+name: Production synthetic monitor
+
+on:
+  schedule:
+    # Twice daily, away from the top-of-hour GitHub Actions traffic spike.
+    - cron: "17 8,20 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-synthetic-monitor
+  cancel-in-progress: true
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@e51e5fe84fc33b4c73ebe40526b2694712b5b858 # v7 post-7.0.0 security fix
+        with:
+          node-version-file: .nvmrc
+
+      - name: Check production homepage and lead delivery
+        env:
+          CONTACT_MONITOR_TOKEN: ${{ secrets.CONTACT_MONITOR_TOKEN }}
+          MONITOR_BASE_URL: https://elitesurfacegroup.com.au
+        run: node scripts/synthetic-monitor.mjs

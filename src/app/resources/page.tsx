@@ -45,7 +45,7 @@ export default function ResourcesPage() {
               <li className="project-link-card" key={guide.slug}>
                 <span>{guide.category}</span>
                 <h3>
-                  <Link href={`/resources/${guide.slug}/`}>
+                  <Link href={`/resources/${guide.slug}/`} prefetch={false}>
                     {guide.metaTitle}
                   </Link>
                 </h3>
@@ -53,6 +53,7 @@ export default function ResourcesPage() {
                 <Link
                   className="text-link"
                   href={`/resources/${guide.slug}/`}
+                  prefetch={false}
                 >
                   Read the guide
                   <ArrowRightIcon />
@@ -62,7 +63,7 @@ export default function ResourcesPage() {
             <li className="project-link-card">
               <span>Quote preparation</span>
               <h3>
-                <Link href="/project-planning/">
+                <Link href="/project-planning/" prefetch={false}>
                   Plan your cladding, render, Hebel or walling enquiry
                 </Link>
               </h3>
@@ -70,7 +71,11 @@ export default function ResourcesPage() {
                 See which plans, photos, site details and programme information
                 can help turn an early enquiry into a clearer scope.
               </p>
-              <Link className="text-link" href="/project-planning/">
+              <Link
+                className="text-link"
+                href="/project-planning/"
+                prefetch={false}
+              >
                 Use the planning guide
                 <ArrowRightIcon />
               </Link>

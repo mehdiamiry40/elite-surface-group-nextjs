@@ -2,6 +2,7 @@
 
 import { Analytics, type BeforeSendEvent } from "@vercel/analytics/next";
 import { track } from "@vercel/analytics";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { useEffect } from "react";
 import {
   contactEventName,
@@ -41,14 +42,17 @@ export default function ConversionAnalytics() {
   }, []);
 
   return (
-    <Analytics
-      beforeSend={(event: BeforeSendEvent) => {
-        // Do not allow future query-string or fragment content into analytics.
-        return {
-          ...event,
-          url: redactAnalyticsUrl(event.url, window.location.origin),
-        };
-      }}
-    />
+    <>
+      <Analytics
+        beforeSend={(event: BeforeSendEvent) => {
+          // Do not allow future query-string or fragment content into analytics.
+          return {
+            ...event,
+            url: redactAnalyticsUrl(event.url, window.location.origin),
+          };
+        }}
+      />
+      <SpeedInsights />
+    </>
   );
 }

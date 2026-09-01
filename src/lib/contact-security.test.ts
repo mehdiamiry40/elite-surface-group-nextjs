@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
+  contactLog,
   isAllowedOrigin,
   isLoopbackHostname,
   redactSensitiveText,
@@ -110,6 +111,91 @@ describe("ResendDeliveryError", () => {
     assert.equal(error.providerStatus, 422);
     assert.equal(error.providerCode, "validation_error");
     assert.match(error.message, /\[redacted-email\]/);
+  });
+});
+
+describe("contactLog", () => {
+  it("emits one parseable JSON line with stable context", () => {
+    const original = console.info;
+    const calls: unknown[][] = [];
+    console.info = (...args: unknown[]) => calls.push(args);
+
+    try {
+      contactLog("contact.resend.accepted", {
+        requestId: "request-123",
+        emailId: "email-456",
+        page: "/contact-us/",
+        level: "forged",
+      });
+    } finally {
+      console.info = original;
+    }
+
+    assert.equal(calls.length, 1);
+    assert.equal(calls[0].length, 1);
+    assert.equal(typeof calls[0][0], "string");
+    const payload = JSON.parse(String(calls[0][0]));
+    assert.equal(payload.level, "info");
+    assert.equal(payload.event, "contact.resend.accepted");
+    assert.equal(payload.service, "elite-surface-group-web");
+    assert.equal(payload.route, "/api/contact/");
+    assert.equal(payload.requestId, "request-123");
+    assert.equal(Object.values(payload).includes("forged"), false);
+    assert.match(payload.timestamp, /^\d{4}-\d{2}-\d{2}T/);
+  });
+
+  it("drops non-allowlisted fields before serialization", () => {
+    const original = console.error;
+    const calls: unknown[][] = [];
+    console.error = (...args: unknown[]) => calls.push(args);
+
+    try {
+      contactLog("contact.resend.failed", {
+        requestId: "request-123",
+        phone: "0470 000 000",
+        message: "private project details",
+      });
+    } finally {
+      console.error = original;
+    }
+
+    const line = String(calls[0]?.[0]);
+    assert.doesNotMatch(line, /0470|private project details/);
+  });
+
+  it("redacts address-shaped field values and uses error severity", () => {
+    const original = console.error;
+    const calls: unknown[][] = [];
+    console.error = (...args: unknown[]) => calls.push(args);
+
+    try {
+      contactLog("contact.resend.webhook.bounced", {
+        providerEventId: "event-123",
+        error: "Mailbox user@example.com rejected the message",
+      });
+    } finally {
+      console.error = original;
+    }
+
+    const line = String(calls[0]?.[0]);
+    const payload = JSON.parse(line);
+    assert.equal(payload.level, "error");
+    assert.equal(payload.error, "Mailbox [redacted-email] rejected the message");
+    assert.doesNotMatch(line, /user@example\.com/);
+  });
+
+  it("keeps analytics failures at warning severity", () => {
+    const original = console.warn;
+    const calls: unknown[][] = [];
+    console.warn = (...args: unknown[]) => calls.push(args);
+
+    try {
+      contactLog("contact.analytics.failed", { page: "/contact-us/" });
+    } finally {
+      console.warn = original;
+    }
+
+    assert.equal(JSON.parse(String(calls[0]?.[0])).level, "warn");
   });
 });
 

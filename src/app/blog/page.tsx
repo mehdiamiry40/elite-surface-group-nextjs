@@ -115,6 +115,7 @@ export default function BlogPage() {
                   <Link
                     className="blog-card__image"
                     href={`/resources/${guide.slug}/`}
+                    prefetch={false}
                     aria-label={`Read ${guide.title}`}
                   >
                     <Image
@@ -134,7 +135,10 @@ export default function BlogPage() {
                       </time>
                     </div>
                     <h3>
-                      <Link href={`/resources/${guide.slug}/`}>
+                      <Link
+                        href={`/resources/${guide.slug}/`}
+                        prefetch={false}
+                      >
                         {guide.title}
                       </Link>
                     </h3>
@@ -144,6 +148,7 @@ export default function BlogPage() {
                       <Link
                         className="text-link"
                         href={`/resources/${guide.slug}/`}
+                        prefetch={false}
                       >
                         Read article
                         <ArrowRightIcon />

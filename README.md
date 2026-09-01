@@ -98,9 +98,35 @@ builds when delivery is unconfigured. `REQUIRE_CONTACT_DELIVERY=1` applies the
 same rule in another environment. Production has no configuration bypass: fix
 the delivery settings before deploying.
 
-The optional Upstash rate limiter is also fail-closed at build time when only
-one of `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` is present. Set
-both values or leave both unset to use the per-instance local limiter.
+The optional Upstash configuration also provides an encrypted durable outbox.
+Set all four values together or leave all four unset:
+
+- `UPSTASH_REDIS_REST_URL`
+- `UPSTASH_REDIS_REST_TOKEN`
+- `CONTACT_OUTBOX_ENCRYPTION_KEY` — standard base64 for exactly 32 random bytes
+- `CRON_SECRET` — at least 32 characters; authenticates
+  `/api/internal/contact-retry/`
+
+When configured, the validated, normalized enquiry is encrypted with
+AES-256-GCM before it is written, a stable submission ID protects Resend
+retries from duplicates, and
+retryable failures may return `202` only after durable storage succeeds. The
+worker stops after six attempts or 23 hours, whichever comes first, so it never
+automatically retries beyond Resend's 24-hour idempotency window. The committed
+hourly `contact-retry.yml` workflow calls the authenticated endpoint; add a
+GitHub Actions `CRON_SECRET` with the same value as Vercel Production before
+merging or queued records will not recover automatically.
+
+`CONTACT_MONITOR_TOKEN` optionally enables
+`POST /api/internal/contact-monitor/`. Supply it as an Authorization Bearer
+token. The endpoint accepts no recipient or enquiry input and sends a fixed,
+PII-free probe only to Resend's `delivered+elite-surface-monitor@resend.dev`
+test address with the `synthetic-monitor` category tag.
+
+`RESEND_WEBHOOK_SECRET` verifies signed delivery, delay, failure, bounce,
+complaint and suppression events at `POST /api/webhooks/resend/`. Register the
+production endpoint in Resend and keep its signing secret Production-only. See
+[`OPS.md`](OPS.md) for activation, monitoring, retention and incident steps.
 
 ## Checks
 
@@ -185,9 +211,10 @@ Open items that still need a human decision outside the codebase:
   domain; do not set it to Gmail. Enquiries land in
   `elite.surfacegroup@gmail.com`; confirm provider acceptance and mailbox
   receipt with a real submission.
-- **Optional shared rate limit** — set both `UPSTASH_REDIS_REST_URL` and
-  `UPSTASH_REDIS_REST_TOKEN` if a hard global contact quota is required; a
-  partial pair is rejected by the production build gate.
+- **Optional durable contact delivery** — provision Upstash Redis, set the
+  complete four-value encrypted-outbox group documented above, and schedule the
+  authenticated retry endpoint. A partial group is rejected by the production
+  build gate.
 - **Social profiles** — add real Facebook / Instagram URLs to `business.social`
   in `src/content/business.ts` when they exist (icons stay hidden while empty).
 - **Legal review** — privacy and terms are now Australian-oriented and match

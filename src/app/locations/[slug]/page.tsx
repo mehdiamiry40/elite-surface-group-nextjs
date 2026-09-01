@@ -98,7 +98,11 @@ export default async function LocationPage({ params }: PageProps) {
             aria-label="Adelaide wall-system guides"
           >
             {resourceGuides.map((guide) => (
-              <Link href={`/resources/${guide.slug}/`} key={guide.slug}>
+              <Link
+                href={`/resources/${guide.slug}/`}
+                key={guide.slug}
+                prefetch={false}
+              >
                 {guide.metaTitle}
               </Link>
             ))}

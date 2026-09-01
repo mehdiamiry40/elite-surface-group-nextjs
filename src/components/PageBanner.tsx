@@ -33,7 +33,9 @@ export default function PageBanner({ title, image, crumbs }: PageBannerProps) {
           <nav className="crumbs" aria-label="Breadcrumb">
             <ol>
               <li>
-                <Link href="/">Home</Link>
+                <Link href="/" prefetch={false}>
+                  Home
+                </Link>
               </li>
               {crumbs.map((crumb, index) => (
                 <li key={crumb.label}>

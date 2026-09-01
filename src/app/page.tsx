@@ -135,7 +135,7 @@ export default function HomePage() {
               <li className="project-link-card" key={guide.slug}>
                 <span>{guide.category}</span>
                 <h3>
-                  <Link href={`/resources/${guide.slug}/`}>
+                  <Link href={`/resources/${guide.slug}/`} prefetch={false}>
                     {guide.metaTitle}
                   </Link>
                 </h3>
@@ -143,6 +143,7 @@ export default function HomePage() {
                 <Link
                   className="text-link"
                   href={`/resources/${guide.slug}/`}
+                  prefetch={false}
                 >
                   Read the guide
                   <ArrowRightIcon />

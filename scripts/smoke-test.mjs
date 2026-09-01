@@ -948,6 +948,50 @@ if (isLoopbackSmoke) {
       unconfigured.status === 503,
       `status ${unconfigured.status}`,
     );
+
+    const progressiveFailure = await get("/api/contact/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Origin: baseUrl.origin,
+        "x-real-ip": "198.51.100.24",
+      },
+      body: new URLSearchParams({
+        firstName: "Retained",
+        lastName: "Visitor",
+        email: "retained@example.com",
+        phone: "0470 000 111",
+        service: "Render",
+        projectArea: "Salisbury East 5109",
+        projectType: "Renovation or extension",
+        projectTiming: "Within 3–6 months",
+        message: "Keep these project details after a delivery failure.",
+        sourcePath: "/contact-us/",
+      }),
+      redirect: "manual",
+    });
+    const progressiveFailureHtml = await progressiveFailure.text();
+    check(
+      "progressive delivery failure retains entered data in a private HTML response",
+      progressiveFailure.status === 503 &&
+        progressiveFailure.headers.get("location") === null &&
+        progressiveFailure.headers
+          .get("content-type")
+          ?.startsWith("text/html") === true &&
+        progressiveFailure.headers.get("cache-control")?.includes("no-store") ===
+          true &&
+        [
+          'value="Retained"',
+          'value="Visitor"',
+          'value="retained@example.com"',
+          'value="Render" selected',
+          'value="Renovation or extension" selected',
+          'value="Within 3–6 months" selected',
+          "Keep these project details after a delivery failure.",
+          "Continue with this enquiry in your email app",
+        ].every((value) => progressiveFailureHtml.includes(value)),
+      `status ${progressiveFailure.status}`,
+    );
   }
 }
 
@@ -1105,9 +1149,24 @@ check(
   "image srcsets cap below 4K widths",
   !/w=3840/.test(homeHtml) && !/w=2048/.test(homeHtml),
 );
+
+const headerLogoTag = homeHtml.match(
+  /<img\b(?=[^>]*\bsrc="[^"]*esg-logo-1\.webp)[^>]*>/,
+)?.[0];
+const headerLogoSrc = headerLogoTag
+  ?.match(/\bsrc="([^"]+)"/)?.[1]
+  ?.replaceAll("&amp;", "&");
+let headerLogoPathname = "";
+try {
+  headerLogoPathname = new URL(headerLogoSrc, baseUrl).pathname;
+} catch {
+  // The assertion below reports a missing or malformed source.
+}
 check(
   "header logo is the static webp, not an optimiser URL",
-  homeHtml.includes('src="/images/esg-logo-1.webp"'),
+  headerLogoPathname === "/images/esg-logo-1.webp" &&
+    !headerLogoSrc?.includes("/_next/image"),
+  headerLogoSrc ?? "logo source not found",
 );
 
 const renderPreloads = preloadMarkup(pages.get("/render/") ?? "");

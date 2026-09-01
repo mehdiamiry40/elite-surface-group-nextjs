@@ -13,19 +13,35 @@ const context = await browser.newContext();
 const page = await context.newPage();
 
 try {
-  await page.route("**/_vercel/insights/script.js", async (route) => {
-    await route.fulfill({
-      contentType: "application/javascript",
-      body: "window.__analyticsTestEvents=window.vaq||[];for(const [event,payload] of window.__analyticsTestEvents){if(event==='beforeSend')window.__beforeSend=payload;}window.va=function(event,payload){if(event==='beforeSend'){window.__beforeSend=payload;return;}window.__analyticsTestEvents=(window.__analyticsTestEvents||[]).concat([[event,payload]]);};",
+  // Install the SDK transport spy before any application or Vercel script. The
+  // production platform can inline the queue and can randomise its transport
+  // path, so intercepting one `/_vercel/insights/script.js` URL is not portable.
+  await page.addInitScript(() => {
+    window.__analyticsTestEvents = [];
+    window.__beforeSend = undefined;
+    const analyticsSpy = (event, payload) => {
+      if (event === "beforeSend") {
+        window.__beforeSend = payload;
+        return;
+      }
+      window.__analyticsTestEvents.push([event, payload]);
+    };
+    Object.defineProperty(window, "va", {
+      configurable: false,
+      enumerable: true,
+      get: () => analyticsSpy,
+      set: () => {},
     });
   });
+
   await page.goto(
     new URL("/contact-us/?private=value#contact", baseUrl).toString(),
     {
-      waitUntil: "networkidle",
+      waitUntil: "domcontentloaded",
     },
   );
-  await page.waitForFunction(() => typeof window.va === "function");
+  await page.waitForFunction(() => typeof window.__beforeSend === "function");
+  await page.waitForFunction(() => typeof window.si === "function");
 
   // Every link asserted below would navigate: `tel:`/`mailto:` hand off to an
   // external protocol. That breaks the assertions — after an external-protocol

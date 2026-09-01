@@ -102,22 +102,109 @@ export function redactSensitiveText(value: string) {
 export type ContactLogEvent =
   | "contact.delivery_unconfigured"
   | "contact.delivery_logged_locally"
+  | "contact.outbox.unavailable"
+  | "contact.outbox.queued"
+  | "contact.outbox.delivery_deferred"
   | "contact.analytics.failed"
   | "contact.resend.accepted"
-  | "contact.resend.failed";
+  | "contact.resend.failed"
+  | "contact.resend.webhook.delivered"
+  | "contact.resend.webhook.delivery_delayed"
+  | "contact.resend.webhook.failed"
+  | "contact.resend.webhook.bounced"
+  | "contact.resend.webhook.complained"
+  | "contact.resend.webhook.suppressed"
+  | "contact.resend.webhook.ignored"
+  | "contact.resend.webhook.rejected"
+  | "contact.resend.webhook.persistence_failed"
+  | "contact.resend.webhook.unconfigured";
+
+type ContactLogLevel = "info" | "warn" | "error";
+
+const CONTACT_LOG_LEVELS: Record<ContactLogEvent, ContactLogLevel> = {
+  "contact.delivery_unconfigured": "error",
+  "contact.delivery_logged_locally": "info",
+  "contact.outbox.unavailable": "error",
+  "contact.outbox.queued": "error",
+  "contact.outbox.delivery_deferred": "error",
+  "contact.analytics.failed": "warn",
+  "contact.resend.accepted": "info",
+  "contact.resend.failed": "error",
+  "contact.resend.webhook.delivered": "info",
+  "contact.resend.webhook.delivery_delayed": "warn",
+  "contact.resend.webhook.failed": "error",
+  "contact.resend.webhook.bounced": "error",
+  "contact.resend.webhook.complained": "error",
+  "contact.resend.webhook.suppressed": "error",
+  "contact.resend.webhook.ignored": "info",
+  "contact.resend.webhook.rejected": "warn",
+  "contact.resend.webhook.persistence_failed": "error",
+  "contact.resend.webhook.unconfigured": "error",
+};
+
+type ContactLogValue = string | number | boolean | null | undefined;
+
+const CONTACT_LOG_FIELDS = new Set([
+  "route",
+  "page",
+  "requestId",
+  "submissionId",
+  "emailId",
+  "providerEventId",
+  "providerCreatedAt",
+  "providerStatus",
+  "providerCode",
+  "providerReason",
+  "webhookType",
+  "category",
+  "duplicate",
+  "durationMs",
+  "error",
+  "errorCode",
+  "reason",
+]);
+
+function safeLogValue(value: ContactLogValue) {
+  if (typeof value !== "string") {
+    return value;
+  }
+
+  // Provider errors and webhook metadata are external input. Redact any
+  // address-shaped text here as a final guard, even when the caller already
+  // allowlists its fields, and cap it so one event cannot flood runtime logs.
+  return redactSensitiveText(value).slice(0, 500);
+}
 
 export function contactLog(
   event: ContactLogEvent,
-  fields: Record<string, string | number | undefined>,
+  fields: Record<string, ContactLogValue>,
 ) {
-  const payload = { event, ...fields };
-  if (
-    event === "contact.resend.accepted" ||
-    event === "contact.delivery_logged_locally"
-  ) {
-    console.info("[contact]", payload);
+  const level = CONTACT_LOG_LEVELS[event];
+  const safeFields = Object.fromEntries(
+    Object.entries(fields)
+      .filter(
+        ([key, value]) =>
+          value !== undefined &&
+          CONTACT_LOG_FIELDS.has(key) &&
+          !["timestamp", "level", "event", "service"].includes(key),
+      )
+      .map(([key, value]) => [key, safeLogValue(value)]),
+  );
+  const line = JSON.stringify({
+    timestamp: new Date().toISOString(),
+    level,
+    event,
+    service: "elite-surface-group-web",
+    route: safeFields.route ?? "/api/contact/",
+    ...safeFields,
+  });
+
+  if (level === "error") {
+    console.error(line);
+  } else if (level === "warn") {
+    console.warn(line);
   } else {
-    console.error("[contact]", payload);
+    console.info(line);
   }
 }
 
