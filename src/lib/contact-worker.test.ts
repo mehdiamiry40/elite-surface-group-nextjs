@@ -2,7 +2,10 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { ResendDeliveryError } from "./contact-security.ts";
 import type { ResendEmail } from "./contact-provider.ts";
-import type { ContactOutboxRecord } from "./contact-outbox.ts";
+import {
+  OUTBOX_RETRY_CUTOFF_MS,
+  type ContactOutboxRecord,
+} from "./contact-outbox.ts";
 import {
   deliverOutboxSubmission,
   MAX_OUTBOX_DELIVERY_ATTEMPTS,
@@ -105,7 +108,8 @@ describe("contact outbox delivery worker", () => {
   it("moves exhausted and expired records to manual review without sending", async () => {
     for (const exhausted of [
       record({ attempts: MAX_OUTBOX_DELIVERY_ATTEMPTS }),
-      record({ firstAttemptAt: 0 }),
+      record({ createdAt: 0 }),
+      record({ createdAt: 0, firstAttemptAt: OUTBOX_RETRY_CUTOFF_MS - 1 }),
     ]) {
       const { fake, calls } = store(exhausted);
       let sent = false;
@@ -114,7 +118,7 @@ describe("contact outbox delivery worker", () => {
         submissionId,
         "re_test",
         {
-          now: () => 23 * 60 * 60 * 1000,
+          now: () => OUTBOX_RETRY_CUTOFF_MS,
           send: async () => {
             sent = true;
             return "email_never";
@@ -125,5 +129,57 @@ describe("contact outbox delivery worker", () => {
       assert.equal(sent, false);
       assert.equal(calls.includes("manual_review"), true);
     }
+  });
+
+  it("anchors an unattempted record to its durable creation time", async () => {
+    const { fake, calls } = store(
+      record({ createdAt: 0, firstAttemptAt: undefined }),
+    );
+    let sent = false;
+    const result = await deliverOutboxSubmission(
+      fake,
+      submissionId,
+      "re_test",
+      {
+        now: () => OUTBOX_RETRY_CUTOFF_MS,
+        send: async () => {
+          sent = true;
+          return "email_never";
+        },
+      },
+    );
+
+    assert.deepEqual(result, {
+      state: "manual_review",
+      errorCode: "idempotency_window_expired",
+    });
+    assert.equal(sent, false);
+    assert.deepEqual(calls, ["lock", "manual_review", "unlock"]);
+  });
+
+  it("does not queue a retry that crosses the idempotency cutoff", async () => {
+    const { fake, calls } = store(record({ createdAt: 0 }));
+    let clockReads = 0;
+    const result = await deliverOutboxSubmission(
+      fake,
+      submissionId,
+      "re_test",
+      {
+        now: () =>
+          clockReads++ === 0
+            ? OUTBOX_RETRY_CUTOFF_MS - 1
+            : OUTBOX_RETRY_CUTOFF_MS,
+        send: async () => {
+          throw new TypeError("network");
+        },
+      },
+    );
+
+    assert.deepEqual(result, {
+      state: "manual_review",
+      errorCode: "TypeError",
+    });
+    assert.equal(calls.includes("queued"), false);
+    assert.equal(calls.includes("manual_review"), true);
   });
 });

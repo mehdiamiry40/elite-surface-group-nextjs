@@ -77,9 +77,14 @@ export async function deliverOutboxSubmission(
     }
 
     const startedAt = now();
+    // Creation is the earliest point at which an ambiguous persistence result
+    // can fall back to a direct provider send. Anchor the safety window here,
+    // not at the first recorded worker attempt, so a committed-but-timed-out
+    // record can never be replayed after Resend's idempotency window expires.
+    const idempotencyWindowStartedAt = record.createdAt;
     if (
       record.attempts >= MAX_OUTBOX_DELIVERY_ATTEMPTS ||
-      retryCutoffReached(record.firstAttemptAt, startedAt)
+      retryCutoffReached(idempotencyWindowStartedAt, startedAt)
     ) {
       const errorCode =
         record.attempts >= MAX_OUTBOX_DELIVERY_ATTEMPTS
@@ -115,7 +120,7 @@ export async function deliverOutboxSubmission(
       }
       if (
         attempt.attempts >= MAX_OUTBOX_DELIVERY_ATTEMPTS ||
-        retryCutoffReached(attempt.firstAttemptAt, now())
+        retryCutoffReached(idempotencyWindowStartedAt, now())
       ) {
         await outbox.markTerminal(
           submissionId,

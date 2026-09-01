@@ -200,8 +200,11 @@ export function decryptOutboxPayload(
   return JSON.parse(plaintext) as ResendEmail;
 }
 
-export function retryCutoffReached(firstAttemptAt: number | undefined, now: number) {
-  return firstAttemptAt !== undefined && now - firstAttemptAt >= OUTBOX_RETRY_CUTOFF_MS;
+export function retryCutoffReached(
+  idempotencyWindowStartedAt: number,
+  now: number,
+) {
+  return now - idempotencyWindowStartedAt >= OUTBOX_RETRY_CUTOFF_MS;
 }
 
 export function nextRetryAt(attempts: number, now: number) {
