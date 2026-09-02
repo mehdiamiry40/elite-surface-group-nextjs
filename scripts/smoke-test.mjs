@@ -169,6 +169,25 @@ check(
   homeH1Text.includes("render, hebel"),
   homeH1Text,
 );
+check(
+  "global footer does not repeat the page-level quote band",
+  [...pages.values()].every(
+    (html) =>
+      !html.includes('class="footer__lead"') &&
+      !html.includes('id="footer-lead-title"'),
+  ),
+);
+check(
+  "every non-home public page retains one page-level quote band",
+  [...pages]
+    .filter(([route]) => route !== "/")
+    .every(([, html]) => (html.match(/class="cta"/g) ?? []).length === 1),
+);
+check(
+  "home uses its contact form instead of a duplicate footer quote band",
+  (pages.get("/") ?? "").includes('class="form-card') &&
+    !(pages.get("/") ?? "").includes('class="footer__lead"'),
+);
 
 /* -------------------------------------------------------------- retired WP */
 
