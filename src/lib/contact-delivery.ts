@@ -119,12 +119,40 @@ type ContactEnvironment = Partial<
     | "CONTACT_FROM_EMAIL"
     | "UPSTASH_REDIS_REST_URL"
     | "UPSTASH_REDIS_REST_TOKEN"
+    | "CONTACT_OUTBOX_ENCRYPTION_KEY"
+    | "CRON_SECRET"
+    | "CONTACT_MONITOR_TOKEN"
     | "VERCEL_ENV"
     | "NODE_ENV"
     | "REQUIRE_CONTACT_DELIVERY",
     string
   >
 >;
+
+const OUTBOX_ENVIRONMENT_KEYS = [
+  "UPSTASH_REDIS_REST_URL",
+  "UPSTASH_REDIS_REST_TOKEN",
+  "CONTACT_OUTBOX_ENCRYPTION_KEY",
+  "CRON_SECRET",
+] as const;
+
+function configured(value: string | undefined) {
+  return Boolean(value?.trim());
+}
+
+function validOutboxKey(value: string | undefined) {
+  const encoded = value?.trim();
+  if (!encoded || !/^[a-z0-9+/]+={0,2}$/i.test(encoded)) {
+    return false;
+  }
+  return Buffer.from(encoded, "base64").length === 32;
+}
+
+export function contactOutboxIsConfigured(
+  env: ContactEnvironment = process.env,
+) {
+  return OUTBOX_ENVIRONMENT_KEYS.every((key) => configured(env[key]));
+}
 
 /** Problems that would make delivery fail or silently weaken rate limiting. */
 export function contactEnvironmentProblems(
@@ -142,12 +170,32 @@ export function contactEnvironmentProblems(
     );
   }
 
-  const hasUpstashUrl = Boolean(env.UPSTASH_REDIS_REST_URL?.trim());
-  const hasUpstashToken = Boolean(env.UPSTASH_REDIS_REST_TOKEN?.trim());
-  if (hasUpstashUrl !== hasUpstashToken) {
+  const configuredOutboxValues = OUTBOX_ENVIRONMENT_KEYS.filter((key) =>
+    configured(env[key]),
+  );
+  if (
+    configuredOutboxValues.length > 0 &&
+    configuredOutboxValues.length !== OUTBOX_ENVIRONMENT_KEYS.length
+  ) {
     problems.push(
-      "UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN (set both or neither)",
+      "UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN + CONTACT_OUTBOX_ENCRYPTION_KEY + CRON_SECRET (set the complete encrypted-outbox group or none)",
     );
+  } else if (configuredOutboxValues.length === OUTBOX_ENVIRONMENT_KEYS.length) {
+    if (!validOutboxKey(env.CONTACT_OUTBOX_ENCRYPTION_KEY)) {
+      problems.push(
+        "CONTACT_OUTBOX_ENCRYPTION_KEY (must be base64 for exactly 32 random bytes)",
+      );
+    }
+    if ((env.CRON_SECRET?.trim().length ?? 0) < 32) {
+      problems.push("CRON_SECRET (must be at least 32 characters)");
+    }
+  }
+
+  if (
+    configured(env.CONTACT_MONITOR_TOKEN) &&
+    (env.CONTACT_MONITOR_TOKEN?.trim().length ?? 0) < 32
+  ) {
+    problems.push("CONTACT_MONITOR_TOKEN (must be at least 32 characters)");
   }
 
   return problems;
@@ -157,11 +205,19 @@ export function contactEnvironmentProblems(
 export function requiresContactDelivery(
   env: ContactEnvironment = process.env,
 ) {
-  return (
-    env.VERCEL_ENV?.trim().toLowerCase() === "production" ||
-    env.NODE_ENV?.trim().toLowerCase() === "production" ||
-    env.REQUIRE_CONTACT_DELIVERY === "1"
-  );
+  if (env.REQUIRE_CONTACT_DELIVERY === "1") {
+    return true;
+  }
+
+  const vercelEnvironment = env.VERCEL_ENV?.trim().toLowerCase();
+  if (vercelEnvironment) {
+    // Vercel builds Preview with NODE_ENV=production. The explicit deployment
+    // target is authoritative so Preview can stay isolated from live mail
+    // credentials while Production remains fail-closed.
+    return vercelEnvironment === "production";
+  }
+
+  return env.NODE_ENV?.trim().toLowerCase() === "production";
 }
 
 /**

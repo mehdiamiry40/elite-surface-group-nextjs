@@ -13,19 +13,49 @@ const context = await browser.newContext();
 const page = await context.newPage();
 
 try {
-  await page.route("**/_vercel/insights/script.js", async (route) => {
-    await route.fulfill({
-      contentType: "application/javascript",
-      body: "window.__analyticsTestEvents=window.vaq||[];for(const [event,payload] of window.__analyticsTestEvents){if(event==='beforeSend')window.__beforeSend=payload;}window.va=function(event,payload){if(event==='beforeSend'){window.__beforeSend=payload;return;}window.__analyticsTestEvents=(window.__analyticsTestEvents||[]).concat([[event,payload]]);};",
+  // Install the SDK transport spy before any application or Vercel script. The
+  // production platform can inline the queue and can randomise its transport
+  // path, so intercepting one `/_vercel/insights/script.js` URL is not portable.
+  await page.addInitScript(() => {
+    window.__analyticsTestEvents = [];
+    window.__beforeSend = undefined;
+    window.__speedBeforeSend = undefined;
+    const analyticsSpy = (event, payload) => {
+      if (event === "beforeSend") {
+        window.__beforeSend = payload;
+        return;
+      }
+      window.__analyticsTestEvents.push([event, payload]);
+    };
+    Object.defineProperty(window, "va", {
+      configurable: false,
+      enumerable: true,
+      get: () => analyticsSpy,
+      set: () => {},
+    });
+    const speedInsightsSpy = (event, payload) => {
+      if (event === "beforeSend") {
+        window.__speedBeforeSend = payload;
+      }
+    };
+    Object.defineProperty(window, "si", {
+      configurable: false,
+      enumerable: true,
+      get: () => speedInsightsSpy,
+      set: () => {},
     });
   });
+
   await page.goto(
     new URL("/contact-us/?private=value#contact", baseUrl).toString(),
     {
-      waitUntil: "networkidle",
+      waitUntil: "domcontentloaded",
     },
   );
-  await page.waitForFunction(() => typeof window.va === "function");
+  await page.waitForFunction(() => typeof window.__beforeSend === "function");
+  await page.waitForFunction(
+    () => typeof window.__speedBeforeSend === "function",
+  );
 
   // Every link asserted below would navigate: `tel:`/`mailto:` hand off to an
   // external protocol. That breaks the assertions — after an external-protocol
@@ -97,8 +127,25 @@ try {
   if (redactedUrl !== new URL("/contact-us/", baseUrl).toString()) {
     throw new Error(`Expected query and hash redaction, got ${redactedUrl}`);
   }
+
+  const redactedVital = await page.evaluate(() =>
+    window.__speedBeforeSend?.({
+      type: "vital",
+      url: window.location.href,
+      route: "/contact-us/",
+    }),
+  );
+  if (
+    redactedVital?.url !== new URL("/contact-us/", baseUrl).toString() ||
+    redactedVital?.type !== "vital" ||
+    redactedVital?.route !== "/contact-us/"
+  ) {
+    throw new Error(
+      `Speed Insights must redact only the URL: ${JSON.stringify(redactedVital)}`,
+    );
+  }
   console.log(
-    "Analytics test passed: contact clicks emit fixed, property-free events.",
+    "Analytics test passed: contact clicks are property-free and both telemetry URLs are redacted.",
   );
 } finally {
   await browser.close();

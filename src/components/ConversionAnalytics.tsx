@@ -1,7 +1,8 @@
 "use client";
 
-import { Analytics, type BeforeSendEvent } from "@vercel/analytics/next";
+import { Analytics } from "@vercel/analytics/next";
 import { track } from "@vercel/analytics";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { useEffect } from "react";
 import {
   contactEventName,
@@ -16,6 +17,13 @@ import {
 function classifyContactLink(link: HTMLAnchorElement) {
   const href = link.getAttribute("href") ?? "";
   return contactEventName(href);
+}
+
+function redactTelemetryUrl<T extends { url: string }>(event: T): T {
+  return {
+    ...event,
+    url: redactAnalyticsUrl(event.url, window.location.origin),
+  };
 }
 
 export default function ConversionAnalytics() {
@@ -41,14 +49,11 @@ export default function ConversionAnalytics() {
   }, []);
 
   return (
-    <Analytics
-      beforeSend={(event: BeforeSendEvent) => {
-        // Do not allow future query-string or fragment content into analytics.
-        return {
-          ...event,
-          url: redactAnalyticsUrl(event.url, window.location.origin),
-        };
-      }}
-    />
+    <>
+      {/* These SDKs use separate browser queues, so each must receive the URL
+          control. The generic helper preserves all current and future fields. */}
+      <Analytics beforeSend={redactTelemetryUrl} />
+      <SpeedInsights beforeSend={redactTelemetryUrl} />
+    </>
   );
 }

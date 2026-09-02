@@ -42,6 +42,8 @@ export function useDialog(
   onClose: () => void,
   /** Optional left/right handler; must be stable (wrap in `useCallback`). */
   onArrow?: (direction: 1 | -1) => void,
+  /** Explicit visible target for focus restoration after nested overlays. */
+  restoreFocusTo?: HTMLElement | null,
 ) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const restoreRef = useRef<HTMLElement | null>(null);
@@ -51,7 +53,9 @@ export function useDialog(
       return;
     }
 
-    if (document.activeElement instanceof HTMLElement) {
+    if (restoreFocusTo?.isConnected) {
+      restoreRef.current = restoreFocusTo;
+    } else if (document.activeElement instanceof HTMLElement) {
       restoreRef.current = document.activeElement;
     }
 
@@ -126,10 +130,17 @@ export function useDialog(
       // Another overlay (quote dialog) may have opened while this one closed —
       // leave focus alone so it can take over.
       if (!anotherModalIsOpen(dialogNode)) {
-        restoreRef.current?.focus();
+        const restoreTarget = restoreRef.current;
+        if (
+          restoreTarget?.isConnected &&
+          !restoreTarget.closest("[hidden]") &&
+          restoreTarget.getClientRects().length > 0
+        ) {
+          restoreTarget.focus();
+        }
       }
     };
-  }, [open, onClose, onArrow]);
+  }, [open, onClose, onArrow, restoreFocusTo]);
 
   return dialogRef;
 }

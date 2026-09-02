@@ -34,7 +34,10 @@ console.warn(
     "<info@elitesurfacegroup.com.au>; if set, it must be a valid mailbox on a\n" +
     "domain verified in Resend, never a public Gmail/Outlook-style mailbox.\n" +
     "CONTACT_TO_EMAIL is optional and defaults to elite.surfacegroup@gmail.com.\n" +
-    "The two UPSTASH_REDIS_REST_* values are optional, but must be set together.\n" +
+    "The encrypted outbox is optional, but its two UPSTASH_REDIS_REST_* values,\n" +
+    "CONTACT_OUTBOX_ENCRYPTION_KEY and CRON_SECRET must be set together.\n" +
+    "The encryption key must be base64 for 32 random bytes; CRON_SECRET and any\n" +
+    "CONTACT_MONITOR_TOKEN must each contain at least 32 characters.\n" +
     `${banner}\n`,
 );
 
@@ -47,6 +50,7 @@ if (requiresContactDelivery(process.env)) {
 }
 
 console.warn(
-  "check-env: continuing only because this is a local development build.\n",
+  "check-env: continuing because this build is not Production or explicitly " +
+    "delivery-required.\n",
 );
 process.exit(0);

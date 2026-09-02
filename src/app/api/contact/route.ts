@@ -20,9 +20,23 @@ import {
   redactSensitiveText,
   ResendDeliveryError,
 } from "@/lib/contact-security";
+import {
+  contactEmailTags,
+  sendWithResend,
+  type ResendEmail,
+} from "@/lib/contact-provider";
+import { outboxFromEnvironment } from "@/lib/contact-outbox";
+import { resolveSubmissionId } from "@/lib/contact-submission";
+import { deliverOutboxSubmission } from "@/lib/contact-worker";
+import {
+  progressiveContactHeaders,
+  renderProgressiveContactFailure,
+  renderProgressiveContactReceived,
+  type ProgressiveContactFields,
+} from "@/lib/progressive-contact";
 
 export const runtime = "nodejs";
-export const maxDuration = 10;
+export const maxDuration = 20;
 
 const MAX = {
   name: 120,
@@ -37,8 +51,7 @@ const MAX = {
   company: 120,
 };
 
-const MAX_BODY_BYTES = 16_384;
-const RESEND_TIMEOUT_MS = 8_000;
+const MAX_BODY_BYTES = 65_536;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX = 6;
 const ALLOWED_SERVICES = new Set(services.map((service) => service.name));
@@ -327,7 +340,7 @@ type ContactPayload = {
   mailto?: string;
 };
 
-type FormOutcome = "sent" | "unavailable" | "invalid";
+type FormOutcome = "sent" | "received" | "unavailable" | "invalid";
 
 function contactResponse(
   request: NextRequest,
@@ -337,6 +350,18 @@ function contactResponse(
   outcome: FormOutcome,
 ) {
   if (isBrowserForm) {
+    if (outcome === "received") {
+      return new NextResponse(
+        renderProgressiveContactReceived({
+          message: payload.message,
+          businessName: business.name,
+          businessPhone: business.phone,
+          businessPhoneDisplay: business.phoneDisplay,
+        }),
+        { status, headers: progressiveContactHeaders },
+      );
+    }
+
     const destination = new URL("/contact-us/", request.url);
     destination.hash = `enquiry-${outcome}`;
     return NextResponse.redirect(destination, 303);
@@ -344,50 +369,33 @@ function contactResponse(
   return NextResponse.json(payload, { status });
 }
 
-type ResendEmail = {
-  from: string;
-  to: string[];
-  reply_to: string;
-  subject: string;
-  text: string;
-  html: string;
-};
-
-async function sendWithResend(
-  apiKey: string,
-  email: ResendEmail,
-  idempotencyKey: string,
+function parsedContactResponse(
+  request: NextRequest,
+  isBrowserForm: boolean,
+  payload: ContactPayload,
+  status: number,
+  outcome: FormOutcome,
+  fields: ProgressiveContactFields,
 ) {
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-      "Idempotency-Key": idempotencyKey,
-    },
-    body: JSON.stringify(email),
-    signal: AbortSignal.timeout(RESEND_TIMEOUT_MS),
-  });
-
-  const result: unknown = await response.json().catch(() => null);
-  if (!response.ok) {
-    const providerCode =
-      result && typeof result === "object" && "name" in result
-        ? String(result.name)
-        : undefined;
-    const providerMessage =
-      result && typeof result === "object" && "message" in result
-        ? String(result.message)
-        : undefined;
-    throw new ResendDeliveryError(response.status, {
-      providerCode,
-      message: providerMessage,
-    });
+  if (!isBrowserForm || outcome === "sent" || outcome === "received") {
+    return contactResponse(request, isBrowserForm, payload, status, outcome);
   }
 
-  return result && typeof result === "object" && "id" in result
-    ? String(result.id)
-    : "accepted";
+  return new NextResponse(
+    renderProgressiveContactFailure({
+      fields,
+      message: payload.message,
+      mailto: payload.mailto,
+      serviceOptions: services.map((service) => service.name),
+      projectTypeOptions,
+      projectTimingOptions,
+      businessName: business.name,
+      businessEmail: business.email,
+      businessPhone: business.phone,
+      businessPhoneDisplay: business.phoneDisplay,
+    }),
+    { status, headers: progressiveContactHeaders },
+  );
 }
 
 export async function POST(request: NextRequest) {
@@ -425,27 +433,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (!(await sharedRateLimit(request))) {
-    if (isBrowserForm) {
-      return contactResponse(
-        request,
-        true,
-        { message: "Too many enquiries were submitted. Please try again soon." },
-        429,
-        "unavailable",
-      );
-    }
-    return NextResponse.json(
-      { message: "Too many enquiries were submitted. Please try again soon." },
-      {
-        status: 429,
-        headers: {
-          "Retry-After": String(Math.ceil(RATE_LIMIT_WINDOW_MS / 1000)),
-        },
-      },
-    );
-  }
-
   let rawBody: string;
   try {
     rawBody = await readBody(request);
@@ -465,6 +452,8 @@ export async function POST(request: NextRequest) {
   }
 
   let body: Record<string, unknown>;
+  let browserFirstName = "";
+  let browserLastName = "";
   try {
     if (isJson) {
       const parsed: unknown = JSON.parse(rawBody);
@@ -475,7 +464,9 @@ export async function POST(request: NextRequest) {
     } else {
       const params = new URLSearchParams(rawBody);
       body = Object.fromEntries(params);
-      body.name = [params.get("firstName"), params.get("lastName")]
+      browserFirstName = params.get("firstName")?.trim() ?? "";
+      browserLastName = params.get("lastName")?.trim() ?? "";
+      body.name = [browserFirstName, browserLastName]
         .map((part) => part?.trim())
         .filter(Boolean)
         .join(" ");
@@ -503,6 +494,42 @@ export async function POST(request: NextRequest) {
     ? requestedSourcePath
     : "unknown";
   const company = singleLine(body.company);
+  const submissionId = resolveSubmissionId(body.submissionId);
+  const progressiveFields: ProgressiveContactFields = {
+    firstName: isBrowserForm ? singleLine(browserFirstName) : name,
+    lastName: isBrowserForm ? singleLine(browserLastName) : "",
+    email,
+    phone,
+    service,
+    projectType,
+    projectArea,
+    projectTiming,
+    message,
+    sourcePath,
+    submissionId,
+  };
+
+  if (!(await sharedRateLimit(request))) {
+    if (isBrowserForm) {
+      return parsedContactResponse(
+        request,
+        true,
+        { message: "Too many enquiries were submitted. Please try again soon." },
+        429,
+        "unavailable",
+        progressiveFields,
+      );
+    }
+    return NextResponse.json(
+      { message: "Too many enquiries were submitted. Please try again soon." },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(Math.ceil(RATE_LIMIT_WINDOW_MS / 1000)),
+        },
+      },
+    );
+  }
 
   if (company) {
     return contactResponse(
@@ -526,12 +553,13 @@ export async function POST(request: NextRequest) {
     tooLong(sourcePath, MAX.sourcePath) ||
     tooLong(company, MAX.company)
   ) {
-    return contactResponse(
+    return parsedContactResponse(
       request,
       isBrowserForm,
       { message: "One or more form fields are too long." },
       422,
       "invalid",
+      progressiveFields,
     );
   }
 
@@ -541,42 +569,46 @@ export async function POST(request: NextRequest) {
     !message ||
     !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
   ) {
-    return contactResponse(
+    return parsedContactResponse(
       request,
       isBrowserForm,
       { message: "Please provide your name, email address and message." },
       400,
       "invalid",
+      progressiveFields,
     );
   }
 
   if (service && !ALLOWED_SERVICES.has(service)) {
-    return contactResponse(
+    return parsedContactResponse(
       request,
       isBrowserForm,
       { message: "Please choose a valid service." },
       400,
       "invalid",
+      progressiveFields,
     );
   }
 
   if (projectType && !ALLOWED_PROJECT_TYPES.has(projectType)) {
-    return contactResponse(
+    return parsedContactResponse(
       request,
       isBrowserForm,
       { message: "Please choose a valid project type." },
       400,
       "invalid",
+      progressiveFields,
     );
   }
 
   if (projectTiming && !ALLOWED_PROJECT_TIMINGS.has(projectTiming)) {
-    return contactResponse(
+    return parsedContactResponse(
       request,
       isBrowserForm,
       { message: "Please choose a valid target timing." },
       400,
       "invalid",
+      progressiveFields,
     );
   }
 
@@ -632,7 +664,7 @@ export async function POST(request: NextRequest) {
     contactLog("contact.delivery_unconfigured", {
       page: sourcePath || "unknown",
     });
-    return contactResponse(
+    return parsedContactResponse(
       request,
       isBrowserForm,
       {
@@ -641,6 +673,7 @@ export async function POST(request: NextRequest) {
       },
       503,
       "unavailable",
+      progressiveFields,
     );
   }
 
@@ -651,7 +684,7 @@ export async function POST(request: NextRequest) {
     contactLog("contact.delivery_unconfigured", {
       page: sourcePath || "unknown",
     });
-    return contactResponse(
+    return parsedContactResponse(
       request,
       isBrowserForm,
       {
@@ -660,96 +693,177 @@ export async function POST(request: NextRequest) {
       },
       503,
       "unavailable",
+      progressiveFields,
     );
   }
 
-  const requestId = crypto.randomUUID();
-  try {
-    const emailId = await sendWithResend(
-      resendKey,
-      {
-      from,
-      to: [to],
-        reply_to: email,
-      subject: `Elite Surface Group website enquiry${
-        service ? ` — ${service}` : ""
-      }`,
-      text: [
-        `Name: ${name}`,
-        `Email: ${email}`,
-        `Phone: ${phone || "Not provided"}`,
-        `Service: ${service || "Not specified"}`,
-        `Project type: ${projectType || "Not specified"}`,
-        `Project area: ${projectArea || "Not provided"}`,
-        `Target timing: ${projectTiming || "Not specified"}`,
-        `Page: ${sourcePath || "Unknown"}`,
-        "",
-        message,
-      ].join("\n"),
-      html: `
-        <h2>New website enquiry</h2>
-        <p><strong>Name:</strong> ${escapeHtml(name)}</p>
-        <p><strong>Email:</strong> ${escapeHtml(email)}</p>
-        <p><strong>Phone:</strong> ${escapeHtml(phone || "Not provided")}</p>
-        <p><strong>Service:</strong> ${escapeHtml(
-          service || "Not specified",
-        )}</p>
-        <p><strong>Project type:</strong> ${escapeHtml(
-          projectType || "Not specified",
-        )}</p>
-        <p><strong>Project area:</strong> ${escapeHtml(
-          projectArea || "Not provided",
-        )}</p>
-        <p><strong>Target timing:</strong> ${escapeHtml(
-          projectTiming || "Not specified",
-        )}</p>
-        <p><strong>Page:</strong> ${escapeHtml(sourcePath || "Unknown")}</p>
-        <hr />
-        <p>${escapeHtml(message).replaceAll("\n", "<br />")}</p>
-      `,
-      },
-      requestId,
-    );
+  const requestId = submissionId;
+  const contactEmail: ResendEmail = {
+    from,
+    to: [to],
+    reply_to: email,
+    subject: `Elite Surface Group website enquiry${
+      service ? ` — ${service}` : ""
+    }`,
+    text: [
+      `Name: ${name}`,
+      `Email: ${email}`,
+      `Phone: ${phone || "Not provided"}`,
+      `Service: ${service || "Not specified"}`,
+      `Project type: ${projectType || "Not specified"}`,
+      `Project area: ${projectArea || "Not provided"}`,
+      `Target timing: ${projectTiming || "Not specified"}`,
+      `Page: ${sourcePath || "Unknown"}`,
+      "",
+      message,
+    ].join("\n"),
+    html: `
+      <h2>New website enquiry</h2>
+      <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+      <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+      <p><strong>Phone:</strong> ${escapeHtml(phone || "Not provided")}</p>
+      <p><strong>Service:</strong> ${escapeHtml(service || "Not specified")}</p>
+      <p><strong>Project type:</strong> ${escapeHtml(projectType || "Not specified")}</p>
+      <p><strong>Project area:</strong> ${escapeHtml(projectArea || "Not provided")}</p>
+      <p><strong>Target timing:</strong> ${escapeHtml(projectTiming || "Not specified")}</p>
+      <p><strong>Page:</strong> ${escapeHtml(sourcePath || "Unknown")}</p>
+      <hr />
+      <p>${escapeHtml(message).replaceAll("\n", "<br />")}</p>
+    `,
+    tags: contactEmailTags(submissionId),
+  };
 
-    contactLog("contact.resend.accepted", {
-      requestId,
-      emailId,
-      page: sourcePath || "unknown",
-    });
+  let deliveryStatus = 200;
+  let successMessage =
+    "Thanks—your enquiry has been sent. We’ll be in touch soon.";
+  let deliveredOrQueued = false;
+  let outboxPersisted = false;
+  let outbox: ReturnType<typeof outboxFromEnvironment> = null;
+
+  try {
+    outbox = outboxFromEnvironment();
+    if (outbox) {
+      const persisted = await outbox.persist(submissionId, contactEmail);
+      if (persisted === "conflict") {
+        return parsedContactResponse(
+          request,
+          isBrowserForm,
+          {
+            message:
+              "This enquiry changed while it was being retried. Please submit it again.",
+          },
+          409,
+          "invalid",
+          progressiveFields,
+        );
+      }
+      outboxPersisted = true;
+    }
   } catch (error) {
-    contactLog("contact.resend.failed", {
+    contactLog("contact.outbox.unavailable", {
       requestId,
-      page: sourcePath || "unknown",
-      providerStatus:
-        error instanceof ResendDeliveryError
-          ? error.providerStatus
-          : undefined,
-      providerCode:
-        error instanceof ResendDeliveryError ? error.providerCode : undefined,
-      error:
-        error instanceof Error
-          ? redactSensitiveText(error.message)
-          : "unknown",
+      error: error instanceof Error ? String(error.name) : "unknown",
     });
-    return contactResponse(
-      request,
-      isBrowserForm,
-      {
-        message: unavailableDeliveryCopy,
-        mailto: mailtoUrl({
-          name,
-          email,
-          phone,
-          service,
-          projectType,
-          projectArea,
-          projectTiming,
-          message,
-        }),
-      },
-      502,
-      "unavailable",
-    );
+    outbox = null;
+  }
+
+  if (outbox && outboxPersisted) {
+    try {
+      const result = await deliverOutboxSubmission(
+        outbox,
+        submissionId,
+        resendKey,
+      );
+      if (result.state === "accepted") {
+        deliveredOrQueued = true;
+        contactLog("contact.resend.accepted", {
+          requestId,
+          emailId: result.emailId,
+          page: sourcePath || "unknown",
+        });
+      } else if (result.state === "queued" || result.state === "locked") {
+        deliveredOrQueued = true;
+        deliveryStatus = 202;
+        successMessage =
+          "Thanks—your enquiry has been received and queued for delivery. We’ll be in touch soon.";
+        contactLog("contact.outbox.queued", {
+          requestId,
+          errorCode:
+            result.state === "queued" ? result.errorCode : "delivery_locked",
+        });
+      } else {
+        contactLog("contact.resend.failed", {
+          requestId,
+          page: sourcePath || "unknown",
+          providerCode:
+            "errorCode" in result ? result.errorCode : result.state,
+        });
+        return parsedContactResponse(
+          request,
+          isBrowserForm,
+          {
+            message: unavailableDeliveryCopy,
+            mailto: mailtoUrl(mailtoFields),
+          },
+          502,
+          "unavailable",
+          progressiveFields,
+        );
+      }
+    } catch (error) {
+      // The encrypted record and due-set member already exist. Leave recovery
+      // to the authenticated retry worker instead of risking an untracked send.
+      deliveredOrQueued = true;
+      deliveryStatus = 202;
+      successMessage =
+        "Thanks—your enquiry has been received and queued for delivery. We’ll be in touch soon.";
+      contactLog("contact.outbox.delivery_deferred", {
+        requestId,
+        error: error instanceof Error ? String(error.name) : "unknown",
+      });
+    }
+  }
+
+  if (!deliveredOrQueued) {
+    try {
+      const emailId = await sendWithResend(
+        resendKey,
+        contactEmail,
+        submissionId,
+      );
+      deliveredOrQueued = true;
+      contactLog("contact.resend.accepted", {
+        requestId,
+        emailId,
+        page: sourcePath || "unknown",
+      });
+    } catch (error) {
+      contactLog("contact.resend.failed", {
+        requestId,
+        page: sourcePath || "unknown",
+        providerStatus:
+          error instanceof ResendDeliveryError
+            ? error.providerStatus
+            : undefined,
+        providerCode:
+          error instanceof ResendDeliveryError ? error.providerCode : undefined,
+        error:
+          error instanceof Error
+            ? redactSensitiveText(error.message)
+            : "unknown",
+      });
+      return parsedContactResponse(
+        request,
+        isBrowserForm,
+        {
+          message: unavailableDeliveryCopy,
+          mailto: mailtoUrl(mailtoFields),
+        },
+        502,
+        "unavailable",
+        progressiveFields,
+      );
+    }
   }
 
   // Measurement must never change a successfully delivered enquiry into a
@@ -772,9 +886,9 @@ export async function POST(request: NextRequest) {
     isBrowserForm,
     {
       ok: true,
-      message: "Thanks—your enquiry has been sent. We’ll be in touch soon.",
+      message: successMessage,
     },
-    200,
-    "sent",
+    deliveryStatus,
+    deliveryStatus === 202 ? "received" : "sent",
   );
 }

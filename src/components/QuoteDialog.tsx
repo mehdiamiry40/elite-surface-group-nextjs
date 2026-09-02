@@ -9,11 +9,16 @@ import { defaultEnquiryService } from "@/content/enquiry";
 type QuoteDialogProps = {
   open: boolean;
   onClose: () => void;
+  restoreFocusTo?: HTMLElement | null;
 };
 
-export default function QuoteDialog({ open, onClose }: QuoteDialogProps) {
+export default function QuoteDialog({
+  open,
+  onClose,
+  restoreFocusTo,
+}: QuoteDialogProps) {
   const { submit, pending, status } = useEnquiryForm();
-  const dialogRef = useDialog(open, onClose);
+  const dialogRef = useDialog(open, onClose, undefined, restoreFocusTo);
   const pathname = usePathname();
   const defaultService = defaultEnquiryService(pathname);
 

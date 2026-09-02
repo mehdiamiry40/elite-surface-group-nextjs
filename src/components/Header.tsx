@@ -3,7 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type SyntheticEvent,
+} from "react";
 import QuoteButton from "@/components/QuoteButton";
 import { ArrowRightIcon, PhoneIcon } from "@/components/icons";
 import { business } from "@/content/business";
@@ -19,9 +25,22 @@ export default function Header() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const menuDisclosureRef = useRef<HTMLDetailsElement>(null);
+  const menuButtonRef = useRef<HTMLElement>(null);
 
-  const closeMenu = useCallback(() => setMenuOpen(false), []);
+  const closeMenu = useCallback(() => {
+    if (menuDisclosureRef.current) {
+      menuDisclosureRef.current.open = false;
+    }
+    setMenuOpen(false);
+  }, []);
+
+  const onMenuToggle = useCallback(
+    (event: SyntheticEvent<HTMLDetailsElement>) => {
+      setMenuOpen(event.currentTarget.open);
+    },
+    [],
+  );
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -99,6 +118,7 @@ export default function Header() {
           <Link
             className="site-header__logo"
             href="/"
+            prefetch={false}
             aria-label={`${business.name} home`}
             onClick={closeMenu}
           >
@@ -132,58 +152,66 @@ export default function Header() {
               Start a project
               <ArrowRightIcon size={16} />
             </QuoteButton>
-            <button
-              ref={menuButtonRef}
-              className="site-header__menu-button"
-              type="button"
-              aria-expanded={menuOpen}
-              aria-controls="mobile-navigation"
-              aria-label={menuOpen ? "Close navigation" : "Open navigation"}
-              onClick={() => setMenuOpen((open) => !open)}
+            <details
+              ref={menuDisclosureRef}
+              className="site-header__mobile-disclosure"
+              onToggle={onMenuToggle}
             >
-              <span />
-              <span />
-              <span />
-            </button>
+              <summary
+                ref={menuButtonRef}
+                className="site-header__menu-button"
+                aria-controls="mobile-navigation"
+                aria-label="Navigation menu"
+              >
+                <span className="site-header__menu-icon" aria-hidden="true">
+                  <span />
+                  <span />
+                  <span />
+                </span>
+                <span className="visually-hidden">Navigation menu</span>
+              </summary>
+
+              <div
+                id="mobile-navigation"
+                className="site-header__mobile-panel"
+              >
+                <nav
+                  className="shell site-header__mobile-nav"
+                  aria-label="Mobile navigation"
+                >
+                  {mainNav.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      aria-current={
+                        isExactCurrent(item.href) ? "page" : undefined
+                      }
+                      onClick={closeMenu}
+                    >
+                      <span>{item.label}</span>
+                      <ArrowRightIcon size={20} />
+                    </Link>
+                  ))}
+
+                  <a
+                    className="site-header__mobile-call"
+                    href={`tel:${business.phone}`}
+                  >
+                    <PhoneIcon size={16} />
+                    Call {business.phoneDisplay}
+                  </a>
+                  <QuoteButton
+                    className="site-header__mobile-quote"
+                    onBeforeOpen={closeMenu}
+                    restoreFocusTo={() => menuButtonRef.current}
+                  >
+                    Start a project
+                  </QuoteButton>
+                </nav>
+              </div>
+            </details>
           </div>
         </div>
-      </div>
-
-      <div
-        id="mobile-navigation"
-        className="site-header__mobile-panel"
-        hidden={!menuOpen}
-      >
-        <nav
-          className="shell site-header__mobile-nav"
-          aria-label="Mobile navigation"
-        >
-          {mainNav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              aria-current={isExactCurrent(item.href) ? "page" : undefined}
-              onClick={closeMenu}
-            >
-              <span>{item.label}</span>
-              <ArrowRightIcon size={20} />
-            </Link>
-          ))}
-
-          <a
-            className="site-header__mobile-call"
-            href={`tel:${business.phone}`}
-          >
-            <PhoneIcon size={16} />
-            Call {business.phoneDisplay}
-          </a>
-          <QuoteButton
-            className="site-header__mobile-quote"
-            onBeforeOpen={closeMenu}
-          >
-            Start a project
-          </QuoteButton>
-        </nav>
       </div>
     </header>
   );

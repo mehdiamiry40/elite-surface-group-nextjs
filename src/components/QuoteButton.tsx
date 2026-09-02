@@ -9,8 +9,10 @@ import {
 type QuoteButtonProps = {
   className?: string;
   children?: React.ReactNode;
-  /** Runs before the dialog opens (e.g. close the mobile drawer first). */
+  /** Runs once the dialog chunk is ready, immediately before it opens. */
   onBeforeOpen?: () => void;
+  /** Overrides the element that receives focus after the dialog closes. */
+  restoreFocusTo?: () => HTMLElement | null;
   /** Progressive-enhancement target when JavaScript is unavailable. */
   href?: string;
 };
@@ -23,11 +25,12 @@ export default function QuoteButton({
   className = "btn",
   children = "Request a Free Quote",
   onBeforeOpen,
+  restoreFocusTo,
   href = "/contact-us/#contact",
 }: QuoteButtonProps) {
   const { open } = useQuoteDialog();
 
-  function onClick(event: MouseEvent<HTMLAnchorElement>) {
+  async function onClick(event: MouseEvent<HTMLAnchorElement>) {
     if (
       event.defaultPrevented ||
       event.button !== 0 ||
@@ -40,8 +43,17 @@ export default function QuoteButton({
     }
 
     event.preventDefault();
-    onBeforeOpen?.();
-    open();
+    const fallbackHref = event.currentTarget.href;
+    const restoreTarget = restoreFocusTo?.() ?? event.currentTarget;
+
+    try {
+      await open({ beforeOpen: onBeforeOpen, restoreFocusTo: restoreTarget });
+    } catch {
+      // The anchor remains the no-JavaScript baseline. Use that same real URL
+      // when a stale deployment or interrupted network makes the lazy chunk
+      // unavailable after hydration.
+      window.location.assign(fallbackHref);
+    }
   }
 
   return (

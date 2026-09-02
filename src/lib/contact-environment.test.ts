@@ -11,6 +11,12 @@ const validDelivery = {
   CONTACT_FROM_EMAIL:
     "Elite Surface Group <info@elitesurfacegroup.com.au>",
 };
+const validOutbox = {
+  UPSTASH_REDIS_REST_URL: "https://example.upstash.io",
+  UPSTASH_REDIS_REST_TOKEN: "upstash-test-token",
+  CONTACT_OUTBOX_ENCRYPTION_KEY: Buffer.alloc(32, 7).toString("base64"),
+  CRON_SECRET: "c".repeat(32),
+};
 
 function runCheck(overrides: NodeJS.ProcessEnv) {
   const result = spawnSync(
@@ -36,7 +42,18 @@ describe("contact environment build gate", () => {
 
     assert.equal(result.status, 0);
     assert.match(result.stderr, /RESEND_API_KEY \(required\)/);
-    assert.match(result.stderr, /local development build/);
+    assert.match(result.stderr, /not Production/);
+  });
+
+  it("allows an isolated Vercel Preview without production delivery secrets", () => {
+    const result = runCheck({
+      VERCEL_ENV: "preview",
+      NODE_ENV: "production",
+    });
+
+    assert.equal(result.status, 0);
+    assert.match(result.stderr, /preview build/);
+    assert.match(result.stderr, /not Production/);
   });
 
   it("fails production for a malformed sender", () => {
@@ -94,7 +111,46 @@ describe("contact environment build gate", () => {
       });
 
       assert.equal(result.status, 1);
-      assert.match(result.stderr, /set both or neither/);
+      assert.match(result.stderr, /complete encrypted-outbox group or none/);
     }
+  });
+
+  it("accepts a complete encrypted outbox group", () => {
+    const result = runCheck({
+      VERCEL_ENV: "production",
+      ...validDelivery,
+      ...validOutbox,
+    });
+
+    assert.equal(result.status, 0);
+    assert.match(result.stdout, /environment is configured/);
+  });
+
+  it("rejects invalid encryption, cron and monitor secrets", () => {
+    const invalidEncryption = runCheck({
+      VERCEL_ENV: "production",
+      ...validDelivery,
+      ...validOutbox,
+      CONTACT_OUTBOX_ENCRYPTION_KEY: Buffer.alloc(16).toString("base64"),
+    });
+    assert.equal(invalidEncryption.status, 1);
+    assert.match(invalidEncryption.stderr, /exactly 32 random bytes/);
+
+    const shortCron = runCheck({
+      VERCEL_ENV: "production",
+      ...validDelivery,
+      ...validOutbox,
+      CRON_SECRET: "short",
+    });
+    assert.equal(shortCron.status, 1);
+    assert.match(shortCron.stderr, /CRON_SECRET/);
+
+    const shortMonitor = runCheck({
+      VERCEL_ENV: "production",
+      ...validDelivery,
+      CONTACT_MONITOR_TOKEN: "short",
+    });
+    assert.equal(shortMonitor.status, 1);
+    assert.match(shortMonitor.stderr, /CONTACT_MONITOR_TOKEN/);
   });
 });

@@ -138,7 +138,7 @@ const mobilePage = await mobile.newPage();
 await mobilePage.goto(new URL("/", baseUrl).toString(), {
   waitUntil: "networkidle",
 });
-await mobilePage.getByRole("button", { name: "Open navigation" }).click();
+await mobilePage.locator('summary[aria-label="Navigation menu"]').click();
 await mobilePage.waitForTimeout(UI_SETTLE_MS);
 await runAxe(mobilePage, "mobile navigation open");
 await mobilePage

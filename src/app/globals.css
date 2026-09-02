@@ -128,6 +128,12 @@
   margin-left: auto;
 }
 
+.site-header__mobile-disclosure {
+  position: static;
+  display: block;
+  flex: none;
+}
+
 .site-header__quote,
 .site-header__mobile-quote {
   display: inline-flex;
@@ -170,9 +176,19 @@
   background: transparent;
   color: var(--ink);
   cursor: pointer;
+  list-style: none;
 }
 
-.site-header__menu-button span {
+.site-header__menu-button::-webkit-details-marker {
+  display: none;
+}
+
+.site-header__menu-icon {
+  display: block;
+  width: 100%;
+}
+
+.site-header__menu-icon > span {
   display: block;
   width: 24px;
   height: 2px;
@@ -183,19 +199,30 @@
     transform 0.18s ease;
 }
 
-.site-header__menu-button[aria-expanded="true"] span:nth-child(1) {
+.site-header__mobile-disclosure[open]
+  .site-header__menu-icon
+  span:nth-child(1) {
   transform: translateY(7px) rotate(45deg);
 }
 
-.site-header__menu-button[aria-expanded="true"] span:nth-child(2) {
+.site-header__mobile-disclosure[open]
+  .site-header__menu-icon
+  span:nth-child(2) {
   opacity: 0;
 }
 
-.site-header__menu-button[aria-expanded="true"] span:nth-child(3) {
+.site-header__mobile-disclosure[open]
+  .site-header__menu-icon
+  span:nth-child(3) {
   transform: translateY(-7px) rotate(-45deg);
 }
 
 .site-header__mobile-panel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  z-index: 1;
   max-height: calc(100dvh - 76px);
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -203,7 +230,7 @@
   background: var(--white);
 }
 
-.site-header__mobile-panel[hidden] {
+.site-header__mobile-disclosure:not([open]) .site-header__mobile-panel {
   display: none;
 }
 
@@ -344,7 +371,7 @@
     display: none;
   }
 
-  .site-header__mobile-panel {
+  .site-header__mobile-disclosure {
     display: none;
   }
 }
@@ -453,7 +480,7 @@ textarea {
   color: inherit;
 }
 
-:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+:where(a, button, summary, input, select, textarea, [tabindex]):focus-visible {
   outline: 3px solid var(--orange-ink);
   outline-offset: 2px;
 }
@@ -4320,6 +4347,13 @@ h5 {
 
   body {
     font-size: 15px;
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    /* Prevent iOS Safari from auto-zooming the primary enquiry form. */
+    font-size: 16px;
   }
 
   h2 {

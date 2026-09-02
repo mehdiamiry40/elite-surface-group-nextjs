@@ -1,0 +1,40 @@
+name: Contact outbox retry
+
+on:
+  schedule:
+    # Hourly and away from the top of the hour, where hosted-runner schedules
+    # are most likely to be delayed.
+    - cron: "43 * * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: contact-outbox-retry
+  cancel-in-progress: false
+
+jobs:
+  retry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+
+    steps:
+      - name: Retry due encrypted enquiries
+        env:
+          CONTACT_RETRY_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          if [ -z "$CONTACT_RETRY_SECRET" ]; then
+            echo "::error::The CRON_SECRET repository secret is not configured."
+            exit 1
+          fi
+
+          curl \
+            --fail-with-body \
+            --silent \
+            --show-error \
+            --max-time 60 \
+            --retry 2 \
+            --retry-all-errors \
+            --request POST \
+            --header "Authorization: Bearer $CONTACT_RETRY_SECRET" \
+            https://elitesurfacegroup.com.au/api/internal/contact-retry/
