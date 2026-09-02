@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import QuoteButton from "@/components/QuoteButton";
 import {
   FacebookIcon,
   InstagramIcon,
@@ -27,20 +26,6 @@ export default function Footer() {
   return (
     <footer className="footer">
       <div className="shell">
-        <section className="footer__lead" aria-labelledby="footer-lead-title">
-          <div>
-            <span>Ready when you are</span>
-            <h2 id="footer-lead-title">Let’s turn your plans into a clear scope.</h2>
-          </div>
-          <div className="footer__lead-actions">
-            <QuoteButton>Request a free quote</QuoteButton>
-            <a className="btn btn--footer-call" href={`tel:${business.phone}`}>
-              <PhoneIcon />
-              Call {business.phoneDisplay}
-            </a>
-          </div>
-        </section>
-
         <div className="footer__grid">
           <div>
             <div className="footer__logo">
