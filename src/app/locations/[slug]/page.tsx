@@ -87,7 +87,7 @@ export default async function LocationPage({ params }: PageProps) {
               </li>
             ))}
           </ul>
-          <h3>Adelaide wall-system guidance</h3>
+          <h3>{location.name} wall-system guidance</h3>
           <p>
             Our practical guides explain what to record, which product or
             system documents to find and which questions to resolve before a
@@ -95,7 +95,7 @@ export default async function LocationPage({ params }: PageProps) {
           </p>
           <nav
             className="article-related"
-            aria-label="Adelaide wall-system guides"
+            aria-label={`${location.name} wall-system guides`}
           >
             {resourceGuides.map((guide) => (
               <Link

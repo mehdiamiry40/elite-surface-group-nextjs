@@ -1,18 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowRightIcon } from "@/components/icons";
 import PageBanner from "@/components/PageBanner";
-import { CtaBand } from "@/components/CtaBand";
+import { CtaBand, SectionHead, ServiceCards } from "@/components/sections";
 import { BreadcrumbSchema } from "@/components/JsonLd";
 import { bannerImages } from "@/content/pages";
 import { locationPages, locationsHub } from "@/content/locations";
-import { services } from "@/content/services";
 import { ogCard, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
   title: locationsHub.metaTitle,
   description: locationsHub.metaDescription,
   path: "/locations",
-  image: ogCard("locations", "Service areas across Adelaide and South Australia"),
+  image: ogCard(
+    "locations",
+    "Adelaide service coverage, with wider South Australia assessed by project",
+  ),
 });
 
 export default function LocationsPage() {
@@ -25,31 +28,65 @@ export default function LocationsPage() {
         crumbs={[{ label: "Service areas" }]}
       />
 
-      <section className="section" aria-labelledby="locations-intro">
-        <div className="shell prose">
-          <h2 id="locations-intro">Our service area</h2>
-          <p>{locationsHub.intro}</p>
-          <ul>
-            {locationPages.map((location) => (
-              <li key={location.slug}>
-                <Link href={`/locations/${location.slug}/`}>
-                  {location.name}
-                </Link>
-                {" — "}
-                {location.metaDescription}
-              </li>
-            ))}
-          </ul>
-          <h3>What we deliver</h3>
-          <ul>
-            {services.map((service) => (
-              <li key={service.slug}>
-                <Link href={`/${service.slug}/`}>{service.name}</Link>
-              </li>
-            ))}
-          </ul>
+      <section
+        className="section locations-overview"
+        aria-labelledby="locations-intro"
+      >
+        <div className="shell">
+          <SectionHead
+            eyebrow="Service coverage"
+            title={locationsHub.introTitle}
+            intro={locationsHub.intro}
+            id="locations-intro"
+          />
+
+          <div className="locations-overview__grid">
+            <ul className="project-link-grid project-link-grid--1 locations-directory">
+              {locationPages.map((location) => (
+                <li
+                  className="project-link-card locations-directory__item"
+                  key={location.slug}
+                >
+                  <span>Primary service area</span>
+                  <h3>
+                    <Link href={`/locations/${location.slug}/`}>
+                      {location.hubTitle}
+                    </Link>
+                  </h3>
+                  <p className="locations-directory__summary">
+                    {location.hubSummary}
+                  </p>
+                  <Link
+                    className="text-link"
+                    href={`/locations/${location.slug}/`}
+                  >
+                    View {location.name} coverage
+                    <ArrowRightIcon />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            <aside
+              className="article-note locations-overview__note"
+              aria-labelledby="outside-adelaide-title"
+            >
+              <h3 id="outside-adelaide-title">
+                {locationsHub.outsideAreaTitle}
+              </h3>
+              <p>{locationsHub.outsideAreaBody}</p>
+              <Link className="text-link" href="/contact-us/#contact">
+                Confirm your project location
+                <ArrowRightIcon />
+              </Link>
+            </aside>
+          </div>
         </div>
       </section>
+
+      <ServiceCards
+        title="Services available across our confirmed coverage area"
+      />
 
       <CtaBand />
     </>

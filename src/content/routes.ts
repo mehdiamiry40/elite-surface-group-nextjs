@@ -16,6 +16,7 @@ function publicRoute(path: string, lastModified: IsoDate): PublicRouteRecord {
 const RELEASE_DATES = {
   initialServiceHub: "2026-08-10",
   verifiedContentRelease: "2026-08-13",
+  serviceAreaHubRefresh: "2026-09-02",
 } as const;
 
 /** Keep an aggregate page current when any content it renders becomes newer. */
@@ -67,7 +68,7 @@ export const publicRouteRecords = [
       RELEASE_DATES.verifiedContentRelease,
     ),
   ),
-  publicRoute("/locations/", RELEASE_DATES.verifiedContentRelease),
+  publicRoute("/locations/", RELEASE_DATES.serviceAreaHubRefresh),
   ...locationPages.map((location) =>
     publicRoute(
       `/locations/${location.slug}/`,

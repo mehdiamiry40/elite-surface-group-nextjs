@@ -111,6 +111,16 @@ const nextConfig: NextConfig = {
         permanent: true,
       })),
       {
+        source: "/service-areas",
+        destination: "/locations/",
+        permanent: true,
+      },
+      {
+        source: "/service-areas/adelaide",
+        destination: "/locations/adelaide/",
+        permanent: true,
+      },
+      {
         source: "/projects/contemporary-exterior-cladding",
         destination: "/projects/dark-feature-cladding/",
         permanent: true,

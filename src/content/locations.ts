@@ -3,6 +3,8 @@ import { business } from "@/content/business";
 export type LocationPage = {
   slug: string;
   name: string;
+  hubTitle: string;
+  hubSummary: string;
   bannerTitle: string;
   metaTitle: string;
   metaDescription: string;
@@ -13,17 +15,24 @@ export type LocationPage = {
 
 export const locationsHub = {
   bannerTitle: "Where We Work",
-  metaTitle: "Adelaide Service Areas",
+  metaTitle: "Adelaide & SA Service Areas",
   metaDescription:
-    "Cladding, render, Hebel and walling services for homes and commercial projects across Adelaide and wider South Australia.",
+    "Based in Salisbury East, we serve metropolitan Adelaide and assess suitable cladding, render, Hebel and walling projects elsewhere in South Australia.",
+  introTitle: "Metropolitan Adelaide is our primary service area.",
   intro:
-    "We deliver walling and exterior-finish work across metropolitan Adelaide and wider South Australia. Project availability depends on the location, scope and programme, so tell us your suburb and what plans are available and we’ll confirm whether we can help.",
+    "Based in Salisbury East, we primarily serve metropolitan Adelaide. Project availability depends on the location, scope, programme and site access, so tell us the suburb or postcode and what plans are available and we’ll confirm coverage before quoting.",
+  outsideAreaTitle: "Planning work outside metropolitan Adelaide?",
+  outsideAreaBody:
+    "We assess projects elsewhere in South Australia individually. Tell us the suburb or postcode, scope, programme and site-access details, and note which plans are available. We’ll confirm whether the location is workable before quoting.",
 } as const;
 
 export const locationPages: readonly LocationPage[] = [
   {
     slug: "adelaide",
     name: "Adelaide",
+    hubTitle: "Cladding, render, Hebel and walling across Adelaide",
+    hubSummary:
+      "Review our metropolitan Adelaide coverage, installation services, planning guidance and photographed project work.",
     bannerTitle: "Cladding, Render, Hebel & Walling in Adelaide",
     metaTitle: "Cladding & Rendering Adelaide",
     metaDescription:

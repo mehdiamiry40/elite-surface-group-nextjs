@@ -201,6 +201,24 @@ for (const sitemap of [
   );
 }
 
+for (const [legacy, destination] of [
+  ["/service-areas/", "/locations/"],
+  ["/service-areas/adelaide/", "/locations/adelaide/"],
+]) {
+  const response = await get(legacy, { redirect: "manual" });
+  const location = response.headers.get("location") ?? "";
+  check(
+    `legacy service-area route ${legacy} redirects permanently`,
+    [301, 308].includes(response.status),
+    `status ${response.status}`,
+  );
+  check(
+    `legacy service-area route ${legacy} targets ${destination}`,
+    new URL(location, baseUrl).pathname === destination,
+    `location ${location}`,
+  );
+}
+
 /* ----------------------------------------------------- legacy asset URLs */
 
 const legacyAssets = JSON.parse(
@@ -361,7 +379,7 @@ const expectedSitemapDates = new Map([
   ...serviceSlugs.map((slug) => [`/${slug}/`, "2026-08-13"]),
   ["/projects/", "2026-08-13"],
   ...projectSlugs.map((slug) => [`/projects/${slug}/`, "2026-08-13"]),
-  ["/locations/", "2026-08-13"],
+  ["/locations/", "2026-09-02"],
   ...locationSlugs.map((slug) => [
     `/locations/${slug}/`,
     latestResourceModified,
@@ -1122,6 +1140,7 @@ check(
 const homeHtml = pages.get("/") ?? "";
 const aboutHtml = pages.get("/about/") ?? "";
 const contactHtml = pages.get("/contact-us/") ?? "";
+const locationsHtml = pages.get("/locations/") ?? "";
 const adelaideHtml = pages.get("/locations/adelaide/") ?? "";
 const resourcesHtml = pages.get("/resources/") ?? "";
 const renderCrackingHtml =
@@ -1278,6 +1297,24 @@ check(
 check(
   "about and Adelaide pages identify the Salisbury East base",
   /Salisbury East/.test(aboutHtml) && /Salisbury East/.test(adelaideHtml),
+);
+check(
+  "service-area hub states metropolitan and conditional wider-SA coverage",
+  /Metropolitan Adelaide is our primary service area/.test(locationsHtml) &&
+    /Planning work outside metropolitan Adelaide/.test(locationsHtml) &&
+    /assess projects elsewhere in South Australia individually/.test(
+      locationsHtml,
+    ),
+);
+check(
+  "service-area hub links its verified Adelaide detail and enquiry fallback",
+  /href="\/locations\/adelaide\/"/.test(locationsHtml) &&
+    /href="\/contact-us\/#contact"/.test(locationsHtml),
+);
+check(
+  "service-area hub uses dedicated cards rather than generic prose lists",
+  /class="[^"]*locations-directory__item[^"]*"/.test(locationsHtml) &&
+    /class="[^"]*locations-overview__note[^"]*"/.test(locationsHtml),
 );
 check(
   "footer links directly to the Adelaide service area",
