@@ -38,6 +38,7 @@ const UI_SETTLE_MS = 400;
 
 const failures = [];
 let checks = 0;
+let layoutChecks = 0;
 
 // CI images and sandboxes often ship a pre-provisioned Chromium rather than the
 // exact revision `npx playwright install` would fetch. Honour an explicit path
@@ -77,6 +78,71 @@ async function runAxe(page, label) {
   }
 }
 
+async function checkServiceAreaLayout(page, label) {
+  layoutChecks += 1;
+  const result = await page.evaluate(() => {
+    function paintedTextRect(element) {
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      const rect = range.getBoundingClientRect();
+      return { width: rect.width, bottom: rect.bottom };
+    }
+
+    const locationItems = [
+      ...document.querySelectorAll(".locations-directory__item"),
+    ].map((item) => {
+      const link = item.querySelector("h3 a");
+      const summary = item.querySelector(".locations-directory__summary");
+      if (!(link instanceof HTMLElement) || !(summary instanceof HTMLElement)) {
+        return { valid: false };
+      }
+      const linkRect = link.getBoundingClientRect();
+      const summaryRect = summary.getBoundingClientRect();
+      const painted = paintedTextRect(link);
+      return {
+        valid: true,
+        linkWidth: linkRect.width,
+        paintedWidth: painted.width,
+        separated: painted.bottom <= summaryRect.top + 1,
+        noOverflow: item.scrollWidth <= item.clientWidth + 1,
+      };
+    });
+
+    const serviceLinks = [
+      ...document.querySelectorAll(".services-section .service-card__link"),
+    ].map((link) => ({
+      width: link.getBoundingClientRect().width,
+      noOverflow: link.scrollWidth <= link.clientWidth + 1,
+    }));
+
+    return {
+      locationItems,
+      serviceLinks,
+      noPageOverflow:
+        document.documentElement.scrollWidth <=
+        document.documentElement.clientWidth + 1,
+    };
+  });
+
+  const valid =
+    result.locationItems.length > 0 &&
+    result.locationItems.every(
+      (item) =>
+        item.valid &&
+        item.linkWidth > 20.5 &&
+        item.linkWidth + 1 >= item.paintedWidth &&
+        item.separated &&
+        item.noOverflow,
+    ) &&
+    result.serviceLinks.length > 0 &&
+    result.serviceLinks.every((link) => link.width > 20.5 && link.noOverflow) &&
+    result.noPageOverflow;
+
+  if (!valid) {
+    failures.push(`${label}: service-area layout ${JSON.stringify(result)}`);
+  }
+}
+
 for (const viewport of VIEWPORTS) {
   for (const route of ROUTES) {
     const context = await browser.newContext({ viewport });
@@ -86,6 +152,12 @@ for (const viewport of VIEWPORTS) {
         waitUntil: "networkidle",
       });
       await runAxe(page, `${route} (${viewport.label})`);
+      if (route === "/locations/") {
+        await checkServiceAreaLayout(
+          page,
+          `/locations/ (${viewport.label})`,
+        );
+      }
     } catch (error) {
       failures.push(
         `${route} (${viewport.label}): ${
@@ -165,5 +237,6 @@ if (failures.length) {
 
 console.log(
   `A11y test passed: ${checks} axe-core runs across ${ROUTES.length} routes, ` +
-    `desktop/mobile viewports and interactive UI states.`,
+    `desktop/mobile viewports and interactive UI states; ` +
+    `${layoutChecks} service-area layout checks passed.`,
 );

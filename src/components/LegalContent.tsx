@@ -35,7 +35,7 @@ export default function LegalContent({
           );
         }
         return (
-          <ul key={`list-${index}`}>
+          <ul className="ticks" key={`list-${index}`}>
             {block.items.map((item) => (
               <li key={item}>
                 <CheckIcon />
