@@ -48,6 +48,7 @@ export {
   claddingMaintenanceGuide,
   claddingMaterialComparisonGuide,
   hebelBoundaryWallsGuide,
+  hebelVsBrickVeneerGuide,
   loadBearingWallRemovalGuide,
   renderCrackingGuide,
   renderingHebelGuide,

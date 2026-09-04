@@ -10,7 +10,8 @@ export type ResourceGuide = {
     | "fibre-cement-vs-weatherboard-cladding-adelaide"
     | "load-bearing-wall-removal-adelaide"
     | "steel-frame-vs-timber-frame-walls-adelaide"
-    | "acrylic-render-vs-cement-render-adelaide";
+    | "acrylic-render-vs-cement-render-adelaide"
+    | "hebel-vs-brick-veneer-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -241,6 +242,29 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "24 August 2026",
     readingTime: "9 minute read",
   },
+  {
+    slug: "hebel-vs-brick-veneer-adelaide",
+    serviceSlug: "hebel",
+    category: "Hebel selection",
+    title:
+      "Hebel or Brick Veneer? What Adelaide New Builds Should Confirm First",
+    metaTitle: "Hebel vs Brick Veneer for Adelaide Homes",
+    metaDescription:
+      "Weighing Hebel AAC panels against brick veneer for a new Adelaide home? Compare weight, footings, bushfire zoning and build speed before you choose.",
+    summary:
+      "See how AAC panel weight, reactive-clay footing design, bushfire compliance and build programme separate Hebel from brick veneer before an Adelaide new build is finalised.",
+    image: "/images/v2/service-hebel-installation.webp",
+    imageAlt:
+      "Installer checking the vertical alignment of AAC wall panels beside steel framing",
+    imageCaption:
+      "Illustrative wall-system image—not a record of a particular Elite Surface Group project, wall system selection or site condition.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-09-04",
+    modified: "2026-09-04",
+    publishedDisplay: "4 September 2026",
+    readingTime: "9 minute read",
+  },
 ];
 
 function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
@@ -275,4 +299,7 @@ export const steelVsTimberFramingGuide = guideBySlug(
 );
 export const acrylicVsCementRenderGuide = guideBySlug(
   "acrylic-render-vs-cement-render-adelaide",
+);
+export const hebelVsBrickVeneerGuide = guideBySlug(
+  "hebel-vs-brick-veneer-adelaide",
 );
