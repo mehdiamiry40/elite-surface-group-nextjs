@@ -122,6 +122,7 @@ type ContactEnvironment = Partial<
     | "CONTACT_OUTBOX_ENCRYPTION_KEY"
     | "CRON_SECRET"
     | "CONTACT_MONITOR_TOKEN"
+    | "CONTACT_ALERT_TO_EMAIL"
     | "VERCEL_ENV"
     | "NODE_ENV"
     | "REQUIRE_CONTACT_DELIVERY",
@@ -196,6 +197,11 @@ export function contactEnvironmentProblems(
     (env.CONTACT_MONITOR_TOKEN?.trim().length ?? 0) < 32
   ) {
     problems.push("CONTACT_MONITOR_TOKEN (must be at least 32 characters)");
+  }
+
+  const alertRecipient = env.CONTACT_ALERT_TO_EMAIL?.trim();
+  if (alertRecipient && emailAddressFromHeader(alertRecipient) !== alertRecipient.toLowerCase()) {
+    problems.push("CONTACT_ALERT_TO_EMAIL (must be one plain email address)");
   }
 
   return problems;

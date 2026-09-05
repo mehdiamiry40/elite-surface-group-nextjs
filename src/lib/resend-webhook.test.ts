@@ -129,7 +129,7 @@ describe("Resend webhook normalisation", () => {
     );
   });
 
-  it("requires outbox correlation only for tagged website enquiries", () => {
+  it("requires durable correlation for tagged enquiries and synthetic probes", () => {
     const base = {
       kind: "tracked" as const,
       logEvent: "contact.resend.webhook.delivered" as const,
@@ -150,7 +150,7 @@ describe("Resend webhook normalisation", () => {
         ...base,
         category: "synthetic-monitor",
       }),
-      false,
+      true,
     );
     assert.equal(resendWebhookNeedsDurableCorrelation(base), false);
     assert.equal(

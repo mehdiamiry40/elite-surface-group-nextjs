@@ -15,7 +15,7 @@ export const metadata: Metadata = pageMetadata({
   title: claddingMaterialComparisonGuide.metaTitle,
   description: claddingMaterialComparisonGuide.metaDescription,
   path: `/resources/${claddingMaterialComparisonGuide.slug}`,
-  image: ogCard("cladding", "Cladding installation services in Adelaide"),
+  image: ogCard(claddingMaterialComparisonGuide.slug, claddingMaterialComparisonGuide.metaTitle),
   openGraphType: "article",
   publishedTime: claddingMaterialComparisonGuide.published,
   modifiedTime: claddingMaterialComparisonGuide.modified,

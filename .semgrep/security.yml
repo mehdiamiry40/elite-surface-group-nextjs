@@ -1,0 +1,72 @@
+rules:
+  - id: no-dynamic-code-execution
+    message: Do not execute strings as code; parse and validate data explicitly.
+    severity: ERROR
+    languages: [javascript, typescript]
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: new Function(...)
+      - pattern: Function(...)
+  - id: no-disabled-tls-validation
+    message: TLS certificate verification must remain enabled.
+    severity: ERROR
+    languages: [javascript, typescript]
+    pattern-either:
+      - pattern: "{..., rejectUnauthorized: false, ...}"
+      - pattern: process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
+  - id: no-shell-command-execution
+    message: Use execFile/spawn with an argument array and shell disabled.
+    severity: ERROR
+    languages: [javascript, typescript]
+    pattern-either:
+      - pattern: exec(...)
+      - pattern: execSync(...)
+      - patterns:
+          - pattern-either:
+              - pattern: $PROCESS.exec(...)
+              - pattern: $PROCESS.execSync(...)
+          - metavariable-regex:
+              metavariable: $PROCESS
+              regex: ^(child_process|childProcess|cp)$
+      - pattern: "{..., shell: true, ...}"
+  - id: no-weak-cryptography
+    message: Use SHA-256 or stronger hashing and authenticated AES-GCM encryption.
+    severity: ERROR
+    languages: [javascript, typescript]
+    pattern-either:
+      - pattern: createHash("md5", ...)
+      - pattern: createHash("sha1", ...)
+      - pattern: $CRYPTO.createHash("md5", ...)
+      - pattern: $CRYPTO.createHash("sha1", ...)
+      - pattern: createCipher(...)
+      - pattern: $CRYPTO.createCipher(...)
+  - id: no-unescaped-dom-html
+    message: Render plain text or reviewed sanitized markup; do not assign raw DOM HTML.
+    severity: ERROR
+    languages: [javascript, typescript]
+    pattern-either:
+      - pattern: $ELEMENT.innerHTML = $VALUE
+      - pattern: $ELEMENT.outerHTML = $VALUE
+      - pattern: document.write(...)
+      - pattern: $ELEMENT.insertAdjacentHTML(...)
+  - id: no-public-server-secret
+    message: Server credentials must never use a NEXT_PUBLIC environment variable.
+    severity: ERROR
+    languages: [javascript, typescript]
+    patterns:
+      - pattern: process.env.$KEY
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: NEXT_PUBLIC_.*(SECRET|TOKEN|PASSWORD|PRIVATE_KEY|RESEND_API_KEY|UPSTASH.*KEY)
+  - id: no-sensitive-console-logging
+    message: Log aggregate status or redacted metadata instead of credentials or enquiry payloads.
+    severity: ERROR
+    languages: [javascript, typescript]
+    patterns:
+      - pattern-either:
+          - pattern: console.log(..., $VALUE, ...)
+          - pattern: console.error(..., $VALUE, ...)
+          - pattern: console.warn(..., $VALUE, ...)
+      - metavariable-regex:
+          metavariable: $VALUE
+          regex: ^(process\.env|payload|contactPayload|password|apiKey|token|secret)$

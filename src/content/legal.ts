@@ -1,11 +1,14 @@
 import { business } from "./business";
 
+export const privacyPolicyUpdated = "2026-09-05" as const;
+
 /**
  * Legal page copy for Elite Surface Group (South Australia).
  *
  * Written to match what the website actually does: enquiry forms emailed to the
- * business, privacy-focused Vercel Web Analytics, no advertising cookies and no
- * marketing opt-in boxes. This is practical website policy text, not a
+ * business with encrypted retry storage, Vercel usage/performance analytics, no
+ * advertising cookies and no marketing opt-in boxes. This is practical policy
+ * text, not a
  * substitute for advice from a qualified Australian lawyer.
  */
 
@@ -21,7 +24,7 @@ export type LegalBlock =
 export const privacyPolicy: readonly LegalBlock[] = [
   {
     type: "paragraph",
-    text: "Elite Surface Group is operated by Elite Surface Group Pty Ltd (ABN 35 691 074 567) (“we”, “us”), based in Adelaide, South Australia. This privacy policy explains how we collect, use and hold personal information when you use elitesurfacegroup.com.au or contact us through the site. We handle personal information in accordance with the Australian Privacy Principles in the Privacy Act 1988 (Cth).",
+    text: "Elite Surface Group is operated by Elite Surface Group Pty Ltd (ABN 35 691 074 567) (“we”, “us”), based in Adelaide, South Australia. This privacy policy explains how we collect, use and hold personal information when you use elitesurfacegroup.com.au or contact us through the site.",
   },
   {
     type: "heading",
@@ -62,7 +65,7 @@ export const privacyPolicy: readonly LegalBlock[] = [
   },
   {
     type: "paragraph",
-    text: "Vercel Web Analytics may also process anonymous usage information, including the page or route visited, referrer, filtered query parameters, event time, approximate location, browser, operating system and device type. A successful enquiry event may include the allowlisted source page and service category. We do not send names, email addresses, phone numbers, enquiry text, project suburbs or postcodes, project types or target timing in analytics events.",
+    text: "Vercel Web Analytics may process usage information such as the page or route visited, referrer, event time, approximate location, browser, operating system and device type. Vercel Speed Insights may process page-performance measurements, including loading speed, responsiveness, layout shifts and technical browser, device and network information. Our website removes query strings and fragments from the page URLs sent to both services. A successful enquiry event includes only the permitted source page and service category; we do not send names, email addresses, phone numbers, enquiry text or optional project details in analytics events.",
   },
   {
     type: "heading",
@@ -78,7 +81,8 @@ export const privacyPolicy: readonly LegalBlock[] = [
       "Respond to your enquiry and provide quotes or project advice",
       "Contact you about work you have asked us to discuss or carry out",
       "Keep basic records needed to run the business and meet legal obligations",
-      "Understand aggregate website use and which contact channels visitors choose",
+      "Deliver enquiries reliably, retry temporary email failures and investigate delivery problems",
+      "Understand aggregate website use, page performance and which contact channels visitors choose",
     ],
   },
   {
@@ -91,7 +95,7 @@ export const privacyPolicy: readonly LegalBlock[] = [
   },
   {
     type: "paragraph",
-    text: "We use Vercel Web Analytics to understand anonymous, aggregated website use and measure conversions such as a successful enquiry submission or a click to call, email or get directions. Vercel Web Analytics does not use cookies or create a profile that follows you across different days or websites. We do not use Google Analytics, advertising pixels, marketing cookies or cross-site advertising trackers. A successful enquiry event may include the allowlisted source page and service category, but we do not send names, email addresses, phone numbers, enquiry text, project suburbs or postcodes, project types or target timing in analytics events.",
+    text: "We use Vercel Web Analytics for aggregated page views and contact events, and Vercel Speed Insights to understand how quickly and reliably pages work. These services do not use analytics cookies on our site. We do not use Google Analytics, advertising pixels, marketing cookies or cross-site advertising trackers.",
   },
   {
     type: "heading",
@@ -99,7 +103,7 @@ export const privacyPolicy: readonly LegalBlock[] = [
   },
   {
     type: "paragraph",
-    text: "When the contact form is configured for email delivery, your enquiry is sent to us by our email delivery provider so we can reply from our business inbox. Your email address is used as the reply-to address for that message. If email delivery is unavailable, the site may offer to open your own email application so you can send the message directly.",
+    text: "Our website normally encrypts a copy of the email message containing your enquiry details before storing it in an Upstash delivery queue. This temporary copy lets us retry delivery after a service interruption and investigate delivery problems. If temporary storage is unavailable, the website may attempt direct delivery through Resend instead. Resend sends the message to our business inbox, with your email address as the reply-to address. If the site offers a direct-email alternative, your own email application sends that message instead.",
   },
   {
     type: "heading",
@@ -107,7 +111,7 @@ export const privacyPolicy: readonly LegalBlock[] = [
   },
   {
     type: "paragraph",
-    text: "We may share personal information with service providers who help us operate the website or communicate with you, including our hosting and Web Analytics provider (Vercel) and email delivery provider (Resend), and only as needed for those services. These providers may process or store information outside Australia, including in the United States. We may also disclose information if required by law, or to protect the rights, property or safety of Elite Surface Group, our customers or others.",
+    text: "Our service providers include Vercel for website hosting, Web Analytics and Speed Insights, Upstash for encrypted enquiry delivery storage and temporary rate limiting, and Resend for email delivery. We share information with them as needed for those services. These providers operate internationally and may process or store information outside Australia, including in the United States. Storage and processing locations depend on the service and its configuration; we do not promise that enquiry information stays in Australia. We may also disclose information if required by law, or to protect the rights, property or safety of Elite Surface Group, our customers or others.",
   },
   {
     type: "heading",
@@ -115,7 +119,11 @@ export const privacyPolicy: readonly LegalBlock[] = [
   },
   {
     type: "paragraph",
-    text: "We take reasonable steps to protect personal information from misuse, interference, loss and unauthorised access, modification or disclosure. Enquiry details that reach our inbox are held with our ordinary business email and project records. Security rate-limit records are temporary. We retain enquiry and project correspondence only while it is needed to respond, manage any resulting work, meet record-keeping obligations, or resolve a dispute, then delete or de-identify it when practical.",
+    text: "The temporary enquiry copy is encrypted before it is written to Upstash. A pending copy is set to expire after 30 days. Once Resend accepts the message, or the enquiry reaches a delivery, failure or manual-review outcome, its expiry is set to 7 days from that update. Individual delivery records used to reconcile enquiries and prevent duplicate sending are set to expire after 30 days from creation or renewal. These records include submission and email references, status, timestamps, attempt counts, error codes and a keyed message fingerprint; the full enquiry text is held in the encrypted copy. Separate monitoring indexes are cleaned during routine health checks, with incident references eligible for removal after 30 days. Security rate-limit records are temporary.",
+  },
+  {
+    type: "paragraph",
+    text: "The delivery-queue expiry rules do not delete messages already held by our email provider, in our business inbox or in project records. We retain enquiry and project correspondence while it is needed to respond, manage resulting work, meet record-keeping obligations or resolve a dispute, then delete or de-identify it when practical.",
   },
   {
     type: "heading",
@@ -124,7 +132,7 @@ export const privacyPolicy: readonly LegalBlock[] = [
   {
     type: "paragraph",
     content: [
-      "You may ask us for access to the personal information we hold about you, or ask us to correct it, by contacting us using the details above. If you have a privacy complaint, please contact us first so we can try to resolve it. If you are not satisfied with our response, you may contact the ",
+      "You may ask us to access, correct or delete the personal information we hold about you using the contact details above. Include the email address used for the enquiry and its approximate date so we can locate it. We will check relevant delivery-queue, email and project records and explain any information we need to retain. If you have a privacy complaint, please contact us first so we can try to resolve it. If you are not satisfied with our response, you may contact the ",
       {
         text: "Office of the Australian Information Commissioner (OAIC)",
         href: "https://www.oaic.gov.au/",

@@ -11,6 +11,15 @@ import type { ResendEmail } from "./contact-provider.ts";
 
 const PREFIX = "contact:v2";
 const DUE_KEY = `${PREFIX}:due`;
+const AGE_KEY = `${PREFIX}:pending-age`;
+const AWAITING_KEY = `${PREFIX}:awaiting-delivery`;
+const FAILURE_KEY = `${PREFIX}:failures`;
+const REVIEW_KEY = `${PREFIX}:manual-review`;
+const MISSING_KEY = `${PREFIX}:missing`;
+const WORKER_KEY = `${PREFIX}:worker`;
+const SYNTHETIC_KEY = `${PREFIX}:synthetic`;
+const ISSUE_SEQUENCE_KEY = `${PREFIX}:issue-sequence`;
+const ISSUE_INDEX_KEY = `${PREFIX}:issue-index`;
 const PENDING_TTL_SECONDS = 30 * 24 * 60 * 60;
 const TERMINAL_DATA_TTL_SECONDS = 7 * 24 * 60 * 60;
 const META_TTL_SECONDS = 30 * 24 * 60 * 60;
@@ -33,11 +42,50 @@ if redis.call('EXISTS', KEYS[1]) == 1 then
 end
 redis.call('HSET', KEYS[1],
   'payloadHash', ARGV[1], 'status', 'queued', 'createdAt', ARGV[3],
-  'updatedAt', ARGV[3], 'attempts', '0')
+  'updatedAt', ARGV[3], 'attempts', '0', 'category', ARGV[7])
 redis.call('EXPIRE', KEYS[1], ARGV[5])
 redis.call('SET', KEYS[2], ARGV[2], 'EX', ARGV[4])
 redis.call('ZADD', KEYS[3], ARGV[3], ARGV[6])
+redis.call('ZADD', KEYS[4], ARGV[3], ARGV[6])
+if ARGV[7] == 'synthetic-monitor' then
+  redis.call('HSET', KEYS[5], 'lastStartedAt', ARGV[3])
+  redis.call('EXPIRE', KEYS[5], ARGV[5])
+end
 return 1`;
+
+// Re-read both halves while holding the same owner's lock. A create that won
+// the race after load() returned null must retain its queue membership.
+const CLEAN_MISSING_SCRIPT = `
+if redis.call('GET', KEYS[1]) ~= ARGV[1] then return 'locked' end
+local status = redis.call('HGET', KEYS[2], 'status')
+if status == 'accepted' or status == 'delivery_delayed' or status == 'delivered'
+  or status == 'failed' or status == 'bounced' or status == 'complained'
+  or status == 'suppressed' or status == 'manual_review' then
+  redis.call('ZREM', KEYS[4], ARGV[2])
+  redis.call('ZREM', KEYS[5], ARGV[2])
+  return 'settled'
+end
+local createdAt = tonumber(redis.call('HGET', KEYS[2], 'createdAt'))
+local attempts = tonumber(redis.call('HGET', KEYS[2], 'attempts'))
+local hash = redis.call('HGET', KEYS[2], 'payloadHash')
+local validStatus = status == 'queued' or status == 'sending' or status == 'accepted'
+  or status == 'delivery_delayed' or status == 'delivered' or status == 'failed'
+  or status == 'bounced' or status == 'complained' or status == 'suppressed'
+  or status == 'manual_review'
+if validStatus and createdAt and createdAt >= 0 and attempts and attempts >= 0
+  and attempts == math.floor(attempts) and hash and hash ~= ''
+  and redis.call('EXISTS', KEYS[3]) == 1 then return 'present' end
+if redis.call('ZREM', KEYS[4], ARGV[2]) == 0 then return 'absent' end
+redis.call('ZREM', KEYS[5], ARGV[2])
+redis.call('ZADD', KEYS[6], ARGV[3], ARGV[2])
+redis.call('ZADD', KEYS[8], redis.call('INCR', KEYS[7]), 'missing:' .. ARGV[2])
+if redis.call('EXISTS', KEYS[2]) == 1 or redis.call('EXISTS', KEYS[3]) == 1 then
+  redis.call('HSET', KEYS[2], 'status', 'manual_review', 'lastErrorCode',
+    'outbox_record_incomplete', 'updatedAt', ARGV[3])
+  redis.call('EXPIRE', KEYS[2], ARGV[4])
+  redis.call('EXPIRE', KEYS[3], ARGV[5])
+end
+return 'removed'`;
 
 const RELEASE_LOCK_SCRIPT = `
 if redis.call('GET', KEYS[1]) == ARGV[1] then
@@ -64,9 +112,54 @@ if update then
   if incoming == 'delivered' or incoming == 'failed' or incoming == 'bounced'
     or incoming == 'complained' or incoming == 'suppressed' then
     redis.call('EXPIRE', dataKey, ARGV[6])
+    redis.call('ZREM', KEYS[3], submissionId)
+    if incoming ~= 'delivered' then
+      redis.call('ZADD', KEYS[4], ARGV[5], submissionId)
+      redis.call('ZADD', KEYS[7], redis.call('INCR', KEYS[6]), 'failure:' .. submissionId)
+    elseif redis.call('HGET', metaKey, 'category') == 'synthetic-monitor' then
+      redis.call('HSET', KEYS[5], 'lastDeliveredAt', ARGV[5])
+      redis.call('EXPIRE', KEYS[5], ARGV[1])
+    end
   end
 end
 return {1, submissionId}`;
+
+const TERMINAL_SCRIPT = `
+redis.call('HSET', KEYS[1], 'status', ARGV[2], 'lastErrorCode', ARGV[3], 'updatedAt', ARGV[4])
+redis.call('ZREM', KEYS[3], ARGV[1])
+redis.call('ZREM', KEYS[4], ARGV[1])
+redis.call('ZREM', KEYS[5], ARGV[1])
+redis.call('ZADD', KEYS[6], ARGV[4], ARGV[1])
+redis.call('ZADD', KEYS[8], redis.call('INCR', KEYS[7]), ARGV[6] .. ARGV[1])
+redis.call('EXPIRE', KEYS[2], ARGV[5])
+return 1`;
+
+// Scores in the primary issue sets retain event time for retention; this
+// independent index is sequenced at Redis commit time, never at a caller clock.
+const PRUNE_ISSUES_SCRIPT = `
+local prefixes = {'failure:', 'review:', 'missing:'}
+for index = 1, 3 do
+  local expired = redis.call('ZRANGEBYSCORE', KEYS[index], '-inf', ARGV[1], 'LIMIT', 0, 100)
+  for _, id in ipairs(expired) do
+    redis.call('ZREM', KEYS[index], id)
+    redis.call('ZREM', KEYS[4], prefixes[index] .. id)
+  end
+end
+return 1`;
+
+const ACKNOWLEDGE_ISSUES_SCRIPT = `
+local current = tonumber(redis.call('GET', KEYS[1]) or '0')
+if tonumber(ARGV[1]) > current then return {-1, 0} end
+local issues = redis.call('ZRANGEBYSCORE', KEYS[2], '-inf', ARGV[1], 'LIMIT', 0, 300)
+for _, issue in ipairs(issues) do
+  local separator = string.find(issue, ':')
+  local kind = string.sub(issue, 1, separator - 1)
+  local id = string.sub(issue, separator + 1)
+  local index = kind == 'failure' and 3 or kind == 'review' and 4 or 5
+  redis.call('ZREM', KEYS[index], id)
+  redis.call('ZREM', KEYS[2], issue)
+end
+return {#issues, redis.call('ZCOUNT', KEYS[2], '-inf', ARGV[1])}`;
 
 export type ContactOutboxStatus =
   | "queued"
@@ -305,16 +398,20 @@ export class UpstashContactOutbox {
       await this.command([
         "EVAL",
         CREATE_SCRIPT,
-        "3",
+        "5",
         metaKey(submissionId),
         dataKey(submissionId),
         DUE_KEY,
+        AGE_KEY,
+        SYNTHETIC_KEY,
         digest,
         envelope,
         String(now),
         String(PENDING_TTL_SECONDS),
         String(META_TTL_SECONDS),
         submissionId,
+        email.tags?.find((tag) => tag.name === "category")?.value === "synthetic-monitor"
+          ? "synthetic-monitor" : "website-enquiry",
       ]),
     );
     return (result === 1 ? "created" : result === 0 ? "existing" : "conflict") as PersistResult;
@@ -327,7 +424,13 @@ export class UpstashContactOutbox {
     ]);
     const fields = hashFields(entries[0]?.result);
     const envelope = entries[1]?.result;
-    if (!fields.status || typeof envelope !== "string") {
+    if (
+      !["queued", "sending", "accepted", "delivery_delayed", ...TERMINAL_STATUSES].includes(fields.status) ||
+      !fields.payloadHash || !Number.isFinite(Number(fields.createdAt)) ||
+      !fields.createdAt || Number(fields.createdAt) < 0 ||
+      !fields.attempts || !Number.isInteger(Number(fields.attempts)) ||
+      Number(fields.attempts) < 0 || typeof envelope !== "string"
+    ) {
       return null;
     }
     return {
@@ -369,6 +472,16 @@ export class UpstashContactOutbox {
     ]);
   }
 
+  async cleanupDueMember(submissionId: string, token: string, now = Date.now()) {
+    return await this.command([
+      "EVAL", CLEAN_MISSING_SCRIPT, "8", lockKey(submissionId),
+      metaKey(submissionId), dataKey(submissionId), DUE_KEY, AGE_KEY, MISSING_KEY,
+      ISSUE_SEQUENCE_KEY, ISSUE_INDEX_KEY,
+      token, submissionId, String(now), String(META_TTL_SECONDS),
+      String(TERMINAL_DATA_TTL_SECONDS),
+    ]) as "removed" | "present" | "locked" | "absent" | "settled";
+  }
+
   async markAttempt(submissionId: string, record: ContactOutboxRecord, now: number) {
     const firstAttemptAt = record.firstAttemptAt ?? now;
     await this.transaction([
@@ -402,6 +515,8 @@ export class UpstashContactOutbox {
         String(now),
       ],
       ["ZREM", DUE_KEY, submissionId],
+      ["ZREM", AGE_KEY, submissionId],
+      ["ZADD", AWAITING_KEY, String(now), submissionId],
       [
         "SET",
         opaqueKey("provider", emailId),
@@ -442,23 +557,15 @@ export class UpstashContactOutbox {
     errorCode: string,
     now: number,
   ) {
-    await this.transaction([
-      [
-        "HSET",
-        metaKey(submissionId),
-        "status",
-        status,
-        "lastErrorCode",
-        errorCode,
-        "updatedAt",
-        String(now),
-      ],
-      ["ZREM", DUE_KEY, submissionId],
-      ["EXPIRE", dataKey(submissionId), String(TERMINAL_DATA_TTL_SECONDS)],
+    await this.command([
+      "EVAL", TERMINAL_SCRIPT, "8", metaKey(submissionId), dataKey(submissionId),
+      DUE_KEY, AGE_KEY, AWAITING_KEY, status === "manual_review" ? REVIEW_KEY : FAILURE_KEY,
+      ISSUE_SEQUENCE_KEY, ISSUE_INDEX_KEY, submissionId, status, errorCode,
+      String(now), String(TERMINAL_DATA_TTL_SECONDS), status === "manual_review" ? "review:" : "failure:",
     ]);
   }
 
-  async dueSubmissionIds(now = Date.now(), limit = 3) {
+  async dueSubmissionIds(now = Date.now(), limit = 30) {
     const result = await this.command([
       "ZRANGEBYSCORE",
       DUE_KEY,
@@ -476,6 +583,12 @@ export class UpstashContactOutbox {
     return typeof result === "string" ? result : undefined;
   }
 
+  async syntheticStatus(submissionId: string) {
+    const fields = hashFields(await this.command(["HGETALL", metaKey(submissionId)]));
+    if (fields.category !== "synthetic-monitor") return null;
+    return { state: fields.status, createdAt: Number(fields.createdAt), updatedAt: Number(fields.updatedAt) };
+  }
+
   async recordProviderStatus(
     emailId: string,
     status: ProviderStatus,
@@ -485,9 +598,14 @@ export class UpstashContactOutbox {
     const result = await this.command([
       "EVAL",
       PROVIDER_STATUS_SCRIPT,
-      "2",
+      "7",
       opaqueKey("webhook", eventId),
       opaqueKey("provider", emailId),
+      AWAITING_KEY,
+      FAILURE_KEY,
+      SYNTHETIC_KEY,
+      ISSUE_SEQUENCE_KEY,
+      ISSUE_INDEX_KEY,
       String(META_TTL_SECONDS),
       `${PREFIX}:meta:`,
       `${PREFIX}:data:`,
@@ -500,6 +618,79 @@ export class UpstashContactOutbox {
       duplicate: Number(values[0]) === 0,
       submissionId: values[1] ? String(values[1]) : undefined,
     };
+  }
+
+  async recordWorkerHeartbeat(
+    phase: "started" | "completed" | "error",
+    now = Date.now(),
+    processed = 0,
+  ) {
+    const field = { started: "lastStartedAt", completed: "lastCompletedAt", error: "lastErrorAt" }[phase];
+    await this.transaction([
+      ["HSET", WORKER_KEY, field, String(now), "lastProcessed", String(processed)],
+      ["EXPIRE", WORKER_KEY, String(META_TTL_SECONDS)],
+    ]);
+  }
+
+  async healthSnapshot(now = Date.now()) {
+    const keys = [FAILURE_KEY, REVIEW_KEY, MISSING_KEY, AWAITING_KEY];
+    const cutoff = String(now - META_TTL_SECONDS * 1_000);
+    const pruning = [
+      ["EVAL", PRUNE_ISSUES_SCRIPT, "4", FAILURE_KEY, REVIEW_KEY, MISSING_KEY, ISSUE_INDEX_KEY, cutoff],
+      ["ZREMRANGEBYSCORE", AWAITING_KEY, "-inf", cutoff],
+    ];
+    const results = (await this.transaction([
+      ...pruning,
+      ["HGETALL", WORKER_KEY], ["HGETALL", SYNTHETIC_KEY],
+      ["ZCARD", DUE_KEY], ["ZCOUNT", DUE_KEY, "-inf", String(now)],
+      ["ZRANGE", DUE_KEY, "0", "0", "WITHSCORES"],
+      ["ZRANGE", AGE_KEY, "0", "0", "WITHSCORES"],
+      ...keys.map((key) => ["ZCARD", key]),
+      ["ZRANGE", AWAITING_KEY, "0", "0", "WITHSCORES"],
+      ["ZCOUNT", AWAITING_KEY, "-inf", String(now - 30 * 60_000)],
+      ["GET", ISSUE_SEQUENCE_KEY],
+    ])).slice(pruning.length).map((entry) => entry.result);
+    const timestamp = (value: unknown) => {
+      const n = Number(value);
+      return value !== undefined && Number.isFinite(n) ? n : null;
+    };
+    const oldest = (value: unknown) => Array.isArray(value) ? timestamp(value[1]) : null;
+    const age = (value: number | null) => value === null ? null : Math.max(0, now - value);
+    const worker = hashFields(results[0]);
+    const synthetic = hashFields(results[1]);
+    const oldestDue = oldest(results[4]);
+    return {
+      acknowledgementSequence: Number(results[12] ?? 0),
+      worker: {
+        lastStartedAt: timestamp(worker.lastStartedAt),
+        lastCompletedAt: timestamp(worker.lastCompletedAt),
+        lastErrorAt: timestamp(worker.lastErrorAt),
+      },
+      queue: {
+        depth: Number(results[2]), dueDepth: Number(results[3]),
+        oldestAgeMs: age(oldest(results[5]) ?? oldestDue),
+        oldestDueAgeMs: age(oldestDue),
+      },
+      delivery: {
+        failures: Number(results[6]), manualReview: Number(results[7]),
+        missing: Number(results[8]), awaiting: Number(results[9]),
+        oldestAwaitingAgeMs: age(oldest(results[10])), overdue: Number(results[11]),
+      },
+      synthetic: {
+        lastStartedAt: timestamp(synthetic.lastStartedAt),
+        lastDeliveredAt: timestamp(synthetic.lastDeliveredAt),
+      },
+    };
+  }
+
+  async acknowledgeIssues(through: number) {
+    const result = await this.command([
+      "EVAL", ACKNOWLEDGE_ISSUES_SCRIPT, "5", ISSUE_SEQUENCE_KEY, ISSUE_INDEX_KEY,
+      FAILURE_KEY, REVIEW_KEY, MISSING_KEY, String(through),
+    ]);
+    const values = Array.isArray(result) ? result : [];
+    if (Number(values[0]) < 0) throw new RangeError("Acknowledgement sequence is in the future");
+    return { acknowledged: Number(values[0]), remainingThroughSequence: Number(values[1]) };
   }
 }
 

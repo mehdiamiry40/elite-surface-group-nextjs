@@ -25,6 +25,7 @@ export default function Header() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
   const menuDisclosureRef = useRef<HTMLDetailsElement>(null);
   const menuButtonRef = useRef<HTMLElement>(null);
 
@@ -41,6 +42,27 @@ export default function Header() {
     },
     [],
   );
+
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+
+    // The variable only affects scroll offsets, never the header's layout.
+    // offsetHeight stays in CSS pixels when the browser scales the page.
+    const updateHeight = () => {
+      document.documentElement.style.setProperty(
+        "--site-header-height",
+        `${header.offsetHeight}px`,
+      );
+    };
+    updateHeight();
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(header);
+    return () => {
+      observer.disconnect();
+      document.documentElement.style.removeProperty("--site-header-height");
+    };
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -87,6 +109,7 @@ export default function Header() {
 
   return (
     <header
+      ref={headerRef}
       className="site-header"
       data-raised={scrolled || menuOpen ? "true" : "false"}
     >

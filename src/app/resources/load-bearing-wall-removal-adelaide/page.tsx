@@ -15,10 +15,7 @@ export const metadata: Metadata = pageMetadata({
   title: loadBearingWallRemovalGuide.metaTitle,
   description: loadBearingWallRemovalGuide.metaDescription,
   path: `/resources/${loadBearingWallRemovalGuide.slug}`,
-  image: ogCard(
-    "walling",
-    "Load-bearing wall removal planning in Adelaide",
-  ),
+  image: ogCard(loadBearingWallRemovalGuide.slug, loadBearingWallRemovalGuide.metaTitle),
   openGraphType: "article",
   publishedTime: loadBearingWallRemovalGuide.published,
   modifiedTime: loadBearingWallRemovalGuide.modified,

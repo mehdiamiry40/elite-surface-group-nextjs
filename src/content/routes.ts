@@ -1,6 +1,7 @@
+import { privacyPolicyUpdated } from "@/content/legal";
 import { locationPages } from "@/content/locations";
 import { projects } from "@/content/projects";
-import { resourceGuides, type IsoDate } from "@/content/resources";
+import { featuredResourceGuides, resourceGuides, type IsoDate } from "@/content/resources";
 import { services } from "@/content/services";
 
 export type PublicRouteRecord = {
@@ -17,6 +18,7 @@ const RELEASE_DATES = {
   initialServiceHub: "2026-08-10",
   verifiedContentRelease: "2026-08-13",
   serviceAreaHubRefresh: "2026-09-02",
+  homeGuideCuration: "2026-09-05",
 } as const;
 
 /** Keep an aggregate page current when any content it renders becomes newer. */
@@ -29,6 +31,11 @@ function latestIsoDate(
     baseline,
   );
 }
+
+const HOME_LAST_MODIFIED = latestIsoDate(
+  RELEASE_DATES.homeGuideCuration,
+  featuredResourceGuides.map((guide) => guide.modified),
+);
 
 const RESOURCE_AGGREGATE_LAST_MODIFIED = latestIsoDate(
   RELEASE_DATES.verifiedContentRelease,
@@ -52,7 +59,7 @@ const RESOURCE_AGGREGATE_LAST_MODIFIED = latestIsoDate(
  * content genuinely landed in the same release.
  */
 export const publicRouteRecords = [
-  publicRoute("/", RESOURCE_AGGREGATE_LAST_MODIFIED),
+  publicRoute("/", HOME_LAST_MODIFIED),
   publicRoute("/about/", RELEASE_DATES.verifiedContentRelease),
   publicRoute("/services/", RELEASE_DATES.initialServiceHub),
   ...services.map((service) =>
@@ -82,7 +89,7 @@ export const publicRouteRecords = [
     publicRoute(`/resources/${guide.slug}/`, guide.modified),
   ),
   publicRoute("/contact-us/", RELEASE_DATES.verifiedContentRelease),
-  publicRoute("/privacy-policy/", RELEASE_DATES.verifiedContentRelease),
+  publicRoute("/privacy-policy/", privacyPolicyUpdated),
   publicRoute("/terms-of-service/", RELEASE_DATES.verifiedContentRelease),
 ] satisfies readonly PublicRouteRecord[];
 

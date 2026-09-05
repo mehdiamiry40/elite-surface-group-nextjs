@@ -15,7 +15,7 @@ export const metadata: Metadata = pageMetadata({
   title: acrylicVsCementRenderGuide.metaTitle,
   description: acrylicVsCementRenderGuide.metaDescription,
   path: `/resources/${acrylicVsCementRenderGuide.slug}`,
-  image: ogCard("render", "Rendering services in Adelaide"),
+  image: ogCard(acrylicVsCementRenderGuide.slug, acrylicVsCementRenderGuide.metaTitle),
   openGraphType: "article",
   publishedTime: acrylicVsCementRenderGuide.published,
   modifiedTime: acrylicVsCementRenderGuide.modified,

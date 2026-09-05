@@ -1,0 +1,17 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/internal/contact-retry/",
+      "schedule": "*/5 * * * *"
+    },
+    {
+      "path": "/api/internal/contact-alert/",
+      "schedule": "2-57/5 * * * *"
+    },
+    {
+      "path": "/api/internal/contact-monitor/",
+      "schedule": "17 8,20 * * *"
+    }
+  ]
+}

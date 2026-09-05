@@ -27,6 +27,10 @@
   --shadow-card: 0 8px 24px rgb(20 33 37 / 6%);
   --shadow-lift: 0 12px 30px rgb(20 33 37 / 9%);
 
+  /* Initial/no-JavaScript geometry: 76px main row + 1px border. */
+  --site-header-height: 77px;
+  --anchor-gap: 16px;
+
   --section-y: 88px;
   --section-y-sm: 52px;
 
@@ -309,6 +313,11 @@
 }
 
 @media (min-width: 1024px) {
+  :root {
+    /* 36px utility row + 88px main row + 1px border. */
+    --site-header-height: 125px;
+  }
+
   .site-header__utility {
     display: block;
   }
@@ -430,11 +439,11 @@ h5 {
   font-weight: 400;
   line-height: 1.08;
   text-wrap: balance;
-  scroll-margin-top: 96px;
 }
 
-#main {
-  scroll-margin-top: 96px;
+/* Fragment links can target headings, section wrappers or the skip target. */
+:where([id]) {
+  scroll-margin-top: calc(var(--site-header-height) + var(--anchor-gap));
 }
 
 p {
@@ -4010,6 +4019,13 @@ h5 {
 
 .home-projects .section-cta {
   margin-top: 36px;
+}
+
+.home-projects__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px 28px;
 }
 
 /* process band */

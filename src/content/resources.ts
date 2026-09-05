@@ -74,11 +74,11 @@ export const resourceGuides: readonly ResourceGuide[] = [
     imageAlt:
       "Two-storey residence with dark panel cladding around an upper window and garage projection",
     imageCaption:
-      "An Elite Surface Group feature-cladding project, shown as an installation example—not as evidence of a particular coastal exposure category.",
+      "Illustrative cladding image. The image does not establish a particular product, project location or coastal exposure category.",
     imageWidth: 1600,
     imageHeight: 1067,
     published: "2026-08-13",
-    modified: "2026-08-13",
+    modified: "2026-09-05",
     publishedDisplay: "13 August 2026",
     readingTime: "10 minute read",
   },
@@ -97,11 +97,11 @@ export const resourceGuides: readonly ResourceGuide[] = [
     imageAlt:
       "Installer checking the vertical alignment of AAC wall panels beside steel framing",
     imageCaption:
-      "Illustrative wall-system image—not a record of a particular Elite Surface Group project or a substitute for the selected system documents.",
+      "Illustrative wall-system image. The image does not establish a particular project or replace the selected system documents.",
     imageWidth: 1600,
     imageHeight: 1067,
     published: "2026-08-13",
-    modified: "2026-08-31",
+    modified: "2026-09-05",
     publishedDisplay: "13 August 2026",
     readingTime: "9 minute read",
   },
@@ -166,11 +166,11 @@ export const resourceGuides: readonly ResourceGuide[] = [
     imageAlt:
       "Installer aligning charcoal vertical cladding on a residential exterior wall",
     imageCaption:
-      "An Elite Surface Group cladding installation, shown as a general example—not a photograph of fibre cement weatherboard, timber weatherboard or a particular bushfire or coastal exposure category.",
+      "Illustrative cladding image. The image does not establish a fibre cement or timber weatherboard specification, bushfire rating or coastal exposure category.",
     imageWidth: 1600,
     imageHeight: 1067,
     published: "2026-08-22",
-    modified: "2026-08-22",
+    modified: "2026-09-05",
     publishedDisplay: "22 August 2026",
     readingTime: "9 minute read",
   },
@@ -189,11 +189,11 @@ export const resourceGuides: readonly ResourceGuide[] = [
     imageAlt:
       "Installer checking internal steel wall framing with a laser level",
     imageCaption:
-      "An Elite Surface Group walling installation, shown as a general example—not a photograph of a load-bearing wall removal, temporary propping system or a particular Adelaide property.",
+      "Illustrative wall-framing image. The image does not establish a structural design, temporary propping arrangement or suitability for a particular site.",
     imageWidth: 1600,
     imageHeight: 1067,
     published: "2026-08-23",
-    modified: "2026-08-23",
+    modified: "2026-09-05",
     publishedDisplay: "23 August 2026",
     readingTime: "9 minute read",
   },
@@ -212,11 +212,11 @@ export const resourceGuides: readonly ResourceGuide[] = [
     imageAlt:
       "Installer checking internal steel wall framing with a laser level",
     imageCaption:
-      "Illustrative wall-framing image—not a record of a particular Elite Surface Group project, framing material selection or site condition.",
+      "Illustrative wall-framing image. The image does not establish a structural design, temporary propping arrangement or suitability for a particular site.",
     imageWidth: 1600,
     imageHeight: 1067,
     published: "2026-08-21",
-    modified: "2026-08-24",
+    modified: "2026-09-05",
     publishedDisplay: "21 August 2026",
     readingTime: "9 minute read",
   },
@@ -233,11 +233,11 @@ export const resourceGuides: readonly ResourceGuide[] = [
     image: "/images/v2/service-render-application.webp",
     imageAlt: "Tradesperson applying an even render finish to an exterior wall",
     imageCaption:
-      "An Elite Surface Group render application, shown as a general example—not a photograph of a particular acrylic or cement render system or substrate.",
+      "Illustrative rendering image. The image does not establish a particular acrylic or cement render system, substrate or specification.",
     imageWidth: 1600,
     imageHeight: 1067,
     published: "2026-08-24",
-    modified: "2026-08-24",
+    modified: "2026-09-05",
     publishedDisplay: "24 August 2026",
     readingTime: "9 minute read",
   },
@@ -276,3 +276,10 @@ export const steelVsTimberFramingGuide = guideBySlug(
 export const acrylicVsCementRenderGuide = guideBySlug(
   "acrylic-render-vs-cement-render-adelaide",
 );
+
+/** A short selection for Home; the Resources hub retains every guide. */
+export const featuredResourceGuides = [
+  renderCrackingGuide,
+  claddingMaterialComparisonGuide,
+  hebelBoundaryWallsGuide,
+] as const;

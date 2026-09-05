@@ -1,10 +1,8 @@
 name: Contact outbox retry
 
 on:
-  schedule:
-    # Hourly and away from the top of the hour, where hosted-runner schedules
-    # are most likely to be delayed.
-    - cron: "43 * * * *"
+  # Production recovery is scheduled by Vercel every five minutes. Keep this
+  # authenticated manual fallback for an operator; avoid two delivery clocks.
   workflow_dispatch:
 
 permissions: {}
