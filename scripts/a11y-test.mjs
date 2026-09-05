@@ -39,6 +39,7 @@ const UI_SETTLE_MS = 400;
 const failures = [];
 let checks = 0;
 let layoutChecks = 0;
+let anchorChecks = 0;
 
 // CI images and sandboxes often ship a pre-provisioned Chromium rather than the
 // exact revision `npx playwright install` would fetch. Honour an explicit path
@@ -143,6 +144,50 @@ async function checkServiceAreaLayout(page, label) {
   }
 }
 
+async function checkArticleAnchors(page, label) {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const targets = ["#how-to-tell", "#faqs-and-sources"];
+  for (const target of targets) {
+    anchorChecks += 1;
+    await page.getByRole("navigation", { name: "On this page" })
+      .locator(`a[href="${target}"]`).click();
+    // Exercise both a heading anchor and a section-wrapper anchor through
+    // real TOC links. A correct hash alone does not prove the title is visible.
+    const geometry = await page.evaluate((selector) => {
+      const targetElement = document.querySelector(selector);
+      const heading = targetElement?.matches("h2")
+        ? targetElement
+        : targetElement?.querySelector("h2");
+      const header = document.querySelector(".site-header");
+      return {
+        hash: window.location.hash,
+        headingTop: heading?.getBoundingClientRect().top,
+        headingBottom: heading?.getBoundingClientRect().bottom,
+        headerBottom: header?.getBoundingClientRect().bottom,
+        viewportBottom: window.innerHeight,
+      };
+    }, target);
+    if (
+      geometry.hash !== target ||
+      !(geometry.headingTop >= geometry.headerBottom + 8) ||
+      !(geometry.headingBottom <= geometry.viewportBottom)
+    ) {
+      failures.push(`${label} ${target}: hidden anchor ${JSON.stringify(geometry)}`);
+    }
+  }
+
+  anchorChecks += 1;
+  await page.locator(".skip-link").focus();
+  await page.locator(".skip-link").press("Enter");
+  const skipVisible = await page.evaluate(() => {
+    const main = document.querySelector("#main");
+    const header = document.querySelector(".site-header");
+    return window.location.hash === "#main" && main && header &&
+      main.getBoundingClientRect().top >= header.getBoundingClientRect().bottom - 1;
+  });
+  if (!skipVisible) failures.push(`${label}: skip target hidden behind header`);
+}
+
 for (const viewport of VIEWPORTS) {
   for (const route of ROUTES) {
     const context = await browser.newContext({ viewport });
@@ -152,6 +197,9 @@ for (const viewport of VIEWPORTS) {
         waitUntil: "networkidle",
       });
       await runAxe(page, `${route} (${viewport.label})`);
+      if (route === "/resources/load-bearing-wall-removal-adelaide/") {
+        await checkArticleAnchors(page, `article (${viewport.label})`);
+      }
       if (route === "/locations/") {
         await checkServiceAreaLayout(
           page,
@@ -167,6 +215,28 @@ for (const viewport of VIEWPORTS) {
     } finally {
       await context.close();
     }
+  }
+}
+
+// A 1280×900 desktop window at 200% zoom has a 640×450 CSS viewport.
+// Also verify the CSS fallbacks keep anchors usable before/without hydration.
+for (const options of [
+  { viewport: { width: 640, height: 450 }, deviceScaleFactor: 2, label: "200% desktop zoom-equivalent viewport" },
+  { viewport: VIEWPORTS[0], javaScriptEnabled: false, label: "desktop without JavaScript" },
+  { viewport: VIEWPORTS[1], javaScriptEnabled: false, label: "mobile without JavaScript" },
+]) {
+  const { label, ...contextOptions } = options;
+  const context = await browser.newContext(contextOptions);
+  try {
+    const page = await context.newPage();
+    await page.goto(new URL("/resources/load-bearing-wall-removal-adelaide/", baseUrl).toString(), {
+      waitUntil: "networkidle",
+    });
+    await checkArticleAnchors(page, label);
+  } catch (error) {
+    failures.push(`${label}: ${error instanceof Error ? error.message : String(error)}`);
+  } finally {
+    await context.close();
   }
 }
 
@@ -238,5 +308,5 @@ if (failures.length) {
 console.log(
   `A11y test passed: ${checks} axe-core runs across ${ROUTES.length} routes, ` +
     `desktop/mobile viewports and interactive UI states; ` +
-    `${layoutChecks} service-area layout checks passed.`,
+    `${layoutChecks} service-area layout checks and ${anchorChecks} anchor checks passed.`,
 );

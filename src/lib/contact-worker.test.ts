@@ -8,6 +8,7 @@ import {
 } from "./contact-outbox.ts";
 import {
   deliverOutboxSubmission,
+  drainContactOutbox,
   MAX_OUTBOX_DELIVERY_ATTEMPTS,
   type ContactOutboxWorkerStore,
 } from "./contact-worker.ts";
@@ -46,6 +47,7 @@ function store(initial: ContactOutboxRecord) {
       calls.push("unlock");
     },
     load: async () => initial,
+    cleanupDueMember: async () => "removed",
     markAttempt: async () => {
       calls.push("attempt");
       return {
@@ -181,5 +183,40 @@ describe("contact outbox delivery worker", () => {
     });
     assert.equal(calls.includes("queued"), false);
     assert.equal(calls.includes("manual_review"), true);
+  });
+
+  it("cleans missing due records under the acquired owner lock", async () => {
+    const { fake } = store(record());
+    fake.load = async () => null;
+    let cleanupArgs: unknown[] = [];
+    fake.cleanupDueMember = async (...args) => { cleanupArgs = args; return "removed"; };
+    assert.deepEqual(await deliverOutboxSubmission(fake, submissionId, "re_test", { now: () => 123 }), { state: "missing" });
+    assert.deepEqual(cleanupArgs, [submissionId, "lock-token", 123]);
+    fake.cleanupDueMember = async () => "present";
+    assert.deepEqual(await deliverOutboxSubmission(fake, submissionId, "re_test"), { state: "deferred" });
+  });
+
+  it("drains past locked and broken oldest records while isolating errors", async () => {
+    const { fake } = store(record());
+    fake.acquireLock = async (id) => id.startsWith("locked") ? null : "lock";
+    fake.load = async (id) => { if (id === "broken") throw new Error("storage"); return record(); };
+    const heartbeats: string[] = [];
+    let sends = 0;
+    const result = await drainContactOutbox({ ...fake,
+      dueSubmissionIds: async () => ["locked1", "locked2", "broken", "valid4", "valid5"],
+      recordWorkerHeartbeat: async (phase) => { heartbeats.push(phase); },
+    }, "re_test", { now: () => 2_000, send: async () => `email_${++sends}` });
+    assert.deepEqual(result, { processed: 5, summary: { locked: 2, error: 1, accepted: 2 } });
+    assert.deepEqual(heartbeats, ["started", "completed", "error"]);
+  });
+
+  it("stops starting new batches when its time budget is reached", async () => {
+    const { fake } = store(record());
+    let now = 2_000;
+    const result = await drainContactOutbox({ ...fake,
+      dueSubmissionIds: async () => ["one", "two", "three", "four"],
+      recordWorkerHeartbeat: async () => {},
+    }, "re_test", { now: () => now, budgetMs: 1_000, send: async () => { now += 1_000; return "email"; } });
+    assert.equal(result.processed, 3);
   });
 });

@@ -115,16 +115,31 @@ AES-256-GCM before it is written, a stable submission ID protects Resend
 retries from duplicates, and
 retryable failures may return `202` only after durable storage succeeds. The
 worker stops after six attempts or 23 hours, whichever comes first, so it never
-automatically retries beyond Resend's 24-hour idempotency window. The committed
-hourly `contact-retry.yml` workflow calls the authenticated endpoint; add a
-GitHub Actions `CRON_SECRET` with the same value as Vercel Production before
-merging or queued records will not recover automatically.
+automatically retries beyond Resend's 24-hour idempotency window. `vercel.json`
+invokes the authenticated retry endpoint every five minutes in Production,
+using the existing `CRON_SECRET`. Each invocation considers up to 30 records in
+concurrent batches of three within an 18-second selection budget. Expired or
+already-settled queue members are safely removed without resending them.
+`contact-retry.yml` remains an authenticated manual fallback.
 
 `CONTACT_MONITOR_TOKEN` optionally enables
 `POST /api/internal/contact-monitor/`. Supply it as an Authorization Bearer
 token. The endpoint accepts no recipient or enquiry input and sends a fixed,
 PII-free probe only to Resend's `delivered+elite-surface-monitor@resend.dev`
-test address with the `synthetic-monitor` category tag.
+test address with the `synthetic-monitor` category tag. The probe passes through
+the encrypted outbox and its signed delivery callback. Vercel invokes the GET
+variant twice daily using `CRON_SECRET`; `scripts/synthetic-monitor.mjs` waits
+for the exact probe's verified delivery outcome.
+
+`GET /api/internal/contact-status/` uses the monitor or cron bearer and exposes
+only queue/worker/delivery aggregates and incident acknowledgement metadata.
+It returns 503 for stale workers, overdue delivery, missing records or unresolved
+failures. `CONTACT_ALERT_TO_EMAIL` selects one explicitly approved operator
+address for dedicated, customer-data-free failure messages. It has no default.
+The alert cron checks every five minutes; repeated identical notifications
+share one Resend idempotency key per hour. The independent GitHub watchdog reads
+status without sending mail. See `OPS.md` for provider-outage limitations,
+cutover scope, acknowledgement and incident response.
 
 `RESEND_WEBHOOK_SECRET` verifies signed delivery, delay, failure, bounce,
 complaint and suppression events at `POST /api/webhooks/resend/`. Register the
@@ -139,11 +154,16 @@ npm run lint        # eslint
 npm run build       # production build (runs the env check first)
 npm test            # unit tests
 npm run check       # typecheck, lint, unit tests, build and bundle budget
+npm run contact-redis-test # isolated real Redis expiry/concurrency tests
 
 npm run start &     # smoke / a11y need a live server
 npm run smoke       # route, SEO, header and contact checks
 npm run a11y        # axe-core across routes and interactive UI states
 ```
+
+The Redis suite starts its own temporary Unix-socket server with persistence
+disabled and never loads production credentials. Install `redis-server`, or
+set `REDIS_SERVER=/path/to/redis-server`. CI installs the runtime explicitly.
 
 `npm run a11y` downloads its own Chromium. Where one is already provisioned
 (CI images, sandboxes), point at it with
@@ -196,6 +216,18 @@ enforce it with a branch-protection rule requiring the `verify` check, rather
 than by remembering to wait. A pull request merged before CI reports is a
 pull request nobody checked.
 
+Vercel Production also requires the exact commit's full `verify` check before
+assigning custom domains. Keep this check name stable and Production behavior
+Blocking; native lint/type checks are additional blocking controls. The full
+verification job explicitly fails if its prerequisite security workflow fails,
+so a skipped dependency cannot accidentally satisfy the release gate.
+
+The security workflow runs pinned Gitleaks and Semgrep with local rules, verifies
+benign scanner fixtures, and checks dependency advisories daily. Code is not
+uploaded to a hosted scanner. GitHub vulnerability alerts/security updates are
+separate enabled controls; paid code/secret-scanning features are not required
+for these CI checks. See `SECURITY.md` for scope and response responsibilities.
+
 ## Audits
 
 | Document | Covers |
@@ -208,18 +240,15 @@ pull request nobody checked.
 
 Open items that still need a human decision outside the codebase:
 
-- **Resend delivery** — verify `elitesurfacegroup.com.au` in the Resend
-  dashboard (add its DNS records), then set `RESEND_API_KEY` in Vercel.
-  `CONTACT_FROM_EMAIL` defaults to `info@elitesurfacegroup.com.au` on that
-  domain; do not set it to Gmail. Enquiries land in
-  `elite.surfacegroup@gmail.com`; confirm provider acceptance and mailbox
-  receipt with a real submission.
-- **Optional durable contact delivery** — provision Upstash Redis, set the
-  complete four-value encrypted-outbox group documented above, and schedule the
-  authenticated retry endpoint. A partial group is rejected by the production
-  build gate.
-- **Social profiles** — add real Facebook / Instagram URLs to `business.social`
-  in `src/content/business.ts` when they exist (icons stay hidden while empty).
+- **Operator alerts** — confirm one recipient for `CONTACT_ALERT_TO_EMAIL`,
+  its responsible operator and backup, and verify a controlled notification.
+- **Mailbox and historical reconciliation** — the Resend/Upstash/webhook setup
+  was activated on 2 September. Provider delivery is not Inbox/Spam placement
+  or human follow-up. Confirm the sales mailbox and outstanding pre-cutover
+  outcomes as described in `OPS.md`.
+- **Social profiles and project evidence** — keep published profile URLs
+  current and supply verifiable installation/photo rights and case-study facts
+  before adding more specific claims.
 - **Legal review** — privacy and terms are now Australian-oriented and match
   the live site, but a qualified review is still wise before relying on them
   for anything beyond ordinary website enquiries.

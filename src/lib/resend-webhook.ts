@@ -160,7 +160,8 @@ export function normaliseResendWebhook(
 export function resendWebhookNeedsDurableCorrelation(
   event: NormalisedResendWebhook,
 ) {
-  return event.kind === "tracked" && event.category === "website-enquiry";
+  return event.kind === "tracked" &&
+    (event.category === "website-enquiry" || event.category === "synthetic-monitor");
 }
 
 export function verifyAndNormaliseResendWebhook(options: {

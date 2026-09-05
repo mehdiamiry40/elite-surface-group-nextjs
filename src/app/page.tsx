@@ -13,7 +13,7 @@ import {
   trustPoints,
 } from "@/content/home";
 import { featuredProjects, projectCards } from "@/content/projects";
-import { resourceGuides } from "@/content/resources";
+import { featuredResourceGuides } from "@/content/resources";
 import { blurProps } from "@/lib/lcp-blur";
 import { pageMetadata } from "@/lib/seo";
 
@@ -110,9 +110,13 @@ export default function HomePage() {
             id="featured-title"
           />
           <ProjectGallery items={projectCards.slice(0, 3)} />
-          <p className="section-cta">
+          <p className="section-cta home-projects__actions">
             <Link className="text-link" href="/projects/">
               Explore all projects
+              <ArrowRightIcon />
+            </Link>
+            <Link className="btn" href="/contact-us/">
+              Discuss your project
               <ArrowRightIcon />
             </Link>
           </p>
@@ -127,11 +131,11 @@ export default function HomePage() {
           <SectionHead
             eyebrow="Practical project guidance"
             title="Resolve the right questions before work begins."
-            intro="Use our source-backed guides to document the issue, identify the selected wall system and prepare a clearer project brief."
+            intro="Start with these three guides, or browse the full resource library for your project."
             id="home-resources-title"
           />
-          <ul className="project-link-grid project-link-grid--2 resource-grid">
-            {resourceGuides.map((guide) => (
+          <ul className="project-link-grid project-link-grid--3 resource-grid">
+            {featuredResourceGuides.map((guide) => (
               <li className="project-link-card" key={guide.slug}>
                 <span>{guide.category}</span>
                 <h3>
@@ -152,7 +156,7 @@ export default function HomePage() {
             ))}
           </ul>
           <p className="section-cta">
-            <Link className="text-link" href="/resources/">
+            <Link className="text-link" href="/resources/" prefetch={false}>
               Explore all resources
               <ArrowRightIcon />
             </Link>

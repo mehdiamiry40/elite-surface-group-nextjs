@@ -17,6 +17,7 @@ export type DeliveryAttemptResult =
   | { state: "permanent_failure"; errorCode: string }
   | { state: "manual_review"; errorCode: string }
   | { state: "locked" }
+  | { state: "deferred" }
   | { state: "missing" };
 
 export const MAX_OUTBOX_DELIVERY_ATTEMPTS = 6;
@@ -41,6 +42,7 @@ export type ContactOutboxWorkerStore = Pick<
   | "recordAccepted"
   | "markTerminal"
   | "queueRetry"
+  | "cleanupDueMember"
 >;
 
 export async function deliverOutboxSubmission(
@@ -57,9 +59,11 @@ export async function deliverOutboxSubmission(
   try {
     const record = await outbox.load(submissionId);
     if (!record) {
-      return { state: "missing" };
+      const cleanup = await outbox.cleanupDueMember(submissionId, lock, now());
+      return { state: cleanup === "removed" || cleanup === "absent" ? "missing" : "deferred" };
     }
-    if (record.status === "accepted" || record.status === "delivered") {
+    if (["accepted", "delivery_delayed", "delivered"].includes(record.status)) {
+      await outbox.cleanupDueMember(submissionId, lock, now());
       return {
         state: "accepted",
         emailId: record.providerEmailId,
@@ -67,6 +71,7 @@ export async function deliverOutboxSubmission(
       };
     }
     if (isTerminalOutboxStatus(record.status)) {
+      await outbox.cleanupDueMember(submissionId, lock, now());
       return {
         state:
           record.status === "manual_review"
@@ -135,6 +140,45 @@ export async function deliverOutboxSubmission(
     }
   } finally {
     await outbox.releaseLock(submissionId, lock).catch(() => undefined);
+  }
+}
+
+export const OUTBOX_DRAIN_LIMIT = 30;
+export const OUTBOX_DRAIN_BUDGET_MS = 18_000;
+
+export async function drainContactOutbox(
+  outbox: ContactOutboxWorkerStore & Pick<UpstashContactOutbox, "dueSubmissionIds" | "recordWorkerHeartbeat">,
+  apiKey: string,
+  options: WorkerOptions & { limit?: number; budgetMs?: number } = {},
+) {
+  const now = options.now ?? Date.now;
+  const startedAt = now();
+  const summary: Record<string, number> = {};
+  let processed = 0;
+  try {
+    await outbox.recordWorkerHeartbeat("started", startedAt);
+    // Snapshot enough IDs once so locked or broken oldest records cannot take
+    // every slot. Never select the same record twice during this invocation.
+    const ids = await outbox.dueSubmissionIds(startedAt, Math.min(options.limit ?? OUTBOX_DRAIN_LIMIT, OUTBOX_DRAIN_LIMIT));
+    for (let offset = 0; offset < ids.length; offset += 3) {
+      if (now() - startedAt >= (options.budgetMs ?? OUTBOX_DRAIN_BUDGET_MS)) break;
+      const results = await Promise.allSettled(ids.slice(offset, offset + 3).map((id) =>
+        deliverOutboxSubmission(outbox, id, apiKey, options),
+      ));
+      for (const result of results) {
+        const state = result.status === "fulfilled" ? result.value.state : "error";
+        summary[state] = (summary[state] ?? 0) + 1;
+        processed++;
+      }
+    }
+    // Persist completion even for record errors; error freshness remains a
+    // separate health signal and cannot disappear behind a green heartbeat.
+    await outbox.recordWorkerHeartbeat("completed", now(), processed);
+    if (summary.error) await outbox.recordWorkerHeartbeat("error", now(), processed);
+    return { processed, summary };
+  } catch (error) {
+    await outbox.recordWorkerHeartbeat("error", now(), processed).catch(() => undefined);
+    throw error;
   }
 }
 

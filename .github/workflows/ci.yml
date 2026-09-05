@@ -13,11 +13,23 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  security:
+    uses: ./.github/workflows/security.yml
+
   verify:
+    # Keep this name stable: Vercel requires this exact job before promotion.
+    # A skipped job can count as success. Explicitly fail when security failed.
+    if: ${{ always() }}
+    needs: security
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
     steps:
+      - name: Require successful security checks
+        env:
+          SECURITY_RESULT: ${{ needs.security.result }}
+        run: test "$SECURITY_RESULT" = success
+
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
@@ -28,7 +40,12 @@ jobs:
           cache: npm
 
       - run: npm ci
-      - run: npm audit --omit=dev --audit-level=high
+      - name: Audit runtime and build dependencies
+        run: npm audit --audit-level=high
+      - name: Install isolated Redis test runtime
+        run: sudo apt-get update && sudo apt-get install --yes redis-server
+      - name: Verify real Redis recovery semantics
+        run: npm run contact-redis-test
       - run: npx playwright install --with-deps chromium
       - run: npm run check
 

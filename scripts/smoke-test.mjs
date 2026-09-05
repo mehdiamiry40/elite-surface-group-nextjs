@@ -387,12 +387,13 @@ const latestResourceModified = [...resourceModifiedDates.values()].reduce(
   "0000-00-00",
 );
 const resourceAggregatePaths = [
-  "/",
   "/resources/",
   ...locationSlugs.map((slug) => `/locations/${slug}/`),
 ];
 const expectedSitemapDates = new Map([
-  ["/", latestResourceModified],
+  // Home now renders a curated subset, so unrelated guide changes need not
+  // change its editorial date. This release shortened that selection.
+  ["/", "2026-09-05"],
   ["/about/", "2026-08-13"],
   ["/services/", "2026-08-10"],
   ...serviceSlugs.map((slug) => [`/${slug}/`, "2026-08-13"]),
@@ -411,7 +412,7 @@ const expectedSitemapDates = new Map([
     resourceModifiedDates.get(slug) ?? "",
   ]),
   ["/contact-us/", "2026-08-13"],
-  ["/privacy-policy/", "2026-08-13"],
+  ["/privacy-policy/", "2026-09-05"],
   ["/terms-of-service/", "2026-08-13"],
 ]);
 const sitemapDateMismatches = [...expectedSitemapDates].filter(
@@ -832,6 +833,21 @@ for (const [name, expected, init] of contactChecks) {
   );
 }
 
+// Every operational action/status route must reject a caller without a token.
+// These requests run before any storage or mail work, including on production.
+for (const [pathname, method] of [
+  ["/api/internal/contact-retry/", "GET"],
+  ["/api/internal/contact-retry/", "POST"],
+  ["/api/internal/contact-monitor/", "GET"],
+  ["/api/internal/contact-monitor/", "POST"],
+  ["/api/internal/contact-status/", "GET"],
+  ["/api/internal/contact-status/", "POST"],
+  ["/api/internal/contact-alert/", "GET"],
+]) {
+  const response = await get(pathname, { method, redirect: "manual" });
+  check(`${method} ${pathname} requires authentication without a redirect`, response.status === 401, `status ${response.status}`);
+}
+
 // Detailed validation probes deliberately consume the endpoint's rate-limit
 // budget. Run them against the isolated local/CI server, where the test IPs are
 // controllable; a remote smoke run keeps to the pre-rate-limit 415/403 probes
@@ -1050,8 +1066,9 @@ check(
   privacyHtml.includes("elite.surfacegroup@gmail.com"),
 );
 check(
-  "privacy policy cites Australian Privacy Principles",
-  /Australian Privacy Principles|Privacy Act 1988/.test(privacyHtml),
+  "privacy policy provides an Australian privacy complaint pathway",
+  /Office of the Australian Information Commissioner/.test(privacyHtml) &&
+    /href="https:\/\/www\.oaic\.gov\.au/.test(privacyHtml),
 );
 check(
   "llms.txt publishes the public business email and phone",
@@ -1077,18 +1094,18 @@ check(
   [privacyHtml, termsHtml].every(
     (html) =>
       /Vercel Web Analytics/.test(html) &&
-      /does not use (?:analytics or advertising )?cookies/.test(html),
+      /(?:does not|do not) use (?:analytics(?: or advertising)? )?cookies/.test(html),
   ),
 );
 check(
   "privacy policy discloses project fields and excludes them from analytics",
-  /successful enquiry event may include the allowlisted source page and service category/i.test(
+  /successful enquiry event includes only the permitted source page and service category/i.test(
     privacyHtml,
   ) &&
     /Project suburb or postcode, project type and target timing/.test(
       privacyHtml,
     ) &&
-    /do not send names, email addresses, phone numbers, enquiry text, project suburbs or postcodes, project types or target timing in analytics events/.test(
+    /do not send names, email addresses, phone numbers, enquiry text or optional project details in analytics events/.test(
       privacyHtml,
     ),
 );
@@ -1569,7 +1586,7 @@ check(
   /<time date[Tt]ime="2026-08-13">Published (?:<!-- -->)?13 August 2026<\/time>/.test(
     claddingMaintenanceHtml,
   ) &&
-    /shown as an installation example—not as evidence of a particular coastal exposure category/.test(
+    /Illustrative cladding image\. The image does not establish a particular product, project location or coastal exposure category/.test(
       claddingMaintenanceHtml,
     ) &&
     /Prepared by (?:<!-- -->)?<a href="\/about\/">Elite Surface Group<\/a>/.test(
@@ -1626,7 +1643,7 @@ check(
     claddingMaintenanceJsonLd?.mainEntityOfPage?.["@id"] ===
       "https://elitesurfacegroup.com.au/resources/cladding-maintenance-coastal-adelaide/" &&
     claddingMaintenanceJsonLd?.datePublished === "2026-08-13" &&
-    claddingMaintenanceJsonLd?.dateModified === "2026-08-13" &&
+    claddingMaintenanceJsonLd?.dateModified === resourceModifiedDates.get("cladding-maintenance-coastal-adelaide") &&
     claddingMaintenanceJsonLd?.image?.contentUrl ===
       "https://elitesurfacegroup.com.au/images/v2/project-dark-feature-cladding.webp" &&
     claddingMaintenanceJsonLd?.image?.width === 1600 &&
@@ -1652,7 +1669,7 @@ check(
   /<time date[Tt]ime="2026-08-13">Published (?:<!-- -->)?13 August 2026<\/time>/.test(
     renderingHebelHtml,
   ) &&
-    /Illustrative wall-system image—not a record of a particular Elite Surface Group project/.test(
+    /Illustrative wall-system image\. The image does not establish a particular project/.test(
       renderingHebelHtml,
     ) &&
     /not an application method, an engineering specification, a warranty promise or a remote assessment/.test(
@@ -1717,7 +1734,7 @@ check(
     renderingHebelJsonLd?.mainEntityOfPage?.["@id"] ===
       "https://elitesurfacegroup.com.au/resources/rendering-hebel-panels-adelaide/" &&
     renderingHebelJsonLd?.datePublished === "2026-08-13" &&
-    renderingHebelJsonLd?.dateModified === "2026-08-31" &&
+    renderingHebelJsonLd?.dateModified === resourceModifiedDates.get("rendering-hebel-panels-adelaide") &&
     renderingHebelJsonLd?.image?.contentUrl ===
       "https://elitesurfacegroup.com.au/images/v2/service-hebel-installation.webp" &&
     renderingHebelJsonLd?.image?.width === 1600 &&
@@ -1955,12 +1972,17 @@ check(
   ),
 );
 check(
-  "homepage and Adelaide page link every published guide contextually",
-  [homeHtml, adelaideHtml].every((html) =>
+  "resources hub and Adelaide page link every published guide contextually",
+  [resourcesHtml, adelaideHtml].every((html) =>
     resourceSlugs.every((slug) =>
       html.includes(`href="/resources/${slug}/"`),
     ),
   ),
+);
+check(
+  "homepage curates three guides and keeps the complete archive accessible",
+  (homeHtml.match(/>Read the guide</g) ?? []).length === 3 &&
+    homeHtml.includes('href="/resources/"'),
 );
 check(
   "homepage shows three featured project case studies",

@@ -15,7 +15,7 @@ export const metadata: Metadata = pageMetadata({
   title: steelVsTimberFramingGuide.metaTitle,
   description: steelVsTimberFramingGuide.metaDescription,
   path: `/resources/${steelVsTimberFramingGuide.slug}`,
-  image: ogCard("walling", "Internal and external walling in Adelaide"),
+  image: ogCard(steelVsTimberFramingGuide.slug, steelVsTimberFramingGuide.metaTitle),
   openGraphType: "article",
   publishedTime: steelVsTimberFramingGuide.published,
   modifiedTime: steelVsTimberFramingGuide.modified,

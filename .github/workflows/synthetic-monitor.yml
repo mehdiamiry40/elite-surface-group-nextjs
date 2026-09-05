@@ -1,10 +1,17 @@
-name: Production synthetic monitor
+name: Production delivery watchdog
 
 on:
   schedule:
-    # Twice daily, away from the top-of-hour GitHub Actions traffic spike.
-    - cron: "17 8,20 * * *"
+    # Independent, read-only fallback. Vercel owns the timely worker and
+    # synthetic schedules; a delayed GitHub run is never the delivery clock.
+    - cron: "43 * * * *"
   workflow_dispatch:
+    inputs:
+      synthetic_proof:
+        description: Send a fixed Resend simulated-recipient probe and verify its signed delivery
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -27,8 +34,15 @@ jobs:
         with:
           node-version-file: .nvmrc
 
-      - name: Check production homepage and lead delivery
+      - name: Verify an explicitly requested durable synthetic probe
+        if: github.event_name == 'workflow_dispatch' && inputs.synthetic_proof
         env:
           CONTACT_MONITOR_TOKEN: ${{ secrets.CONTACT_MONITOR_TOKEN }}
           MONITOR_BASE_URL: https://elitesurfacegroup.com.au
         run: node scripts/synthetic-monitor.mjs
+
+      - name: Check production homepage and durable delivery status
+        env:
+          CONTACT_MONITOR_TOKEN: ${{ secrets.CONTACT_MONITOR_TOKEN }}
+          MONITOR_BASE_URL: https://elitesurfacegroup.com.au
+        run: node scripts/contact-status-check.mjs

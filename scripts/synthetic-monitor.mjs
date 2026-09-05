@@ -55,10 +55,26 @@ if (contact.status !== 200) {
   throw new Error(`Contact delivery probe failed with HTTP ${contact.status}.`);
 }
 const contactPayload = await contact.json().catch(() => null);
-if (contactPayload?.ok !== true) {
-  throw new Error("Contact delivery probe did not return an accepted outcome.");
+if (contactPayload?.ok !== true || contactPayload?.durable !== true || !contactPayload?.submissionId) {
+  throw new Error("Contact delivery probe did not return a durable accepted outcome.");
 }
 
+const deadline = Date.now() + 120_000;
+let delivered = false;
+while (Date.now() < deadline) {
+  const status = await monitoredFetch(`/api/internal/contact-monitor/?submissionId=${encodeURIComponent(contactPayload.submissionId)}`, {
+    headers: { Authorization: `Bearer ${monitorToken}` },
+  });
+  if (status.status !== 200) throw new Error(`Durable probe status failed with HTTP ${status.status}.`);
+  const outcome = await status.json();
+  if (outcome.state === "delivered") { delivered = true; break; }
+  if (["failed", "bounced", "complained", "suppressed", "manual_review"].includes(outcome.state)) {
+    throw new Error(`Synthetic delivery requires operator review: ${outcome.state}.`);
+  }
+  await new Promise((resolve) => setTimeout(resolve, 5_000));
+}
+if (!delivered) throw new Error("Signed delivery confirmation was not recorded for the exact durable probe within 2 minutes.");
+
 console.log(
-  `Synthetic monitor passed for ${baseUrl.origin}: homepage, readiness and contact delivery were accepted.`,
+  `Synthetic monitor passed for ${baseUrl.origin}: homepage, readiness, encrypted durable capture and signed provider delivery correlation. Inbox placement is not tested.`,
 );
