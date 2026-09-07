@@ -10,7 +10,8 @@ export type ResourceGuide = {
     | "fibre-cement-vs-weatherboard-cladding-adelaide"
     | "load-bearing-wall-removal-adelaide"
     | "steel-frame-vs-timber-frame-walls-adelaide"
-    | "acrylic-render-vs-cement-render-adelaide";
+    | "acrylic-render-vs-cement-render-adelaide"
+    | "second-storey-addition-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -241,6 +242,29 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "24 August 2026",
     readingTime: "9 minute read",
   },
+  {
+    slug: "second-storey-addition-adelaide",
+    serviceSlug: "walling",
+    category: "Second-storey additions",
+    title:
+      "Adding a Second Storey in Adelaide: What Your Existing Walls Need to Confirm First",
+    metaTitle: "Second Storey Addition Adelaide Guide",
+    metaDescription:
+      "Planning a second storey addition in Adelaide? See what your existing walls, footings and approvals should confirm before framing begins.",
+    summary:
+      "A second storey changes the load travelling through every wall and footing below it—see what an Adelaide home should have assessed before an upper-level addition begins.",
+    image: "/images/v2/service-walling-installation.webp",
+    imageAlt:
+      "Installer checking internal steel wall framing with a laser level",
+    imageCaption:
+      "Illustrative wall-framing image. The image does not establish a structural design, temporary propping arrangement or suitability for a particular site.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-09-07",
+    modified: "2026-09-07",
+    publishedDisplay: "7 September 2026",
+    readingTime: "10 minute read",
+  },
 ];
 
 function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
@@ -275,6 +299,9 @@ export const steelVsTimberFramingGuide = guideBySlug(
 );
 export const acrylicVsCementRenderGuide = guideBySlug(
   "acrylic-render-vs-cement-render-adelaide",
+);
+export const secondStoreyAdditionGuide = guideBySlug(
+  "second-storey-addition-adelaide",
 );
 
 /** A short selection for Home; the Resources hub retains every guide. */
