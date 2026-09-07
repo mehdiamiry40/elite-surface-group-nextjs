@@ -54,6 +54,7 @@ export {
   renderingPaintedBrickGuide,
   resourceGuides,
   resourcesHub,
+  secondStoreyAdditionGuide,
   steelVsTimberFramingGuide,
   type ResourceGuide,
 } from "@/content/resources";
