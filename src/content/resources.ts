@@ -11,7 +11,8 @@ export type ResourceGuide = {
     | "load-bearing-wall-removal-adelaide"
     | "steel-frame-vs-timber-frame-walls-adelaide"
     | "acrylic-render-vs-cement-render-adelaide"
-    | "second-storey-addition-adelaide";
+    | "second-storey-addition-adelaide"
+    | "repainting-render-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -265,6 +266,29 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "7 September 2026",
     readingTime: "10 minute read",
   },
+  {
+    slug: "repainting-render-adelaide",
+    serviceSlug: "render",
+    category: "Render maintenance",
+    title:
+      "Repainting Rendered Walls in Adelaide: What to Check Before the First Coat",
+    metaTitle: "Repainting Render in Adelaide",
+    metaDescription:
+      "Repainting render on an Adelaide home? See how to assess the existing surface, deal with cracks and choose a coating that survives local exposure.",
+    summary:
+      "A rendered wall that looks tired is not always ready for paint. See what the existing surface, its cracks and its exposure need to confirm before a recoat is specified.",
+    image: "/images/v2/project-two-storey-exterior-render.webp",
+    imageAlt:
+      "Two-storey residence with a consistent light render finish across the exterior walls",
+    imageCaption:
+      "Elite Surface Group project photograph. The image records a finished render surface and does not establish a particular coating system, age or recoating interval.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-09-08",
+    modified: "2026-09-08",
+    publishedDisplay: "8 September 2026",
+    readingTime: "9 minute read",
+  },
 ];
 
 function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
@@ -303,6 +327,7 @@ export const acrylicVsCementRenderGuide = guideBySlug(
 export const secondStoreyAdditionGuide = guideBySlug(
   "second-storey-addition-adelaide",
 );
+export const repaintingRenderGuide = guideBySlug("repainting-render-adelaide");
 
 /** A short selection for Home; the Resources hub retains every guide. */
 export const featuredResourceGuides = [

@@ -52,6 +52,7 @@ export {
   renderCrackingGuide,
   renderingHebelGuide,
   renderingPaintedBrickGuide,
+  repaintingRenderGuide,
   resourceGuides,
   resourcesHub,
   secondStoreyAdditionGuide,
