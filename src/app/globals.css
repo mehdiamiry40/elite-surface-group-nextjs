@@ -961,77 +961,15 @@ h3 {
   color: var(--white);
 }
 
-.hero__slide {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 1s var(--ease-out);
-}
-
-.hero__slide[data-active="true"] {
-  opacity: 1;
-}
-
-.hero__slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.04);
-  transition: transform 6.5s linear;
-}
-
-.hero__slide[data-active="true"] img {
-  transform: scale(1);
-}
-
-.hero::after {
-  content: none;
-}
-
 .hero__inner {
   position: relative;
   z-index: 2;
   max-width: 740px;
   padding-block: 120px 110px;
-  animation: hero-rise 0.9s var(--ease-out) both;
-}
-
-@keyframes hero-rise {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .hero h1 {
   color: var(--white);
-}
-
-.hero__brand {
-  display: block;
-  margin-bottom: 14px;
-  font-size: clamp(40px, 7vw, 72px);
-  font-weight: 400;
-  letter-spacing: -0.015em;
-  line-height: 1.08;
-  text-transform: none;
-}
-
-.hero__tagline {
-  display: block;
-  max-width: 22ch;
-  color: rgb(255 255 255 / 92%);
-  font-family: var(--font-sans), sans-serif;
-  font-size: clamp(17px, 2.2vw, 22px);
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  line-height: 1.35;
-  text-transform: none;
 }
 
 .hero p {
@@ -1046,67 +984,6 @@ h3 {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-}
-
-.hero__controls {
-  position: absolute;
-  right: max(22px, calc((100vw - var(--shell)) / 2 + var(--gutter)));
-  bottom: 28px;
-  left: auto;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  transform: none;
-}
-
-.hero__dots {
-  display: flex;
-  gap: 8px;
-}
-
-.hero__dots button {
-  /* 10px mark, 24px hit area: the padding is the target, not the ink. */
-  width: 24px;
-  height: 24px;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-  padding: 0;
-}
-
-.hero__dots button::before {
-  content: "";
-  display: block;
-  width: 18px;
-  height: 3px;
-  margin: auto;
-  background: rgb(255 255 255 / 45%);
-  transition:
-    background-color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.hero__dots button[aria-pressed="true"]::before {
-  background: var(--orange);
-  transform: scaleX(1.15);
-}
-
-.hero__pause {
-  min-height: 34px;
-  border: 1px solid rgb(255 255 255 / 55%);
-  border-radius: var(--radius);
-  padding: 5px 12px;
-  background: rgb(0 0 0 / 40%);
-  color: var(--white);
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.hero__pause:hover {
-  border-color: var(--orange);
-  background: var(--orange-dark);
 }
 
 /* ----------------------------------------------------------------- banner */
@@ -2940,21 +2817,6 @@ h3 {
 
   .hero {
     align-items: center;
-    min-height: calc(100svh - 78px);
-  }
-
-  .hero__inner {
-    padding-block: 72px 108px;
-  }
-
-  .hero__brand {
-    font-size: clamp(34px, 11vw, 48px);
-  }
-
-  .hero__controls {
-    right: var(--gutter);
-    left: var(--gutter);
-    justify-content: space-between;
   }
 
   .banner {
@@ -3656,28 +3518,61 @@ h5 {
   object-position: center 53%;
 }
 
+/* The photograph is bright exactly where the copy sits, so contrast is carried
+   by a scrim rather than by the crop. It spans the whole hero on purpose: a
+   panel sized to the copy always shows its own edges over a photograph, which
+   is what the old three-sided white border did. */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(
+      100deg,
+      rgb(4 18 36 / 90%) 0%,
+      rgb(4 18 36 / 84%) 36%,
+      rgb(4 18 36 / 46%) 70%,
+      rgb(4 18 36 / 10%) 100%
+    ),
+    linear-gradient(
+      rgb(4 18 36 / 34%) 0%,
+      rgb(4 18 36 / 0%) 30%,
+      rgb(4 18 36 / 0%) 60%,
+      rgb(4 18 36 / 28%) 100%
+    );
+  pointer-events: none;
+}
+
 .hero__inner {
+  position: relative;
+  z-index: 2;
   max-width: var(--shell);
   padding-block: 92px 88px;
-  animation: none;
 }
 
 .hero__frame {
   position: relative;
   isolation: isolate;
-  max-width: 770px;
-  padding: 54px 52px 54px 0;
+  max-width: 860px;
+  padding: 52px 56px 52px 0;
 }
 
-.hero__frame::before {
+/* A single accent rule instead of a three-sided box: it anchors the copy to
+   the left edge without drawing a hard border across the photograph. */
+.hero__frame::after {
   content: "";
   position: absolute;
-  inset: 0 0 0 -50vw;
-  z-index: -1;
-  border-top: 3px solid rgb(255 255 255 / 86%);
-  border-right: 3px solid rgb(255 255 255 / 86%);
-  border-bottom: 3px solid rgb(255 255 255 / 86%);
-  background: rgb(7 31 61 / 38%);
+  top: 52px;
+  bottom: 52px;
+  left: -20px;
+  width: 3px;
+  background: linear-gradient(
+    var(--orange) 0%,
+    var(--orange) 34%,
+    rgb(255 255 255 / 55%) 34%,
+    rgb(255 255 255 / 12%) 100%
+  );
 }
 
 .hero__eyebrow {
@@ -3694,21 +3589,26 @@ h5 {
 .hero h1 {
   max-width: none;
   color: var(--white);
-  font-size: clamp(46px, 5.2vw, 64px);
-  letter-spacing: -0.015em;
-  line-height: 1.08;
+  font-size: clamp(42px, 4.6vw, 60px);
+  letter-spacing: -0.018em;
+  line-height: 1.06;
+  text-shadow: 0 1px 24px rgb(4 18 36 / 45%);
+  text-wrap: balance;
 }
 
+/* Inline, so `text-wrap: balance` can rebalance across the authored break
+   when a line would otherwise overflow. */
 .hero__headline-line {
-  display: block;
+  display: inline;
 }
 
 .hero p {
-  max-width: 57ch;
-  margin: 25px 0 34px;
-  color: rgb(255 255 255 / 84%);
+  max-width: 56ch;
+  margin: 24px 0 32px;
+  color: rgb(255 255 255 / 92%);
   font-size: 18px;
   line-height: 1.58;
+  text-shadow: 0 1px 16px rgb(4 18 36 / 40%);
 }
 
 .hero__actions {
@@ -3717,7 +3617,7 @@ h5 {
 
 .btn--hero-link {
   border-color: rgb(255 255 255 / 78%);
-  background: transparent;
+  background: rgb(6 26 51 / 30%);
   color: var(--white);
 }
 
@@ -3725,6 +3625,62 @@ h5 {
   border-color: var(--white);
   background: var(--white);
   color: var(--navy);
+}
+
+.hero__call {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 10px;
+  margin-top: 22px;
+  color: rgb(255 255 255 / 90%);
+  font-size: 16px;
+  transition: color 0.2s ease;
+}
+
+.hero__call svg {
+  flex: none;
+  color: var(--orange);
+}
+
+.hero__call strong {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.hero__call:hover {
+  color: var(--white);
+}
+
+.hero__assurances {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 26px;
+  margin: 22px 0 0;
+  padding: 18px 0 0;
+  border-top: 1px solid rgb(255 255 255 / 22%);
+  list-style: none;
+  color: rgb(255 255 255 / 88%);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.hero__assurances li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+/* Tick mark drawn in CSS so the row costs no extra markup or requests. */
+.hero__assurances li::before {
+  content: "";
+  flex: none;
+  width: 7px;
+  height: 12px;
+  border-right: 2px solid var(--orange);
+  border-bottom: 2px solid var(--orange);
+  transform: rotate(42deg) translateY(-1px);
 }
 
 /* proof rail */
@@ -4322,7 +4278,8 @@ h5 {
   }
 
   .hero__frame {
-    max-width: 700px;
+    max-width: 660px;
+    padding-right: 40px;
   }
 
   .home-story__grid,
@@ -4384,36 +4341,79 @@ h5 {
     min-height: calc(100svh - 86px);
   }
 
+  /* The angled scrim is for a wide crop. On a phone it would darken the whole
+     frame, so fall back to a light vertical wash and let the panel below do
+     the work under the copy. */
+  .hero::after {
+    background: linear-gradient(
+      rgb(4 18 36 / 38%) 0%,
+      rgb(4 18 36 / 10%) 32%,
+      rgb(4 18 36 / 0%) 58%
+    );
+  }
+
   .hero__inner {
-    padding-block: 54px;
+    padding-block: 48px 44px;
   }
 
   .hero__frame {
     max-width: none;
-    padding: 34px 0;
+    padding: 30px 0 0;
   }
 
+  /* A phone viewport is too narrow for the angled scrim to separate copy from
+     photograph, so the copy gets a full-bleed panel instead. Edge to edge, and
+     faded at the top, so it still reads as one image rather than a card. */
   .hero__frame::before {
-    inset: 0 -20px;
-    border-left: 0;
+    content: "";
+    position: absolute;
+    inset: -84px calc(var(--gutter) * -1) 0;
+    z-index: -1;
+    background: linear-gradient(
+      rgb(6 26 51 / 0%) 0%,
+      rgb(6 26 51 / 66%) 13%,
+      rgb(6 26 51 / 88%) 100%
+    );
+  }
+
+  .hero__frame::after {
+    display: none;
   }
 
   .hero__eyebrow {
+    margin-bottom: 12px;
     font-size: 13px;
   }
 
   .hero h1 {
-    font-size: clamp(40px, 11vw, 52px);
+    font-size: clamp(34px, 9.4vw, 46px);
     line-height: 1.1;
   }
 
   .hero p {
-    margin-block: 22px 28px;
+    margin-block: 18px 26px;
     font-size: 16px;
   }
 
   .hero__actions {
     max-width: none;
+  }
+
+  .hero__actions .btn {
+    flex: 1 1 210px;
+    justify-content: center;
+  }
+
+  .hero__call {
+    margin-top: 18px;
+    font-size: 15px;
+  }
+
+  .hero__assurances {
+    gap: 8px 18px;
+    margin-top: 18px;
+    padding-top: 16px;
+    font-size: 13px;
   }
 
   .trust-strip__grid {
