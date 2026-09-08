@@ -3530,16 +3530,16 @@ h5 {
   background:
     linear-gradient(
       100deg,
-      rgb(4 18 36 / 90%) 0%,
-      rgb(4 18 36 / 84%) 36%,
-      rgb(4 18 36 / 46%) 70%,
-      rgb(4 18 36 / 10%) 100%
+      rgb(4 18 36 / 74%) 0%,
+      rgb(4 18 36 / 69%) 36%,
+      rgb(4 18 36 / 38%) 70%,
+      rgb(4 18 36 / 8%) 100%
     ),
     linear-gradient(
-      rgb(4 18 36 / 34%) 0%,
+      rgb(4 18 36 / 28%) 0%,
       rgb(4 18 36 / 0%) 30%,
       rgb(4 18 36 / 0%) 60%,
-      rgb(4 18 36 / 28%) 100%
+      rgb(4 18 36 / 23%) 100%
     );
   pointer-events: none;
 }
@@ -3605,7 +3605,7 @@ h5 {
 .hero p {
   max-width: 56ch;
   margin: 24px 0 32px;
-  color: rgb(255 255 255 / 92%);
+  color: var(--white);
   font-size: 18px;
   line-height: 1.58;
   text-shadow: 0 1px 16px rgb(4 18 36 / 40%);
@@ -3660,7 +3660,7 @@ h5 {
   padding: 18px 0 0;
   border-top: 1px solid rgb(255 255 255 / 22%);
   list-style: none;
-  color: rgb(255 255 255 / 88%);
+  color: var(--white);
   font-size: 14px;
   font-weight: 600;
   line-height: 1.35;
@@ -4346,8 +4346,8 @@ h5 {
      the work under the copy. */
   .hero::after {
     background: linear-gradient(
-      rgb(4 18 36 / 38%) 0%,
-      rgb(4 18 36 / 10%) 32%,
+      rgb(4 18 36 / 31%) 0%,
+      rgb(4 18 36 / 8%) 32%,
       rgb(4 18 36 / 0%) 58%
     );
   }
@@ -4378,8 +4378,8 @@ h5 {
     z-index: -1;
     background: linear-gradient(
       rgb(6 26 51 / 0%) 0%,
-      rgb(6 26 51 / 66%) 13%,
-      rgb(6 26 51 / 88%) 100%
+      rgb(6 26 51 / 54%) 13%,
+      rgb(6 26 51 / 72%) 100%
     );
   }
 
