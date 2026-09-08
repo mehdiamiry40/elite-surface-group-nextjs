@@ -9,6 +9,8 @@ import {
 } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons";
 
+const DEFAULT_PER_VIEW = { desktop: 3, tablet: 2, mobile: 1 } as const;
+
 type CarouselProps = {
   label: string;
   children: ReactNode[];
@@ -36,18 +38,20 @@ function visibleFor(
 export default function Carousel({
   label,
   children,
-  perView = { desktop: 3, tablet: 2, mobile: 1 },
+  perView = DEFAULT_PER_VIEW,
 }: CarouselProps) {
   const [rawIndex, setIndex] = useState(0);
   const [visible, setVisible] = useState(perView.desktop);
   const pointerStart = useRef<number | null>(null);
 
+  const { desktop, tablet, mobile } = perView;
   useEffect(() => {
-    const measure = () => setVisible(visibleFor(window.innerWidth, perView));
+    const breakpoints = { desktop, tablet, mobile };
+    const measure = () => setVisible(visibleFor(window.innerWidth, breakpoints));
     measure();
-    window.addEventListener("resize", measure);
+    window.addEventListener("resize", measure, { passive: true });
     return () => window.removeEventListener("resize", measure);
-  }, [perView]);
+  }, [desktop, tablet, mobile]);
 
   const maxIndex = Math.max(0, children.length - visible);
   // Derived rather than synced in an effect: a resize that reduces `maxIndex`
