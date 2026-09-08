@@ -4353,7 +4353,11 @@ h5 {
   }
 
   .hero__inner {
-    padding-block: 48px 44px;
+    /* Shared with the copy panel below, which has to bleed past this padding
+       to reach the bottom edge of the hero. */
+    --hero-pad-bottom: 44px;
+
+    padding-block: 48px var(--hero-pad-bottom);
   }
 
   .hero__frame {
@@ -4363,11 +4367,14 @@ h5 {
 
   /* A phone viewport is too narrow for the angled scrim to separate copy from
      photograph, so the copy gets a full-bleed panel instead. Edge to edge, and
-     faded at the top, so it still reads as one image rather than a card. */
+     faded at the top, so it still reads as one image rather than a card. It
+     runs past the inner padding to the bottom of the section: ending it at the
+     frame left a bright band of bare photograph under the assurances, with a
+     hard edge across the width of the hero. */
   .hero__frame::before {
     content: "";
     position: absolute;
-    inset: -84px calc(var(--gutter) * -1) 0;
+    inset: -84px calc(var(--gutter) * -1) calc(var(--hero-pad-bottom) * -1);
     z-index: -1;
     background: linear-gradient(
       rgb(6 26 51 / 0%) 0%,
