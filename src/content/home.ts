@@ -10,11 +10,21 @@ export const heroSlides = [
 
 export const heroCopy = {
   eyebrow: "Cladding, render, Hebel & walling across Adelaide",
+  /**
+   * Preferred line breaks for the headline. They are hints, not hard breaks —
+   * the h1 balances its own wrapping when a line will not fit.
+   */
   titleLines: [
     "Adelaide cladding, render,",
     "Hebel & walling specialists.",
   ],
   body: "One team for carefully planned, professionally installed walling and exterior finishes—from the first quote through to handover.",
+  /** Short proof points shown under the hero actions. Facts only. */
+  assurances: [
+    "Obligation-free quotes",
+    "Homes, renovations & commercial",
+    business.area,
+  ],
 } as const;
 
 export const trustPoints = [

@@ -2,7 +2,8 @@ import Image, { getImageProps } from "next/image";
 import { preload } from "react-dom";
 import Link from "next/link";
 import QuoteButton from "@/components/QuoteButton";
-import { ArrowRightIcon } from "@/components/icons";
+import { ArrowRightIcon, PhoneIcon } from "@/components/icons";
+import { business } from "@/content/business";
 import { heroCopy, heroSlides } from "@/content/home";
 import { blurProps } from "@/lib/lcp-blur";
 
@@ -70,9 +71,13 @@ export default function Hero() {
             {heroCopy.eyebrow}
           </span>
           <h1>
-            {heroCopy.titleLines.map((line) => (
+            {/* Inline spans, not blocks: the authored break is the preferred
+                one, but a line that no longer fits rebalances instead of
+                overflowing the frame or orphaning its last word. */}
+            {heroCopy.titleLines.map((line, index) => (
               <span className="hero__headline-line" key={line}>
-                {line}{" "}
+                {index > 0 ? " " : null}
+                {line}
               </span>
             ))}
           </h1>
@@ -84,6 +89,19 @@ export default function Hero() {
               <ArrowRightIcon />
             </Link>
           </div>
+          {/* The header hides the phone number below 1024px, so the hero
+              carries the tap-to-call for high-intent mobile visitors. */}
+          <a className="hero__call" href={`tel:${business.phone}`}>
+            <PhoneIcon size={18} />
+            <span>
+              Or call <strong>{business.phoneDisplay}</strong>
+            </span>
+          </a>
+          <ul className="hero__assurances">
+            {heroCopy.assurances.map((assurance) => (
+              <li key={assurance}>{assurance}</li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>
