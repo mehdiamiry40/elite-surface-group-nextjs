@@ -1,7 +1,4 @@
-"use client";
-
-import EnquiryFields from "@/components/EnquiryFields";
-import { useEnquiryForm } from "@/components/useEnquiryForm";
+import EnquiryForm from "@/components/EnquiryForm";
 import { MailIcon, PhoneIcon } from "@/components/icons";
 import { business } from "@/content/business";
 import { contactSection } from "@/content/pages";
@@ -19,8 +16,6 @@ export default function ContactSection({
   intro = contactSection.intro,
   defaultService,
 }: ContactSectionProps) {
-  const { submit, pending, status } = useEnquiryForm();
-
   return (
     <section
       className="section section--contact"
@@ -85,19 +80,7 @@ export default function ContactSection({
               <h3>{contactSection.formTitle}</h3>
               <p>{contactSection.formNote}</p>
             </div>
-            <form
-              className="form form--2col"
-              action="/api/contact/"
-              method="post"
-              onSubmit={submit}
-            >
-              <EnquiryFields
-                idPrefix="contact"
-                pending={pending}
-                status={status}
-                defaultService={defaultService}
-              />
-            </form>
+            <EnquiryForm idPrefix="contact" defaultService={defaultService} />
           </div>
         </div>
       </div>
