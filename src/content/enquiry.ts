@@ -44,6 +44,7 @@ export const enquiryServiceByPath = {
   "/resources/acrylic-render-vs-cement-render-adelaide/": "Render",
   "/resources/second-storey-addition-adelaide/": "Walling",
   "/resources/repainting-render-adelaide/": "Render",
+  "/resources/cladding-over-brick-adelaide/": "Cladding",
 } as const satisfies Readonly<Record<string, string>>;
 
 export function defaultEnquiryService(pathname: string) {

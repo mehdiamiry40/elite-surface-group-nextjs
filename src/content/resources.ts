@@ -12,7 +12,8 @@ export type ResourceGuide = {
     | "steel-frame-vs-timber-frame-walls-adelaide"
     | "acrylic-render-vs-cement-render-adelaide"
     | "second-storey-addition-adelaide"
-    | "repainting-render-adelaide";
+    | "repainting-render-adelaide"
+    | "cladding-over-brick-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -289,6 +290,29 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "8 September 2026",
     readingTime: "9 minute read",
   },
+  {
+    slug: "cladding-over-brick-adelaide",
+    serviceSlug: "cladding",
+    category: "Cladding renovation",
+    title:
+      "Can You Put Cladding Over Brick? What Adelaide Homes Should Confirm First",
+    metaTitle: "Can You Put Cladding Over Brick? Adelaide",
+    metaDescription:
+      "Cladding over brick is possible on many Adelaide homes—see what the wall, battens, cavity and approvals need to confirm before a reclad is quoted.",
+    summary:
+      "Recladding a brick exterior adds weight, a new cavity and a new set of junctions to a wall that was never designed for them. See what an Adelaide home should have assessed before the work is scoped.",
+    image: "/images/v2/service-cladding-installation.webp",
+    imageAlt:
+      "Installer aligning charcoal vertical cladding on a residential exterior wall",
+    imageCaption:
+      "Illustrative cladding image. The image does not establish a batten or cavity detail, a masonry substrate or a fixing method suitable for a particular wall.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-09-10",
+    modified: "2026-09-10",
+    publishedDisplay: "10 September 2026",
+    readingTime: "10 minute read",
+  },
 ];
 
 function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
@@ -328,6 +352,9 @@ export const secondStoreyAdditionGuide = guideBySlug(
   "second-storey-addition-adelaide",
 );
 export const repaintingRenderGuide = guideBySlug("repainting-render-adelaide");
+export const claddingOverBrickGuide = guideBySlug(
+  "cladding-over-brick-adelaide",
+);
 
 /** A short selection for Home; the Resources hub retains every guide. */
 export const featuredResourceGuides = [
