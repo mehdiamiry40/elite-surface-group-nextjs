@@ -242,6 +242,9 @@ Open items that still need a human decision outside the codebase:
 
 - **Operator alerts** — confirm one recipient for `CONTACT_ALERT_TO_EMAIL`,
   its responsible operator and backup, and verify a controlled notification.
+  Until it is set in the Vercel Production environment the five-minute alert
+  cron has nowhere to send, and the delivery watchdog annotates each run with a
+  warning rather than failing it.
 - **Mailbox and historical reconciliation** — the Resend/Upstash/webhook setup
   was activated on 2 September. Provider delivery is not Inbox/Spam placement
   or human follow-up. Confirm the sales mailbox and outstanding pre-cutover
