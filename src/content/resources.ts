@@ -12,7 +12,8 @@ export type ResourceGuide = {
     | "steel-frame-vs-timber-frame-walls-adelaide"
     | "acrylic-render-vs-cement-render-adelaide"
     | "second-storey-addition-adelaide"
-    | "repainting-render-adelaide";
+    | "repainting-render-adelaide"
+    | "salt-damp-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -289,6 +290,29 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "8 September 2026",
     readingTime: "9 minute read",
   },
+  {
+    slug: "salt-damp-adelaide",
+    serviceSlug: "render",
+    category: "Render and moisture",
+    title:
+      "Salt Damp in Adelaide Homes: Why Render Alone Will Not Fix It",
+    metaTitle: "Salt Damp in Adelaide: Can Render Fix It?",
+    metaDescription:
+      "Seeing salt damp on an Adelaide wall? Learn why rendering over it usually makes things worse and what has to be assessed before any repair.",
+    summary:
+      "White powdery deposits and crumbling mortar near the base of a wall point to a moisture source, not a finish problem. See what an older Adelaide home needs assessed before render is considered.",
+    image: "/images/v2/resource-rendering-painted-brick.webp",
+    imageAlt:
+      "Illustrative inspection of a worn area on a white-painted brick exterior",
+    imageCaption:
+      "AI-generated illustration only—not a photograph of an Elite Surface Group project or an actual property. Surface appearance alone cannot confirm a moisture source, a salt damp diagnosis or the condition of the masonry behind a coating.",
+    imageWidth: 1536,
+    imageHeight: 1024,
+    published: "2026-09-09",
+    modified: "2026-09-09",
+    publishedDisplay: "9 September 2026",
+    readingTime: "9 minute read",
+  },
 ];
 
 function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
@@ -328,6 +352,7 @@ export const secondStoreyAdditionGuide = guideBySlug(
   "second-storey-addition-adelaide",
 );
 export const repaintingRenderGuide = guideBySlug("repainting-render-adelaide");
+export const saltDampGuide = guideBySlug("salt-damp-adelaide");
 
 /** A short selection for Home; the Resources hub retains every guide. */
 export const featuredResourceGuides = [

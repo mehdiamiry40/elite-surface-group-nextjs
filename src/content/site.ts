@@ -55,6 +55,7 @@ export {
   repaintingRenderGuide,
   resourceGuides,
   resourcesHub,
+  saltDampGuide,
   secondStoreyAdditionGuide,
   steelVsTimberFramingGuide,
   type ResourceGuide,
