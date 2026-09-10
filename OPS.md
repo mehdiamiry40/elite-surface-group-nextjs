@@ -11,7 +11,7 @@ enquiry is lost.
 | Website | `/` returns HTTP 200 and the Elite Surface Group page | Independent GitHub delivery watchdog |
 | Configuration | `/api/health/` returns HTTP 200 with `status: ready` | Public endpoint; configuration shape only |
 | Durable delivery health | Protected `/api/internal/contact-status/` returns `ok: true` | Worker heartbeat, queue age and delivery reconciliation |
-| Operator notification | `notificationsConfigured: true` and a received controlled alert | Explicit operator mailbox and Resend event; not configuration alone |
+| Operator notification | `notificationsConfigured: true` and a received controlled alert | Explicit operator mailbox and Resend event; not configuration alone. `false` is a watchdog warning annotation, not a run failure |
 | Contact acceptance | `contact.resend.accepted` | Vercel runtime logs |
 | Recipient-server delivery | `contact.resend.webhook.delivered` | Vercel runtime logs and Resend Webhooks |
 | Field performance | LCP, INP and CLS populate after real visits | Vercel Speed Insights |
@@ -121,8 +121,16 @@ status and verify its operator delivery separately.
 The existing `.github/workflows/synthetic-monitor.yml` is now the **Production
 delivery watchdog**: hourly, read-only checks of the homepage, public
 configuration and protected status. It does not send a synthetic email. It
-fails when status is unhealthy or dedicated notifications are unconfigured.
-Enable failed GitHub Actions workflow notifications for the responsible operator.
+fails when the homepage, public configuration or delivery status is unhealthy.
+An unconfigured `CONTACT_ALERT_TO_EMAIL` is annotated as a run warning instead:
+it is a deployment setting that cannot change between runs, so failing on it
+would mail the same unchanged fact every scheduled run until somebody edits the
+Vercel environment, and an operator who learns to ignore a permanently red
+watchdog will also ignore it on the run that reports lost enquiries. Delivery
+stays covered while the recipient is undecided, because this watchdog is itself
+the independent second alert path. Read the run summary, not only the
+conclusion, and enable failed GitHub Actions workflow notifications for the
+responsible operator.
 The manual workflow form has an opt-in `synthetic_proof` checkbox for a controlled
 fixed-recipient delivery verification; it defaults off and is never used by the
 hourly schedule. This lets an authorized operator verify with existing Actions
