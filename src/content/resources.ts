@@ -13,7 +13,8 @@ export type ResourceGuide = {
     | "acrylic-render-vs-cement-render-adelaide"
     | "second-storey-addition-adelaide"
     | "repainting-render-adelaide"
-    | "salt-damp-adelaide";
+    | "salt-damp-adelaide"
+    | "hebel-vs-brick-veneer-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -313,6 +314,29 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "9 September 2026",
     readingTime: "9 minute read",
   },
+  {
+    slug: "hebel-vs-brick-veneer-adelaide",
+    serviceSlug: "hebel",
+    category: "Hebel selection",
+    title:
+      "Hebel or Brick Veneer? What Adelaide Homes Should Compare First",
+    metaTitle: "Hebel vs Brick Veneer for Adelaide Homes",
+    metaDescription:
+      "Choosing between Hebel and brick veneer for an Adelaide build? Compare how each wall is built, insulated, finished and approved before you commit.",
+    summary:
+      "Hebel panels and brick veneer can finish to a similar look from very different walls. See what separates them on an Adelaide site—frame, cavity, weight, coating and who carries the finish.",
+    image: "/images/v2/service-hebel-installation.webp",
+    imageAlt:
+      "Installer checking the vertical alignment of AAC wall panels beside steel framing",
+    imageCaption:
+      "Illustrative wall-system image. The image does not establish a particular Hebel system, panel thickness, framing arrangement or suitability for a given site.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-09-11",
+    modified: "2026-09-11",
+    publishedDisplay: "11 September 2026",
+    readingTime: "10 minute read",
+  },
 ];
 
 function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
@@ -353,6 +377,9 @@ export const secondStoreyAdditionGuide = guideBySlug(
 );
 export const repaintingRenderGuide = guideBySlug("repainting-render-adelaide");
 export const saltDampGuide = guideBySlug("salt-damp-adelaide");
+export const hebelVsBrickVeneerGuide = guideBySlug(
+  "hebel-vs-brick-veneer-adelaide",
+);
 
 /** A short selection for Home; the Resources hub retains every guide. */
 export const featuredResourceGuides = [
