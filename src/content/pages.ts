@@ -121,6 +121,7 @@ export const bannerImages: Record<string, string> = {
     "/images/v2/banner-walling.webp",
   "/resources/repainting-render-adelaide": "/images/v2/banner-render.webp",
   "/resources/salt-damp-adelaide": "/images/v2/banner-render.webp",
+  "/resources/hebel-vs-brick-veneer-adelaide": "/images/v2/banner-hebel.webp",
   "/projects": "/images/v2/banner-projects.webp",
   "/locations": "/images/v2/banner-locations.webp",
   "/locations/adelaide": "/images/v2/banner-locations.webp",

@@ -30,6 +30,11 @@ const cards = [
     category: "RENDER SELECTION",
     lines: ["Acrylic render", "vs cement render"],
   },
+  {
+    slug: "hebel-vs-brick-veneer-adelaide",
+    category: "HEBEL SELECTION",
+    lines: ["Hebel or", "brick veneer?"],
+  },
 ];
 
 const escapeXml = (value) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;");
