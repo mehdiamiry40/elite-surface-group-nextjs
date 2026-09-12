@@ -14,7 +14,8 @@ export type ResourceGuide = {
     | "second-storey-addition-adelaide"
     | "repainting-render-adelaide"
     | "salt-damp-adelaide"
-    | "hebel-vs-brick-veneer-adelaide";
+    | "hebel-vs-brick-veneer-adelaide"
+    | "cladding-over-brick-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -337,6 +338,29 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "11 September 2026",
     readingTime: "10 minute read",
   },
+  {
+    slug: "cladding-over-brick-adelaide",
+    serviceSlug: "cladding",
+    category: "Cladding over masonry",
+    title:
+      "Cladding Over Brick in Adelaide: What the Existing Wall Decides",
+    metaTitle: "Cladding Over Brick in Adelaide",
+    metaDescription:
+      "Planning cladding over brick on an Adelaide home? See what the wall behind it, its cavity, flashings and approvals need to confirm before boards go up.",
+    summary:
+      "Fixing a lightweight system to a brick wall that already sheds water is a different job to cladding a new frame. See what the substrate, its moisture history and every junction settle first.",
+    image: "/images/v2/project-dark-feature-cladding.webp",
+    imageAlt:
+      "Two-storey residence with dark panel cladding around an upper window and garage projection",
+    imageCaption:
+      "Elite Surface Group project photograph. The image records a finished cladding installation and does not establish a particular substrate, batten arrangement or fixing method.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-09-12",
+    modified: "2026-09-12",
+    publishedDisplay: "12 September 2026",
+    readingTime: "9 minute read",
+  },
 ];
 
 function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
@@ -379,6 +403,9 @@ export const repaintingRenderGuide = guideBySlug("repainting-render-adelaide");
 export const saltDampGuide = guideBySlug("salt-damp-adelaide");
 export const hebelVsBrickVeneerGuide = guideBySlug(
   "hebel-vs-brick-veneer-adelaide",
+);
+export const claddingOverBrickGuide = guideBySlug(
+  "cladding-over-brick-adelaide",
 );
 
 /** A short selection for Home; the Resources hub retains every guide. */

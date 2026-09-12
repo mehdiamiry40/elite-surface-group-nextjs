@@ -47,6 +47,7 @@ export {
   acrylicVsCementRenderGuide,
   claddingMaintenanceGuide,
   claddingMaterialComparisonGuide,
+  claddingOverBrickGuide,
   hebelBoundaryWallsGuide,
   hebelVsBrickVeneerGuide,
   loadBearingWallRemovalGuide,
