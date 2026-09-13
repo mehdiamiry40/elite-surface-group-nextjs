@@ -661,9 +661,9 @@ for (const [route, html] of pages) {
   // Every tel: link must be the single E.164 number — no placeholders.
   const telLinks = [...html.matchAll(/href="tel:([^"]+)"/g)].map((m) => m[1]);
   check(`${route} has at least one tel: link`, telLinks.length > 0);
-  const badTel = telLinks.filter((value) => value !== "+61470353225");
+  const badTel = telLinks.filter((value) => value !== "+61413844912");
   check(
-    `${route} tel: links are all +61470353225`,
+    `${route} tel: links are all +61413844912`,
     badTel.length === 0,
     badTel.join(", "),
   );
@@ -1073,7 +1073,7 @@ check(
 check(
   "llms.txt publishes the public business email and phone",
   llmsBody.includes("elite.surfacegroup@gmail.com") &&
-    llmsBody.includes("0470 353 225"),
+    llmsBody.includes("0413 844 912"),
 );
 check(
   "the retired info@ inbox is not published",
@@ -1316,17 +1316,17 @@ check(
 check(
   "the retired phone number is not published",
   ![...pages.values(), llmsBody].some((html) =>
-    /0413 844 912|\+61413844912/.test(html),
+    /0470 353 225|\+61470353225/.test(html),
   ),
 );
 check(
   "every public page publishes the current phone number",
-  [...pages.values()].every((html) => /0470 353 225/.test(html)),
+  [...pages.values()].every((html) => /0413 844 912/.test(html)),
 );
 check(
   "contact page publishes complete local contact details",
   /Contact our Salisbury East team/.test(contactHtml) &&
-    /0470 353 225/.test(contactHtml) &&
+    /0413 844 912/.test(contactHtml) &&
     /elite\.surfacegroup@gmail\.com/.test(contactHtml) &&
     /Adelaide &amp; South Australia/.test(contactHtml),
 );
@@ -1386,7 +1386,7 @@ check(
   "organisation schema publishes the verified local NAP",
   organisationJsonLd?.name === "Elite Surface Group" &&
     organisationJsonLd?.legalName === "Elite Surface Group Pty Ltd" &&
-    organisationJsonLd?.telephone === "+61470353225" &&
+    organisationJsonLd?.telephone === "+61413844912" &&
     organisationJsonLd?.email === "elite.surfacegroup@gmail.com" &&
     organisationJsonLd?.address?.streetAddress === undefined &&
     organisationJsonLd?.address?.postalCode === undefined &&

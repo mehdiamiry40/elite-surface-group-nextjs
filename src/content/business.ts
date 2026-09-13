@@ -5,9 +5,9 @@ export const business = {
   abn: "35 691 074 567",
   tagline: "Adelaide Cladding, Render, Hebel & Walling Specialists",
   /** E.164 for `tel:` hrefs — never hand-write a `tel:` link anywhere else. */
-  phone: "+61470353225",
+  phone: "+61413844912",
   /** Human-readable form of the same number. */
-  phoneDisplay: "0470 353 225",
+  phoneDisplay: "0413 844 912",
   email: "elite.surfacegroup@gmail.com",
   area: "Adelaide & South Australia",
   serviceAreas: [

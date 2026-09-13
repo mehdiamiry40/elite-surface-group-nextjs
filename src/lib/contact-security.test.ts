@@ -202,7 +202,7 @@ describe("contactLog", () => {
 describe("conversion analytics", () => {
   it("classifies contact links without returning their destinations", () => {
     const directions = "https://www.google.com/maps/dir/?api=1&destination=office";
-    assert.equal(contactEventName("tel:+61470353225", directions), "Phone Click");
+    assert.equal(contactEventName("tel:+61413844912", directions), "Phone Click");
     assert.equal(
       contactEventName(
         "mailto:info@example.com?body=private%20enquiry",
