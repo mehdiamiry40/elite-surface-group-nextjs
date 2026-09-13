@@ -32,8 +32,8 @@ function render(overrides: Partial<Parameters<typeof renderProgressiveContactFai
     projectTimingOptions: ["Within 3–6 months", "Just researching"],
     businessName: "Elite Surface Group",
     businessEmail: "elite.surfacegroup@gmail.com",
-    businessPhone: "+61470353225",
-    businessPhoneDisplay: "0470 353 225",
+    businessPhone: "+61413844912",
+    businessPhoneDisplay: "0413 844 912",
     ...overrides,
   });
 }
@@ -78,14 +78,14 @@ describe("progressive queued confirmation", () => {
       message:
         "Thanks—your enquiry has been received and queued for delivery.",
       businessName: "Elite Surface Group",
-      businessPhone: "+61470353225",
-      businessPhoneDisplay: "0470 353 225",
+      businessPhone: "+61413844912",
+      businessPhoneDisplay: "0413 844 912",
     });
 
     assert.match(html, /Your enquiry is safely queued/);
     assert.match(html, /received and queued for delivery/);
     assert.match(html, /You do not need to submit it again/);
-    assert.match(html, /href="tel:\+61470353225"/);
+    assert.match(html, /href="tel:\+61413844912"/);
     assert.doesNotMatch(html, /firstName|submissionId|example\.com/);
     assert.equal(
       progressiveContactHeaders["Cache-Control"],

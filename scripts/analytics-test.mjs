@@ -76,7 +76,7 @@ try {
     );
   });
 
-  await page.getByRole("link", { name: "0470 353 225" }).first().click();
+  await page.getByRole("link", { name: "0413 844 912" }).first().click();
   const queuedEvents = await page.evaluate(
     () => window.__analyticsTestEvents ?? [],
   );
