@@ -15,7 +15,8 @@ export type ResourceGuide = {
     | "repainting-render-adelaide"
     | "salt-damp-adelaide"
     | "hebel-vs-brick-veneer-adelaide"
-    | "cladding-over-brick-adelaide";
+    | "cladding-over-brick-adelaide"
+    | "asbestos-cladding-replacement-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -361,6 +362,29 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "12 September 2026",
     readingTime: "9 minute read",
   },
+  {
+    slug: "asbestos-cladding-replacement-adelaide",
+    serviceSlug: "cladding",
+    category: "Cladding replacement",
+    title:
+      "Replacing Asbestos Cladding in Adelaide: What Has to Happen First",
+    metaTitle: "Replacing Asbestos Cladding in Adelaide",
+    metaDescription:
+      "Replacing asbestos cladding on an Adelaide home? See who is licensed to remove it, what SafeWork SA requires and what the new wall decides.",
+    summary:
+      "Old fibro sheeting has to be identified, removed under licence and disposed of lawfully before any new system is scoped. Here is the order the work runs in, and who carries each part of it.",
+    image: "/images/v2/service-cladding-installation.webp",
+    imageAlt:
+      "Installer aligning charcoal vertical cladding on a residential exterior wall",
+    imageCaption:
+      "Illustrative image of new cladding being installed. It does not depict asbestos material, an asbestos removal area or a cleared substrate, and it does not establish a particular replacement system.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-09-14",
+    modified: "2026-09-14",
+    publishedDisplay: "14 September 2026",
+    readingTime: "10 minute read",
+  },
 ];
 
 function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
@@ -406,6 +430,9 @@ export const hebelVsBrickVeneerGuide = guideBySlug(
 );
 export const claddingOverBrickGuide = guideBySlug(
   "cladding-over-brick-adelaide",
+);
+export const asbestosCladdingReplacementGuide = guideBySlug(
+  "asbestos-cladding-replacement-adelaide",
 );
 
 /** A short selection for Home; the Resources hub retains every guide. */
