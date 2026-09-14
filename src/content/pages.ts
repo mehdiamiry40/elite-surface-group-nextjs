@@ -123,6 +123,8 @@ export const bannerImages: Record<string, string> = {
   "/resources/salt-damp-adelaide": "/images/v2/banner-render.webp",
   "/resources/hebel-vs-brick-veneer-adelaide": "/images/v2/banner-hebel.webp",
   "/resources/cladding-over-brick-adelaide": "/images/v2/banner-cladding.webp",
+  "/resources/asbestos-cladding-replacement-adelaide":
+    "/images/v2/banner-cladding.webp",
   "/projects": "/images/v2/banner-projects.webp",
   "/locations": "/images/v2/banner-locations.webp",
   "/locations/adelaide": "/images/v2/banner-locations.webp",

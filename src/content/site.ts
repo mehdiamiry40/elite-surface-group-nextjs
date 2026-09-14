@@ -45,6 +45,7 @@ export {
 export { projectPlanningPage } from "@/content/project-planning";
 export {
   acrylicVsCementRenderGuide,
+  asbestosCladdingReplacementGuide,
   claddingMaintenanceGuide,
   claddingMaterialComparisonGuide,
   claddingOverBrickGuide,
