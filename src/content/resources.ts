@@ -18,6 +18,7 @@ export type ResourceGuide = {
     | "hebel-vs-brick-veneer-adelaide"
     | "cladding-over-brick-adelaide"
     | "asbestos-cladding-replacement-adelaide"
+    | "soundproofing-walls-adelaide"
     | "cladding-vs-render-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
@@ -411,6 +412,29 @@ export const resourceGuides: readonly ResourceGuide[] = [
     readingTime: "10 minute read",
   },
   {
+    slug: "soundproofing-walls-adelaide",
+    serviceSlug: "walling",
+    category: "Acoustic walling",
+    title:
+      "Soundproofing Walls in Adelaide: What Actually Reduces the Noise You Hear",
+    metaTitle: "Soundproofing Walls in Adelaide",
+    metaDescription:
+      "Soundproofing walls in Adelaide? See what mass, separation and sealing actually change, and what the Code requires between attached homes.",
+    summary:
+      "Acoustic batts on their own rarely quieten a wall. See how mass, separation, sealing and flanking paths decide what carries through, and what a wall between two attached Adelaide dwellings has to achieve.",
+    image: "/images/v2/service-walling-installation.webp",
+    imageAlt:
+      "Installer checking internal steel wall framing with a laser level",
+    imageCaption:
+      "Illustrative wall-framing image. The image does not establish an acoustic system, a tested wall build-up or a sound insulation rating for a particular wall.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-09-16",
+    modified: "2026-09-16",
+    publishedDisplay: "16 September 2026",
+    readingTime: "10 minute read",
+  },
+  {
     slug: "cladding-vs-render-adelaide",
     serviceSlug: "cladding",
     category: "Exterior finish selection",
@@ -484,6 +508,9 @@ export const claddingOverBrickGuide = guideBySlug(
 );
 export const asbestosCladdingReplacementGuide = guideBySlug(
   "asbestos-cladding-replacement-adelaide",
+);
+export const soundproofingWallsGuide = guideBySlug(
+  "soundproofing-walls-adelaide",
 );
 export const claddingVsRenderGuide = guideBySlug("cladding-vs-render-adelaide");
 

@@ -49,6 +49,7 @@ export const enquiryServiceByPath = {
   "/resources/hebel-vs-brick-veneer-adelaide/": "Hebel",
   "/resources/cladding-over-brick-adelaide/": "Cladding",
   "/resources/asbestos-cladding-replacement-adelaide/": "Cladding",
+  "/resources/soundproofing-walls-adelaide/": "Walling",
   "/resources/cladding-vs-render-adelaide/": "Cladding",
 } as const satisfies Readonly<Record<string, string>>;
 
