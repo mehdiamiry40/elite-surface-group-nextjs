@@ -16,7 +16,8 @@ export type ResourceGuide = {
     | "salt-damp-adelaide"
     | "hebel-vs-brick-veneer-adelaide"
     | "cladding-over-brick-adelaide"
-    | "asbestos-cladding-replacement-adelaide";
+    | "asbestos-cladding-replacement-adelaide"
+    | "cladding-vs-render-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -385,6 +386,29 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "14 September 2026",
     readingTime: "10 minute read",
   },
+  {
+    slug: "cladding-vs-render-adelaide",
+    serviceSlug: "cladding",
+    category: "Exterior finish selection",
+    title:
+      "Cladding or Render? Choosing an Exterior Finish for an Adelaide Home",
+    metaTitle: "Cladding vs Render for Adelaide Homes",
+    metaDescription:
+      "Cladding vs render on an Adelaide home? See what the wall behind the finish decides, how each handles local conditions and what to confirm first.",
+    summary:
+      "One finish is bonded to the wall, the other hangs off it, and that single difference drives everything else. See what separates them on an Adelaide site.",
+    image: "/images/v2/project-dark-feature-cladding.webp",
+    imageAlt:
+      "Two-storey residence with dark panel cladding around an upper window and garage projection",
+    imageCaption:
+      "Elite Surface Group project photograph. It records dark panel cladding set against light exterior walls, and does not establish that the adjoining walls are rendered or that either finish suits a particular substrate.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-09-17",
+    modified: "2026-09-17",
+    publishedDisplay: "17 September 2026",
+    readingTime: "9 minute read",
+  },
 ];
 
 function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
@@ -434,6 +458,7 @@ export const claddingOverBrickGuide = guideBySlug(
 export const asbestosCladdingReplacementGuide = guideBySlug(
   "asbestos-cladding-replacement-adelaide",
 );
+export const claddingVsRenderGuide = guideBySlug("cladding-vs-render-adelaide");
 
 /** A short selection for Home; the Resources hub retains every guide. */
 export const featuredResourceGuides = [
