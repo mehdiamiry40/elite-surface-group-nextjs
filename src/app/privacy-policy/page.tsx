@@ -25,8 +25,8 @@ export default function PrivacyPolicyPage() {
       />
 
       <section className="section">
-        <div className="shell">
-          <p>
+        <div className="shell prose">
+          <p className="legal-updated">
             Last updated:{" "}
             <time dateTime={privacyPolicyUpdated}>5 September 2026</time>
           </p>

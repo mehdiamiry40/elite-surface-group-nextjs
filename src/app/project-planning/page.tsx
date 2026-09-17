@@ -6,7 +6,10 @@ import { BreadcrumbSchema, FAQPageSchema } from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { ServiceCards, TickList } from "@/components/sections";
 import { bannerImages } from "@/content/pages";
-import { projectPlanningPage } from "@/content/project-planning";
+import {
+  planningGuides,
+  projectPlanningPage,
+} from "@/content/project-planning";
 import { ogCard, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
@@ -44,52 +47,26 @@ export default function ProjectPlanningPage() {
             What to send with your project enquiry
           </h2>
           <p>{projectPlanningPage.lead}</p>
-          <p>
-            If an existing rendered wall is cracked, first read our{" "}
-            <Link href="/resources/render-cracking-adelaide/">
-              Adelaide render-cracking guide
-            </Link>{" "}
-            for what to record and when another professional may need to assess
-            the building before a repair is scoped.
-          </p>
-          <p>
-            For a new cladding or facade-replacement enquiry near Adelaide’s
-            coast, use our{" "}
-            <Link href="/resources/cladding-maintenance-coastal-adelaide/">
-              coastal cladding maintenance guide
-            </Link>{" "}
-            to identify the proposed product, site exposure, unwashed areas and
-            future access questions worth resolving before installation.
-          </p>
-          <p>
-            If a Hebel wall will receive a rendered or coated finish, review
-            our{" "}
-            <Link href="/resources/rendering-hebel-panels-adelaide/">
-              guide to rendering Hebel panels
-            </Link>{" "}
-            for the system documents, movement details, coating specification
-            and trade responsibilities that should be clear before work begins.
-          </p>
-          <p>
-            For a wall on or near an allotment boundary, use our{" "}
-            <Link href="/resources/hebel-boundary-walls-adelaide/">
-              Adelaide Hebel boundary-wall planning guide
-            </Link>{" "}
-            to distinguish the wall configuration, identify the approved system
-            documents and coordinate access, sequencing, interfaces and
-            professional responsibilities before requesting an installation
-            quote.
-          </p>
-          <p>
-            For an existing painted-brick exterior, use our {" "}
-            <Link href="/resources/rendering-over-painted-brick-adelaide/">
-              guide to rendering over painted brick
-            </Link>{" "}
-            to record the coating history, visible wall condition, safety
-            questions and preparation assumptions that need to be resolved
-            before a finish is specified.
-          </p>
           <TickList items={projectPlanningPage.enquiryDetails} />
+
+          <h3 id="planning-guides">Start with the guide that matches your wall</h3>
+          <p>
+            Five situations come up often enough to have their own guide. Each
+            one lists what to record before an enquiry is worth sending.
+          </p>
+          <dl className="planning-guides">
+            {planningGuides.map((guide) => (
+              <div key={guide.href} className="planning-guides__item">
+                <dt>
+                  <Link href={guide.href}>{guide.label}</Link>
+                </dt>
+                <dd>
+                  <strong>{guide.when}</strong> {guide.covers}
+                </dd>
+              </div>
+            ))}
+          </dl>
+
           <p>
             If you are still comparing options, start with the outcome you want
             and the information you already have. Explore our{" "}
