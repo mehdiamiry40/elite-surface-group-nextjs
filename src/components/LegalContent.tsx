@@ -7,7 +7,7 @@ export default function LegalContent({
   blocks: readonly LegalBlock[];
 }) {
   return (
-    <div className="prose">
+    <>
       {blocks.map((block, index) => {
         if (block.type === "heading") {
           return <h2 key={`heading-${index}`}>{block.text}</h2>;
@@ -45,6 +45,6 @@ export default function LegalContent({
           </ul>
         );
       })}
-    </div>
+    </>
   );
 }

@@ -56,3 +56,49 @@ export const projectPlanningPage = {
     },
   ],
 } as const;
+
+/**
+ * The five enquiries that come up often enough to have their own guide.
+ *
+ * These were five near-identical paragraphs on the planning page. Nobody reads
+ * five paragraphs that all open with "For a…, use our…", so the trigger
+ * condition and what the guide resolves are now separate fields and the page
+ * renders them as a scannable list.
+ */
+export const planningGuides = [
+  {
+    href: "/resources/render-cracking-adelaide/",
+    label: "Adelaide render-cracking guide",
+    when: "An existing rendered wall is cracked.",
+    covers:
+      "What to record, and when another professional may need to assess the building before a repair is scoped.",
+  },
+  {
+    href: "/resources/cladding-maintenance-coastal-adelaide/",
+    label: "Coastal cladding maintenance guide",
+    when: "New cladding or a facade replacement near the coast.",
+    covers:
+      "Identifying the proposed product, site exposure, unwashed areas and future access questions worth resolving before installation.",
+  },
+  {
+    href: "/resources/rendering-hebel-panels-adelaide/",
+    label: "Guide to rendering Hebel panels",
+    when: "A Hebel wall will receive a rendered or coated finish.",
+    covers:
+      "The system documents, movement details, coating specification and trade responsibilities that should be clear before work begins.",
+  },
+  {
+    href: "/resources/hebel-boundary-walls-adelaide/",
+    label: "Adelaide Hebel boundary-wall planning guide",
+    when: "A wall sits on or near an allotment boundary.",
+    covers:
+      "Distinguishing the wall configuration, identifying the approved system documents, and coordinating access, sequencing, interfaces and professional responsibilities before an installation quote.",
+  },
+  {
+    href: "/resources/rendering-over-painted-brick-adelaide/",
+    label: "Guide to rendering over painted brick",
+    when: "An existing painted-brick exterior is being rendered.",
+    covers:
+      "Recording the coating history, visible wall condition, safety questions and preparation assumptions that need resolving before a finish is specified.",
+  },
+] as const;

@@ -94,7 +94,7 @@ export default async function LocationPage({ params }: PageProps) {
             quote or professional assessment.
           </p>
           <nav
-            className="article-related"
+            className="guide-links"
             aria-label={`${location.name} wall-system guides`}
           >
             {resourceGuides.map((guide) => (
@@ -106,7 +106,9 @@ export default async function LocationPage({ params }: PageProps) {
                 {guide.metaTitle}
               </Link>
             ))}
-            <Link href="/resources/">View all resources</Link>
+            <Link className="guide-links__all" href="/resources/">
+              View all resources
+            </Link>
           </nav>
           <h3>What you can expect</h3>
           <TickList items={location.proof} />
@@ -117,14 +119,13 @@ export default async function LocationPage({ params }: PageProps) {
                 Explore photographed render and cladding details from our
                 portfolio. Individual project addresses are not published.
               </p>
-              <ul className="plain-link-list">
+              <ul className="plain-link-list plain-link-list--described">
                 {projects.map((project) => (
                   <li key={project.slug}>
                     <Link href={`/projects/${project.slug}/`}>
                       {project.title}
                     </Link>
-                    {" — "}
-                    {project.summary}
+                    <span>{project.summary}</span>
                   </li>
                 ))}
               </ul>

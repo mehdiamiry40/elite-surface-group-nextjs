@@ -25,7 +25,7 @@ export default function TermsOfServicePage() {
       />
 
       <section className="section">
-        <div className="shell">
+        <div className="shell prose">
           <LegalContent blocks={termsOfService} />
         </div>
       </section>
