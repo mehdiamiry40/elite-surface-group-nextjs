@@ -62,6 +62,7 @@ export {
   resourcesHub,
   saltDampGuide,
   secondStoreyAdditionGuide,
+  soundproofingWallsGuide,
   steelVsTimberFramingGuide,
   type ResourceGuide,
 } from "@/content/resources";
