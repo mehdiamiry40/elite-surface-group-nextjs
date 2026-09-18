@@ -19,7 +19,8 @@ export type ResourceGuide = {
     | "cladding-over-brick-adelaide"
     | "asbestos-cladding-replacement-adelaide"
     | "soundproofing-walls-adelaide"
-    | "cladding-vs-render-adelaide";
+    | "cladding-vs-render-adelaide"
+    | "render-finishes-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -457,6 +458,28 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "17 September 2026",
     readingTime: "9 minute read",
   },
+  {
+    slug: "render-finishes-adelaide",
+    serviceSlug: "render",
+    category: "Render finishes",
+    title:
+      "Render Finishes in Adelaide: Which Texture Suits the Wall You Have?",
+    metaTitle: "Render Finishes for Adelaide Homes",
+    metaDescription:
+      "Choosing render finishes for an Adelaide home? See how texture grade changes crack visibility, cleaning, coastal wear and the coating over it.",
+    summary:
+      "Smooth, sand float and coarse texture are not only a look. The grade decides how much of the wall behind it disappears, how often the surface needs washing and how a future patch will blend.",
+    image: "/images/v2/project-curved-render-detail.webp",
+    imageAlt: "Curved rendered upper wall with an even light finish",
+    imageCaption:
+      "Elite Surface Group project photograph. It records one finished render surface and does not establish a particular texture grade, coating system or colour.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-09-18",
+    modified: "2026-09-18",
+    publishedDisplay: "18 September 2026",
+    readingTime: "8 minute read",
+  },
 ];
 
 function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
@@ -513,6 +536,7 @@ export const soundproofingWallsGuide = guideBySlug(
   "soundproofing-walls-adelaide",
 );
 export const claddingVsRenderGuide = guideBySlug("cladding-vs-render-adelaide");
+export const renderFinishesGuide = guideBySlug("render-finishes-adelaide");
 
 /** A short selection for Home; the Resources hub retains every guide. */
 export const featuredResourceGuides = [
