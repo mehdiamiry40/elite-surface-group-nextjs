@@ -42,6 +42,7 @@ export const enquiryServiceByPath = {
   "/resources/load-bearing-wall-removal-adelaide/": "Walling",
   "/resources/steel-frame-vs-timber-frame-walls-adelaide/": "Walling",
   "/resources/acrylic-render-vs-cement-render-adelaide/": "Render",
+  "/resources/vertical-vs-horizontal-cladding-adelaide/": "Cladding",
   "/resources/second-storey-addition-adelaide/": "Walling",
   "/resources/repainting-render-adelaide/": "Render",
   "/resources/salt-damp-adelaide/": "Render",
