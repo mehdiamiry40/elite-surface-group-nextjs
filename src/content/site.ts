@@ -55,6 +55,7 @@ export {
   hebelVsBrickVeneerGuide,
   loadBearingWallRemovalGuide,
   renderCrackingGuide,
+  renderFinishesGuide,
   renderingHebelGuide,
   renderingPaintedBrickGuide,
   repaintingRenderGuide,
