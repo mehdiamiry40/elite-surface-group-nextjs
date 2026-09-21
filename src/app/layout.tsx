@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Archivo } from "next/font/google";
+import { Figtree } from "next/font/google";
 import ConversionAnalytics from "@/components/ConversionAnalytics";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
@@ -10,10 +10,9 @@ import { absoluteUrl, DEFAULT_OG_IMAGE } from "@/lib/seo";
 import "./globals.css";
 
 // Self-hosted at build time, so the site makes no request to Google's CDN.
-// One variable family still carries the whole page, but a grotesque with a
-// usable weight range does the job a geometric sans could not: hierarchy comes
-// from weight and tracking rather than from ever-larger light headings.
-const sans = Archivo({
+// A single variable family keeps the hierarchy calm and human while avoiding
+// duplicate font downloads for a heading face that was visually overridden.
+const sans = Figtree({
   subsets: ["latin"],
   weight: "variable",
   display: "swap",
