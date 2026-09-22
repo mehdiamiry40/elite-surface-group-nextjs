@@ -287,8 +287,8 @@ export default function ExternalWallInsulationGuidePage() {
               </p>
               <p className="article-source">
                 Sources:{" "}
-                <a href="https://www.abcb.gov.au/resources/climate-zone-map">
-                  ABCB climate zone map
+                <a href="https://www.abcb.gov.au/resource/map/climate-zone-map-sa">
+                  ABCB climate zone map for South Australia
                 </a>
                 ,{" "}
                 <a href="https://plan.sa.gov.au/news/article/2023/new-building-standards-to-improve-home-accessibility-and-energy-efficiency">
@@ -492,8 +492,8 @@ export default function ExternalWallInsulationGuidePage() {
                     management
                   </a>{" "}
                   and the{" "}
-                  <a href="https://www.abcb.gov.au/resources/climate-zone-map">
-                    climate zone map
+                  <a href="https://www.abcb.gov.au/resource/map/climate-zone-map-sa">
+                    South Australian climate zone map
                   </a>
                 </dd>
               </div>
