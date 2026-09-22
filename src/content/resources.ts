@@ -20,7 +20,8 @@ export type ResourceGuide = {
     | "asbestos-cladding-replacement-adelaide"
     | "soundproofing-walls-adelaide"
     | "cladding-vs-render-adelaide"
-    | "render-finishes-adelaide";
+    | "render-finishes-adelaide"
+    | "external-wall-insulation-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -480,6 +481,29 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "18 September 2026",
     readingTime: "8 minute read",
   },
+  {
+    slug: "external-wall-insulation-adelaide",
+    serviceSlug: "walling",
+    category: "Wall thermal performance",
+    title:
+      "External Wall Insulation in Adelaide: What the Whole Wall Decides",
+    metaTitle: "External Wall Insulation in Adelaide",
+    metaDescription:
+      "Planning external wall insulation in Adelaide? See what the whole wall build-up decides, what 7-star changed here, and what to confirm first.",
+    summary:
+      "A batt between the studs is one layer in a wall that performs as a system. See how the frame, the cavity, the membrane and the finish over them set the total R-value an Adelaide wall actually achieves.",
+    image: "/images/v2/service-walling-installation.webp",
+    imageAlt:
+      "Installer checking internal steel wall framing with a laser level",
+    imageCaption:
+      "Illustrative wall-framing image. The image does not establish an insulation product, a tested wall build-up or a total R-value for a particular wall.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-09-22",
+    modified: "2026-09-22",
+    publishedDisplay: "22 September 2026",
+    readingTime: "10 minute read",
+  },
 ];
 
 function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
@@ -537,6 +561,9 @@ export const soundproofingWallsGuide = guideBySlug(
 );
 export const claddingVsRenderGuide = guideBySlug("cladding-vs-render-adelaide");
 export const renderFinishesGuide = guideBySlug("render-finishes-adelaide");
+export const externalWallInsulationGuide = guideBySlug(
+  "external-wall-insulation-adelaide",
+);
 
 /** A short selection for Home; the Resources hub retains every guide. */
 export const featuredResourceGuides = [

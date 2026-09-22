@@ -51,6 +51,7 @@ export {
   claddingOrientationGuide,
   claddingOverBrickGuide,
   claddingVsRenderGuide,
+  externalWallInsulationGuide,
   hebelBoundaryWallsGuide,
   hebelVsBrickVeneerGuide,
   loadBearingWallRemovalGuide,
