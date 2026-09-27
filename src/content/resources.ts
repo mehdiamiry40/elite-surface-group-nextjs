@@ -21,7 +21,8 @@ export type ResourceGuide = {
     | "soundproofing-walls-adelaide"
     | "cladding-vs-render-adelaide"
     | "render-finishes-adelaide"
-    | "external-wall-insulation-adelaide";
+    | "external-wall-insulation-adelaide"
+    | "bushfire-rated-cladding-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -504,6 +505,29 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "22 September 2026",
     readingTime: "10 minute read",
   },
+  {
+    slug: "bushfire-rated-cladding-adelaide",
+    serviceSlug: "cladding",
+    category: "Cladding and bushfire",
+    title:
+      "Bushfire-Rated Cladding in Adelaide: What the BAL Decides Before You Choose",
+    metaTitle: "Bushfire Rated Cladding in Adelaide",
+    metaDescription:
+      "Building or re-cladding in the Adelaide Hills? See how the BAL shapes bushfire rated cladding, who sets it, and what to confirm before choosing.",
+    summary:
+      "In a bushfire overlay, the site's attack level comes first and the cladding follows. See how South Australia sets that level and why the whole wall, not just the board, has to answer to it.",
+    image: "/images/v2/service-cladding-installation.webp",
+    imageAlt:
+      "Installer aligning charcoal vertical cladding on a residential exterior wall",
+    imageCaption:
+      "Illustrative cladding image. The image does not establish a cladding product, a Bushfire Attack Level or bushfire compliance for a particular wall.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-09-27",
+    modified: "2026-09-27",
+    publishedDisplay: "27 September 2026",
+    readingTime: "6 minute read",
+  },
 ];
 
 function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
@@ -563,6 +587,9 @@ export const claddingVsRenderGuide = guideBySlug("cladding-vs-render-adelaide");
 export const renderFinishesGuide = guideBySlug("render-finishes-adelaide");
 export const externalWallInsulationGuide = guideBySlug(
   "external-wall-insulation-adelaide",
+);
+export const bushfireRatedCladdingGuide = guideBySlug(
+  "bushfire-rated-cladding-adelaide",
 );
 
 /** A short selection for Home; the Resources hub retains every guide. */
