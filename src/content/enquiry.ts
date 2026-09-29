@@ -53,6 +53,7 @@ export const enquiryServiceByPath = {
   "/resources/cladding-vs-render-adelaide/": "Cladding",
   "/resources/render-finishes-adelaide/": "Render",
   "/resources/external-wall-insulation-adelaide/": "Walling",
+  "/resources/rendering-besser-block-walls-adelaide/": "Render",
 } as const satisfies Readonly<Record<string, string>>;
 
 export function defaultEnquiryService(pathname: string) {
