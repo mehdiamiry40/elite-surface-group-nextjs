@@ -21,7 +21,8 @@ export type ResourceGuide = {
     | "soundproofing-walls-adelaide"
     | "cladding-vs-render-adelaide"
     | "render-finishes-adelaide"
-    | "external-wall-insulation-adelaide";
+    | "external-wall-insulation-adelaide"
+    | "bagged-brick-vs-render-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -504,6 +505,29 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "22 September 2026",
     readingTime: "10 minute read",
   },
+  {
+    slug: "bagged-brick-vs-render-adelaide",
+    serviceSlug: "render",
+    category: "Brick finishes",
+    title:
+      "Bagged Brick or Render? What Each Does to an Adelaide Brick Wall",
+    metaTitle: "Bagged Brick vs Render in Adelaide",
+    metaDescription:
+      "Deciding between bagged brick and render in Adelaide? See what each leaves of the brick, what bagging can't hide and what to check first.",
+    summary:
+      "Bagging keeps the brick pattern under a thin coat; render buries it under a full one. The wall you already have usually decides which is realistic before taste does.",
+    image: "/images/v2/resource-rendering-painted-brick.webp",
+    imageAlt:
+      "Illustrative inspection of a worn area on a white-painted brick exterior",
+    imageCaption:
+      "AI-generated illustration only—not a photograph of an Elite Surface Group project or an actual property. It shows painted brick, not a bagged or rendered finish, and surface appearance alone cannot confirm the condition of the masonry or a suitable coating system.",
+    imageWidth: 1536,
+    imageHeight: 1024,
+    published: "2026-10-01",
+    modified: "2026-10-01",
+    publishedDisplay: "1 October 2026",
+    readingTime: "7 minute read",
+  },
 ];
 
 function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
@@ -563,6 +587,9 @@ export const claddingVsRenderGuide = guideBySlug("cladding-vs-render-adelaide");
 export const renderFinishesGuide = guideBySlug("render-finishes-adelaide");
 export const externalWallInsulationGuide = guideBySlug(
   "external-wall-insulation-adelaide",
+);
+export const baggedBrickVsRenderGuide = guideBySlug(
+  "bagged-brick-vs-render-adelaide",
 );
 
 /** A short selection for Home; the Resources hub retains every guide. */

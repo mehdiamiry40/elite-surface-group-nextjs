@@ -132,6 +132,7 @@ export const bannerImages: Record<string, string> = {
   "/resources/render-finishes-adelaide": "/images/v2/banner-render.webp",
   "/resources/external-wall-insulation-adelaide":
     "/images/v2/banner-walling.webp",
+  "/resources/bagged-brick-vs-render-adelaide": "/images/v2/banner-render.webp",
   "/projects": "/images/v2/banner-projects.webp",
   "/locations": "/images/v2/banner-locations.webp",
   "/locations/adelaide": "/images/v2/banner-locations.webp",
