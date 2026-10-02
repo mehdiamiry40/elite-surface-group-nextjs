@@ -55,6 +55,7 @@ export {
   hebelBoundaryWallsGuide,
   hebelVsBrickVeneerGuide,
   loadBearingWallRemovalGuide,
+  partitionWallsGuide,
   renderCrackingGuide,
   renderFinishesGuide,
   renderingHebelGuide,
