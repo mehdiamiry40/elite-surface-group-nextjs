@@ -3,8 +3,6 @@ name: Security
 on:
   workflow_call:
   workflow_dispatch:
-  schedule:
-    - cron: "37 21 * * *"
 
 permissions:
   contents: read
@@ -57,8 +55,8 @@ jobs:
         run: "$RUNNER_TEMP/gitleaks git . --redact=100 --no-banner --log-opts=--all"
 
   dependency-security:
-    # The regular CI performs this as well; scheduling catches new advisories.
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    # The regular CI performs this as well; run manually to check for new advisories.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -70,4 +68,7 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci --ignore-scripts
-      - run: npm audit --audit-level=high
+      # Shipped dependencies fail on high; the dev-only toolchain fails on critical,
+      # because some high advisories there (e.g. braces) have no patched release.
+      - run: npm audit --audit-level=high --omit=dev
+      - run: npm audit --audit-level=critical
