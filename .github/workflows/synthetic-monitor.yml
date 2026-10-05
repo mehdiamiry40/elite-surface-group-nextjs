@@ -1,10 +1,7 @@
 name: Production delivery watchdog
 
 on:
-  schedule:
-    # Independent, read-only fallback. Vercel owns the timely worker and
-    # synthetic schedules; a delayed GitHub run is never the delivery clock.
-    - cron: "43 * * * *"
+  # Manual only. Vercel owns the timely worker and synthetic schedules.
   workflow_dispatch:
     inputs:
       synthetic_proof:

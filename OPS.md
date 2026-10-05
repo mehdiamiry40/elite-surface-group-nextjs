@@ -119,12 +119,12 @@ required, connect an independently hosted uptime/dead-man monitor to protected
 status and verify its operator delivery separately.
 
 The existing `.github/workflows/synthetic-monitor.yml` is now the **Production
-delivery watchdog**: hourly, read-only checks of the homepage, public
+delivery watchdog**: manually dispatched, read-only checks of the homepage, public
 configuration and protected status. It does not send a synthetic email. It
 fails when the homepage, public configuration or delivery status is unhealthy.
 An unconfigured `CONTACT_ALERT_TO_EMAIL` is annotated as a run warning instead:
 it is a deployment setting that cannot change between runs, so failing on it
-would mail the same unchanged fact every scheduled run until somebody edits the
+would mail the same unchanged fact every run until somebody edits the
 Vercel environment, and an operator who learns to ignore a permanently red
 watchdog will also ignore it on the run that reports lost enquiries. Delivery
 stays covered while the recipient is undecided, because this watchdog is itself

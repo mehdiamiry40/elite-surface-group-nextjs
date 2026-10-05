@@ -13,8 +13,8 @@
  *
  * Deliberately NOT part of `npm run smoke`. Smoke runs on every pull request
  * and must stay deterministic; this reaches 40-odd third-party hosts, so a
- * single unrelated outage would block unrelated work. It runs on a schedule
- * instead (see .github/workflows/link-check.yml) and on demand.
+ * single unrelated outage would block unrelated work. It runs on demand
+ * instead (see .github/workflows/link-check.yml).
  *
  * Exits non-zero only for links that are definitively gone (404/410). Hosts
  * that block automated clients, rate-limit, or time out are reported and
