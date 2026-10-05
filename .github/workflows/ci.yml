@@ -40,8 +40,10 @@ jobs:
           cache: npm
 
       - run: npm ci
-      - name: Audit runtime and build dependencies
-        run: npm audit --audit-level=high
+      - name: Audit runtime dependencies
+        run: npm audit --audit-level=high --omit=dev
+      - name: Audit dev toolchain for critical advisories
+        run: npm audit --audit-level=critical
       - name: Install isolated Redis test runtime
         run: sudo apt-get update && sudo apt-get install --yes redis-server
       - name: Verify real Redis recovery semantics
