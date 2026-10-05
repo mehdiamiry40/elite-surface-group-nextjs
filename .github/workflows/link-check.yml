@@ -1,14 +1,10 @@
 name: Link check
 
 # The resource guides cite primary manufacturer and South Australian government
-# documents, and those move without telling anyone. This runs on a schedule
+# documents, and those move without telling anyone. This runs on demand
 # rather than per pull request: it reaches 40-odd third-party hosts, so wiring
 # it into CI would let one unrelated outage block unrelated work.
 on:
-  schedule:
-    # Mondays 20:00 UTC — Tuesday morning in Adelaide, so a dead link is waiting
-    # at the start of the week rather than discovered mid-change.
-    - cron: "0 20 * * 1"
   workflow_dispatch:
 
 permissions:
@@ -32,6 +28,6 @@ jobs:
         with:
           node-version-file: .nvmrc
 
-      # No `npm ci`: the checker uses only Node builtins, so the scheduled job
+      # No `npm ci`: the checker uses only Node builtins, so the job
       # neither waits on an install nor pulls dependencies it does not need.
       - run: npm run link-check

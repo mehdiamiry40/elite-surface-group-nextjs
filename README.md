@@ -191,8 +191,8 @@ them would train everyone to ignore the check. Redirects are reported too: not
 a failure, but a permanent move is worth writing into the citation while it is
 known.
 
-It runs weekly rather than per pull request (`.github/workflows/link-check.yml`,
-also runnable on demand from the Actions tab). Reaching 40-odd third-party hosts
+It runs on demand rather than per pull request (`.github/workflows/link-check.yml`,
+from the Actions tab). Reaching 40-odd third-party hosts
 on every pull request would let one unrelated outage block unrelated work.
 
 ## Contributing
