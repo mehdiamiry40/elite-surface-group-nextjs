@@ -4,8 +4,7 @@ updates:
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: weekly
-      day: monday
+      interval: monthly
       time: "20:00"
       timezone: Australia/Adelaide
     open-pull-requests-limit: 5
@@ -39,8 +38,7 @@ updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
-      day: monday
+      interval: monthly
       time: "20:00"
       timezone: Australia/Adelaide
     open-pull-requests-limit: 5
