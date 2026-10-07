@@ -66,10 +66,6 @@ export default function Hero() {
 
       <div className="shell hero__inner">
         <div className="hero__frame">
-          <span className="hero__eyebrow">
-            <span aria-hidden="true" />
-            {heroCopy.eyebrow}
-          </span>
           <h1>
             {/* Inline spans, not blocks: the authored break is the preferred
                 one, but a line that no longer fits rebalances instead of
@@ -97,11 +93,6 @@ export default function Hero() {
               Or call <strong>{business.phoneDisplay}</strong>
             </span>
           </a>
-          <ul className="hero__assurances">
-            {heroCopy.assurances.map((assurance) => (
-              <li key={assurance}>{assurance}</li>
-            ))}
-          </ul>
         </div>
       </div>
     </section>

@@ -3,15 +3,14 @@ import { business } from "@/content/business";
 export const contactSection = {
   eyebrow: "Project enquiries",
   title: "Tell us about your project.",
-  intro:
-    "Share the suburb, property type and work you have in mind. We’ll review the details and follow up about the next step.",
+  intro: "Share the suburb and the work you have in mind.",
   formTitle: "Project details",
-  formNote: "A few useful details will help us understand and price the work.",
+  formNote: "A few details help us price the work.",
 } as const;
 
 export const ctaBand = {
   title: "Ready to move your project forward?",
-  body: "Tell us what work you have in mind and what plans or photos are available. If supporting files are needed, we’ll arrange how to review them.",
+  body: "Tell us the work and what plans or photos you have.",
   note: "Quotes are obligation-free.",
   background: "/images/v2/cta-render-action.webp",
 } as const;
