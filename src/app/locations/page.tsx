@@ -85,7 +85,7 @@ export default function LocationsPage() {
       </section>
 
       <ServiceCards
-        title="Services available across our confirmed coverage area"
+        title="Services in our coverage area"
       />
 
       <CtaBand />

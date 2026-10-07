@@ -30,7 +30,6 @@ export default function AboutPage() {
         <div className="shell">
           <div className="section-head">
             <h2 id="about-title">{aboutPage.title}</h2>
-            <p>{aboutPage.lead}</p>
             <p>{aboutPage.identity}</p>
           </div>
 
@@ -49,16 +48,11 @@ export default function AboutPage() {
           </Carousel>
 
           <div className="prose" style={{ marginTop: 48 }}>
-            {aboutPage.body.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-            <p>{aboutPage.prideLead}</p>
             <div className="grid grid--2">
               {aboutPage.pride.map((column) => (
                 <TickList key={column[0]} items={column} />
               ))}
             </div>
-            <p style={{ marginTop: 24 }}>{aboutPage.closing}</p>
           </div>
         </div>
       </section>

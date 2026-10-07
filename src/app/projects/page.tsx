@@ -36,26 +36,16 @@ export default function ProjectsPage() {
           <SectionHead
             eyebrow={featuredProjects.eyebrow}
             title="A closer look at our work"
-            intro={featuredProjects.intro}
             id="projects-title"
           />
           <div className="prose projects-context">
             <p>
-              These image-backed residential case studies record the project
-              type, visible finish and construction details shown in our render
-              and cladding portfolio.
-            </p>
-            <p>
-              We publish only the level of location and product detail available
-              for each project. Exact addresses, systems and dates are omitted
-              where they are not part of the public project record.
-            </p>
-            <p>
-              Explore our <Link href="/render/">rendering services</Link> and{" "}
-              <Link href="/cladding/">cladding and facade installation</Link>,
-              check the <Link href="/locations/adelaide/">Adelaide service area</Link>,
-              or use the <Link href="/project-planning/">project planning guide</Link>{" "}
-              before requesting a quote.
+              Exact addresses, systems and dates are omitted where they are not
+              part of the public project record. See{" "}
+              <Link href="/render/">render</Link>,{" "}
+              <Link href="/cladding/">cladding</Link>,{" "}
+              <Link href="/locations/adelaide/">Adelaide</Link> or the{" "}
+              <Link href="/project-planning/">planning guide</Link>.
             </p>
           </div>
           <ProjectGallery items={projectCards} />

@@ -2336,12 +2336,6 @@ h3 {
   font-size: 16px;
 }
 
-.planning-guides dd strong {
-  display: block;
-  margin-bottom: 4px;
-  color: var(--ink);
-  font-weight: 600;
-}
 
 @media (max-width: 767px) {
   .planning-guides__item {

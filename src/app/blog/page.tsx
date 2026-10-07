@@ -53,7 +53,6 @@ export default function BlogPage() {
           <SectionHead
             eyebrow="Latest article"
             title="Practical knowledge for better project decisions"
-            intro="Clear, useful guidance about wall systems, surface finishes and the details worth confirming before work begins."
             id="latest-guidance-title"
           />
 
@@ -104,7 +103,6 @@ export default function BlogPage() {
           <SectionHead
             eyebrow="From the site notebook"
             title="More advice and project guides"
-            intro="Browse practical articles covering material selection, common wall and render questions, maintenance and pre-construction planning."
             id="all-articles-title"
           />
 
@@ -169,11 +167,6 @@ export default function BlogPage() {
             <h2>Turn what you know into a clearer scope.</h2>
           </div>
           <div>
-            <p>
-              Use the planning guide to gather the site details, photos, drawings
-              and programme information that make an early project conversation
-              more useful.
-            </p>
             <Link className="text-link" href="/project-planning/">
               Open the project-planning guide
               <ArrowRightIcon />

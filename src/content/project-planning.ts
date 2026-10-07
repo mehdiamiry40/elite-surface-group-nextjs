@@ -3,32 +3,31 @@ export const projectPlanningPage = {
   metaTitle: "Project Planning Guide Adelaide",
   metaDescription:
     "Prepare a clearer cladding, render, Hebel or walling quote with the plans, photos, site details and programme information our Adelaide team needs.",
-  lead:
-    "A useful quote starts with a clear picture of the building, the selected wall system and the conditions around the work. You do not need to have every detail resolved before contacting us, but the information below helps us identify open questions early and prepare a more accurate scope.",
+  lead: "You don’t need every detail. These help us scope accurately:",
   enquiryDetails: [
-    "The project suburb, property type and whether the work is residential or commercial",
-    "The service you need: cladding, render, Hebel, walling or a coordinated package",
-    "Plans, elevations, specifications or marked-up drawings when they are available",
-    "Current photos of the building, substrate and nearby openings or junctions",
-    "The preferred material, system, finish or colour if one has already been selected",
-    "Your target dates, site access constraints and any known programme dependencies",
+    "Suburb and property type",
+    "Service needed",
+    "Plans, elevations or specifications",
+    "Current site photos",
+    "Preferred material, finish or colour",
+    "Target dates and site access",
   ],
   reviewPoints: [
     {
       title: "System and substrate",
-      body: "We confirm what is being installed, what it is fixed or applied to, and whether the existing surface is ready for the proposed work.",
+      body: "What is installed, and whether the surface is ready.",
     },
     {
       title: "Scope boundaries",
-      body: "We clarify who supplies materials, prepares the substrate, provides access equipment and completes adjoining finishes so responsibilities are visible in the quote.",
+      body: "Who supplies, prepares and finishes what.",
     },
     {
       title: "Junctions and interfaces",
-      body: "Windows, corners, penetrations, flashings and connections to other materials are reviewed because these details often shape both labour and sequencing.",
+      body: "Windows, corners, penetrations and flashings.",
     },
     {
       title: "Programme and access",
-      body: "We consider the proposed start window, site access, surrounding trades and any staging needed to keep the work practical and safe.",
+      body: "Start window, site access and surrounding trades.",
     },
   ],
   quoteIncludes: [
@@ -57,48 +56,31 @@ export const projectPlanningPage = {
   ],
 } as const;
 
-/**
- * The five enquiries that come up often enough to have their own guide.
- *
- * These were five near-identical paragraphs on the planning page. Nobody reads
- * five paragraphs that all open with "For a…, use our…", so the trigger
- * condition and what the guide resolves are now separate fields and the page
- * renders them as a scannable list.
- */
+/** The five enquiries that come up often enough to have their own guide. */
 export const planningGuides = [
   {
     href: "/resources/render-cracking-adelaide/",
     label: "Adelaide render-cracking guide",
     when: "An existing rendered wall is cracked.",
-    covers:
-      "What to record, and when another professional may need to assess the building before a repair is scoped.",
   },
   {
     href: "/resources/cladding-maintenance-coastal-adelaide/",
     label: "Coastal cladding maintenance guide",
     when: "New cladding or a facade replacement near the coast.",
-    covers:
-      "Identifying the proposed product, site exposure, unwashed areas and future access questions worth resolving before installation.",
   },
   {
     href: "/resources/rendering-hebel-panels-adelaide/",
     label: "Guide to rendering Hebel panels",
     when: "A Hebel wall will receive a rendered or coated finish.",
-    covers:
-      "The system documents, movement details, coating specification and trade responsibilities that should be clear before work begins.",
   },
   {
     href: "/resources/hebel-boundary-walls-adelaide/",
     label: "Adelaide Hebel boundary-wall planning guide",
     when: "A wall sits on or near an allotment boundary.",
-    covers:
-      "Distinguishing the wall configuration, identifying the approved system documents, and coordinating access, sequencing, interfaces and professional responsibilities before an installation quote.",
   },
   {
     href: "/resources/rendering-over-painted-brick-adelaide/",
     label: "Guide to rendering over painted brick",
     when: "An existing painted-brick exterior is being rendered.",
-    covers:
-      "Recording the coating history, visible wall condition, safety questions and preparation assumptions that need resolving before a finish is specified.",
   },
 ] as const;
