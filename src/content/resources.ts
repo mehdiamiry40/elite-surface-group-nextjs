@@ -44,7 +44,7 @@ export const resourcesHub = {
   metaTitle: "Adelaide Render, Cladding & Hebel Guides",
   metaDescription:
     "Practical Adelaide guides about render, cladding and Hebel wall systems, including what to check before seeking assessment, repair advice or a quote.",
-  lead: "Clear information helps you ask better questions about a wall system and its care. These guides explain what to document, which product information to follow and when another professional may need to assess the building.",
+  lead: "What to check, record and ask before a quote.",
 } as const;
 
 export const resourceGuides: readonly ResourceGuide[] = [

@@ -208,8 +208,6 @@ export const projectCards: readonly ProjectCard[] = projects.map(
 export const featuredProjects = {
   eyebrow: "Selected project work",
   title: "The details make the finish.",
-  intro:
-    "Explore the project type, visible finish and construction details recorded in our residential render and cladding portfolio.",
 } as const;
 
 /** Kept reachable so historic social-share URLs do not become broken assets. */

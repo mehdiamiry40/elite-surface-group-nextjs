@@ -49,7 +49,6 @@ export default function ResourcesPage() {
                     {guide.metaTitle}
                   </Link>
                 </h3>
-                <p>{guide.summary}</p>
                 <Link
                   className="text-link"
                   href={`/resources/${guide.slug}/`}
@@ -67,10 +66,6 @@ export default function ResourcesPage() {
                   Plan your cladding, render, Hebel or walling enquiry
                 </Link>
               </h3>
-              <p>
-                See which plans, photos, site details and programme information
-                can help turn an early enquiry into a clearer scope.
-              </p>
               <Link
                 className="text-link"
                 href="/project-planning/"
@@ -88,20 +83,11 @@ export default function ResourcesPage() {
         <div className="shell prose">
           <h2 id="resource-boundary-title">Guidance, not a remote diagnosis</h2>
           <p>
-            Buildings, substrates and wall systems differ. These resources help
-            you record useful information and recognise when another
-            professional should assess the building; they do not diagnose a
-            property from a description or photograph.
-          </p>
-          <p>
-            When you are ready to discuss a new installation or a clearly
-            scoped finish, review our <Link href="/cladding/">cladding</Link>,{" "}
+            These guides can’t diagnose a building from a photo. Ready to talk?
+            See <Link href="/cladding/">cladding</Link>,{" "}
             <Link href="/render/">rendering</Link> and{" "}
-            <Link href="/hebel/">Hebel</Link> services, or{" "}
-            <Link href="/contact-us/#contact">
-              send the team your project details
-            </Link>
-            .
+            <Link href="/hebel/">Hebel</Link>, or{" "}
+            <Link href="/contact-us/#contact">send your project details</Link>.
           </p>
         </div>
       </section>

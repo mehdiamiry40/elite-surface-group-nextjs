@@ -17,7 +17,6 @@ export type Service = {
   metaTitle: string;
   metaDescription: string;
   intro: readonly string[];
-  detail: readonly string[];
   benefitsLead: string;
   benefits: readonly string[];
   closing: string;
@@ -36,17 +35,12 @@ export const services: readonly Service[] = [
       "Installer aligning charcoal vertical cladding on a residential exterior",
     imageWidth: 1600,
     imageHeight: 1067,
-    summary:
-      "Architectural cladding installed with careful setting-out, clean junctions and close attention to the system details.",
+    summary: "Architectural cladding with clean lines and junctions.",
     metaTitle: "Cladding & Facade Installation Adelaide",
     metaDescription:
       "Architectural cladding and facade installation across Adelaide for homes and commercial builds, planned around the design, substrate, exposure and budget.",
     intro: [
       "The right cladding can completely change the character of a building while adding another layer of protection to the wall behind it. We install architectural cladding for new homes, renovations and commercial projects across Adelaide and South Australia.",
-      "Every cladding and facade installation starts with the building, not a one-size-fits-all product. We consider the design, substrate, site exposure and budget, then install the selected system to the manufacturer’s requirements and project specification.",
-    ],
-    detail: [
-      "A strong cladding result comes down to what sits behind the finished surface. We focus on substrate readiness, accurate setting-out, aligned panel lines and tidy junctions around windows, corners and adjoining finishes. Product choice, exposure and ongoing maintenance all influence long-term performance, so those details are considered before installation begins.",
     ],
     benefitsLead:
       "A well-selected and correctly installed cladding system can offer:",
@@ -100,17 +94,12 @@ export const services: readonly Service[] = [
     imageAlt: "Tradesperson applying an even render finish to an exterior wall",
     imageWidth: 1600,
     imageHeight: 1067,
-    summary:
-      "Smooth, textured and custom render finishes, prepared and applied to suit the wall, the conditions and the design.",
+    summary: "Smooth, textured and custom render finishes.",
     metaTitle: "Rendering Services Adelaide",
     metaDescription:
       "Rendering services across Adelaide for internal and external walls, with smooth, textured and custom finishes backed by careful surface preparation.",
     intro: [
       "Render can refresh a tired exterior, create a clean finish on new construction or add texture and depth to an architectural design. We render internal and external walls for residential and commercial projects across Adelaide and South Australia.",
-      "The finish is only as sound as the preparation beneath it. We assess the substrate, repair or prepare it as required, and apply the agreed render system with close attention to weather conditions, junctions and surface consistency.",
-    ],
-    detail: [
-      "Rendering is equal parts technical preparation and skilled finishing. We work to achieve even colour, texture and lines across the visible surface while allowing for the movement, exposure and maintenance needs of the underlying wall. Existing cracks, weak coatings or damaged substrates are identified before the new finish goes on.",
     ],
     benefitsLead: "Our rendering work is built around:",
     benefits: [
@@ -167,17 +156,12 @@ export const services: readonly Service[] = [
       "Installer checking lightweight AAC wall panels on a new build",
     imageWidth: 1600,
     imageHeight: 1067,
-    summary:
-      "Hebel wall systems installed with accurate panel placement, secure fixing and careful junction detailing.",
+    summary: "Hebel wall systems, accurately fixed and detailed.",
     metaTitle: "Hebel Installation Adelaide",
     metaDescription:
       "Hebel wall system installation across Adelaide for residential and commercial projects, completed to the specified fixing and performance details.",
     intro: [
-      "Hebel is a lightweight autoclaved aerated concrete system used across homes, multi-residential developments and commercial construction. When designed and installed as a complete system, it can provide documented fire, thermal and acoustic performance without the weight of traditional masonry.",
-      "We install Hebel wall systems across Adelaide and South Australia, handling panel placement, fixing and junction detailing to the project specification and manufacturer requirements.",
-    ],
-    detail: [
-      "Accuracy matters at every stage of a Hebel installation. We set out panels carefully, use the specified fixings and pay close attention to openings, penetrations and adjoining materials. That disciplined approach helps the completed wall assembly deliver the performance documented in the design.",
+      "We install Hebel lightweight autoclaved aerated concrete wall systems for homes, multi-residential developments and commercial projects across Adelaide and South Australia. Installed as a complete system, Hebel can provide documented fire, thermal and acoustic performance.",
     ],
     benefitsLead: "When specified as a complete system, Hebel can provide:",
     benefits: [
@@ -229,17 +213,12 @@ export const services: readonly Service[] = [
       "Installer checking internal steel wall framing with a laser level",
     imageWidth: 1600,
     imageHeight: 1067,
-    summary:
-      "Internal and external walling installed accurately, safely and in step with the wider construction programme.",
+    summary: "Internal and external walling, built to programme.",
     metaTitle: "Walling Services Adelaide",
     metaDescription:
       "Internal and external walling services across Adelaide and South Australia for new homes, renovations, multi-unit and commercial projects.",
     intro: [
       "Good walling gives every trade that follows a better starting point. Elite Surface Group installs internal and external wall systems for new homes, renovations, multi-unit developments and commercial projects across Adelaide and South Australia.",
-      "We plan the work around the drawings, selected system and site programme, then coordinate closely with builders so framing, linings, openings and finishes connect cleanly with the wider build.",
-    ],
-    detail: [
-      "Walling demands accuracy long before the surface is finished. We focus on set-out, alignment, openings and junctions while keeping safety, access and adjoining trades in view. The result is a wall system prepared for the next stage and aligned with the documented performance requirements.",
     ],
     benefitsLead: "Our walling capability includes:",
     benefits: [
@@ -289,4 +268,4 @@ export const services: readonly Service[] = [
 export const serviceNames = services.map((service) => service.name);
 
 export const servicesIntro =
-  "Specialist installation for new homes, renovations, multi-unit developments and commercial builds across Adelaide.";
+  "For homes, renovations and commercial builds across Adelaide.";

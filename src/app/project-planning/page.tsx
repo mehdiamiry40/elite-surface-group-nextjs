@@ -4,7 +4,7 @@ import ContactSection from "@/components/ContactSection";
 import { CtaBand } from "@/components/CtaBand";
 import { BreadcrumbSchema, FAQPageSchema } from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
-import { ServiceCards, TickList } from "@/components/sections";
+import { TickList } from "@/components/sections";
 import { bannerImages } from "@/content/pages";
 import {
   planningGuides,
@@ -50,32 +50,17 @@ export default function ProjectPlanningPage() {
           <TickList items={projectPlanningPage.enquiryDetails} />
 
           <h3 id="planning-guides">Start with the guide that matches your wall</h3>
-          <p>
-            Five situations come up often enough to have their own guide. Each
-            one lists what to record before an enquiry is worth sending.
-          </p>
           <dl className="planning-guides">
             {planningGuides.map((guide) => (
               <div key={guide.href} className="planning-guides__item">
                 <dt>
                   <Link href={guide.href}>{guide.label}</Link>
                 </dt>
-                <dd>
-                  <strong>{guide.when}</strong> {guide.covers}
-                </dd>
+                <dd>{guide.when}</dd>
               </div>
             ))}
           </dl>
 
-          <p>
-            If you are still comparing options, start with the outcome you want
-            and the information you already have. Explore our{" "}
-            <Link href="/cladding/">cladding</Link>,{" "}
-            <Link href="/render/">render</Link>,{" "}
-            <Link href="/hebel/">Hebel</Link> and{" "}
-            <Link href="/walling/">walling</Link> services for the questions we
-            consider for each type of work.
-          </p>
         </div>
       </section>
 
@@ -97,11 +82,6 @@ export default function ProjectPlanningPage() {
       <section className="section" aria-labelledby="planning-quote-title">
         <div className="shell prose">
           <h2 id="planning-quote-title">What a clear quote should explain</h2>
-          <p>
-            Once the available information has been reviewed, the written quote
-            should make the agreed scope and its main assumptions easy to find.
-            Our quotes set out:
-          </p>
           <TickList items={projectPlanningPage.quoteIncludes} />
 
           <h2 id="planning-faqs">Project planning FAQs</h2>
@@ -116,10 +96,9 @@ export default function ProjectPlanningPage() {
         </div>
       </section>
 
-      <ServiceCards title="Explore the right service for your project" />
       <ContactSection
         withDetails
-        intro="Tell us about the project and what plans or photos are available. If supporting files are needed, we’ll arrange how to review them before preparing an obligation-free quote."
+        intro="Tell us about the project and what plans or photos you have."
       />
       <CtaBand />
     </>

@@ -33,10 +33,6 @@ export default function ContactSection({
           {withDetails ? (
             <div className="split__body">
               <h3>Contact our Salisbury East team</h3>
-              <p>
-                We’re based in Salisbury East. Call or email us with your
-                suburb, plans and a short description of the work.
-              </p>
               {/* A <dl> may only contain dt/dd (optionally wrapped in a single
                   div per group), so the icon lives inside the group div rather
                   than as a sibling of dt/dd. */}

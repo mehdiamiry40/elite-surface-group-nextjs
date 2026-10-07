@@ -118,9 +118,6 @@ export default async function ServicePage({ params }: PageProps) {
       <section className="section section--tint" aria-labelledby="service-detail">
         <div className="shell prose">
           <h2 id="service-detail">How we approach {serviceLabel}</h2>
-          {service.detail.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
           <p>{service.benefitsLead}</p>
           <TickList items={service.benefits} />
           <p style={{ marginTop: 24 }}>{service.closing}</p>
@@ -130,7 +127,7 @@ export default async function ServicePage({ params }: PageProps) {
       <ProjectLinks
         items={relatedProjects}
         title={`${service.name} project details`}
-        intro={`Review the visible finish and construction details recorded in the public ${serviceLabel} project portfolio.`}
+        intro={`Recent ${serviceLabel} work.`}
         id={`${service.slug}-project-details`}
       />
 
@@ -152,7 +149,7 @@ export default async function ServicePage({ params }: PageProps) {
 
       <ContactSection
         defaultService={service.name}
-        intro={`Tell us about your ${serviceLabel} project, and we’ll review the details for an obligation-free quote.`}
+        intro={`Tell us about your ${serviceLabel} project for an obligation-free quote.`}
       />
 
       <CtaBand />

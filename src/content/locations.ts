@@ -20,10 +20,10 @@ export const locationsHub = {
     "Based in Salisbury East, we serve metropolitan Adelaide and assess suitable cladding, render, Hebel and walling projects elsewhere in South Australia.",
   introTitle: "Metropolitan Adelaide is our primary service area.",
   intro:
-    "Based in Salisbury East, we primarily serve metropolitan Adelaide. Project availability depends on the location, scope, programme and site access, so tell us the suburb or postcode and what plans are available and we’ll confirm coverage before quoting.",
+    "Based in Salisbury East. Send your suburb and we’ll confirm coverage before quoting.",
   outsideAreaTitle: "Planning work outside metropolitan Adelaide?",
   outsideAreaBody:
-    "We assess projects elsewhere in South Australia individually. Tell us the suburb or postcode, scope, programme and site-access details, and note which plans are available. We’ll confirm whether the location is workable before quoting.",
+    "We assess projects elsewhere in South Australia individually. Send the suburb and scope.",
 } as const;
 
 export const locationPages: readonly LocationPage[] = [
@@ -31,8 +31,7 @@ export const locationPages: readonly LocationPage[] = [
     slug: "adelaide",
     name: "Adelaide",
     hubTitle: "Cladding, render, Hebel and walling across Adelaide",
-    hubSummary:
-      "Review our metropolitan Adelaide coverage, installation services, planning guidance and photographed project work.",
+    hubSummary: "Services, guides and project work across metropolitan Adelaide.",
     bannerTitle: "Cladding, Render, Hebel & Walling in Adelaide",
     metaTitle: "Cladding & Rendering Adelaide",
     metaDescription:

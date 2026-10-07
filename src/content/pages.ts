@@ -3,15 +3,14 @@ import { business } from "@/content/business";
 export const contactSection = {
   eyebrow: "Project enquiries",
   title: "Tell us about your project.",
-  intro:
-    "Share the suburb, property type and work you have in mind. We’ll review the details and follow up about the next step.",
+  intro: "Share the suburb and the work you have in mind.",
   formTitle: "Project details",
-  formNote: "A few useful details will help us understand and price the work.",
+  formNote: "A few details help us price the work.",
 } as const;
 
 export const ctaBand = {
   title: "Ready to move your project forward?",
-  body: "Tell us what work you have in mind and what plans or photos are available. If supporting files are needed, we’ll arrange how to review them.",
+  body: "Tell us the work and what plans or photos you have.",
   note: "Quotes are obligation-free.",
   background: "/images/v2/cta-render-action.webp",
 } as const;
@@ -22,7 +21,6 @@ export const aboutPage = {
   title: "Practical expertise, from planning to handover",
   metaDescription:
     "Meet our Salisbury East-based team providing cladding, render, Hebel and walling installations across Adelaide and South Australia.",
-  lead: "Elite Surface Group brings cladding, render, Hebel and walling together for homeowners, builders and developers across Adelaide and South Australia.",
   identity: `${business.name} is operated by ${business.legalName} (ABN ${business.abn}), based in ${business.address.suburb}, ${business.address.region}. From this Adelaide base, we deliver cladding, render, Hebel and walling work across metropolitan Adelaide and wider South Australia.`,
   gallery: [
     {
@@ -50,11 +48,6 @@ export const aboutPage = {
       height: 1067,
     },
   ],
-  body: [
-    "Our work spans new homes, renovations, multi-unit developments and commercial sites. Every installation is shaped by the plans, the selected system and the real conditions on site.",
-    "We work closely with builders and adjoining trades so substrates, junctions and finishes are ready at the right time—not left to become someone else’s problem later.",
-  ],
-  prideLead: "What you can expect from us:",
   pride: [
     [
       "Careful installers with practical site experience",
@@ -65,8 +58,6 @@ export const aboutPage = {
       "Work delivered to the agreed project specification",
     ],
   ],
-  closing:
-    "Whether the job is a single facade or a larger development, our focus stays the same: clear expectations, practical coordination and a finish everyone can be proud of.",
 } as const;
 
 export const servicesPage = {
@@ -85,8 +76,7 @@ export const contactPage = {
   bannerTitle: "Let’s Talk About Your Project",
   metaTitle: "Contact Our Salisbury East Team",
   metaDescription: `Contact ${business.name} for cladding, render, Hebel and walling enquiries across Adelaide.`,
-  intro:
-    "Tell our Salisbury East team what you’re planning and where the project is located. We’ll review the details and follow up about the next step.",
+  intro: "Tell our Salisbury East team what you’re planning and where.",
 } as const;
 
 /** Banner background images, keyed by route. */
