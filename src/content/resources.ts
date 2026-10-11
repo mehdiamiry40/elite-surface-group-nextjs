@@ -21,7 +21,8 @@ export type ResourceGuide = {
     | "soundproofing-walls-adelaide"
     | "cladding-vs-render-adelaide"
     | "render-finishes-adelaide"
-    | "external-wall-insulation-adelaide";
+    | "external-wall-insulation-adelaide"
+    | "hebel-fence-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -504,6 +505,29 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "22 September 2026",
     readingTime: "10 minute read",
   },
+  {
+    slug: "hebel-fence-adelaide",
+    serviceSlug: "hebel",
+    category: "Hebel fencing",
+    title:
+      "Hebel Fences in Adelaide: Approval, Footings and Finish to Settle First",
+    metaTitle: "Hebel Fence Adelaide: What to Check First",
+    metaDescription:
+      "Planning a Hebel fence in Adelaide? See when council approval applies, what your neighbour must be told and why the posts decide how it lasts.",
+    summary:
+      "A solid AAC fence is closer to a small structure than a paling fence. Here is the approval question, the neighbour notice, the post footing and the coating that each need settling before panels go in.",
+    image: "/images/v2/service-hebel-installation.webp",
+    imageAlt:
+      "Installer checking the vertical alignment of AAC wall panels beside steel framing",
+    imageCaption:
+      "Illustrative wall-system image showing AAC panels on a building, not a fence. It does not establish a PowerFence installation, post footing or suitability for a particular site.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-09-25",
+    modified: "2026-09-25",
+    publishedDisplay: "25 September 2026",
+    readingTime: "7 minute read",
+  },
 ];
 
 function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
@@ -564,6 +588,7 @@ export const renderFinishesGuide = guideBySlug("render-finishes-adelaide");
 export const externalWallInsulationGuide = guideBySlug(
   "external-wall-insulation-adelaide",
 );
+export const hebelFenceGuide = guideBySlug("hebel-fence-adelaide");
 
 /** A short selection for Home; the Resources hub retains every guide. */
 export const featuredResourceGuides = [
