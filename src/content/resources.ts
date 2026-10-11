@@ -21,7 +21,8 @@ export type ResourceGuide = {
     | "soundproofing-walls-adelaide"
     | "cladding-vs-render-adelaide"
     | "render-finishes-adelaide"
-    | "external-wall-insulation-adelaide";
+    | "external-wall-insulation-adelaide"
+    | "partition-walls-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -504,6 +505,29 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "22 September 2026",
     readingTime: "10 minute read",
   },
+  {
+    slug: "partition-walls-adelaide",
+    serviceSlug: "walling",
+    category: "Internal walls",
+    title:
+      "Adding a Partition Wall in Adelaide: What the New Room Has to Meet",
+    metaTitle: "Adding a Partition Wall in Adelaide",
+    metaDescription:
+      "Adding a partition wall to split a room in Adelaide? See when approval applies, what a new bedroom must meet and why the roof trusses matter.",
+    summary:
+      "A new stud wall looks like the simplest job in a renovation. The room it creates still needs light, air and a smoke alarm, and the wall itself has to stay clear of the roof above it.",
+    image: "/images/v2/service-walling-installation.webp",
+    imageAlt:
+      "Installer checking internal steel wall framing with a laser level",
+    imageCaption:
+      "Illustrative wall-framing image. The image does not establish a particular partition layout, head detail or compliance with the light, ventilation and smoke alarm provisions for a new room.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-10-02",
+    modified: "2026-10-02",
+    publishedDisplay: "2 October 2026",
+    readingTime: "6 minute read",
+  },
 ];
 
 function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
@@ -564,6 +588,7 @@ export const renderFinishesGuide = guideBySlug("render-finishes-adelaide");
 export const externalWallInsulationGuide = guideBySlug(
   "external-wall-insulation-adelaide",
 );
+export const partitionWallsGuide = guideBySlug("partition-walls-adelaide");
 
 /** A short selection for Home; the Resources hub retains every guide. */
 export const featuredResourceGuides = [
