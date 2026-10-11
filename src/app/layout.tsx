@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Figtree } from "next/font/google";
+import { Archivo, Space_Mono } from "next/font/google";
 import ConversionAnalytics from "@/components/ConversionAnalytics";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
@@ -10,13 +10,21 @@ import { absoluteUrl, DEFAULT_OG_IMAGE } from "@/lib/seo";
 import "./globals.css";
 
 // Self-hosted at build time, so the site makes no request to Google's CDN.
-// A single variable family keeps the hierarchy calm and human while avoiding
-// duplicate font downloads for a heading face that was visually overridden.
-const sans = Figtree({
+// Archivo (with its width axis) carries headings and long-form reading;
+// Space Mono carries short body copy, labels and buttons.
+const sans = Archivo({
   subsets: ["latin"],
   weight: "variable",
+  axes: ["wdth"],
   display: "swap",
   variable: "--font-sans",
+});
+
+const mono = Space_Mono({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  display: "swap",
+  variable: "--font-mono",
 });
 
 const HOME_DESCRIPTION =
@@ -145,7 +153,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en-AU" className={sans.variable}>
+    <html lang="en-AU" className={`${sans.variable} ${mono.variable}`}>
       <body>
         <script
           type="application/ld+json"

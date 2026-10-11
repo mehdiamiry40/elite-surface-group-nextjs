@@ -14,11 +14,8 @@ export const heroCopy = {
    * Preferred line breaks for the headline. They are hints, not hard breaks —
    * the h1 balances its own wrapping when a line will not fit.
    */
-  titleLines: [
-    "Adelaide cladding, render,",
-    "Hebel & walling specialists.",
-  ],
-  body: "One team for walling and exterior finishes — from quote to handover.",
+  titleLines: ["Adelaide cladding,", "render, Hebel", "& walling"],
+  body: "One team for walls and exterior finishes on Adelaide homes, renovations and commercial builds — from the first quote to handover.",
   /** Short proof points shown under the hero actions. Facts only. */
   assurances: [
     "Obligation-free quotes",
@@ -123,3 +120,65 @@ export const audiences = [
     linkLabel: "Explore our services",
   },
 ] as const;
+
+/* ------------------------------------------------ concept-style homepage */
+
+export const welcome = {
+  title: `Welcome to ${business.name}`,
+  subtitle: "Cladding, render, Hebel and walling for Adelaide homes and builders",
+  body: [
+    `${business.name} installs cladding, render, Hebel and walling for new homes, renovations, multi-unit developments and commercial projects across Adelaide and South Australia.`,
+    "We review the system, site and surrounding trades before work starts, so responsibilities are clear and the job runs smoothly.",
+  ],
+  callLabel: "Call us – get a free quote",
+  image: "/images/v2/project-two-storey-exterior-render.webp",
+  imageAlt:
+    "Two-storey home with a light render finish across its upper and lower walls",
+} as const;
+
+export const specialists = {
+  title: "Cladding and render specialists in Adelaide",
+  heading: "Local knowledge. Site-ready delivery.",
+  subtitle: "Planned around your site, system and programme.",
+  body: [
+    "From a single feature facade to a complete walling package, we plan the work around your site, the selected system and the wider construction programme.",
+    "Each job is installed to the manufacturer’s system and the project specification, and coordinated with the trades around us.",
+  ],
+  image: "/images/v2/project-curved-render-detail.webp",
+  imageAlt: "Curved upper wall finished in a continuous light render",
+} as const;
+
+export const consultation = {
+  title: "Get a free quote",
+  image: "/images/v2/project-rendered-columns-stone.webp",
+  body: "Tell us about the job and what plans or photos you have, and we’ll arrange the next step.",
+} as const;
+
+export const expect = {
+  title: "What you can expect",
+  intro: `Working with ${business.name}, you can expect:`,
+  features: [
+    {
+      icon: "layers",
+      title: "Four specialist services",
+      body: "Cladding, render, Hebel and walling under one scope.",
+    },
+    {
+      icon: "clipboard",
+      title: "Clear written quotes",
+      body: "Work, materials and timing set out in writing.",
+    },
+    {
+      icon: "building",
+      title: "Homes to commercial",
+      body: "New builds, renovations and multi-unit work.",
+    },
+    {
+      icon: "pin",
+      title: "Local to Adelaide",
+      body: `Based in ${business.address.suburb}, working across SA.`,
+    },
+  ],
+  image: "/images/v2/project-rendered-window-reveal.webp",
+  imageAlt: "Deep rendered return framing a large glazed opening",
+} as const;

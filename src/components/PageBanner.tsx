@@ -16,19 +16,9 @@ type PageBannerProps = {
 
 export default function PageBanner({ title, image, crumbs }: PageBannerProps) {
   return (
-    <section className="banner">
-      <Image
-        src={image}
-        alt=""
-        fill
-        sizes="100vw"
-        priority
-        fetchPriority="high"
-        aria-hidden
-        {...blurProps(image)}
-      />
+    // Long article titles drop a size so they stay within three lines.
+    <section className={title.length > 42 ? "banner banner--long" : "banner"}>
       <div className="shell">
-        <h1>{title}</h1>
         {crumbs?.length ? (
           <nav className="crumbs" aria-label="Breadcrumb">
             <ol>
@@ -49,6 +39,19 @@ export default function PageBanner({ title, image, crumbs }: PageBannerProps) {
             </ol>
           </nav>
         ) : null}
+        <h1>{title}</h1>
+        <div className="banner__media">
+          <Image
+            src={image}
+            alt=""
+            fill
+            sizes="(max-width: 1280px) 100vw, 1220px"
+            priority
+            fetchPriority="high"
+            aria-hidden
+            {...blurProps(image)}
+          />
+        </div>
       </div>
     </section>
   );
