@@ -21,7 +21,8 @@ export type ResourceGuide = {
     | "soundproofing-walls-adelaide"
     | "cladding-vs-render-adelaide"
     | "render-finishes-adelaide"
-    | "external-wall-insulation-adelaide";
+    | "external-wall-insulation-adelaide"
+    | "rendering-besser-block-walls-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -504,6 +505,28 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "22 September 2026",
     readingTime: "10 minute read",
   },
+  {
+    slug: "rendering-besser-block-walls-adelaide",
+    serviceSlug: "render",
+    category: "Render over blockwork",
+    title:
+      "Rendering Besser Block Walls in Adelaide: What the Blockwork Decides",
+    metaTitle: "Rendering Besser Block Walls in Adelaide",
+    metaDescription:
+      "Rendering besser block walls in Adelaide? See how suction, salts, joints and retained soil decide whether the render holds before you book.",
+    summary:
+      "Grey concrete blockwork takes render well when it is sound, dry and prepared for the system chosen. See what a garden, boundary or retaining wall has to settle first.",
+    image: "/images/v2/service-render-application.webp",
+    imageAlt: "Tradesperson applying an even render finish to an exterior wall",
+    imageCaption:
+      "Illustrative rendering image. The image does not establish a concrete block substrate, a retaining wall or a particular render system or specification.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-09-29",
+    modified: "2026-09-29",
+    publishedDisplay: "29 September 2026",
+    readingTime: "8 minute read",
+  },
 ];
 
 function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
@@ -563,6 +586,9 @@ export const claddingVsRenderGuide = guideBySlug("cladding-vs-render-adelaide");
 export const renderFinishesGuide = guideBySlug("render-finishes-adelaide");
 export const externalWallInsulationGuide = guideBySlug(
   "external-wall-insulation-adelaide",
+);
+export const renderingBesserBlockGuide = guideBySlug(
+  "rendering-besser-block-walls-adelaide",
 );
 
 /** A short selection for Home; the Resources hub retains every guide. */

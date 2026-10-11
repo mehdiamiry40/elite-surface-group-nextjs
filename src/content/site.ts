@@ -57,6 +57,7 @@ export {
   loadBearingWallRemovalGuide,
   renderCrackingGuide,
   renderFinishesGuide,
+  renderingBesserBlockGuide,
   renderingHebelGuide,
   renderingPaintedBrickGuide,
   repaintingRenderGuide,
