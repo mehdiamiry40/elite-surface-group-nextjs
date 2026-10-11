@@ -18,7 +18,7 @@ export const heroCopy = {
     "Adelaide cladding, render,",
     "Hebel & walling specialists.",
   ],
-  body: "One team for carefully planned, professionally installed walling and exterior finishes—from the first quote through to handover.",
+  body: "One team for walling and exterior finishes — from quote to handover.",
   /** Short proof points shown under the hero actions. Facts only. */
   assurances: [
     "Obligation-free quotes",
@@ -27,21 +27,22 @@ export const heroCopy = {
   ],
 } as const;
 
+/** `icon` keys map to components in the homepage, keeping content JSX-free. */
 export const trustPoints = [
   {
-    eyebrow: "One point of contact",
+    icon: "layers",
     title: "Four specialist services",
-    body: "Bring cladding, render, Hebel and walling together under one clearly defined scope.",
+    body: "One team, one clear scope.",
   },
   {
-    eyebrow: "Projects of every scale",
+    icon: "building",
     title: "Homes to commercial sites",
-    body: "Practical installation for new homes, renovations, multi-unit developments and commercial builds.",
+    body: "New builds, renovations and multi-unit.",
   },
   {
-    eyebrow: "Local, reliable delivery",
+    icon: "pin",
     title: "Adelaide & South Australia",
-    body: "Straightforward quotes, thoughtful trade coordination and clear communication throughout.",
+    body: "Local, straightforward quotes.",
   },
 ] as const;
 
@@ -51,39 +52,51 @@ export const aboutTeaser = {
   image: "/images/v2/home-team-site-review.webp",
   imageAlt: "Construction team reviewing facade details on an Adelaide building site",
   body: [
-    `${business.name} delivers cladding, render, Hebel and walling for homes, renovations, multi-unit developments and commercial projects across Adelaide and South Australia.`,
-    "Good work starts well before installation. We review the system, site conditions and surrounding trades early, so responsibilities are clear and the job is ready to run smoothly.",
+    "We review the system, site and surrounding trades before work starts, so the job runs smoothly.",
+  ],
+  facts: [
+    { icon: "pin", label: `Based in ${business.address.suburb}` },
+    { icon: "clock", label: "Monday–Saturday, 9am–5pm" },
+    { icon: "phone", label: business.phoneDisplay, href: `tel:${business.phone}` },
   ],
 } as const;
 
 export const coverage = {
   eyebrow: "Adelaide & South Australia",
   title: "Local knowledge. Site-ready delivery.",
-  body: "From a focused facade update to a complete walling package, we plan the work around your site, the selected system and the wider construction programme.",
+  body: "From a single facade to a full walling package, planned around your site and programme.",
+  points: [
+    { icon: "clipboard", label: "Planned around your site" },
+    { icon: "layers", label: "Installed to the specified system" },
+    { icon: "hardhat", label: "Coordinated with surrounding trades" },
+  ],
   image: "/images/v2/home-adelaide-coverage.webp",
   imageAlt: "Contemporary Adelaide home with charcoal cladding and native landscaping",
 } as const;
 
 export const process = {
   title: "Well planned. Clearly communicated. Properly finished.",
-  intro:
-    "You’ll know what is included, which materials are being used and when the work is due to happen. If site conditions change, we raise it early and agree on the next step.",
+  intro: "Clear scope, clear materials, clear timing.",
   steps: [
     {
+      icon: "search",
       title: "Site review",
-      body: "We review your plans, photos and site conditions to understand the work and identify any open questions.",
+      body: "Plans, photos and site conditions.",
     },
     {
+      icon: "clipboard",
       title: "Scope and quote",
-      body: "Your quote clearly sets out the work, materials, responsibilities and timing assumptions.",
+      body: "Work, materials and timing in writing.",
     },
     {
+      icon: "hardhat",
       title: "Installation",
-      body: "We install the agreed system and coordinate our work with the trades around us.",
+      body: "Coordinated with the trades around us.",
     },
     {
+      icon: "shield",
       title: "Handover check",
-      body: "We review the completed work, resolve any outstanding items and leave the project ready for handover.",
+      body: "Outstanding items resolved before handover.",
     },
   ],
 } as const;
@@ -91,8 +104,9 @@ export const process = {
 export const audiences = [
   {
     eyebrow: "For homeowners & renovators",
+    icon: "home",
     title: "Turn your ideas into a clear plan.",
-    body: "Tell us what plans or photos are available and the finish you have in mind. If supporting files are needed, we’ll arrange how to review them before work is scoped.",
+    body: "Tell us the finish you have in mind and what plans or photos are available.",
     image: "/images/v2/homeowner-consultation.webp",
     imageAlt: "Homeowner and estimator reviewing exterior renovation materials",
     href: "/contact-us/#contact",
@@ -100,8 +114,9 @@ export const audiences = [
   },
   {
     eyebrow: "For builders & developers",
+    icon: "building",
     title: "A trade partner who works to the programme.",
-    body: "Tell us what drawings, specifications and programme information are available. We’ll arrange how to review what is needed to clarify scope and adjoining-trade handovers.",
+    body: "Share your drawings and programme — we’ll clarify scope and handovers.",
     image: "/images/v2/builders-plan-review.webp",
     imageAlt: "Builder and tradesperson reviewing elevation drawings on site",
     href: "/services/",

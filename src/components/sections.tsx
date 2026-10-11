@@ -79,14 +79,23 @@ export function ProjectLinks({
           intro={intro}
           id={id}
         />
-        <ul className={`project-link-grid project-link-grid--${columns}`}>
+        <ul className={`photo-cards photo-cards--${columns}`}>
           {items.map((project) => (
-            <li className="project-link-card" key={project.slug}>
+            <li className="photo-card" key={project.slug}>
+              <div className="photo-card__media">
+                <Image
+                  src={project.image}
+                  alt={project.alt}
+                  width={project.width}
+                  height={project.height}
+                  sizes="(max-width: 767px) 100vw, 33vw"
+                  {...blurProps(project.image)}
+                />
+              </div>
               <span>{projectServiceName(project)} project</span>
               <h3>
                 <Link href={`/projects/${project.slug}/`}>{project.title}</Link>
               </h3>
-              <p>{project.summary}</p>
               <Link className="text-link" href={`/projects/${project.slug}/`}>
                 View project details
                 <ArrowRightIcon />
@@ -104,21 +113,28 @@ export function ProjectLinks({
 export function ServiceCards({
   title = "Cladding, render, Hebel & walling",
   currentSlug,
+  compact = true,
 }: {
   title?: string;
   currentSlug?: string;
+  /** Image-led cards: name only, no intro or summary copy. */
+  compact?: boolean;
 }) {
   const shown = currentSlug
     ? services.filter((service) => service.slug !== currentSlug)
     : services;
 
   return (
-    <section className="section section--tint services-section">
+    <section
+      className={`section section--tint services-section${
+        compact ? " services-section--compact" : ""
+      }`}
+    >
       <div className="shell">
         <SectionHead
           eyebrow={currentSlug ? "Related services" : "What we install"}
           title={title}
-          intro={servicesIntro}
+          intro={compact ? undefined : servicesIntro}
         />
         <ul className={`grid grid--${shown.length === 3 ? "3" : "4"}`}>
           {shown.map((service, index) => (
@@ -143,7 +159,7 @@ export function ServiceCards({
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <h3>{service.name}</h3>
-                  <p>{service.summary}</p>
+                  {compact ? null : <p>{service.summary}</p>}
                   <span className="service-card__more">
                     Explore service
                     <ArrowRightIcon />

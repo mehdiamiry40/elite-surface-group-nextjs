@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import PageBanner from "@/components/PageBanner";
 import { CtaBand } from "@/components/CtaBand";
 import ContactSection from "@/components/ContactSection";
-import { TickList } from "@/components/sections";
+import { ProjectLinks, TickList } from "@/components/sections";
 import { BreadcrumbSchema } from "@/components/JsonLd";
 import { bannerImages } from "@/content/pages";
 import {
@@ -78,7 +78,7 @@ export default async function LocationPage({ params }: PageProps) {
             <p key={paragraph}>{paragraph}</p>
           ))}
           <p>{location.servicesLead}</p>
-          <ul className="plain-link-list">
+          <ul className="plain-link-list service-chips">
             {services.map((service) => (
               <li key={service.slug}>
                 <Link href={`/${service.slug}/`}>
@@ -112,27 +112,15 @@ export default async function LocationPage({ params }: PageProps) {
           </nav>
           <h3>What you can expect</h3>
           <TickList items={location.proof} />
-          {projects.length ? (
-            <>
-              <h3>Related project case studies</h3>
-              <p>
-                Explore photographed render and cladding details from our
-                portfolio. Individual project addresses are not published.
-              </p>
-              <ul className="plain-link-list plain-link-list--described">
-                {projects.map((project) => (
-                  <li key={project.slug}>
-                    <Link href={`/projects/${project.slug}/`}>
-                      {project.title}
-                    </Link>
-                    <span>{project.summary}</span>
-                  </li>
-                ))}
-              </ul>
-            </>
-          ) : null}
         </div>
       </section>
+
+      <ProjectLinks
+        items={projects}
+        title="Related project case studies"
+        intro="Photographed render and cladding details from our portfolio. Individual project addresses are not published."
+        id="location-projects"
+      />
 
       <ContactSection
         intro={`Planning cladding, render, Hebel or walling work in ${location.name}? Send us the details for an obligation-free quote.`}

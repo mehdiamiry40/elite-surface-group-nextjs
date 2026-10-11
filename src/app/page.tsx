@@ -3,6 +3,7 @@ import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
 import Hero from "@/components/Hero";
 import ProjectGallery from "@/components/ProjectGallery";
+import FeatureIcon from "@/components/FeatureIcon";
 import { ArrowRightIcon } from "@/components/icons";
 import { SectionHead, ServiceCards } from "@/components/sections";
 import {
@@ -30,12 +31,9 @@ export default function HomePage() {
 
       <section className="trust-strip" aria-label="Why work with Elite Surface Group">
         <div className="shell trust-strip__grid">
-          {trustPoints.map((point, index) => (
+          {trustPoints.map((point) => (
             <div key={point.title}>
-              <span className="trust-strip__number" aria-hidden="true">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-              <span className="trust-strip__eyebrow">{point.eyebrow}</span>
+              <FeatureIcon name={point.icon} />
               <strong>{point.title}</strong>
               <p>{point.body}</p>
             </div>
@@ -43,7 +41,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      <ServiceCards title="Four specialist services. One coordinated team." />
+      <ServiceCards
+        title="Four specialist services. One coordinated team."
+        compact
+      />
 
       <section
         className="section home-story home-story--coverage"
@@ -54,6 +55,14 @@ export default function HomePage() {
             <span className="eyebrow">{coverage.eyebrow}</span>
             <h2 id="coverage-title">{coverage.title}</h2>
             <p>{coverage.body}</p>
+            <ul className="icon-points">
+              {coverage.points.map((point) => (
+                <li key={point.label}>
+                  <FeatureIcon name={point.icon} small />
+                  {point.label}
+                </li>
+              ))}
+            </ul>
             <Link className="text-link" href="/locations/adelaide/">
               Explore our Adelaide service area
               <ArrowRightIcon />
@@ -93,6 +102,18 @@ export default function HomePage() {
             {aboutTeaser.body.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
+            <ul className="icon-points">
+              {aboutTeaser.facts.map((fact) => (
+                <li key={fact.label}>
+                  <FeatureIcon name={fact.icon} small />
+                  {"href" in fact ? (
+                    <a href={fact.href}>{fact.label}</a>
+                  ) : (
+                    fact.label
+                  )}
+                </li>
+              ))}
+            </ul>
             <Link className="text-link" href="/about/">
               Get to know our team
               <ArrowRightIcon />
@@ -106,7 +127,6 @@ export default function HomePage() {
           <SectionHead
             eyebrow={featuredProjects.eyebrow}
             title={featuredProjects.title}
-            intro={featuredProjects.intro}
             id="featured-title"
           />
           <ProjectGallery items={projectCards.slice(0, 3)} />
@@ -131,19 +151,27 @@ export default function HomePage() {
           <SectionHead
             eyebrow="Practical project guidance"
             title="Resolve the right questions before work begins."
-            intro="Start with these three guides, or browse the full resource library for your project."
             id="home-resources-title"
           />
-          <ul className="project-link-grid project-link-grid--3 resource-grid">
+          <ul className="photo-cards">
             {featuredResourceGuides.map((guide) => (
-              <li className="project-link-card" key={guide.slug}>
+              <li className="photo-card" key={guide.slug}>
+                <div className="photo-card__media">
+                  <Image
+                    src={guide.image}
+                    alt={guide.imageAlt}
+                    width={guide.imageWidth}
+                    height={guide.imageHeight}
+                    sizes="(max-width: 767px) 100vw, 33vw"
+                    {...blurProps(guide.image)}
+                  />
+                </div>
                 <span>{guide.category}</span>
                 <h3>
                   <Link href={`/resources/${guide.slug}/`} prefetch={false}>
                     {guide.metaTitle}
                   </Link>
                 </h3>
-                <p>{guide.summary}</p>
                 <Link
                   className="text-link"
                   href={`/resources/${guide.slug}/`}
@@ -172,9 +200,9 @@ export default function HomePage() {
             <p>{process.intro}</p>
           </div>
           <ol className="home-process__list">
-            {process.steps.map((step, index) => (
+            {process.steps.map((step) => (
               <li key={step.title}>
-                <span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+                <FeatureIcon name={step.icon} />
                 <h3>{step.title}</h3>
                 <p>{step.body}</p>
               </li>
@@ -214,6 +242,7 @@ export default function HomePage() {
                   />
                 </div>
                 <div className="audience-card__body">
+                  <FeatureIcon name={audience.icon} />
                   <span className="eyebrow">{audience.eyebrow}</span>
                   <h3>{audience.title}</h3>
                   <p>{audience.body}</p>

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
+import FeatureIcon from "@/components/FeatureIcon";
 import { ArrowRightIcon } from "@/components/icons";
 import { BreadcrumbSchema } from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
@@ -7,6 +9,7 @@ import { CtaBand } from "@/components/CtaBand";
 import { SectionHead } from "@/components/sections";
 import { bannerImages } from "@/content/pages";
 import { resourceGuides, resourcesHub } from "@/content/resources";
+import { blurProps } from "@/lib/lcp-blur";
 import { ogCard, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
@@ -40,16 +43,25 @@ export default function ResourcesPage() {
             intro={resourcesHub.lead}
             id="resources-title"
           />
-          <ul className="project-link-grid project-link-grid--2 resource-grid">
+          <ul className="photo-cards">
             {resourceGuides.map((guide) => (
-              <li className="project-link-card" key={guide.slug}>
+              <li className="photo-card" key={guide.slug}>
+                <div className="photo-card__media">
+                  <Image
+                    src={guide.image}
+                    alt={guide.imageAlt}
+                    width={guide.imageWidth}
+                    height={guide.imageHeight}
+                    sizes="(max-width: 767px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    {...blurProps(guide.image)}
+                  />
+                </div>
                 <span>{guide.category}</span>
                 <h3>
                   <Link href={`/resources/${guide.slug}/`} prefetch={false}>
                     {guide.metaTitle}
                   </Link>
                 </h3>
-                <p>{guide.summary}</p>
                 <Link
                   className="text-link"
                   href={`/resources/${guide.slug}/`}
@@ -60,17 +72,14 @@ export default function ResourcesPage() {
                 </Link>
               </li>
             ))}
-            <li className="project-link-card">
+            <li className="photo-card photo-card--icon">
+              <FeatureIcon name="clipboard" />
               <span>Quote preparation</span>
               <h3>
                 <Link href="/project-planning/" prefetch={false}>
                   Plan your cladding, render, Hebel or walling enquiry
                 </Link>
               </h3>
-              <p>
-                See which plans, photos, site details and programme information
-                can help turn an early enquiry into a clearer scope.
-              </p>
               <Link
                 className="text-link"
                 href="/project-planning/"

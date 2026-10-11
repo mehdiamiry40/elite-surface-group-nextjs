@@ -4771,3 +4771,825 @@ h5 {
     padding-block: 48px 38px;
   }
 }
+
+/* ------------------------------------------ visual refresh: type & icons */
+
+/* Larger type throughout, icon badges in place of numbering, and image-led
+   cards where the homepage used to rely on paragraphs. */
+
+body {
+  font-size: 17px;
+}
+
+h1 {
+  font-size: clamp(50px, 5.8vw, 76px);
+}
+
+h2 {
+  font-size: clamp(38px, 4.2vw, 56px);
+}
+
+h3 {
+  font-size: 24px;
+}
+
+.section-head p {
+  font-size: 19px;
+}
+
+.hero__frame {
+  max-width: 820px;
+}
+
+.hero h1 {
+  font-size: clamp(50px, 6.2vw, 84px);
+  line-height: 1.04;
+}
+
+.hero p {
+  max-width: 34ch;
+  font-size: 21px;
+}
+
+.hero__assurances {
+  font-size: 15px;
+}
+
+.feature-icon {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  margin-bottom: 22px;
+  border-radius: var(--radius-md);
+  background: var(--orange-soft);
+  color: var(--orange-ink);
+}
+
+.trust-strip .feature-icon,
+.home-process .feature-icon {
+  background: rgb(255 255 255 / 9%);
+  color: #ff9c68;
+}
+
+/* proof rail: icon, title, one short line */
+
+.trust-strip__grid > div {
+  min-height: 0;
+  padding: 44px 36px 42px;
+}
+
+.trust-strip strong {
+  font-size: 25px;
+  line-height: 1.2;
+}
+
+.trust-strip p {
+  font-size: 16px;
+}
+
+/* compact service cards: tall photograph and a name */
+
+.services-section--compact .service-card__index {
+  display: none;
+}
+
+/* Headings without an intro take the full row rather than half a grid. */
+.services-section--compact .section-head,
+.home-projects .section-head,
+.section--tint:has(.photo-cards) .section-head {
+  display: block;
+  max-width: 900px;
+}
+
+.section--contact .split {
+  align-items: start;
+}
+
+.services-section--compact .service-card__media {
+  aspect-ratio: 4 / 5;
+}
+
+.services-section--compact .service-card__body h3 {
+  margin-bottom: 18px;
+  font-size: 28px;
+}
+
+/* homepage stories */
+
+.home-story__copy p {
+  font-size: 20px;
+}
+
+/* featured projects: photograph and title only */
+
+.home-projects .gallery__caption > p:not(.gallery__meta) {
+  display: none;
+}
+
+.home-projects .gallery__caption h3 {
+  margin-bottom: 12px;
+  font-size: 24px;
+}
+
+/* guide cards with their own photograph */
+
+.photo-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.photo-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--white);
+}
+
+.photo-card > :not(.photo-card__media) {
+  margin-inline: 28px;
+}
+
+.photo-card__media {
+  aspect-ratio: 3 / 2;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.photo-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease-out);
+}
+
+.photo-card:hover .photo-card__media img {
+  transform: scale(1.03);
+}
+
+.photo-card > span {
+  margin-bottom: 10px;
+  color: var(--orange-ink);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.photo-card h3 {
+  margin-bottom: 18px;
+  font-size: 24px;
+}
+
+.photo-card h3 a {
+  color: var(--ink);
+}
+
+.photo-card h3 a:hover {
+  color: var(--orange-ink);
+  text-decoration: none;
+}
+
+.photo-card .text-link {
+  align-self: flex-start;
+  margin-top: auto;
+  margin-bottom: 28px;
+}
+
+/* process: icon, title, one line */
+
+.home-process__intro p {
+  font-size: 20px;
+}
+
+.home-process__list li {
+  min-height: 0;
+  padding: 36px 30px 40px;
+}
+
+/* Beats the legacy step-number rule for `li > span`. */
+.home-process__list li > .feature-icon {
+  display: inline-grid;
+  margin-bottom: 26px;
+  font-size: inherit;
+}
+
+.home-process__list p {
+  font-size: 16px;
+}
+
+/* audience cards */
+
+.audience-card__body h3 {
+  font-size: clamp(26px, 2.4vw, 32px);
+}
+
+.audience-card__body p {
+  font-size: 18px;
+}
+
+.audience-card__body .feature-icon {
+  margin-bottom: 18px;
+}
+
+/* icon fact lists in the homepage stories */
+
+.icon-points {
+  display: grid;
+  gap: 14px;
+  margin: 28px 0 32px;
+  padding: 0;
+  list-style: none;
+}
+
+.icon-points li {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.icon-points a {
+  color: var(--ink);
+}
+
+.icon-points a:hover {
+  color: var(--orange-ink);
+  text-decoration: none;
+}
+
+.feature-icon--sm {
+  width: 48px;
+  height: 48px;
+  margin: 0;
+}
+
+.home-story--about .feature-icon {
+  background: var(--white);
+}
+
+/* compact service cards: name laid over a full-height photograph */
+
+.services-section--compact .service-card {
+  position: relative;
+}
+
+.services-section--compact .service-card:hover {
+  transform: none;
+}
+
+.services-section--compact .service-card__link {
+  position: relative;
+  display: block;
+  height: 100%;
+}
+
+.services-section--compact .service-card__media {
+  aspect-ratio: 3 / 4;
+}
+
+.services-section--compact .service-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.services-section--compact .service-card:hover .service-card__media img {
+  transform: scale(1.05);
+}
+
+.services-section--compact .service-card__body {
+  position: absolute;
+  inset: auto 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 120px 26px 26px;
+  background: linear-gradient(
+    rgb(6 26 51 / 0%) 0%,
+    rgb(6 26 51 / 62%) 45%,
+    rgb(6 26 51 / 90%) 100%
+  );
+}
+
+.services-section--compact .service-card__body h3 {
+  margin-bottom: 10px;
+  color: var(--white);
+  font-size: 32px;
+}
+
+.services-section--compact .service-card__more {
+  width: auto;
+  justify-content: flex-start;
+  color: #ffc4a5;
+  font-size: 16px;
+}
+
+.services-section--compact .service-card__more svg {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--orange-ink);
+  color: var(--white);
+  transition: transform 0.35s var(--ease-out);
+}
+
+.services-section--compact .service-card:hover .service-card__more svg {
+  transform: translateX(4px);
+}
+
+/* featured projects: one large photograph beside two smaller ones */
+
+.home-projects .gallery {
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  grid-template-rows: auto auto;
+}
+
+.home-projects .gallery > li:first-child {
+  display: flex;
+  flex-direction: column;
+  grid-row: span 2;
+}
+
+.home-projects .gallery > li:first-child button {
+  flex: 1;
+  aspect-ratio: auto;
+  min-height: 420px;
+}
+
+.home-projects .gallery > li:first-child .gallery__caption h3 {
+  font-size: 30px;
+}
+
+.home-projects .gallery > li:not(:first-child) {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+}
+
+.home-projects .gallery > li:not(:first-child) button {
+  height: 100%;
+  aspect-ratio: auto;
+  min-height: 240px;
+}
+
+.home-projects .gallery > li:not(:first-child) .gallery__caption {
+  align-self: center;
+}
+
+/* larger hero proof points */
+
+.hero__assurances {
+  gap: 12px 30px;
+  font-size: 16px;
+}
+
+.hero__assurances li::before {
+  width: 8px;
+  height: 14px;
+  border-width: 3px;
+}
+
+/* contact details: bigger icons and values */
+
+.contact-list {
+  gap: 22px;
+}
+
+.contact-list__row {
+  grid-template-columns: 52px 1fr;
+  gap: 2px 16px;
+}
+
+.contact-list__row--plain {
+  padding-left: 68px;
+}
+
+.contact-list__icon {
+  width: 52px;
+  height: 52px;
+}
+
+.contact-list__icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.contact-list dt {
+  font-size: 15px;
+}
+
+.contact-list dd {
+  font-size: 18px;
+}
+
+@media (max-width: 1024px) {
+  .photo-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  body {
+    font-size: 16px;
+  }
+
+  h2 {
+    font-size: clamp(32px, 9vw, 42px);
+  }
+
+  h3 {
+    font-size: 22px;
+  }
+
+  .hero h1 {
+    font-size: clamp(40px, 11vw, 54px);
+  }
+
+  .hero p {
+    font-size: 18px;
+  }
+
+  .section-head p,
+  .home-story__copy p,
+  .home-process__intro p {
+    font-size: 17px;
+  }
+
+  .trust-strip__grid > div,
+  .trust-strip__grid > div:last-child {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2px 18px;
+    padding: 28px 0;
+  }
+
+  .trust-strip .feature-icon {
+    grid-row: span 2;
+    width: 56px;
+    height: 56px;
+    margin: 0;
+  }
+
+  .trust-strip strong {
+    margin-bottom: 2px;
+    font-size: 21px;
+  }
+
+  .trust-strip p {
+    font-size: 15px;
+  }
+
+  .services-section--compact .service-card__media {
+    aspect-ratio: 4 / 3;
+  }
+
+  .photo-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .icon-points li {
+    font-size: 16px;
+  }
+
+  .feature-icon--sm {
+    width: 44px;
+    height: 44px;
+  }
+
+  .services-section--compact .service-card__media {
+    aspect-ratio: 4 / 3;
+  }
+
+  .services-section--compact .service-card__body h3 {
+    font-size: 28px;
+  }
+
+  .home-projects .gallery {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+  }
+
+  .home-projects .gallery > li:first-child {
+    grid-row: auto;
+  }
+
+  .home-projects .gallery > li:not(:first-child) button {
+    height: auto;
+  }
+
+  .home-projects .gallery > li:first-child button {
+    min-height: 0;
+    aspect-ratio: 4 / 3;
+  }
+
+  .home-projects .gallery > li:first-child .gallery__caption h3 {
+    font-size: 24px;
+  }
+
+  .home-projects .gallery > li:not(:first-child) {
+    display: block;
+  }
+
+  .home-projects .gallery > li:not(:first-child) button {
+    min-height: 0;
+    aspect-ratio: 4 / 3;
+  }
+
+  .hero__assurances {
+    font-size: 15px;
+  }
+
+  .contact-list dd {
+    font-size: 16px;
+  }
+
+  .photo-card > :not(.photo-card__media) {
+    margin-inline: 22px;
+  }
+
+  .home-process__list li,
+  .home-process__list li:nth-child(3),
+  .home-process__list li:nth-child(4),
+  .home-process__list li:last-child {
+    padding: 28px 22px;
+  }
+
+  .audience-card__body p {
+    font-size: 16px;
+  }
+}
+
+/* ------------------------------------- visual refresh: inner pages */
+
+/* photo-card grids shared by guides, project links and the resource index */
+
+.photo-cards {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.section--tint .photo-card,
+.project-links .photo-card {
+  background: var(--white);
+}
+
+.photo-card--icon {
+  padding-top: 32px;
+}
+
+.photo-card--icon .feature-icon {
+  margin-inline: 28px;
+}
+
+/* tick lists: round check badges and larger text */
+
+.ticks {
+  gap: 14px;
+  margin-block: 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.ticks li {
+  grid-template-columns: 32px 1fr;
+  gap: 14px;
+  align-items: center;
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.ticks svg {
+  width: 32px;
+  height: 32px;
+  margin: 0;
+  padding: 8px;
+  border-radius: 50%;
+  background: var(--orange-soft);
+  color: var(--orange-ink);
+  stroke-width: 3;
+}
+
+/* case-study story: icon badges instead of 01–03 */
+
+.project-case__story article > .feature-icon {
+  display: inline-grid;
+  margin-bottom: 22px;
+  font-size: inherit;
+}
+
+.project-case__story h3 {
+  font-size: 24px;
+}
+
+.project-case__story p {
+  font-size: 17px;
+}
+
+/* link rows become pill buttons */
+
+.related-links,
+.project-case__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.related-links a,
+.project-case__links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 18px;
+  background: var(--white);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.related-links a:hover,
+.project-case__links a:hover {
+  border-color: var(--orange-ink);
+  color: var(--orange-ink);
+  text-decoration: none;
+}
+
+/* location service links as icon tiles */
+
+.prose .service-chips {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-block: 24px 36px;
+  padding-left: 0;
+  list-style: none;
+}
+
+.prose .service-chips li {
+  margin: 0;
+  padding: 0;
+}
+
+.prose .service-chips li {
+  display: block;
+  list-style: none;
+}
+
+.prose .ticks li {
+  font-size: 17px;
+}
+
+/* Icon badges inside cards whose legacy rules style every child span. */
+.project-link-card > .feature-icon,
+.locations-overview__note > .feature-icon {
+  display: inline-grid;
+  margin-bottom: 18px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.prose .service-chips a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 64px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 14px 20px;
+  background: var(--white);
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.prose .service-chips a::after {
+  content: "→";
+  color: var(--orange-ink);
+}
+
+.prose .service-chips a:hover {
+  border-color: var(--orange-ink);
+  color: var(--orange-ink);
+}
+
+/* icon card grid (project planning review points) */
+
+.section-title {
+  max-width: 900px;
+  margin-bottom: 44px;
+}
+
+.icon-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 22px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.icon-cards li {
+  border-radius: var(--radius-md);
+  padding: 32px 28px;
+  background: var(--white);
+}
+
+.icon-cards h3 {
+  margin-bottom: 10px;
+}
+
+.icon-cards p {
+  margin: 0;
+  font-size: 16px;
+}
+
+/* service-area hub cards */
+
+.locations-directory__item .feature-icon,
+.locations-overview__note .feature-icon {
+  margin-bottom: 18px;
+}
+
+.locations-overview__note .feature-icon {
+  background: var(--white);
+}
+
+/* FAQ and prose: larger reading size */
+
+.prose p,
+.prose li {
+  font-size: 18px;
+}
+
+.faq-list dt {
+  font-size: 20px;
+}
+
+.faq-list dd {
+  font-size: 17px;
+}
+
+/* plain contact rows (no icon) span the full width */
+
+.contact-list__row--plain {
+  grid-template-columns: 1fr;
+}
+
+/* call-to-action band: bigger copy */
+
+.cta h2 {
+  font-size: clamp(38px, 4.2vw, 56px);
+}
+
+.cta p {
+  font-size: 17px;
+}
+
+@media (max-width: 1024px) {
+  .icon-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .icon-cards,
+  .prose .service-chips {
+    grid-template-columns: 1fr;
+  }
+
+  .ticks li {
+    font-size: 16px;
+  }
+
+  .prose p,
+  .prose li {
+    font-size: 17px;
+  }
+
+  .faq-list dt {
+    font-size: 18px;
+  }
+
+  .project-case__story h3 {
+    font-size: 22px;
+  }
+
+  .project-case__story p {
+    font-size: 16px;
+  }
+}
