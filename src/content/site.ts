@@ -53,6 +53,7 @@ export {
   claddingVsRenderGuide,
   externalWallInsulationGuide,
   hebelBoundaryWallsGuide,
+  hebelFenceGuide,
   hebelVsBrickVeneerGuide,
   loadBearingWallRemovalGuide,
   renderCrackingGuide,

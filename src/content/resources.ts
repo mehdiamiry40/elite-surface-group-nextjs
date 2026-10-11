@@ -21,7 +21,8 @@ export type ResourceGuide = {
     | "soundproofing-walls-adelaide"
     | "cladding-vs-render-adelaide"
     | "render-finishes-adelaide"
-    | "external-wall-insulation-adelaide";
+    | "external-wall-insulation-adelaide"
+    | "hebel-fence-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -504,6 +505,29 @@ export const resourceGuides: readonly ResourceGuide[] = [
     publishedDisplay: "22 September 2026",
     readingTime: "10 minute read",
   },
+  {
+    slug: "hebel-fence-adelaide",
+    serviceSlug: "hebel",
+    category: "Hebel fencing",
+    title:
+      "Building a Hebel Fence in Adelaide: Approvals, Footings and the Neighbour Next Door",
+    metaTitle: "Hebel Fence Adelaide: What to Check First",
+    metaDescription:
+      "Planning a Hebel fence in Adelaide? Check whether council treats it as masonry, what your neighbour pays towards it and why the footings decide it.",
+    summary:
+      "An AAC panel fence sits between two legal regimes and a reactive clay site. See which approval threshold applies, how the Fences Act splits the cost and what the posts depend on.",
+    image: "/images/v2/service-hebel-installation.webp",
+    imageAlt:
+      "Installer checking the vertical alignment of AAC wall panels beside steel framing",
+    imageCaption:
+      "Illustrative wall-system image showing AAC wall panels, not a fence. It does not depict a PowerFence installation, a post or footing detail, or a particular site.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-10-04",
+    modified: "2026-10-04",
+    publishedDisplay: "4 October 2026",
+    readingTime: "7 minute read",
+  },
 ];
 
 function guideBySlug(slug: ResourceGuide["slug"]): ResourceGuide {
@@ -564,6 +588,7 @@ export const renderFinishesGuide = guideBySlug("render-finishes-adelaide");
 export const externalWallInsulationGuide = guideBySlug(
   "external-wall-insulation-adelaide",
 );
+export const hebelFenceGuide = guideBySlug("hebel-fence-adelaide");
 
 /** A short selection for Home; the Resources hub retains every guide. */
 export const featuredResourceGuides = [
