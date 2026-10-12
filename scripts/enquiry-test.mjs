@@ -228,7 +228,7 @@ try {
   await stubAnalytics(prefetchPage);
   const homeHeroRequests = [];
   prefetchPage.on("request", (request) => {
-    if (request.url().includes("home-hero-adelaide")) {
+    if (request.url().includes("home-hero-cladding-render")) {
       homeHeroRequests.push(request.url());
     }
   });

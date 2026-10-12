@@ -78,7 +78,6 @@ export default function ContactSection({
           <div className="form-card">
             <div className="form-card__head">
               <h3>{contactSection.formTitle}</h3>
-              <p>{contactSection.formNote}</p>
             </div>
             <EnquiryForm idPrefix="contact" defaultService={defaultService} />
           </div>

@@ -1200,8 +1200,8 @@ function preloadMarkup(html) {
 const homePreloads = preloadMarkup(homeHtml);
 check(
   "home preloads the art-directed hero photograph",
-  homePreloads.includes("home-hero-adelaide.webp") &&
-    homePreloads.includes("home-hero-adelaide-mobile-v2.webp") &&
+  homePreloads.includes("home-hero-cladding-render.webp") &&
+    homePreloads.includes("home-hero-cladding-render-mobile.webp") &&
     homePreloads.includes('media="(max-width: 767px)"') &&
     homePreloads.includes('media="(min-width: 768px)"'),
 );
