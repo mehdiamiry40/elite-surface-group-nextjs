@@ -55,6 +55,8 @@ export const aboutPage = {
     "We work closely with builders and adjoining trades so substrates, junctions and finishes are ready at the right time—not left to become someone else’s problem later.",
   ],
   prideLead: "What you can expect from us:",
+  /** Icon keys for the four pride points, in reading order. */
+  prideIcons: ["hardhat", "clipboard", "phone", "shield"],
   pride: [
     [
       "Careful installers with practical site experience",

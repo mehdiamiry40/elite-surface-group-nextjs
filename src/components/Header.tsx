@@ -11,7 +11,7 @@ import {
   type SyntheticEvent,
 } from "react";
 import QuoteButton from "@/components/QuoteButton";
-import { ArrowRightIcon, PhoneIcon } from "@/components/icons";
+import { ArrowRightIcon, InstagramIcon, PhoneIcon } from "@/components/icons";
 import { business } from "@/content/business";
 import { mainNav, type NavItem } from "@/content/navigation";
 
@@ -159,7 +159,7 @@ export default function Header() {
             {/* Static WebP at display size. Do not set priority/eager — that
                 preloads the logo and races the page LCP photograph. */}
             <Image
-              src="/images/esg-logo-1.webp"
+              src="/images/footer-logo.webp"
               alt=""
               width={123}
               height={67}
@@ -182,6 +182,17 @@ export default function Header() {
           </nav>
 
           <div className="site-header__actions">
+            {business.social.instagram ? (
+              <a
+                className="site-header__social"
+                href={business.social.instagram}
+                aria-label={`${business.name} on Instagram`}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <InstagramIcon size={20} />
+              </a>
+            ) : null}
             <QuoteButton className="site-header__quote">
               Start a project
               <ArrowRightIcon size={16} />

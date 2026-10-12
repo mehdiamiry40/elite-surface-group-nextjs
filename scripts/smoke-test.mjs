@@ -1215,7 +1215,7 @@ check(
 );
 
 const headerLogoTag = homeHtml.match(
-  /<img\b(?=[^>]*\bsrc="[^"]*esg-logo-1\.webp)[^>]*>/,
+  /<img\b(?=[^>]*\bsrc="[^"]*footer-logo\.webp)[^>]*>/,
 )?.[0];
 const headerLogoSrc = headerLogoTag
   ?.match(/\bsrc="([^"]+)"/)?.[1]
@@ -1228,7 +1228,7 @@ try {
 }
 check(
   "header logo is the static webp, not an optimiser URL",
-  headerLogoPathname === "/images/esg-logo-1.webp" &&
+  headerLogoPathname === "/images/footer-logo.webp" &&
     !headerLogoSrc?.includes("/_next/image"),
   headerLogoSrc ?? "logo source not found",
 );
@@ -1985,8 +1985,8 @@ check(
     homeHtml.includes('href="/resources/"'),
 );
 check(
-  "homepage shows three featured project case studies",
-  (homeHtml.match(/>View case study</g) ?? []).length === 3,
+  "homepage links every project case study",
+  projectSlugs.every((slug) => homeHtml.includes(`href="/projects/${slug}/"`)),
 );
 check(
   "footer has no placeholder Facebook/Instagram home links",

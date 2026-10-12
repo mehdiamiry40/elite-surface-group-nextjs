@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import FeatureIcon from "@/components/FeatureIcon";
 import PageBanner from "@/components/PageBanner";
 import QuoteButton from "@/components/QuoteButton";
 import { CtaBand } from "@/components/CtaBand";
@@ -140,17 +141,17 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
 
           <div className="project-case__story">
             <article>
-              <span aria-hidden="true">01</span>
+              <FeatureIcon name="camera" />
               <h3>What the photograph records</h3>
               <p>{project.overview}</p>
             </article>
             <article>
-              <span aria-hidden="true">02</span>
+              <FeatureIcon name="search" />
               <h3>Detail focus</h3>
               <p>{project.detailFocus}</p>
             </article>
             <article>
-              <span aria-hidden="true">03</span>
+              <FeatureIcon name="shield" />
               <h3>Visible result</h3>
               <p>{project.visibleResult}</p>
             </article>

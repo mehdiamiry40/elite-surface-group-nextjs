@@ -1,8 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
+import QuoteButton from "@/components/QuoteButton";
+import ServiceGlyph from "@/components/ServiceGlyph";
 import { ArrowRightIcon, CheckIcon } from "@/components/icons";
 import type { Project } from "@/content/projects";
-import { services, servicesIntro } from "@/content/services";
+import { services } from "@/content/services";
 import { blurProps } from "@/lib/lcp-blur";
 
 function projectServiceName(project: Project) {
@@ -79,14 +81,23 @@ export function ProjectLinks({
           intro={intro}
           id={id}
         />
-        <ul className={`project-link-grid project-link-grid--${columns}`}>
+        <ul className={`photo-cards photo-cards--${columns}`}>
           {items.map((project) => (
-            <li className="project-link-card" key={project.slug}>
+            <li className="photo-card" key={project.slug}>
+              <div className="photo-card__media">
+                <Image
+                  src={project.image}
+                  alt={project.alt}
+                  width={project.width}
+                  height={project.height}
+                  sizes="(max-width: 767px) 100vw, 33vw"
+                  {...blurProps(project.image)}
+                />
+              </div>
               <span>{projectServiceName(project)} project</span>
               <h3>
                 <Link href={`/projects/${project.slug}/`}>{project.title}</Link>
               </h3>
-              <p>{project.summary}</p>
               <Link className="text-link" href={`/projects/${project.slug}/`}>
                 View project details
                 <ArrowRightIcon />
@@ -102,57 +113,45 @@ export function ProjectLinks({
 /* ----------------------------------------------------------- service cards */
 
 export function ServiceCards({
-  title = "Cladding, render, Hebel & walling",
+  title = "Our services",
   currentSlug,
+  withCta = false,
 }: {
   title?: string;
   currentSlug?: string;
+  /** Adds a "Get in touch" quote button under the cards. */
+  withCta?: boolean;
 }) {
   const shown = currentSlug
     ? services.filter((service) => service.slug !== currentSlug)
     : services;
 
   return (
-    <section className="section section--tint services-section">
+    <section className="section services-section">
       <div className="shell">
-        <SectionHead
-          eyebrow={currentSlug ? "Related services" : "What we install"}
-          title={title}
-          intro={servicesIntro}
-        />
+        <h2 className="stack-title">{title}</h2>
         <ul className={`grid grid--${shown.length === 3 ? "3" : "4"}`}>
-          {shown.map((service, index) => (
+          {shown.map((service) => (
             <li key={service.slug} className="service-card">
               <Link
                 className="service-card__link"
                 href={`/${service.slug}`}
                 prefetch={false}
               >
-                <div className="service-card__media">
-                  <Image
-                    src={service.image}
-                    alt={service.imageAlt}
-                    width={480}
-                    height={360}
-                    sizes="(max-width: 767px) 100vw, (max-width: 1024px) 50vw, 280px"
-                    {...blurProps(service.image)}
-                  />
-                </div>
+                <ServiceGlyph slug={service.slug} />
                 <div className="service-card__body">
-                  <span className="service-card__index" aria-hidden="true">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
                   <h3>{service.name}</h3>
                   <p>{service.summary}</p>
-                  <span className="service-card__more">
-                    Explore service
-                    <ArrowRightIcon />
-                  </span>
                 </div>
               </Link>
             </li>
           ))}
         </ul>
+        {withCta ? (
+          <div className="services-section__cta">
+            <QuoteButton>Get in touch</QuoteButton>
+          </div>
+        ) : null}
       </div>
     </section>
   );

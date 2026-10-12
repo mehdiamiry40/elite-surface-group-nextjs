@@ -3,6 +3,7 @@ import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
 import { CtaBand } from "@/components/CtaBand";
 import { BreadcrumbSchema, FAQPageSchema } from "@/components/JsonLd";
+import FeatureIcon, { type FeatureIconName } from "@/components/FeatureIcon";
 import PageBanner from "@/components/PageBanner";
 import { ServiceCards, TickList } from "@/components/sections";
 import { bannerImages } from "@/content/pages";
@@ -21,6 +22,14 @@ export const metadata: Metadata = pageMetadata({
     "Plan a cladding, render, Hebel or walling project in Adelaide",
   ),
 });
+
+// One icon per review point, in content order.
+const reviewIcons: readonly FeatureIconName[] = [
+  "layers",
+  "clipboard",
+  "ruler",
+  "clock",
+];
 
 export default function ProjectPlanningPage() {
   return (
@@ -83,14 +92,19 @@ export default function ProjectPlanningPage() {
         className="section section--tint"
         aria-labelledby="planning-review-title"
       >
-        <div className="shell prose">
-          <h2 id="planning-review-title">What we review before quoting</h2>
-          {projectPlanningPage.reviewPoints.map((point) => (
-            <div key={point.title}>
-              <h3>{point.title}</h3>
-              <p>{point.body}</p>
-            </div>
-          ))}
+        <div className="shell">
+          <h2 id="planning-review-title" className="section-title">
+            What we review before quoting
+          </h2>
+          <ul className="icon-cards">
+            {projectPlanningPage.reviewPoints.map((point, index) => (
+              <li key={point.title}>
+                <FeatureIcon name={reviewIcons[index % reviewIcons.length]} />
+                <h3>{point.title}</h3>
+                <p>{point.body}</p>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 

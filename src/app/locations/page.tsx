@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRightIcon } from "@/components/icons";
+import FeatureIcon from "@/components/FeatureIcon";
 import PageBanner from "@/components/PageBanner";
 import { CtaBand, SectionHead, ServiceCards } from "@/components/sections";
 import { BreadcrumbSchema } from "@/components/JsonLd";
@@ -47,6 +48,7 @@ export default function LocationsPage() {
                   className="project-link-card locations-directory__item"
                   key={location.slug}
                 >
+                  <FeatureIcon name="pin" />
                   <span>Primary service area</span>
                   <h3>
                     <Link href={`/locations/${location.slug}/`}>
@@ -71,6 +73,7 @@ export default function LocationsPage() {
               className="article-note locations-overview__note"
               aria-labelledby="outside-adelaide-title"
             >
+              <FeatureIcon name="search" />
               <h3 id="outside-adelaide-title">
                 {locationsHub.outsideAreaTitle}
               </h3>
