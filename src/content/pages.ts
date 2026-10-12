@@ -6,7 +6,6 @@ export const contactSection = {
   intro:
     "Share the suburb, property type and work you have in mind. We’ll review the details and follow up about the next step.",
   formTitle: "Project details",
-  formNote: "A few useful details will help us understand and price the work.",
 } as const;
 
 export const ctaBand = {

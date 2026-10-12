@@ -2,9 +2,11 @@ import { business } from "@/content/business";
 
 export const heroSlides = [
   {
-    image: "/images/v2/home-hero-adelaide.webp",
-    mobileImage: "/images/v2/home-hero-adelaide-mobile-v2.webp",
-    alt: "Contemporary Adelaide home with charcoal cladding and light rendered walls",
+    // Unsplash License (free commercial use): "a building with windows" by
+    // S.Group Official, https://unsplash.com/photos/bTSQGD_hqiE
+    image: "/images/v2/home-hero-cladding-render.webp",
+    mobileImage: "/images/v2/home-hero-cladding-render-mobile.webp",
+    alt: "Dark panel cladding wrapping the upper level of a house above light rendered walls",
   },
 ] as const;
 

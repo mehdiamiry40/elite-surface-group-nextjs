@@ -63,7 +63,10 @@ export function useDialog(
 
     const frame = window.requestAnimationFrame(() => {
       const dialog = dialogRef.current;
-      if (!dialog) {
+      // Someone may already be typing in a field by the time this frame
+      // runs; pulling focus back to the first field would send their input
+      // to the wrong place.
+      if (!dialog || dialog.contains(document.activeElement)) {
         return;
       }
       const target =
