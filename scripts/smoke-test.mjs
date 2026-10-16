@@ -131,7 +131,6 @@ const EXPECTED_SITEMAP_PATHS = [
   ...projectSlugs.map((slug) => `/projects/${slug}/`),
   "/locations/",
   "/project-planning/",
-  "/blog/",
   "/resources/",
   ...resourceSlugs.map((slug) => `/resources/${slug}/`),
   ...locationSlugs.map((slug) => `/locations/${slug}/`),
@@ -223,16 +222,18 @@ for (const sitemap of [
 for (const [legacy, destination] of [
   ["/service-areas/", "/locations/"],
   ["/service-areas/adelaide/", "/locations/adelaide/"],
+  // The blog index listed the same guides as the resources hub.
+  ["/blog/", "/resources/"],
 ]) {
   const response = await get(legacy, { redirect: "manual" });
   const location = response.headers.get("location") ?? "";
   check(
-    `legacy service-area route ${legacy} redirects permanently`,
+    `legacy route ${legacy} redirects permanently`,
     [301, 308].includes(response.status),
     `status ${response.status}`,
   );
   check(
-    `legacy service-area route ${legacy} targets ${destination}`,
+    `legacy route ${legacy} targets ${destination}`,
     new URL(location, baseUrl).pathname === destination,
     `location ${location}`,
   );
@@ -405,7 +406,6 @@ const expectedSitemapDates = new Map([
     latestResourceModified,
   ]),
   ["/project-planning/", "2026-08-13"],
-  ["/blog/", "2026-08-24"],
   ["/resources/", latestResourceModified],
   ...resourceSlugs.map((slug) => [
     `/resources/${slug}/`,

@@ -83,7 +83,6 @@ export const publicRouteRecords = [
     ),
   ),
   publicRoute("/project-planning/", RELEASE_DATES.verifiedContentRelease),
-  publicRoute("/blog/", "2026-08-24"),
   publicRoute("/resources/", RESOURCE_AGGREGATE_LAST_MODIFIED),
   ...resourceGuides.map((guide) =>
     publicRoute(`/resources/${guide.slug}/`, guide.modified),

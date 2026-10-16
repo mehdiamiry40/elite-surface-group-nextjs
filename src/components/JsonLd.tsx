@@ -175,9 +175,8 @@ export function ArticleSchema({ guide }: { guide: ResourceGuide }) {
   );
 }
 
-
-/** Chronological list of editorial guides shown on the blog index. */
-export function BlogListSchema({
+/** Newest-first list of editorial guides shown on the resources hub. */
+export function GuideListSchema({
   guides,
 }: {
   guides: readonly ResourceGuide[];

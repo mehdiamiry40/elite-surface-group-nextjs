@@ -10,7 +10,7 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
   title: "Terms of Service",
-  description: `The terms and conditions that apply when you browse and use the ${business.name} website.`,
+  description: `The terms that apply when you use the ${business.name} website, including how quotes and enquiries, site content, external links and liability are handled.`,
   path: "/terms-of-service",
 });
 

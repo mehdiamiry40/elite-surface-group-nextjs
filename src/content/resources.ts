@@ -41,7 +41,7 @@ export type ResourceGuide = {
 
 export const resourcesHub = {
   bannerTitle: "Practical Surface & Walling Guides",
-  metaTitle: "Adelaide Render, Cladding & Hebel Guides",
+  metaTitle: "Adelaide Render & Cladding Guides",
   metaDescription:
     "Practical Adelaide guides about render, cladding and Hebel wall systems, including what to check before seeking assessment, repair advice or a quote.",
   lead: "Clear information helps you ask better questions about a wall system and its care. These guides explain what to document, which product information to follow and when another professional may need to assess the building.",
@@ -54,7 +54,7 @@ export const resourceGuides: readonly ResourceGuide[] = [
     category: "Render care",
     title:
       "What Causes Render Cracking in Adelaide—and What Should You Do Next?",
-    metaTitle: "What Causes Render Cracking in Adelaide?",
+    metaTitle: "Render Cracking Causes in Adelaide",
     metaDescription:
       "Understand common causes of render cracking in Adelaide, signs that need prompt assessment and what to document before requesting repair advice.",
     summary:
@@ -122,7 +122,7 @@ export const resourceGuides: readonly ResourceGuide[] = [
     category: "Render preparation",
     title:
       "Can You Render Over Painted Brick? What Adelaide Homeowners Should Confirm",
-    metaTitle: "Can You Render Over Painted Brick? Adelaide",
+    metaTitle: "Rendering Painted Brick in Adelaide",
     metaDescription:
       "Understand when painted brick may be suitable for render, what must be assessed first and which safety and planning checks matter for Adelaide projects.",
     summary:
@@ -168,7 +168,7 @@ export const resourceGuides: readonly ResourceGuide[] = [
     category: "Cladding selection",
     title:
       "Fibre Cement or Timber Weatherboard? What Adelaide Homes Should Confirm First",
-    metaTitle: "Fibre Cement vs Weatherboard Cladding SA",
+    metaTitle: "Fibre Cement vs Weatherboard, Adelaide",
     metaDescription:
       "Compare fibre cement and weatherboard cladding for Adelaide homes, covering bushfire zoning, coastal exposure and upkeep to confirm before you choose.",
     summary:
@@ -191,7 +191,7 @@ export const resourceGuides: readonly ResourceGuide[] = [
     category: "Renovation walling",
     title:
       "Removing a Load-Bearing Wall in Adelaide: What to Confirm Before Work Begins",
-    metaTitle: "Load-Bearing Wall Removal Adelaide Guide",
+    metaTitle: "Load-Bearing Wall Removal Adelaide",
     metaDescription:
       "Planning a load-bearing wall removal in Adelaide? See what engineering, consent and reframing steps to confirm before an opening or renovation begins.",
     summary:
@@ -214,7 +214,7 @@ export const resourceGuides: readonly ResourceGuide[] = [
     category: "Wall framing",
     title:
       "Steel Frame or Timber Frame Walls? What Adelaide Projects Should Confirm First",
-    metaTitle: "Steel Frame vs Timber Frame Walls Adelaide",
+    metaTitle: "Steel vs Timber Wall Framing Adelaide",
     metaDescription:
       "Compare steel and timber wall framing for Adelaide projects, including compliance pathways, termite scope, coastal exposure and footing design.",
     summary:
@@ -236,7 +236,7 @@ export const resourceGuides: readonly ResourceGuide[] = [
     serviceSlug: "render",
     category: "Render selection",
     title: "Acrylic Render vs Cement Render: What Should Adelaide Homes Choose?",
-    metaTitle: "Acrylic Render vs Cement Render in Adelaide",
+    metaTitle: "Acrylic vs Cement Render in Adelaide",
     metaDescription:
       "Weighing acrylic render against cement render for an Adelaide home? Compare flexibility, substrate fit and coastal durability before you choose a system.",
     summary:
@@ -258,7 +258,7 @@ export const resourceGuides: readonly ResourceGuide[] = [
     category: "Cladding design",
     title:
       "Vertical vs Horizontal Cladding: Which Suits Your Adelaide Home?",
-    metaTitle: "Vertical vs Horizontal Cladding Adelaide",
+    metaTitle: "Vertical vs Horizontal Cladding in SA",
     metaDescription:
       "Choosing vertical vs horizontal cladding for an Adelaide home? Compare batten orientation, drainage cavities and coastal detailing before you commit.",
     summary:
@@ -327,7 +327,7 @@ export const resourceGuides: readonly ResourceGuide[] = [
     category: "Render and moisture",
     title:
       "Salt Damp in Adelaide Homes: Why Render Alone Will Not Fix It",
-    metaTitle: "Salt Damp in Adelaide: Can Render Fix It?",
+    metaTitle: "Salt Damp Adelaide: Can Render Fix It?",
     metaDescription:
       "Seeing salt damp on an Adelaide wall? Learn why rendering over it usually makes things worse and what has to be assessed before any repair.",
     summary:
@@ -350,7 +350,7 @@ export const resourceGuides: readonly ResourceGuide[] = [
     category: "Hebel selection",
     title:
       "Hebel or Brick Veneer? What Adelaide Homes Should Compare First",
-    metaTitle: "Hebel vs Brick Veneer for Adelaide Homes",
+    metaTitle: "Hebel vs Brick Veneer in Adelaide",
     metaDescription:
       "Choosing between Hebel and brick veneer for an Adelaide build? Compare how each wall is built, insulated, finished and approved before you commit.",
     summary:

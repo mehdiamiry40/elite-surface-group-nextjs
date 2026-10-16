@@ -94,6 +94,20 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      // Files (sitemap.xml, robots.txt, images) keep their bare path. Without
+      // this rule the page rule below sends `www/sitemap.xml` to
+      // `/sitemap.xml/`, which then needs a second redirect.
+      {
+        source: "/:file(.*\\.[a-zA-Z0-9]+)",
+        has: [
+          {
+            type: "host",
+            value: "www.elitesurfacegroup.com.au",
+          },
+        ],
+        destination: "https://elitesurfacegroup.com.au/:file",
+        permanent: true,
+      },
       {
         source: "/:path*",
         has: [
@@ -110,6 +124,12 @@ const nextConfig: NextConfig = {
         destination: "/sitemap.xml",
         permanent: true,
       })),
+      // The blog index listed the same guides as the resources hub.
+      {
+        source: "/blog",
+        destination: "/resources/",
+        permanent: true,
+      },
       {
         source: "/service-areas",
         destination: "/locations/",
