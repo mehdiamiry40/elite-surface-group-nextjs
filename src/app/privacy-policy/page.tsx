@@ -10,7 +10,7 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
   title: "Privacy Policy",
-  description: `How ${business.name} handles enquiry details and privacy-friendly website analytics.`,
+  description: `How ${business.name} collects, uses, stores and discloses the details you send in an enquiry, and how its cookie-free website analytics work.`,
   path: "/privacy-policy",
 });
 

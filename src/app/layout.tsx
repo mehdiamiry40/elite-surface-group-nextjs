@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { QuoteDialogProvider } from "@/components/QuoteDialogProvider";
 import { business } from "@/content/business";
+import { projects } from "@/content/projects";
 import { services } from "@/content/services";
 import { absoluteUrl, DEFAULT_OG_IMAGE } from "@/lib/seo";
 import "./globals.css";
@@ -82,7 +83,12 @@ const organisationSchema = {
   telephone: business.phone,
   email: business.email,
   description: HOME_DESCRIPTION,
-  image: absoluteUrl("/images/cropped-esg-logo-1-192x192.webp"),
+  // Finished-work photographs; the logo is carried separately below.
+  image: projects
+    .filter((project) => project.stage !== "Work in progress")
+    .slice(0, 3)
+    .map((project) => absoluteUrl(project.image)),
+  priceRange: business.priceRange,
   logo: {
     "@type": "ImageObject",
     "@id": `${business.siteUrl}/#logo`,
@@ -118,6 +124,11 @@ const organisationSchema = {
     addressLocality: business.address.suburb,
     addressRegion: business.address.region,
     addressCountry: business.address.country,
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: business.geo.latitude,
+    longitude: business.geo.longitude,
   },
   ...(sameAs.length ? { sameAs } : {}),
   contactPoint: [

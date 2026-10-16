@@ -23,6 +23,16 @@ export const business = {
     region: "SA",
     country: "AU",
   },
+  /**
+   * Suburb-level coordinates for Salisbury East (two decimal places, roughly
+   * 1 km). Precise enough for local search, without pinpointing a premises.
+   */
+  geo: {
+    latitude: -34.77,
+    longitude: 138.67,
+  },
+  /** Schema.org `priceRange`: relative cost band, not a quoted price. */
+  priceRange: "$$",
   siteUrl: "https://elitesurfacegroup.com.au",
   hours: {
     days: [

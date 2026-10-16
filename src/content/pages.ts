@@ -85,7 +85,7 @@ export const projectsPage = {
 export const contactPage = {
   bannerTitle: "Let’s Talk About Your Project",
   metaTitle: "Contact Our Salisbury East Team",
-  metaDescription: `Contact ${business.name} for cladding, render, Hebel and walling enquiries across Adelaide.`,
+  metaDescription: `Contact ${business.name} for cladding, render, Hebel and walling enquiries across Adelaide. Call ${business.phoneDisplay} or send your project details for a quote.`,
   intro:
     "Tell our Salisbury East team what you’re planning and where the project is located. We’ll review the details and follow up about the next step.",
 } as const;
@@ -99,7 +99,6 @@ export const bannerImages: Record<string, string> = {
   "/hebel": "/images/v2/banner-hebel.webp",
   "/walling": "/images/v2/banner-walling.webp",
   "/project-planning": "/images/v2/banner-services.webp",
-  "/blog": "/images/v2/banner-services.webp",
   "/resources": "/images/v2/banner-services.webp",
   "/resources/render-cracking-adelaide": "/images/v2/banner-render.webp",
   "/resources/cladding-maintenance-coastal-adelaide":

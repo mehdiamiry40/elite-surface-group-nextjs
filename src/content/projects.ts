@@ -129,7 +129,7 @@ export const projects: readonly Project[] = [
     title: "Rendered window reveal detail",
     metaTitle: "Rendered Window Reveal Case Study",
     metaDescription:
-      "See a close view of a deep light-rendered window return and straight parapet edge beside dark-framed glazing.",
+      "See a close view of a deep light-rendered window return and straight parapet edge beside dark-framed glazing, recorded on a finished residential exterior.",
     service: "render",
     projectType: "Residential exterior detail",
     stage: "Finished detail",
@@ -159,7 +159,7 @@ export const projects: readonly Project[] = [
     title: "Rendered columns and stone junctions",
     metaTitle: "Rendered Column Detail Case Study",
     metaDescription:
-      "View an in-progress exterior detail with textured rendered columns, moulded ledges and a stone-faced base.",
+      "View an in-progress residential exterior detail with textured rendered columns, moulded ledges and the junctions where render meets a stone-faced base.",
     service: "render",
     projectType: "Residential exterior detail",
     stage: "Work in progress",
