@@ -244,8 +244,11 @@ try {
   const resourcePrefetches = [];
   prefetchPage.on("request", (request) => {
     const url = new URL(request.url());
+    // The hub itself is a header nav link and may prefetch like any other
+    // nav item; only individual guides count.
     if (
       url.pathname.startsWith("/resources/") &&
+      url.pathname !== "/resources/" &&
       url.searchParams.has("_rsc")
     ) {
       resourcePrefetches.push(url.pathname);
