@@ -1,38 +1,26 @@
 import type { NextConfig } from "next";
+import { join } from "node:path";
 import legacyAssets from "./src/content/legacy-assets.json";
+import { buildContentSecurityPolicy, buildDevContentSecurityPolicy } from "./src/lib/csp-policy.ts";
 
 /**
  * Content-Security-Policy.
  *
- * Vercel Web Analytics uses same-origin `/_vercel/insights/*` endpoints;
- * `next/font` self-hosts the webfonts, icons are inline SVG, and every image is
- * local. That lets the policy stay at `'self'` for all fetch directives.
- *
- * `'unsafe-inline'` is still needed for `style-src` (Next.js injects inline
- * style attributes) and `script-src` (its inline bootstrap plus our JSON-LD
- * block). Tightening those to nonces means routing every response through
- * middleware — worth doing later, but it buys little while browser scripts
- * remain first-party and tightly scoped.
+ * Production script hashes are unknown until prerender finishes. The placeholder
+ * is replaced in the build output by scripts/csp-hashes.ts. On Vercel that is
+ * too late for the header the CDN serves: the Next adapter copies it into
+ * `.next/output/config.json` during onBuildComplete, while `next build` is still
+ * running. scripts/csp-adapter.mjs wraps that adapter and writes the hashes first.
+ * Development cannot use those hashes. style-src stays 'unsafe-inline' because
+ * next/image emits style attributes. JSON-LD is not executable and is not hashed.
+ * There is no nonce: a nonce would make every HTML response unique and stop the
+ * CDN from caching it.
  */
-const csp = [
-  "default-src 'self'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "frame-ancestors 'none'",
-  "object-src 'none'",
-  "img-src 'self' data: blob:",
-  "font-src 'self'",
-  "style-src 'self' 'unsafe-inline'",
-  // Next.js ships an inline bootstrap script and inline JSON-LD.
-  "script-src 'self' 'unsafe-inline'" +
-    (process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""),
-  "connect-src 'self'",
-  "manifest-src 'self'",
-  "upgrade-insecure-requests",
-].join("; ");
+const contentSecurityPolicy =
+  process.env.NODE_ENV === "development" ? buildDevContentSecurityPolicy() : buildContentSecurityPolicy([]);
 
 const securityHeaders = [
-  { key: "Content-Security-Policy", value: csp },
+  { key: "Content-Security-Policy", value: contentSecurityPolicy },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "X-Frame-Options", value: "DENY" },
@@ -60,6 +48,9 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   reactStrictMode: true,
   turbopack: { root: process.cwd() },
+  // Vercel sets NEXT_ADAPTER_PATH to its own adapter. Wrap it so the routing
+  // object it serialises already contains the real script hashes.
+  ...(process.env.NEXT_ADAPTER_PATH ? { adapterPath: join(process.cwd(), "scripts/csp-adapter.mjs") } : {}),
 
   images: {
     formats: ["image/avif", "image/webp"],
