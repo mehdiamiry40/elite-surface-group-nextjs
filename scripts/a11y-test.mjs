@@ -51,10 +51,21 @@ const browser = await chromium.launch({
     : {}),
 });
 
+const AXE_PATH = "/__axe-core.min.js";
+
 async function runAxe(page, label) {
   checks += 1;
   if (!(await page.evaluate(() => Boolean(globalThis.axe)))) {
-    await page.addScriptTag({ content: axeSource });
+    // script-src is hash-based, so an inline axe payload is refused. A
+    // same-origin URL is allowed by 'self'; Playwright serves the file.
+    await page.route(`**${AXE_PATH}`, async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "text/javascript; charset=utf-8",
+        body: axeSource,
+      });
+    });
+    await page.addScriptTag({ url: AXE_PATH });
   }
   const violations = await page.evaluate(async () => {
     const results = await globalThis.axe.run(document, {
