@@ -10,7 +10,10 @@ export const maxDuration = 60;
 
 async function retryDueEnquiries(request: NextRequest) {
   if (!bearerTokenIsValid(request.headers.get("authorization"), process.env.CRON_SECRET)) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    return NextResponse.json(
+      { message: "Unauthorized" },
+      { status: 401, headers: { "Cache-Control": "private, no-store, max-age=0" } },
+    );
   }
   try {
     const outbox = outboxFromEnvironment();
