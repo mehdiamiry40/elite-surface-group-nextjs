@@ -63,13 +63,6 @@ export const metadata: Metadata = {
     description: HOME_DESCRIPTION,
     images: [absoluteUrl(DEFAULT_OG_IMAGE)],
   },
-  icons: {
-    icon: [
-      { url: "/images/cropped-esg-logo-1-32x32.webp", sizes: "32x32" },
-      { url: "/images/cropped-esg-logo-1-192x192.webp", sizes: "192x192" },
-    ],
-    apple: "/images/cropped-esg-logo-1-180x180.webp",
-  },
 };
 
 const organisationSchema = {
