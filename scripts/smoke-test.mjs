@@ -1244,6 +1244,54 @@ check(
   !renderPreloads.includes("service-render-application.webp"),
 );
 
+function withoutScripts(html) {
+  return html.replace(/<script[\s\S]*?<\/script>/gi, "");
+}
+
+const renderVisible = withoutScripts(pages.get("/render/") ?? "");
+check(
+  "service pages do not repeat the banner photograph under the hero",
+  !renderVisible.includes("service-render-application.webp") &&
+    renderVisible.includes("banner-render.webp") &&
+    !withoutScripts(pages.get("/cladding/") ?? "").includes(
+      "service-cladding-installation.webp",
+    ) &&
+    !withoutScripts(pages.get("/hebel/") ?? "").includes(
+      "service-hebel-installation.webp",
+    ) &&
+    !withoutScripts(pages.get("/walling/") ?? "").includes(
+      "service-walling-installation.webp",
+    ),
+);
+
+const darkFeatureVisible = withoutScripts(
+  pages.get("/projects/dark-feature-cladding/") ?? "",
+);
+check(
+  "dark feature case study banner is a different photograph from the project",
+  darkFeatureVisible.includes("home-hero-cladding-render.webp") &&
+    darkFeatureVisible.includes("project-dark-feature-cladding.webp") &&
+    !darkFeatureVisible.includes("banner-projects.webp"),
+);
+
+const acrylicVisible = withoutScripts(
+  pages.get("/resources/acrylic-render-vs-cement-render-adelaide/") ?? "",
+);
+check(
+  "acrylic render guide keeps its figure and uses a different banner",
+  acrylicVisible.includes("banner-services.webp") &&
+    acrylicVisible.includes("service-render-application.webp") &&
+    !acrylicVisible.includes("banner-render.webp"),
+);
+
+const privacyVisible = withoutScripts(pages.get("/privacy-policy/") ?? "");
+check(
+  "privacy policy banner is not the closing call-to-action photograph",
+  privacyVisible.includes("banner-about.webp") &&
+    privacyVisible.includes("cta-render-action.webp") &&
+    !privacyVisible.includes("banner-legal.webp"),
+);
+
 check(
   "contact form collects optional project context with fixed choices",
   ["projectArea", "projectType", "projectTiming"].every((name) =>

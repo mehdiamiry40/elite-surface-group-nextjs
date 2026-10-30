@@ -10,11 +10,21 @@ type Crumb = {
 type PageBannerProps = {
   title: string;
   image: string;
+  /**
+   * Set when this photograph is the page's only copy of the shot.
+   * Otherwise the banner is decorative and the body image carries the alt.
+   */
+  imageAlt?: string;
   /** Trail after "Home"; the last entry is rendered as the current page. */
   crumbs?: readonly Crumb[];
 };
 
-export default function PageBanner({ title, image, crumbs }: PageBannerProps) {
+export default function PageBanner({
+  title,
+  image,
+  imageAlt,
+  crumbs,
+}: PageBannerProps) {
   return (
     // Long article titles drop a size so they stay within three lines.
     <section className={title.length > 42 ? "banner banner--long" : "banner"}>
@@ -43,12 +53,12 @@ export default function PageBanner({ title, image, crumbs }: PageBannerProps) {
         <div className="banner__media">
           <Image
             src={image}
-            alt=""
+            alt={imageAlt ?? ""}
             fill
             sizes="(max-width: 1280px) 100vw, 1220px"
             priority
             fetchPriority="high"
-            aria-hidden
+            aria-hidden={imageAlt ? undefined : true}
             {...blurProps(image)}
           />
         </div>

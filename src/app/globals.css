@@ -1557,6 +1557,14 @@ h3 {
   margin-top: 24px;
 }
 
+/* Text intro used when the banner already shows the service photograph.
+   The measure matches the prose section that follows, so the column lines up. */
+.service-intro {
+  max-width: 768px;
+  font-size: 17px;
+  line-height: 1.72;
+}
+
 .project-case__story {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
