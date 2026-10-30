@@ -9,6 +9,7 @@ import { CtaBand } from "@/components/CtaBand";
 import { ProjectLinks, ServiceCards, TickList } from "@/components/sections";
 import { bannerImages } from "@/content/pages";
 import { projects } from "@/content/projects";
+import { samePhotograph } from "@/lib/photographs";
 import { services, type Service } from "@/content/services";
 import {
   BreadcrumbSchema,
@@ -64,6 +65,29 @@ export default async function ServicePage({ params }: PageProps) {
   const relatedProjects = projects
     .filter((project) => project.service === service.slug)
     .slice(0, 3);
+  const banner = bannerImages[`/${service.slug}`];
+  // The service photograph and the banner file are the same shot. The banner
+  // keeps it; the intro underneath does not show it again.
+  const introRepeatsBanner = samePhotograph(service.image, banner);
+
+  const intro = (
+    <>
+      <h2 id="service-intro">{service.name} services across Adelaide</h2>
+      {service.intro.map((paragraph) => (
+        <p key={paragraph}>{paragraph}</p>
+      ))}
+      <div className="service-intro__actions">
+        <QuoteButton>Request a {serviceLabel} quote</QuoteButton>
+      </div>
+      <ul className="related-links">
+        {service.relatedLinks.map((link) => (
+          <li key={link.href}>
+            <Link href={link.href}>{link.label}</Link>
+          </li>
+        ))}
+      </ul>
+    </>
+  );
 
   return (
     <>
@@ -77,7 +101,8 @@ export default async function ServicePage({ params }: PageProps) {
       />
       <PageBanner
         title={service.bannerTitle}
-        image={bannerImages[`/${service.slug}`]}
+        image={banner}
+        imageAlt={introRepeatsBanner ? service.imageAlt : undefined}
         crumbs={[
           { label: "Services", href: "/services" },
           { label: service.name },
@@ -85,34 +110,23 @@ export default async function ServicePage({ params }: PageProps) {
       />
 
       <section className="section" aria-labelledby="service-intro">
-        <div className="shell split">
-          <div className="split__media">
-            <Image
-              src={service.image}
-              alt={service.imageAlt}
-              width={service.imageWidth}
-              height={service.imageHeight}
-              sizes="(max-width: 767px) 100vw, 560px"
-              {...blurProps(service.image)}
-            />
-          </div>
-          <div className="split__body">
-            <h2 id="service-intro">{service.name} services across Adelaide</h2>
-            {service.intro.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-            <div className="service-intro__actions">
-              <QuoteButton>Request a {serviceLabel} quote</QuoteButton>
+        {introRepeatsBanner ? (
+          <div className="shell service-intro">{intro}</div>
+        ) : (
+          <div className="shell split">
+            <div className="split__media">
+              <Image
+                src={service.image}
+                alt={service.imageAlt}
+                width={service.imageWidth}
+                height={service.imageHeight}
+                sizes="(max-width: 767px) 100vw, 560px"
+                {...blurProps(service.image)}
+              />
             </div>
-            <ul className="related-links">
-              {service.relatedLinks.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href}>{link.label}</Link>
-                </li>
-              ))}
-            </ul>
+            <div className="split__body">{intro}</div>
           </div>
-        </div>
+        )}
       </section>
 
       <section className="section section--tint" aria-labelledby="service-detail">

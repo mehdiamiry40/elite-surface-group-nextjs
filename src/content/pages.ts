@@ -90,7 +90,13 @@ export const contactPage = {
     "Tell our Salisbury East team what you’re planning and where the project is located. We’ll review the details and follow up about the next step.",
 } as const;
 
-/** Banner background images, keyed by route. */
+/**
+ * Banner photographs, keyed by route.
+ *
+ * Some older banner files are the same shot as a photograph in the page body
+ * (a service intro, a case-study image, a guide figure, or the closing CTA).
+ * Those routes point at a different existing photo so the shot appears once.
+ */
 export const bannerImages: Record<string, string> = {
   "/about": "/images/v2/banner-about.webp",
   "/services": "/images/v2/banner-services.webp",
@@ -104,38 +110,42 @@ export const bannerImages: Record<string, string> = {
   "/resources/cladding-maintenance-coastal-adelaide":
     "/images/v2/banner-cladding.webp",
   "/resources/rendering-hebel-panels-adelaide":
-    "/images/v2/banner-hebel.webp",
+    "/images/v2/banner-services.webp",
   "/resources/hebel-boundary-walls-adelaide":
     "/images/v2/banner-hebel.webp",
   "/resources/rendering-over-painted-brick-adelaide":
     "/images/v2/banner-render.webp",
   "/resources/fibre-cement-vs-weatherboard-cladding-adelaide":
-    "/images/v2/banner-cladding.webp",
+    "/images/v2/banner-services.webp",
   "/resources/load-bearing-wall-removal-adelaide":
-    "/images/v2/banner-walling.webp",
+    "/images/v2/banner-services.webp",
   "/resources/steel-frame-vs-timber-frame-walls-adelaide":
-    "/images/v2/banner-walling.webp",
+    "/images/v2/banner-services.webp",
   "/resources/acrylic-render-vs-cement-render-adelaide":
-    "/images/v2/banner-render.webp",
+    "/images/v2/banner-services.webp",
   "/resources/vertical-vs-horizontal-cladding-adelaide":
-    "/images/v2/banner-cladding.webp",
+    "/images/v2/banner-services.webp",
   "/resources/second-storey-addition-adelaide":
-    "/images/v2/banner-walling.webp",
+    "/images/v2/banner-services.webp",
   "/resources/repainting-render-adelaide": "/images/v2/banner-render.webp",
   "/resources/salt-damp-adelaide": "/images/v2/banner-render.webp",
-  "/resources/hebel-vs-brick-veneer-adelaide": "/images/v2/banner-hebel.webp",
+  "/resources/hebel-vs-brick-veneer-adelaide":
+    "/images/v2/banner-services.webp",
   "/resources/cladding-over-brick-adelaide": "/images/v2/banner-cladding.webp",
   "/resources/asbestos-cladding-replacement-adelaide":
-    "/images/v2/banner-cladding.webp",
-  "/resources/soundproofing-walls-adelaide": "/images/v2/banner-walling.webp",
+    "/images/v2/banner-services.webp",
+  "/resources/soundproofing-walls-adelaide":
+    "/images/v2/banner-services.webp",
   "/resources/cladding-vs-render-adelaide": "/images/v2/banner-cladding.webp",
   "/resources/render-finishes-adelaide": "/images/v2/banner-render.webp",
   "/resources/external-wall-insulation-adelaide":
-    "/images/v2/banner-walling.webp",
-  "/projects": "/images/v2/banner-projects.webp",
+    "/images/v2/banner-services.webp",
+  // Not the dark-feature case study: that photograph is already in the gallery.
+  "/projects": "/images/v2/home-hero-cladding-render.webp",
   "/locations": "/images/v2/banner-locations.webp",
   "/locations/adelaide": "/images/v2/banner-locations.webp",
   "/contact-us": "/images/v2/banner-contact.webp",
-  "/privacy-policy": "/images/v2/banner-legal.webp",
-  "/terms-of-service": "/images/v2/banner-legal.webp",
+  // Not the closing CTA photograph (cta-render-action.webp is the same shot).
+  "/privacy-policy": "/images/v2/banner-about.webp",
+  "/terms-of-service": "/images/v2/banner-about.webp",
 };
