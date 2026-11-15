@@ -335,8 +335,8 @@ export default function RepaintingRenderGuidePage() {
             <aside className="article-note article-note--warning">
               <strong>Older coatings and height both carry risk.</strong>
               <p>
-                Sanding or blasting paint applied before 1970 can disturb
-                lead-based coatings, and repainting render on anything above
+                Sanding or blasting paint on a property built before 1980 can
+                disturb lead-based coatings, and repainting render on anything above
                 single storey is work at height. Both are regulated safety
                 matters in South Australia—confirm how they will be managed
                 before preparation starts.

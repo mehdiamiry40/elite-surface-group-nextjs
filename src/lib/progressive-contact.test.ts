@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import { SPAM_TRAP_FIELD } from "./contact-submission.ts";
 import {
   progressiveContactHeaders,
   renderProgressiveContactFailure,
@@ -53,14 +54,31 @@ describe("progressive contact recovery", () => {
     assert.match(progressiveContactHeaders["X-Robots-Tag"], /noindex/);
   });
 
-  it("escapes reflected values and never restores the honeypot", () => {
+  it("escapes reflected values", () => {
     const html = render();
 
     assert.doesNotMatch(html, /<script>alert/);
     assert.match(html, /Alex &lt;script&gt;alert\(&quot;x&quot;\)&lt;\/script&gt;/);
     assert.match(html, /Salisbury East &amp; &quot;nearby&quot;/);
-    assert.match(html, /name="company"/);
-    assert.doesNotMatch(html, /honeypot-secret/);
+  });
+
+  it("renders an empty spam trap that autofill has no reason to fill", () => {
+    const html = render();
+    const trap = /<input id="recovery-enquiry-check"[^>]*>/.exec(html)?.[0] ?? "";
+
+    assert.match(trap, new RegExp(`name="${SPAM_TRAP_FIELD}"`));
+    assert.doesNotMatch(trap, /value=/);
+    assert.match(trap, /tabindex="-1"/);
+    assert.match(trap, /data-1p-ignore/);
+    assert.match(trap, /data-lpignore="true"/);
+    // A name or label a browser recognises is what made the old trap fire for
+    // genuine visitors: `company` was filled from saved address profiles.
+    assert.doesNotMatch(
+      SPAM_TRAP_FIELD,
+      /company|organi[sz]ation|business|name|mail|phone|address|street|city|suburb|state|zip|post|country|url|website/i,
+    );
+    assert.doesNotMatch(html, /name="company"/);
+    assert.match(html, /<label for="recovery-enquiry-check">Leave this field empty<\/label>/);
   });
 
   it("only renders a generated mailto fallback", () => {

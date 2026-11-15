@@ -59,6 +59,12 @@ const contactRouteSource = readFileSync(
   path.join(projectRoot, "src/app/api/contact/route.ts"),
   "utf8",
 );
+const spamTrapField = /SPAM_TRAP_FIELD = "([^"]+)"/.exec(
+  readFileSync(
+    path.join(projectRoot, "src/lib/contact-submission.ts"),
+    "utf8",
+  ),
+)?.[1];
 const routesSource = readFileSync(
   path.join(projectRoot, "src/content/routes.ts"),
   "utf8",
@@ -950,11 +956,14 @@ if (isLoopbackSmoke) {
     `status ${noRedirect.status}`,
   );
 
+  // A native form POST that is refused before parsing answers with a redirect.
+  // The destination must carry the outcome only — never what was typed.
   const progressiveForm = await get("/api/contact/", {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-      Origin: baseUrl.origin,
+      Origin: "https://example.invalid",
+      "Sec-Fetch-Site": "cross-site",
       "x-real-ip": "198.51.100.22",
     },
     body: new URLSearchParams({
@@ -966,7 +975,6 @@ if (isLoopbackSmoke) {
       projectType: "Multi-unit development",
       projectTiming: "Within 3–6 months",
       message: "Progressive form fallback check.",
-      company: "honeypot-check",
       sourcePath: "/contact-us/",
     }),
     redirect: "manual",
@@ -975,7 +983,7 @@ if (isLoopbackSmoke) {
   check(
     "progressive form POST redirects without personal data",
     progressiveForm.status === 303 &&
-      /\/contact-us\/#enquiry-sent$/.test(progressiveLocation) &&
+      /\/contact-us\/#enquiry-invalid$/.test(progressiveLocation) &&
       !/Smoke|smoke%40|message=|Salisbury|Multi-unit|Within/.test(
         progressiveLocation,
       ),
@@ -983,6 +991,13 @@ if (isLoopbackSmoke) {
   );
 
   const publicContactPageHtml = pages.get("/contact-us/") ?? "";
+  check(
+    "enquiry form carries the spam trap under a name autofill does not recognise",
+    Boolean(spamTrapField) &&
+      publicContactPageHtml.includes(`name="${spamTrapField}"`) &&
+      !publicContactPageHtml.includes('name="company"'),
+    `field ${spamTrapField}`,
+  );
   check(
     "queued confirmation is not forgeable through a public contact-page fragment",
     !publicContactPageHtml.includes('id="enquiry-received"') &&
@@ -1009,6 +1024,31 @@ if (isLoopbackSmoke) {
       "contact endpoint reports unconfigured delivery without a provider key",
       unconfigured.status === 503,
       `status ${unconfigured.status}`,
+    );
+
+    // A filled spam trap used to be answered "sent" and thrown away, which
+    // also discarded any genuine enquiry whose browser autofilled the hidden
+    // field. It must now go on to delivery like any other enquiry — on this
+    // keyless server that is the same 503, never a 200.
+    const trapped = await get("/api/contact/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: baseUrl.origin,
+        "x-real-ip": "198.51.100.25",
+      },
+      body: JSON.stringify({
+        name: "Smoke Tester",
+        email: "smoke@example.com",
+        message: "Please ignore — spam-trap check.",
+        [spamTrapField]: "Autofilled Pty Ltd",
+      }),
+    });
+    const trappedBody = await trapped.json().catch(() => ({}));
+    check(
+      "a filled spam trap is not answered with a fake success",
+      trapped.status === 503 && trappedBody.ok !== true,
+      `status ${trapped.status}`,
     );
 
     const progressiveFailure = await get("/api/contact/", {

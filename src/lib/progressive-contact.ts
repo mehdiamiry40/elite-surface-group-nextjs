@@ -1,3 +1,5 @@
+import { SPAM_TRAP_FIELD } from "./contact-submission.ts";
+
 export type ProgressiveContactFields = {
   firstName: string;
   lastName: string;
@@ -219,8 +221,8 @@ export function renderProgressiveContactFailure({
         <input type="hidden" name="sourcePath" value="${escapeHtml(fields.sourcePath)}" />
         <input type="hidden" name="submissionId" value="${escapeHtml(fields.submissionId)}" />
         <div class="hidden" aria-hidden="true">
-          <label for="recovery-company">Company</label>
-          <input id="recovery-company" name="company" tabindex="-1" autocomplete="off" maxlength="120" />
+          <label for="recovery-enquiry-check">Leave this field empty</label>
+          <input id="recovery-enquiry-check" name="${SPAM_TRAP_FIELD}" type="text" tabindex="-1" autocomplete="off" maxlength="120" data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other" />
         </div>
         <button class="submit" type="submit">Try sending again</button>
         <p class="privacy">For your privacy, this response is not cached and your details are not placed in the page URL.</p>

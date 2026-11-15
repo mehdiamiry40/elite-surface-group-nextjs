@@ -1,3 +1,14 @@
+/**
+ * Name of the hidden anti-spam field carried by every enquiry form.
+ *
+ * It is deliberately meaningless. Browsers and password managers fill hidden
+ * fields they recognise and ignore `autocomplete="off"` when they do; the
+ * previous name, `company`, was one of those, so a genuine visitor could trip
+ * the trap without ever seeing it. A filled trap marks the enquiry as possible
+ * spam — it never discards it.
+ */
+export const SPAM_TRAP_FIELD = "enquiryCheck";
+
 const SUBMISSION_ID =
   /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
