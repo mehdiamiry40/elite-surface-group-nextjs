@@ -26,7 +26,10 @@ import {
   type ResendEmail,
 } from "@/lib/contact-provider";
 import { outboxFromEnvironment } from "@/lib/contact-outbox";
-import { resolveSubmissionId } from "@/lib/contact-submission";
+import {
+  resolveSubmissionId,
+  SPAM_TRAP_FIELD,
+} from "@/lib/contact-submission";
 import { deliverOutboxSubmission } from "@/lib/contact-worker";
 import {
   progressiveContactHeaders,
@@ -48,7 +51,7 @@ const MAX = {
   projectTiming: 80,
   message: 5000,
   sourcePath: 250,
-  company: 120,
+  spamTrap: 120,
 };
 
 const MAX_BODY_BYTES = 65_536;
@@ -493,7 +496,11 @@ export async function POST(request: NextRequest) {
   const sourcePath = ALLOWED_SOURCE_PATHS.has(requestedSourcePath)
     ? requestedSourcePath
     : "unknown";
-  const company = singleLine(body.company);
+  // Whatever filled the hidden field is shown to the business, never trusted:
+  // it is capped here rather than rejected, because a visitor whose browser
+  // filled it cannot see the field to correct it.
+  const spamTrap = singleLine(body[SPAM_TRAP_FIELD]).slice(0, MAX.spamTrap);
+  const possibleSpam = Boolean(spamTrap);
   const submissionId = resolveSubmissionId(body.submissionId);
   const progressiveFields: ProgressiveContactFields = {
     firstName: isBrowserForm ? singleLine(browserFirstName) : name,
@@ -531,14 +538,16 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (company) {
-    return contactResponse(
-      request,
-      isBrowserForm,
-      { ok: true, message: "Thanks—your enquiry has been sent. We’ll be in touch soon." },
-      200,
-      "sent",
-    );
+  if (possibleSpam) {
+    // A filled trap is a signal, not a verdict. Autofill and password managers
+    // can fill a field the visitor never sees, so the enquiry carries on
+    // through validation and delivery with a flagged subject instead of being
+    // answered with a success message and thrown away. Nothing personal is
+    // logged — only that the trap fired, and where.
+    contactLog("contact.spam_trap.triggered", {
+      requestId: submissionId,
+      page: sourcePath,
+    });
   }
 
   if (
@@ -550,8 +559,7 @@ export async function POST(request: NextRequest) {
     tooLong(projectArea, MAX.projectArea) ||
     tooLong(projectTiming, MAX.projectTiming) ||
     tooLong(message, MAX.message) ||
-    tooLong(sourcePath, MAX.sourcePath) ||
-    tooLong(company, MAX.company)
+    tooLong(sourcePath, MAX.sourcePath)
   ) {
     return parsedContactResponse(
       request,
@@ -648,6 +656,7 @@ export async function POST(request: NextRequest) {
         projectTiming,
         sourcePath,
         message,
+        possibleSpam,
       });
       return contactResponse(
         request,
@@ -698,14 +707,22 @@ export async function POST(request: NextRequest) {
   }
 
   const requestId = submissionId;
+  // Shown only on a flagged enquiry, so the business can judge it at a glance:
+  // a real company name here usually means autofill, a link usually means a bot.
+  const spamNotice =
+    "Possible spam: this enquiry filled a form field that visitors cannot see. " +
+    "A browser's autofill can do that for a genuine enquiry, so read it before discarding it.";
   const contactEmail: ResendEmail = {
     from,
     to: [to],
     reply_to: email,
-    subject: `Elite Surface Group website enquiry${
+    subject: `${possibleSpam ? "[Possible spam] " : ""}Elite Surface Group website enquiry${
       service ? ` — ${service}` : ""
     }`,
     text: [
+      ...(possibleSpam
+        ? [spamNotice, `Hidden field contained: ${spamTrap}`, ""]
+        : []),
       `Name: ${name}`,
       `Email: ${email}`,
       `Phone: ${phone || "Not provided"}`,
@@ -718,7 +735,14 @@ export async function POST(request: NextRequest) {
       message,
     ].join("\n"),
     html: `
-      <h2>New website enquiry</h2>
+      <h2>New website enquiry</h2>${
+        possibleSpam
+          ? `
+      <p><strong>${escapeHtml(spamNotice)}</strong></p>
+      <p><strong>Hidden field contained:</strong> ${escapeHtml(spamTrap)}</p>
+      <hr />`
+          : ""
+      }
       <p><strong>Name:</strong> ${escapeHtml(name)}</p>
       <p><strong>Email:</strong> ${escapeHtml(email)}</p>
       <p><strong>Phone:</strong> ${escapeHtml(phone || "Not provided")}</p>
@@ -868,17 +892,22 @@ export async function POST(request: NextRequest) {
 
   // Measurement must never change a successfully delivered enquiry into a
   // visitor-facing failure, but awaiting it lets Vercel finish the dispatch.
-  try {
-    await track(
-      CONVERSION_EVENT_NAMES.enquirySubmitted,
-      {
-        page: sourcePath,
-        service: service || "Not specified",
-      },
-      { request },
-    );
-  } catch {
-    contactLog("contact.analytics.failed", { page: sourcePath });
+  // A flagged enquiry is delivered but not counted: before the trap stopped
+  // discarding, these never reached the conversion total either, and bot
+  // traffic must not inflate it now.
+  if (!possibleSpam) {
+    try {
+      await track(
+        CONVERSION_EVENT_NAMES.enquirySubmitted,
+        {
+          page: sourcePath,
+          service: service || "Not specified",
+        },
+        { request },
+      );
+    } catch {
+      contactLog("contact.analytics.failed", { page: sourcePath });
+    }
   }
 
   return contactResponse(

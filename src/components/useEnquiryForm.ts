@@ -6,6 +6,7 @@ import { business } from "@/content/business";
 import {
   createSubmissionId,
   isSubmissionId,
+  SPAM_TRAP_FIELD,
 } from "@/lib/contact-submission";
 
 export type EnquiryStatus = {
@@ -113,7 +114,7 @@ export function useEnquiryForm() {
       projectArea: value("projectArea"),
       projectTiming: value("projectTiming"),
       message: value("message"),
-      company: value("company"),
+      [SPAM_TRAP_FIELD]: value(SPAM_TRAP_FIELD),
       sourcePath: window.location.pathname,
     };
 

@@ -70,7 +70,7 @@ export default function LocationsPage() {
             </ul>
 
             <aside
-              className="article-note locations-overview__note"
+              className="locations-overview__note"
               aria-labelledby="outside-adelaide-title"
             >
               <FeatureIcon name="search" />

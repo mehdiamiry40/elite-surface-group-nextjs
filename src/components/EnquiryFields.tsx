@@ -7,6 +7,7 @@ import {
   projectTimingOptions,
   projectTypeOptions,
 } from "@/content/enquiry";
+import { SPAM_TRAP_FIELD } from "@/lib/contact-submission";
 
 type EnquiryFieldsProps = {
   /** Prefixes field ids so the two forms can coexist on one page. */
@@ -21,8 +22,10 @@ type EnquiryFieldsProps = {
 /**
  * The enquiry fields, shared by the contact section and the quote dialog.
  *
- * `company` is a honeypot — it is visually hidden and the API treats any
- * submission that fills it as spam.
+ * The last field is a spam trap: hidden from visitors, named so that browsers
+ * and password managers have no reason to fill it, and marked for the common
+ * managers to skip. The API delivers an enquiry that fills it with a
+ * "possible spam" flag — it does not discard it.
  */
 export default function EnquiryFields({
   idPrefix,
@@ -171,13 +174,18 @@ export default function EnquiryFields({
       <input type="hidden" name="sourcePath" value={pathname} />
 
       <div className="field field--hidden" aria-hidden="true">
-        <label htmlFor={id("company")}>Company</label>
+        <label htmlFor={id("enquiry-check")}>Leave this field empty</label>
         <input
-          id={id("company")}
-          name="company"
+          id={id("enquiry-check")}
+          name={SPAM_TRAP_FIELD}
+          type="text"
           tabIndex={-1}
           autoComplete="off"
           maxLength={120}
+          data-1p-ignore
+          data-lpignore="true"
+          data-bwignore
+          data-form-type="other"
         />
       </div>
 

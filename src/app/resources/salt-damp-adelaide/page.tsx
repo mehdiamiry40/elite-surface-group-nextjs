@@ -354,9 +354,9 @@ export default function SaltDampGuidePage() {
               <p>
                 Cutting, grinding or blasting masonry, render and mortar can
                 generate respirable crystalline silica, which is regulated in
-                South Australia, and paint applied before 1970 may contain
-                lead. Confirm how both will be controlled before any stripping
-                or cutting starts.
+                South Australia, and paint on a property built before 1980 may
+                contain lead. Confirm how both will be controlled before any
+                stripping or cutting starts.
               </p>
             </aside>
             <p className="article-source">

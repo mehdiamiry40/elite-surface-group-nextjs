@@ -102,6 +102,7 @@ export function redactSensitiveText(value: string) {
 export type ContactLogEvent =
   | "contact.delivery_unconfigured"
   | "contact.delivery_logged_locally"
+  | "contact.spam_trap.triggered"
   | "contact.outbox.unavailable"
   | "contact.outbox.queued"
   | "contact.outbox.delivery_deferred"
@@ -124,6 +125,7 @@ type ContactLogLevel = "info" | "warn" | "error";
 const CONTACT_LOG_LEVELS: Record<ContactLogEvent, ContactLogLevel> = {
   "contact.delivery_unconfigured": "error",
   "contact.delivery_logged_locally": "info",
+  "contact.spam_trap.triggered": "warn",
   "contact.outbox.unavailable": "error",
   "contact.outbox.queued": "error",
   "contact.outbox.delivery_deferred": "error",
