@@ -56,7 +56,7 @@ export function ServiceSchema({ service }: { service: Service }) {
         "@type": "Service",
         "@id": `${absoluteUrl(`/${service.slug}`)}#service`,
         name: `${service.name} — ${business.name}`,
-        serviceType: service.name,
+        serviceType: service.longName ?? service.name,
         description: service.metaDescription,
         url: absoluteUrl(`/${service.slug}`),
         image: absoluteUrl(service.image),
@@ -238,7 +238,7 @@ export function ServiceListSchema({
         itemListElement: services.map((service, index) => ({
           "@type": "ListItem",
           position: index + 1,
-          name: service.name,
+          name: service.longName ?? service.name,
           url: absoluteUrl(`/${service.slug}`),
         })),
       }}

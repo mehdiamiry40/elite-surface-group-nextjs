@@ -2,7 +2,7 @@ import { privacyPolicyUpdated } from "@/content/legal";
 import { locationPages } from "@/content/locations";
 import { projects } from "@/content/projects";
 import { featuredResourceGuides, resourceGuides, type IsoDate } from "@/content/resources";
-import { services } from "@/content/services";
+import { services, type Service } from "@/content/services";
 
 export type PublicRouteRecord = {
   path: string;
@@ -19,7 +19,13 @@ const RELEASE_DATES = {
   verifiedContentRelease: "2026-08-13",
   serviceAreaHubRefresh: "2026-09-02",
   homeGuideCuration: "2026-09-05",
+  claddingFacadeRefresh: "2026-11-19",
 } as const;
+
+/** Service pages whose copy changed after the shared content release. */
+const SERVICE_LAST_MODIFIED: Partial<Record<Service["slug"], IsoDate>> = {
+  cladding: RELEASE_DATES.claddingFacadeRefresh,
+};
 
 /** Keep an aggregate page current when any content it renders becomes newer. */
 function latestIsoDate(
@@ -65,7 +71,8 @@ export const publicRouteRecords = [
   ...services.map((service) =>
     publicRoute(
       `/${service.slug}/`,
-      RELEASE_DATES.verifiedContentRelease,
+      SERVICE_LAST_MODIFIED[service.slug] ??
+        RELEASE_DATES.verifiedContentRelease,
     ),
   ),
   publicRoute("/projects/", RELEASE_DATES.verifiedContentRelease),

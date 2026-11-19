@@ -72,7 +72,11 @@ export default async function ServicePage({ params }: PageProps) {
 
   const intro = (
     <>
-      <h2 id="service-intro">{service.name} services across Adelaide</h2>
+      <h2 id="service-intro">
+        {service.headings?.intro ?? (
+          <>{service.name} services across Adelaide</>
+        )}
+      </h2>
       {service.intro.map((paragraph) => (
         <p key={paragraph}>{paragraph}</p>
       ))}
@@ -150,7 +154,9 @@ export default async function ServicePage({ params }: PageProps) {
 
       <section className="section" aria-labelledby="service-faqs">
         <div className="shell prose">
-          <h2 id="service-faqs">{service.name} FAQs</h2>
+          <h2 id="service-faqs">
+            {service.headings?.faqs ?? <>{service.name} FAQs</>}
+          </h2>
           <dl className="faq-list">
             {service.faqs.map((faq) => (
               <div key={faq.question} className="faq-list__item">
