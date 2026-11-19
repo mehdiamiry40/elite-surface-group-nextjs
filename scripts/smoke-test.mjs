@@ -403,7 +403,11 @@ const expectedSitemapDates = new Map([
   ["/", "2026-09-05"],
   ["/about/", "2026-08-13"],
   ["/services/", "2026-08-10"],
-  ...serviceSlugs.map((slug) => [`/${slug}/`, "2026-08-13"]),
+  // The cladding page's facade copy was rewritten on 19 November.
+  ...serviceSlugs.map((slug) => [
+    `/${slug}/`,
+    slug === "cladding" ? "2026-11-19" : "2026-08-13",
+  ]),
   ["/projects/", "2026-08-13"],
   ...projectSlugs.map((slug) => [`/projects/${slug}/`, "2026-08-13"]),
   ["/locations/", "2026-09-02"],

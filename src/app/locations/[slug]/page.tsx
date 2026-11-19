@@ -78,6 +78,14 @@ export default async function LocationPage({ params }: PageProps) {
             <p key={paragraph}>{paragraph}</p>
           ))}
           <p>{location.servicesLead}</p>
+          <p>
+            Planning a building facade? Our{" "}
+            <Link href="/cladding/">
+              facade and cladding installation in {location.name}
+            </Link>{" "}
+            page explains how we approach the system, the substrate and the
+            junction details.
+          </p>
           <ul className="plain-link-list service-chips">
             {services.map((service) => (
               <li key={service.slug}>

@@ -6,6 +6,13 @@ export type ServiceFaq = {
 export type Service = {
   slug: "cladding" | "render" | "hebel" | "walling";
   name: string;
+  /**
+   * Fuller phrase for the service, used in structured data where the one-word
+   * name says too little about what its page covers. Falls back to `name`.
+   */
+  longName?: string;
+  /** Section headings that replace the name-based defaults on the service page. */
+  headings?: { intro?: string; faqs?: string };
   /** Heading as it appears on the service page banner. */
   bannerTitle: string;
   image: string;
@@ -30,6 +37,11 @@ export const services: readonly Service[] = [
   {
     slug: "cladding",
     name: "Cladding",
+    longName: "Cladding and facade installation",
+    headings: {
+      intro: "Facade and cladding installation across Adelaide",
+      faqs: "Cladding and facade FAQs",
+    },
     bannerTitle: "Cladding & Facade Installation Adelaide",
     image: "/images/v2/service-cladding-installation.webp",
     imageAlt:
@@ -37,16 +49,17 @@ export const services: readonly Service[] = [
     imageWidth: 1600,
     imageHeight: 1067,
     summary:
-      "Architectural cladding installed with careful setting-out, clean junctions and close attention to the system details.",
+      "Cladding and facade installation with careful setting-out, clean junctions and close attention to the system details.",
     metaTitle: "Cladding & Facade Installation Adelaide",
     metaDescription:
-      "Architectural cladding and facade installation across Adelaide for homes and commercial builds, planned around the design, substrate, exposure and budget.",
+      "Facade and cladding installation in Adelaide for homes and commercial builds, planned around the design, substrate and exposure. Obligation-free quotes.",
     intro: [
-      "The right cladding can completely change the character of a building while adding another layer of protection to the wall behind it. We install architectural cladding for new homes, renovations and commercial projects across Adelaide and South Australia.",
-      "Every cladding and facade installation starts with the building, not a one-size-fits-all product. We consider the design, substrate, site exposure and budget, then install the selected system to the manufacturer’s requirements and project specification.",
+      "The right cladding can completely change the character of a building facade while adding another layer of protection to the wall behind it. We install architectural cladding, from a single feature wall to a complete building facade, for new homes, renovations and commercial projects across Adelaide and South Australia.",
+      "Every cladding and facade installation starts with the building, not a one-size-fits-all product. We consider the design, substrate, site exposure and budget, then install the selected cladding or facade system to the manufacturer’s requirements and project specification.",
     ],
     detail: [
       "A strong cladding result comes down to what sits behind the finished surface. We focus on substrate readiness, accurate setting-out, aligned panel lines and tidy junctions around windows, corners and adjoining finishes. Product choice, exposure and ongoing maintenance all influence long-term performance, so those details are considered before installation begins.",
+      "On a full building facade installation, we work from the drawings and the selected system’s installation details, and coordinate with the builder and adjoining trades so each elevation is ready before the cladding goes on.",
     ],
     benefitsLead:
       "A well-selected and correctly installed cladding system can offer:",
@@ -78,6 +91,11 @@ export const services: readonly Service[] = [
         question: "Do you handle complete facade and cladding installation?",
         answer:
           "We install the cladding components included in the agreed facade scope. The quote identifies the selected system, substrate assumptions, material responsibilities and any work by adjoining trades before installation starts.",
+      },
+      {
+        question: "What does a facade system installation include?",
+        answer:
+          "A facade system is more than the visible panels or boards. It usually includes the framing or battens, fixings, flashings and junction details set out in the manufacturer’s installation guide. We follow that guide and the project documents for the parts in our scope, and the quote lists what is included.",
       },
       {
         question:
@@ -123,7 +141,7 @@ export const services: readonly Service[] = [
       "A well-executed render finish can sharpen the appearance of a building and support the wall system behind it. Browse our completed render details, or talk to us about pairing render with feature cladding for contrast.",
     relatedLinks: [
       { label: "View render projects", href: "/projects/" },
-      { label: "Cladding installation", href: "/cladding/" },
+      { label: "Cladding and facade installation", href: "/cladding/" },
       { label: "Adelaide service area", href: "/locations/adelaide/" },
       {
         label: "What causes render cracking?",
@@ -251,7 +269,7 @@ export const services: readonly Service[] = [
     closing:
       "Clear communication and careful installation keep walling work moving towards the agreed finish. Explore our cladding, render and Hebel services, or request a quote for a coordinated package.",
     relatedLinks: [
-      { label: "Cladding services", href: "/cladding/" },
+      { label: "Cladding and facade installation", href: "/cladding/" },
       { label: "Hebel wall systems", href: "/hebel/" },
       {
         label: "Steel vs timber wall framing guide",
