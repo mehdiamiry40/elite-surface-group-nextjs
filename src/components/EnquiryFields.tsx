@@ -44,30 +44,28 @@ export default function EnquiryFields({
   return (
     <>
       <div className="field">
-        <label className="visually-hidden" htmlFor={id("first-name")}>First name</label>
+        <label htmlFor={id("first-name")}>First name</label>
         <input
           id={id("first-name")}
           name="firstName"
           autoComplete="given-name"
-          placeholder="First name"
           maxLength={60}
           required
         />
       </div>
 
       <div className="field">
-        <label className="visually-hidden" htmlFor={id("last-name")}>Last name (optional)</label>
+        <label htmlFor={id("last-name")}>Last name (optional)</label>
         <input
           id={id("last-name")}
           name="lastName"
           autoComplete="family-name"
-          placeholder="Last name (optional)"
           maxLength={59}
         />
       </div>
 
       <div className="field">
-        <label className="visually-hidden" htmlFor={id("email")}>Email</label>
+        <label htmlFor={id("email")}>Email</label>
         <input
           id={id("email")}
           name="email"
@@ -75,27 +73,25 @@ export default function EnquiryFields({
           inputMode="email"
           autoComplete="email"
           spellCheck={false}
-          placeholder="Email"
           maxLength={254}
           required
         />
       </div>
 
       <div className="field">
-        <label className="visually-hidden" htmlFor={id("phone")}>Phone number (optional)</label>
+        <label htmlFor={id("phone")}>Phone number (optional)</label>
         <input
           id={id("phone")}
           name="phone"
           type="tel"
           inputMode="tel"
           autoComplete="tel"
-          placeholder="Phone (optional)"
           maxLength={50}
         />
       </div>
 
       <div className="field">
-        <label className="visually-hidden" htmlFor={id("service")}>Service needed (optional)</label>
+        <label htmlFor={id("service")}>Service needed (optional)</label>
         <select
           key={`${pathname}:${selected}`}
           id={id("service")}
@@ -103,7 +99,7 @@ export default function EnquiryFields({
           autoComplete="off"
           defaultValue={selected}
         >
-          <option value="">Service needed (optional)</option>
+          <option value="">Select…</option>
           {serviceOptions.map((option) => (
             <option key={option} value={option}>
               {option}
@@ -113,14 +109,14 @@ export default function EnquiryFields({
       </div>
 
       <div className="field">
-        <label className="visually-hidden" htmlFor={id("project-type")}>Project type (optional)</label>
+        <label htmlFor={id("project-type")}>Project type (optional)</label>
         <select
           id={id("project-type")}
           name="projectType"
           autoComplete="off"
           defaultValue=""
         >
-          <option value="">Project type (optional)</option>
+          <option value="">Select…</option>
           {projectTypeOptions.map((option) => (
             <option key={option} value={option}>
               {option}
@@ -130,27 +126,26 @@ export default function EnquiryFields({
       </div>
 
       <div className="field">
-        <label className="visually-hidden" htmlFor={id("project-location")}>
-          Project suburb or postcode (optional)
+        <label htmlFor={id("project-location")}>
+          Suburb or postcode (optional)
         </label>
         <input
           id={id("project-location")}
           name="projectArea"
           autoComplete="off"
-          placeholder="Suburb or postcode (optional)"
           maxLength={120}
         />
       </div>
 
       <div className="field">
-        <label className="visually-hidden" htmlFor={id("target-start")}>Target timing (optional)</label>
+        <label htmlFor={id("target-start")}>Target timing (optional)</label>
         <select
           id={id("target-start")}
           name="projectTiming"
           autoComplete="off"
           defaultValue=""
         >
-          <option value="">Target timing (optional)</option>
+          <option value="">Select…</option>
           {projectTimingOptions.map((option) => (
             <option key={option} value={option}>
               {option}
@@ -160,13 +155,13 @@ export default function EnquiryFields({
       </div>
 
       <div className="field field--full">
-        <label className="visually-hidden" htmlFor={id("message")}>Project details</label>
+        <label htmlFor={id("message")}>Project details</label>
         <textarea
           id={id("message")}
           name="message"
           rows={4}
           maxLength={5000}
-          placeholder="Project details — the work, access, plans or site details"
+          placeholder="The work, access, plans or site details"
           required
         />
       </div>

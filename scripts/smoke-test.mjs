@@ -1342,7 +1342,7 @@ check(
     contactHtml.includes(`name="${name}"`),
   ) &&
     [
-      "Project suburb or postcode (optional)",
+      "Suburb or postcode (optional)",
       "Project type (optional)",
       "Target timing (optional)",
       "Multi-unit development",
