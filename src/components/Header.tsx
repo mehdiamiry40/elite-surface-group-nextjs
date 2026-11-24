@@ -193,6 +193,18 @@ export default function Header() {
                 <InstagramIcon size={20} />
               </a>
             ) : null}
+            {/* Always visible: the number where the bar has room, the icon
+                alone where it does not. The label names both cases. */}
+            <a
+              className="site-header__call"
+              href={`tel:${business.phone}`}
+              aria-label={`Call ${business.phoneDisplay}`}
+            >
+              <PhoneIcon size={18} />
+              <span className="site-header__call-number">
+                {business.phoneDisplay}
+              </span>
+            </a>
             <QuoteButton className="site-header__quote">
               Start a project
               <ArrowRightIcon size={16} />

@@ -212,7 +212,7 @@ export function renderProgressiveContactFailure({
         ${input({ id: "recovery-phone", name: "phone", label: "Phone number (optional)", value: fields.phone, type: "tel", autocomplete: "tel", maxlength: 50 })}
         ${select({ id: "recovery-service", name: "service", label: "Service needed (optional)", value: fields.service, placeholder: "Choose a service / not sure yet", options: serviceOptions })}
         ${select({ id: "recovery-project-type", name: "projectType", label: "Project type (optional)", value: fields.projectType, placeholder: "Choose a project type / not sure yet", options: projectTypeOptions })}
-        ${input({ id: "recovery-project-area", name: "projectArea", label: "Project suburb or postcode (optional)", value: fields.projectArea, maxlength: 120 })}
+        ${input({ id: "recovery-project-area", name: "projectArea", label: "Suburb or postcode (optional)", value: fields.projectArea, maxlength: 120 })}
         ${select({ id: "recovery-project-timing", name: "projectTiming", label: "Target timing (optional)", value: fields.projectTiming, placeholder: "Choose a timeframe / not sure yet", options: projectTimingOptions })}
         <div class="field field--full">
           <label for="recovery-message">Project details</label>

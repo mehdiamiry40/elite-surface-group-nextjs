@@ -70,7 +70,7 @@ try {
   await dialog.getByLabel("First name").fill("Alex");
   await dialog.getByLabel("Email").fill("alex@example.com");
   await dialog
-    .getByLabel("Project suburb or postcode (optional)")
+    .getByLabel("Suburb or postcode (optional)")
     .fill("Salisbury East 5109");
   await dialog
     .getByLabel("Project type (optional)")
