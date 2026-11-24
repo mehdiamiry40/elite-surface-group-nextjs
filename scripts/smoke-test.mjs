@@ -393,9 +393,20 @@ const latestResourceModified = [...resourceModifiedDates.values()].reduce(
   (latest, candidate) => (candidate > latest ? candidate : latest),
   "0000-00-00",
 );
+// Only the metropolitan Adelaide page lists every guide. The region pages
+// carry a hand-picked guide list, so a newly published guide does not change
+// them and their date stays with their own copy.
+const REGION_LOCATION_SLUGS = [
+  "northern-adelaide",
+  "coastal-adelaide",
+  "adelaide-hills",
+];
+const SERVICE_AND_REGION_CONTENT_BUILD = "2026-11-25";
 const resourceAggregatePaths = [
   "/resources/",
-  ...locationSlugs.map((slug) => `/locations/${slug}/`),
+  ...locationSlugs
+    .filter((slug) => !REGION_LOCATION_SLUGS.includes(slug))
+    .map((slug) => `/locations/${slug}/`),
 ];
 const expectedSitemapDates = new Map([
   // Home now renders a curated subset, so unrelated guide changes need not
@@ -403,17 +414,20 @@ const expectedSitemapDates = new Map([
   ["/", "2026-09-05"],
   ["/about/", "2026-08-13"],
   ["/services/", "2026-08-10"],
-  // The cladding page's facade copy was rewritten on 19 November.
+  // All four service pages were rewritten at length on 25 November.
   ...serviceSlugs.map((slug) => [
     `/${slug}/`,
-    slug === "cladding" ? "2026-11-19" : "2026-08-13",
+    SERVICE_AND_REGION_CONTENT_BUILD,
   ]),
   ["/projects/", "2026-08-13"],
   ...projectSlugs.map((slug) => [`/projects/${slug}/`, "2026-08-13"]),
-  ["/locations/", "2026-09-02"],
+  // The hub was reorganised around the three region pages on 25 November.
+  ["/locations/", SERVICE_AND_REGION_CONTENT_BUILD],
   ...locationSlugs.map((slug) => [
     `/locations/${slug}/`,
-    latestResourceModified,
+    REGION_LOCATION_SLUGS.includes(slug)
+      ? SERVICE_AND_REGION_CONTENT_BUILD
+      : latestResourceModified,
   ]),
   ["/project-planning/", "2026-08-13"],
   ["/resources/", latestResourceModified],
@@ -433,6 +447,13 @@ const sitemapDateMismatches = [...expectedSitemapDates].filter(
         : `https://elitesurfacegroup.com.au${route}`;
     return sitemapLastModified.get(loc) !== expected;
   },
+);
+check(
+  "the service-area inventory is Adelaide plus exactly three region pages",
+  locationSlugs.length === REGION_LOCATION_SLUGS.length + 1 &&
+    locationSlugs.includes("adelaide") &&
+    REGION_LOCATION_SLUGS.every((slug) => locationSlugs.includes(slug)),
+  locationSlugs.join(", "),
 );
 check(
   "resource metadata extraction covers every published guide",
@@ -698,6 +719,32 @@ for (const [route, html] of pages) {
     `${missingAlt.length} without alt`,
   );
 }
+
+// Every internal link on every public page must land on a published route.
+// A typo in a guide slug still renders a perfectly good-looking link.
+const knownRoutes = new Set(ROUTES);
+const brokenInternalLinks = [];
+for (const [route, tags] of tagsByRoute) {
+  for (const tag of tags.filter((candidate) => /^<a(?:\s|>)/i.test(candidate))) {
+    const href = tagAttribute(tag, "href");
+    if (!href || !href.startsWith("/") || href.startsWith("//")) {
+      continue;
+    }
+    const pathname = new URL(href, baseUrl).pathname;
+    // Static files (llms.txt, images) are covered by their own checks.
+    if (/\.[a-z0-9]+$/i.test(pathname)) {
+      continue;
+    }
+    if (!knownRoutes.has(publicRouteFor(pathname))) {
+      brokenInternalLinks.push(`${route} -> ${href}`);
+    }
+  }
+}
+check(
+  "internal links on every public page resolve to a published route",
+  brokenInternalLinks.length === 0,
+  [...new Set(brokenInternalLinks)].join(", "),
+);
 
 check(
   "public pages have unique titles",
@@ -2060,6 +2107,135 @@ check(
   [pages.get("/render/") ?? "", projectPlanningHtml].every((html) =>
     html.includes(
       'href="/resources/rendering-over-painted-brick-adelaide/"',
+    ),
+  ),
+);
+const northernHtml = pages.get("/locations/northern-adelaide/") ?? "";
+const coastalHtml = pages.get("/locations/coastal-adelaide/") ?? "";
+const hillsHtml = pages.get("/locations/adelaide-hills/") ?? "";
+check(
+  "service-area hub and Adelaide page link all three region pages",
+  [locationsHtml, adelaideHtml].every((html) =>
+    REGION_LOCATION_SLUGS.every((slug) =>
+      html.includes(`href="/locations/${slug}/"`),
+    ),
+  ),
+);
+check(
+  "region pages repeat the confirm-before-quoting coverage rule",
+  [northernHtml, coastalHtml, hillsHtml].every(
+    (html) =>
+      /suburb or postcode/.test(html) &&
+      /confirm coverage before quoting/.test(html) &&
+      /Salisbury East/.test(html) &&
+      /do not publish project addresses/.test(html),
+  ) &&
+    /Hills projects are confirmed case by case/.test(hillsHtml) &&
+    /do not claim to cover every township/.test(hillsHtml),
+);
+check(
+  "region pages link their regional guides, the hub and the enquiry form",
+  [
+    [
+      northernHtml,
+      [
+        "/resources/render-cracking-adelaide/",
+        "/resources/hebel-vs-brick-veneer-adelaide/",
+      ],
+    ],
+    [
+      coastalHtml,
+      [
+        "/resources/cladding-maintenance-coastal-adelaide/",
+        "/resources/salt-damp-adelaide/",
+        "/resources/steel-frame-vs-timber-frame-walls-adelaide/",
+      ],
+    ],
+    [
+      hillsHtml,
+      [
+        "/resources/fibre-cement-vs-weatherboard-cladding-adelaide/",
+        "/resources/steel-frame-vs-timber-frame-walls-adelaide/",
+      ],
+    ],
+  ].every(([html, hrefs]) =>
+    [...hrefs, "/locations/", "/locations/adelaide/", "/contact-us/#contact"]
+      .concat(serviceSlugs.map((slug) => `/${slug}/`))
+      .every((href) => html.includes(`href="${href}"`)),
+  ),
+);
+check(
+  "service and location pages emit FAQ schema that matches a visible FAQ list",
+  [
+    ...serviceSlugs.map((slug) => `/${slug}/`),
+    ...locationSlugs.map((slug) => `/locations/${slug}/`),
+  ].every((route) => {
+    const html = pages.get(route) ?? "";
+    const faqSchema = (jsonLdByRoute.get(route) ?? []).find(
+      (data) => data?.["@type"] === "FAQPage",
+    );
+    const questions = faqSchema?.mainEntity ?? [];
+    const visibleQuestions = (html.match(/<dt>/g) ?? []).length;
+    return questions.length >= 4 && visibleQuestions >= questions.length;
+  }),
+);
+check(
+  "service pages link the guides that belong to them",
+  [
+    [
+      "/cladding/",
+      [
+        "/resources/facade-recladding-adelaide/",
+        "/resources/fibre-cement-cladding-adelaide/",
+        "/resources/cladding-vs-render-adelaide/",
+      ],
+    ],
+    [
+      "/render/",
+      [
+        "/resources/render-repair-adelaide/",
+        "/resources/render-finishes-adelaide/",
+        "/resources/acrylic-render-vs-cement-render-adelaide/",
+        "/resources/preparing-walls-for-render-adelaide/",
+        "/resources/internal-rendering-adelaide/",
+        "/resources/cladding-vs-render-adelaide/",
+      ],
+    ],
+    [
+      "/hebel/",
+      [
+        "/resources/choosing-a-hebel-installer-adelaide/",
+        "/resources/hebel-vs-brick-veneer-adelaide/",
+      ],
+    ],
+    [
+      "/walling/",
+      [
+        "/resources/steel-frame-vs-timber-frame-walls-adelaide/",
+        "/resources/external-wall-insulation-adelaide/",
+      ],
+    ],
+  ].every(([route, hrefs]) =>
+    [...hrefs, "/resources/what-affects-cladding-render-quotes-adelaide/"].every(
+      (href) => (pages.get(route) ?? "").includes(`href="${href}"`),
+    ),
+  ),
+);
+const quoteGuideVisible = withoutScripts(
+  pages.get("/resources/what-affects-cladding-render-quotes-adelaide/") ?? "",
+).replace(/<[^>]+>/g, " ");
+check(
+  "quote-drivers guide publishes no prices or rates",
+  quoteGuideVisible.length > 2000 &&
+    !/\$\s?\d|\bper\s+(?:square\s+)?m(?:etre|²|2)\b|\d\s?%|\bper hour\b/i.test(
+      quoteGuideVisible,
+    ),
+);
+check(
+  "no public page claims manufacturer accreditation or trade-body membership",
+  ![...pages.values()].some((html) =>
+    /(?:we are|we’re|is an?|as an?) (?:accredited|authorised|certified|approved) (?:Hebel|CSR|James Hardie)|Master Builders|member of the HIA/i.test(
+      withoutScripts(html),
     ),
   ),
 );

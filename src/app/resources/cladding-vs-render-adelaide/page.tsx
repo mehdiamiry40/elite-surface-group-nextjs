@@ -3,11 +3,16 @@ import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
 import { CtaBand } from "@/components/CtaBand";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/JsonLd";
+import {
+  ArticleSchema,
+  BreadcrumbSchema,
+  FAQPageSchema,
+} from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
 import { bannerImages } from "@/content/pages";
 import { claddingVsRenderGuide } from "@/content/resources";
+import type { ServiceFaq } from "@/content/services";
 import { blurProps } from "@/lib/lcp-blur";
 import { ogCard, pageMetadata } from "@/lib/seo";
 
@@ -20,6 +25,41 @@ export const metadata: Metadata = pageMetadata({
   publishedTime: claddingVsRenderGuide.published,
   modifiedTime: claddingVsRenderGuide.modified,
 });
+
+/** Rendered in the visible FAQ list and emitted as FAQPage schema. */
+const faqs: readonly ServiceFaq[] = [
+  {
+    question: "Which one lasts longer?",
+    answer:
+      "Service life belongs to the specific system and its exposure, not to the category. Maintained to their documented terms, both are long-life walls. The one that fails early is usually the one installed on the wrong substrate or detailed badly at the junctions.",
+  },
+  {
+    question: "Can we use both on the same house?",
+    answer:
+      "Yes, and it is common. Render on the masonry ground floor with cladding to an upper level or a feature element is a standard Adelaide approach. The junction between the two systems is the detail that has to be designed rather than improvised on site.",
+  },
+  {
+    question: "Does cladding vs render change the insulation in the wall?",
+    answer:
+      "It can. A clad wall with a batten cavity is a different assembly to a bonded render, and thermal and condensation performance is assessed across the whole build-up, not the finish. Where insulation or a membrane is being added, have the assembly designed as one thing.",
+  },
+  {
+    question: "Will render hide the cracks already in our wall?",
+    answer:
+      "Only until the wall moves again. Render bonded to a moving substrate reproduces the movement at the surface, so the cause needs assessment first. Covering it is the expensive way to find that out.",
+  },
+  {
+    question: "Where should the join between render and cladding go?",
+    answer:
+      "On a line the building already has: a floor level, a change of plane, the head of a run of windows or the edge of a projecting element. Wherever it lands, it needs a designed flashing and a clear decision about which trade installs and seals it. A join placed mid-wall for looks alone is the hardest one to detail well.",
+  },
+  {
+    question:
+      "Is it better to have one contractor for both the render and the cladding?",
+    answer:
+      "It is not essential, but it closes the usual gap. When separate trades each stop short of the junction, the flashing, the sealant and the making good can end up belonging to nobody. One coordinated scope, or two scopes that both name the junction in writing, avoids that.",
+  },
+];
 
 export default function CladdingVsRenderGuidePage() {
   return (
@@ -34,6 +74,7 @@ export default function CladdingVsRenderGuidePage() {
         ]}
       />
       <ArticleSchema guide={claddingVsRenderGuide} />
+      <FAQPageSchema faqs={faqs} />
 
       <article>
         <PageBanner
@@ -55,6 +96,11 @@ export default function CladdingVsRenderGuidePage() {
               <time dateTime={claddingVsRenderGuide.published}>
                 Published {claddingVsRenderGuide.publishedDisplay}
               </time>
+              {claddingVsRenderGuide.modifiedDisplay ? (
+                <time dateTime={claddingVsRenderGuide.modified}>
+                  Updated {claddingVsRenderGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{claddingVsRenderGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -85,6 +131,9 @@ export default function CladdingVsRenderGuidePage() {
               <strong>On this page</strong>
               <ol>
                 <li>
+                  <a href="#at-a-glance">Cladding vs render at a glance</a>
+                </li>
+                <li>
                   <a href="#difference">What actually differs</a>
                 </li>
                 <li>
@@ -95,6 +144,9 @@ export default function CladdingVsRenderGuidePage() {
                 </li>
                 <li>
                   <a href="#upkeep">Upkeep, repair and how each ages</a>
+                </li>
+                <li>
+                  <a href="#combining">When to combine both</a>
                 </li>
                 <li>
                   <a href="#approvals">Approvals, scope and who carries it</a>
@@ -110,7 +162,80 @@ export default function CladdingVsRenderGuidePage() {
           </div>
         </section>
 
-        <section className="section section--tint" aria-labelledby="difference">
+        <section className="section section--tint" aria-labelledby="at-a-glance">
+          <div className="shell prose article-prose">
+            <h2 id="at-a-glance">Cladding vs render at a glance</h2>
+            <p>
+              Both finishes are common across Adelaide, and both are legitimate
+              on the right wall. These are the differences that change a
+              drawing, a scope or a maintenance plan.
+            </p>
+            <dl className="faq-list professional-list">
+              <div className="faq-list__item">
+                <dt>How it is attached</dt>
+                <dd>
+                  Render is applied wet and bonds to the wall. Cladding is fixed
+                  mechanically over a frame or battens, with a cavity and a
+                  membrane behind it.
+                </dd>
+              </div>
+              <div className="faq-list__item">
+                <dt>What it needs behind it</dt>
+                <dd>
+                  Render needs masonry, an AAC panel system or a documented
+                  render base sheet. Cladding needs a frame or a battened
+                  substrate it can be fixed to.
+                </dd>
+              </div>
+              <div className="faq-list__item">
+                <dt>How it handles movement</dt>
+                <dd>
+                  Render shows substrate movement as cracking. Cladding conceals
+                  more of it and tends to show it at the joints and junctions
+                  instead.
+                </dd>
+              </div>
+              <div className="faq-list__item">
+                <dt>Where water is managed</dt>
+                <dd>
+                  On a rendered wall the coating is the exposed layer. On a clad
+                  wall the flashings, membrane and cavity do that work out of
+                  sight.
+                </dd>
+              </div>
+              <div className="faq-list__item">
+                <dt>How it looks</dt>
+                <dd>
+                  Render gives one continuous plane in a chosen texture.
+                  Cladding gives an expressed pattern of boards, panels and
+                  joints that has to be set out.
+                </dd>
+              </div>
+              <div className="faq-list__item">
+                <dt>How it is repaired</dt>
+                <dd>
+                  Render is patched and matched into a continuous texture. A
+                  damaged board is replaced individually.
+                </dd>
+              </div>
+            </dl>
+            <p>
+              If you have already settled on one, our guides to{" "}
+              <Link href="/resources/fibre-cement-cladding-adelaide/">
+                fibre cement cladding installation
+              </Link>{" "}
+              and{" "}
+              <Link href="/resources/render-finishes-adelaide/">
+                render finishes
+              </Link>{" "}
+              go a level deeper on each. Many houses do not have to choose at
+              all&mdash;see{" "}
+              <a href="#combining">when to combine cladding and render</a>.
+            </p>
+          </div>
+        </section>
+
+        <section className="section" aria-labelledby="difference">
           <div className="shell prose article-prose">
             <h2 id="difference">Cladding vs render: what actually differs</h2>
             <h3>Render is a coating</h3>
@@ -162,7 +287,7 @@ export default function CladdingVsRenderGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="substrate">
+        <section className="section section--tint" aria-labelledby="substrate">
           <div className="shell prose article-prose">
             <h2 id="substrate">Start with the wall you have</h2>
             <p>
@@ -211,7 +336,7 @@ export default function CladdingVsRenderGuidePage() {
           </div>
         </section>
 
-        <section className="section section--tint" aria-labelledby="conditions">
+        <section className="section" aria-labelledby="conditions">
           <div className="shell split article-visual">
             <figure className="split__media article-figure">
               <Image
@@ -269,6 +394,14 @@ export default function CladdingVsRenderGuidePage() {
                 whole wall assembly rather than to the finish alone, and
                 Adelaide sits in climate zone 5.
               </p>
+              <p>
+                Our{" "}
+                <Link href="/locations/coastal-adelaide/">coastal Adelaide</Link>{" "}
+                and{" "}
+                <Link href="/locations/adelaide-hills/">Adelaide Hills</Link>{" "}
+                pages set out how we plan cladding and render work around those
+                two exposures.
+              </p>
               <p className="article-source">
                 Sources:{" "}
                 <a href="https://research.csiro.au/infratech/wp-content/uploads/sites/38/2024/12/2979_FoundationMaintenanceandFootingPerformance_WCAG.pdf">
@@ -296,7 +429,7 @@ export default function CladdingVsRenderGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="upkeep">
+        <section className="section section--tint" aria-labelledby="upkeep">
           <div className="shell prose article-prose">
             <h2 id="upkeep">Upkeep, repair and how each ages</h2>
             <p>
@@ -325,6 +458,16 @@ export default function CladdingVsRenderGuidePage() {
               Colour is a repaint either way. Both systems will change their
               look in ten years; neither will leave you alone for thirty.
             </p>
+            <p>
+              When a clad facade has reached the point where the boards, the
+              fixings or the layers behind them are failing rather than
+              weathering, the question stops being upkeep and becomes
+              replacement. Our{" "}
+              <Link href="/resources/facade-recladding-adelaide/">
+                facade recladding guide
+              </Link>{" "}
+              covers what to inspect before that decision is made.
+            </p>
             <p className="article-source">
               Sources:{" "}
               <a href="https://www.dulux.com.au/specifier/products/acratex/overview/warranty/">
@@ -339,6 +482,92 @@ export default function CladdingVsRenderGuidePage() {
                 James Hardie, fibre cement product information
               </a>
               .
+            </p>
+          </div>
+        </section>
+
+        <section className="section" aria-labelledby="combining">
+          <div className="shell prose article-prose">
+            <h2 id="combining">When to combine cladding and render</h2>
+            <p>
+              On a lot of Adelaide homes the honest answer to cladding vs render
+              is both. Combining render and cladding on one facade is not a
+              compromise between two looks. It usually follows from how the
+              building is put together: each finish goes where its substrate
+              already is.
+            </p>
+            <h3>Where each finish usually lands</h3>
+            <p>
+              Render needs something solid to bond to, so it tends to go on the
+              masonry or AAC panel walls&mdash;most often the ground floor, the
+              garage, boundary walls and piers. Cladding fixes to a frame, so it
+              tends to go on framed upper levels, lightweight extensions and
+              feature elements such as an entry surround, a projecting window
+              box or a gable. Reversing that is possible, but it means adding a
+              render base sheet to a frame or battening a cavity onto masonry,
+              and each of those is extra work with its own system documents.
+            </p>
+            <p>
+              The split also does visual work. A continuous rendered plane reads
+              as mass, and a jointed clad element reads as a lighter object set
+              against it. That contrast is why a small clad element can organise
+              a whole elevation, and why the proportions matter more than the
+              products.
+            </p>
+            <h3>The junction is the detail to design</h3>
+            <p>
+              Where the two systems meet, a bonded coating stops and a drained
+              layer starts. Water running down the cladding and out of its
+              cavity has to be turned out over the render below it, not behind
+              it, which makes the flashing on that line one of the details a
+              mixed facade depends on most. Put the level of the join, the
+              flashing and how the render finishes beneath it on the drawings.
+            </p>
+            <TickList
+              items={[
+                "Where the join sits and which building line it follows",
+                "The flashing or trim at the join, who supplies it and who installs it",
+                "How the cladding cavity drains at its base",
+                "Where the render stops and the bead or edge it finishes against",
+                "Who seals the junction and makes good around windows that cross both finishes",
+                "How movement between the framed and masonry parts of the wall is allowed for at the join",
+              ]}
+            />
+            <h3>Sequence the two trades</h3>
+            <p>
+              The order matters because each trade can damage or block the
+              other. A flashing that sits behind the cladding generally has to
+              be in before the boards; wet render work can splash and stain
+              finished cladding if it follows too closely; and scaffold that
+              suits one trade may be gone before the other has finished. Agree
+              the sequence, the protection and the scaffold arrangements before
+              either trade starts, rather than after the first clash.
+            </p>
+            <h3>Choose the contrast deliberately</h3>
+            <p>
+              Colour and texture are easier to judge together than apart. A dark
+              board beside a light render shows every variation in the line
+              between them, and a coarse texture beside a crisp panel joint can
+              look unresolved. Ask to see the render sample and the cladding
+              sample side by side, outdoors, on the elevation that matters. Our{" "}
+              <Link href="/resources/render-finishes-adelaide/">
+                render finishes guide
+              </Link>{" "}
+              explains how the texture grade changes what a wall shows.
+            </p>
+            <h3>Why one coordinated scope helps</h3>
+            <p>
+              The practical advantage of one contractor across both finishes is
+              that the junction has one owner, the sequence is planned once and
+              there is one conversation about colour. We install both, so a
+              combined cladding and render scope can be quoted together. Where
+              two businesses are involved, the same result comes from naming the
+              junction in both scopes. Our guide to{" "}
+              <Link href="/resources/what-affects-cladding-render-quotes-adelaide/">
+                what affects cladding and render quotes
+              </Link>{" "}
+              covers how scope boundaries like this one change what a quote
+              includes.
             </p>
           </div>
         </section>
@@ -470,46 +699,12 @@ export default function CladdingVsRenderGuidePage() {
           <div className="shell prose article-prose">
             <h2 id="cladding-render-faqs">Common questions</h2>
             <dl className="faq-list" aria-labelledby="cladding-render-faqs">
-              <div className="faq-list__item">
-                <dt>Which one lasts longer?</dt>
-                <dd>
-                  Service life belongs to the specific system and its exposure,
-                  not to the category. Maintained to their documented terms,
-                  both are long-life walls. The one that fails early is usually
-                  the one installed on the wrong substrate or detailed badly at
-                  the junctions.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Can we use both on the same house?</dt>
-                <dd>
-                  Yes, and it is common. Render on the masonry ground floor with
-                  cladding to an upper level or a feature element is a standard
-                  Adelaide approach. The junction between the two systems is the
-                  detail that has to be designed rather than improvised on site.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>
-                  Does cladding vs render change the insulation in the wall?
-                </dt>
-                <dd>
-                  It can. A clad wall with a batten cavity is a different
-                  assembly to a bonded render, and thermal and condensation
-                  performance is assessed across the whole build-up, not the
-                  finish. Where insulation or a membrane is being added, have
-                  the assembly designed as one thing.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Will render hide the cracks already in our wall?</dt>
-                <dd>
-                  Only until the wall moves again. Render bonded to a moving
-                  substrate reproduces the movement at the surface, so the cause
-                  needs assessment first. Covering it is the expensive way to
-                  find that out.
-                </dd>
-              </div>
+              {faqs.map((faq) => (
+                <div className="faq-list__item" key={faq.question}>
+                  <dt>{faq.question}</dt>
+                  <dd>{faq.answer}</dd>
+                </div>
+              ))}
             </dl>
 
             <h2 id="sources">Sources and further reading</h2>
@@ -630,6 +825,18 @@ export default function CladdingVsRenderGuidePage() {
               </Link>
               <Link href="/resources/acrylic-render-vs-cement-render-adelaide/">
                 Acrylic or cement render?
+              </Link>
+              <Link href="/resources/fibre-cement-cladding-adelaide/">
+                Fibre cement cladding installation
+              </Link>
+              <Link href="/resources/render-finishes-adelaide/">
+                Render finishes
+              </Link>
+              <Link href="/resources/facade-recladding-adelaide/">
+                Facade recladding guide
+              </Link>
+              <Link href="/resources/what-affects-cladding-render-quotes-adelaide/">
+                What affects a quote
               </Link>
               <Link href="/project-planning/">Project planning notes</Link>
               <Link href="/contact-us/#contact">

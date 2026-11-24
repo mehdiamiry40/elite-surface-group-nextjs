@@ -3,11 +3,16 @@ import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
 import { CtaBand } from "@/components/CtaBand";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/JsonLd";
+import {
+  ArticleSchema,
+  BreadcrumbSchema,
+  FAQPageSchema,
+} from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
 import { bannerImages } from "@/content/pages";
 import { acrylicVsCementRenderGuide } from "@/content/resources";
+import type { ServiceFaq } from "@/content/services";
 import { blurProps } from "@/lib/lcp-blur";
 import { ogCard, pageMetadata } from "@/lib/seo";
 
@@ -20,6 +25,45 @@ export const metadata: Metadata = pageMetadata({
   publishedTime: acrylicVsCementRenderGuide.published,
   modifiedTime: acrylicVsCementRenderGuide.modified,
 });
+
+/** Rendered as the visible FAQ list and emitted as FAQPage structured data. */
+const faqs: readonly ServiceFaq[] = [
+  {
+    question: "Is acrylic render vs cement render really an either/or choice?",
+    answer:
+      "Not always. Many systems use a cementitious base coat with a compatible acrylic texture topcoat over it, so the finished wall benefits from both.",
+  },
+  {
+    question: "Which render type costs more?",
+    answer:
+      "It depends on the substrate preparation required, the specified system and the coverage needed, so it is not a fair like-for-like comparison unless you are working from itemised quotes for the same complete scope of work.",
+  },
+  {
+    question: "Can render go over Hebel or fibre cement sheeting?",
+    answer:
+      "Yes, with a system matched to that substrate—see our guide to rendering Hebel panels for panel-specific detail.",
+  },
+  {
+    question: "Can acrylic render go over existing cement render?",
+    answer:
+      "Often, provided the existing render is sound, well bonded and clean, and the acrylic system is documented for that surface. Hollow, cracked or damp areas need to be dealt with first, and a wall that has been painted needs its coating assessed before anything goes over it.",
+  },
+  {
+    question: "Does acrylic render stop a wall cracking?",
+    answer:
+      "No. Its flexibility helps it tolerate minor movement better than a rigid cement render, but a crack caused by footing or structural movement will come through either system. The cause needs assessment before the finish is chosen.",
+  },
+  {
+    question: "Which suits an older brick home?",
+    answer:
+      "It depends on the wall. Sound, unpainted brickwork is the substrate cement render was developed for, and an acrylic finish over a cement base is common. Painted brick, previous repairs or signs of salt damp change the answer, so the wall is assessed before a system is selected.",
+  },
+  {
+    question: "Is the choice different for internal walls?",
+    answer:
+      "Inside, weather exposure drops out and the surface is seen up close, so the decision turns on the substrate, the flatness required and the finish wanted. The system still needs to be documented for the wall it is going on.",
+  },
+];
 
 export default function AcrylicVsCementRenderGuidePage() {
   return (
@@ -34,6 +78,7 @@ export default function AcrylicVsCementRenderGuidePage() {
         ]}
       />
       <ArticleSchema guide={acrylicVsCementRenderGuide} />
+      <FAQPageSchema faqs={faqs} />
 
       <article>
         <PageBanner
@@ -55,6 +100,11 @@ export default function AcrylicVsCementRenderGuidePage() {
               <time dateTime={acrylicVsCementRenderGuide.published}>
                 Published {acrylicVsCementRenderGuide.publishedDisplay}
               </time>
+              {acrylicVsCementRenderGuide.modifiedDisplay ? (
+                <time dateTime={acrylicVsCementRenderGuide.modified}>
+                  Updated {acrylicVsCementRenderGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{acrylicVsCementRenderGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -90,6 +140,9 @@ export default function AcrylicVsCementRenderGuidePage() {
               <strong>On this page</strong>
               <ol>
                 <li>
+                  <a href="#at-a-glance">The comparison at a glance</a>
+                </li>
+                <li>
                   <a href="#what-separates-them">What actually differs</a>
                 </li>
                 <li>
@@ -97,6 +150,9 @@ export default function AcrylicVsCementRenderGuidePage() {
                 </li>
                 <li>
                   <a href="#adelaide-conditions">Why Adelaide conditions matter</a>
+                </li>
+                <li>
+                  <a href="#upkeep">Upkeep, repair and recoating</a>
                 </li>
                 <li>
                   <a href="#next-steps">Sensible next steps</a>
@@ -112,10 +168,100 @@ export default function AcrylicVsCementRenderGuidePage() {
           </div>
         </section>
 
-        <section
-          className="section section--tint"
-          aria-labelledby="what-separates-them"
-        >
+        <section className="section section--tint" aria-labelledby="at-a-glance">
+          <div className="shell prose article-prose">
+            <h2 id="at-a-glance">Acrylic vs cement render at a glance</h2>
+            <p>
+              Read these as the general tendencies of each family, not as the
+              specification of any one product. The selected
+              manufacturer&rsquo;s technical data sheet decides what a
+              particular system can do on a particular wall.
+            </p>
+            <dl className="faq-list professional-list">
+              <div className="faq-list__item">
+                <dt>What it is</dt>
+                <dd>
+                  Cement render is cement, sand and water, mixed and applied
+                  over masonry in one or more coats. Acrylic render is a
+                  pre-mixed, polymer-based coating, usually applied as one
+                  layer of a coordinated system.
+                </dd>
+              </div>
+              <div className="faq-list__item">
+                <dt>Movement tolerance</dt>
+                <dd>
+                  Cement render sets hard and rigid, so it is more likely to
+                  show hairline cracking when the wall behind it moves.
+                  Acrylic render has some flexibility and copes better with
+                  minor movement. Neither bridges structural cracking or
+                  stands in for a movement joint.
+                </dd>
+              </div>
+              <div className="faq-list__item">
+                <dt>Substrates it suits</dt>
+                <dd>
+                  Cement render was developed for bare masonry such as brick,
+                  block and stone. Acrylic systems are formulated for a wider
+                  range of prepared surfaces, including fibre cement sheeting
+                  and some previously painted walls, where the system
+                  documents allow it.
+                </dd>
+              </div>
+              <div className="faq-list__item">
+                <dt>Application and curing</dt>
+                <dd>
+                  Cement render is mixed on site and has to cure, so the mix,
+                  the coat thickness and the curing conditions all shape the
+                  result. Acrylic render arrives pre-mixed and dries rather
+                  than cures, inside the temperature and weather limits on its
+                  data sheet.
+                </dd>
+              </div>
+              <div className="faq-list__item">
+                <dt>Finish and colour</dt>
+                <dd>
+                  A cement render is commonly finished with a separate texture
+                  coat or paint system over the top. Acrylic texture coats
+                  come in grades from smooth to coarse and can carry the
+                  colour in the coating itself.
+                </dd>
+              </div>
+              <div className="faq-list__item">
+                <dt>Upkeep</dt>
+                <dd>
+                  Both need periodic washing and eventual recoating, on a
+                  cycle set by the system, the colour and the exposure rather
+                  than by the render type alone.
+                </dd>
+              </div>
+              <div className="faq-list__item">
+                <dt>Used together</dt>
+                <dd>
+                  Often. A cementitious base coat levelled over masonry with a
+                  compatible acrylic texture coat on top is a common
+                  documented combination, so the real question is usually
+                  which system, not which material.
+                </dd>
+              </div>
+            </dl>
+            <p>
+              The texture itself is a separate decision that sits on top of
+              the system. Our guide to{" "}
+              <Link href="/resources/render-finishes-adelaide/">
+                render finishes in Adelaide
+              </Link>{" "}
+              covers where smooth, sand float and textured render are each
+              used. And if you are comparing prices for the two, the guide to{" "}
+              <Link href="/resources/what-affects-cladding-render-quotes-adelaide/">
+                what affects a cladding or render quote
+              </Link>{" "}
+              explains why preparation and access usually move a quote more
+              than the product does.
+            </p>
+          </div>
+        </section>
+
+        <section className="section" aria-labelledby="what-separates-them">
           <div className="shell prose article-prose">
             <h2 id="what-separates-them">
               Acrylic render vs cement render: what actually separates them
@@ -171,7 +317,7 @@ export default function AcrylicVsCementRenderGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="substrate-fit">
+        <section className="section section--tint" aria-labelledby="substrate-fit">
           <div className="shell prose article-prose">
             <h2 id="substrate-fit">Matching the render system to the wall</h2>
             <p>
@@ -212,10 +358,30 @@ export default function AcrylicVsCementRenderGuidePage() {
               </Link>{" "}
               covers the signs that need assessment first.
             </p>
+            <p>
+              Whichever system is selected, the preparation under it decides
+              how well it performs. A sound, clean, dry substrate with its
+              movement joints in the right places matters more than the name
+              on the bucket&mdash;our guide to{" "}
+              <Link href="/resources/preparing-walls-for-render-adelaide/">
+                preparing walls for render
+              </Link>{" "}
+              sets out what has to be confirmed before the first coat.
+            </p>
+            <p>
+              Internal walls follow the same logic with the weather taken
+              out. The surface is seen at close range and has to meet joinery,
+              floors and ceilings cleanly, so flatness and the junction
+              details tend to drive the choice. The{" "}
+              <Link href="/resources/internal-rendering-adelaide/">
+                internal rendering guide
+              </Link>{" "}
+              covers what to confirm indoors.
+            </p>
           </div>
         </section>
 
-        <section className="section section--tint" aria-labelledby="adelaide-conditions">
+        <section className="section" aria-labelledby="adelaide-conditions">
           <div className="shell split article-visual">
             <figure className="split__media article-figure">
               <Image
@@ -254,6 +420,39 @@ export default function AcrylicVsCementRenderGuidePage() {
                 manufacturer&rsquo;s curing guidance matter as much as the
                 product choice itself.
               </p>
+              <h3>Older masonry and salt damp</h3>
+              <p>
+                Many established Adelaide homes are solid brick or stone, and
+                some show salt damp near the base of the wall. Where it is
+                present, acrylic or cement is the wrong place to start:
+                neither render fixes the moisture behind it, and coating over
+                it usually makes the damage worse. Our guide to{" "}
+                <Link href="/resources/salt-damp-adelaide/">
+                  salt damp in Adelaide homes
+                </Link>{" "}
+                covers what has to be assessed before any render is
+                considered.
+              </p>
+              <h3>Coastal elevations</h3>
+              <p>
+                Near the gulf the coating is the layer taking the salt and
+                the wind, so the system&rsquo;s documented exposure limits,
+                the colour and the washing routine matter more than the label
+                on the base coat. The{" "}
+                <Link href="/locations/coastal-adelaide/">
+                  coastal Adelaide page
+                </Link>{" "}
+                explains how we plan render around those conditions.
+              </p>
+              <h3>Summer programmes</h3>
+              <p>
+                Heat affects both systems on the day of application.
+                Cement-based coats need time and moisture to cure; acrylic
+                coats dry, and hot wind shortens the time available to work
+                the texture evenly. Each product&rsquo;s data sheet sets its
+                temperature and weather limits, and a summer programme should
+                be built around those limits rather than around the calendar.
+              </p>
               <p className="article-source">
                 Sources:{" "}
                 <a href="https://research.csiro.au/infratech/wp-content/uploads/sites/38/2024/12/2979_FoundationMaintenanceandFootingPerformance_WCAG.pdf">
@@ -267,6 +466,66 @@ export default function AcrylicVsCementRenderGuidePage() {
                 .
               </p>
             </div>
+          </div>
+        </section>
+
+        <section className="section section--tint" aria-labelledby="upkeep">
+          <div className="shell prose article-prose">
+            <h2 id="upkeep">Upkeep, repair and recoating</h2>
+            <p>
+              Neither system is finished the day the scaffold comes down.
+              What differs is where the maintenance sits and how a repair
+              blends in.
+            </p>
+
+            <h3>Washing and routine care</h3>
+            <p>
+              Acrylic finishes and painted cement render both collect dust,
+              salt and organic growth, and both are looked after by regular
+              inspection and gentle washing to the manufacturer&rsquo;s
+              documented method. The Rockcote maintenance guide ties
+              maintenance cycles to colour choice, exposure, application
+              quality and location, and notes that dark colours and coastal
+              environments may need repainting more often. That holds
+              whichever render sits underneath.
+            </p>
+
+            <h3>Patching and blending a repair</h3>
+            <p>
+              A rigid cement render that has cracked or come away is cut back
+              and patched with a compatible repair render, then the texture
+              and coating are made good over the top. An acrylic texture is
+              patched by matching its grade and profile by hand. Either way, a
+              patch in the middle of an elevation tends to show in low light,
+              which is why sound repairs are normally taken out to a corner,
+              an opening or a joint. Our{" "}
+              <Link href="/resources/render-repair-adelaide/">
+                render repair guide
+              </Link>{" "}
+              explains how to tell a patch from a partial or full re-render,
+              and why the cause comes first.
+            </p>
+
+            <h3>Recoating down the track</h3>
+            <p>
+              Sooner or later the surface is recoated rather than re-rendered.
+              What can go over the existing finish depends on what that
+              finish is, how well it is still bonded and what the new coating
+              system is documented for&mdash;an unknown older coating usually
+              means test areas and preparation before a specification is
+              settled. The guide to{" "}
+              <Link href="/resources/repainting-render-adelaide/">
+                repainting rendered walls
+              </Link>{" "}
+              works through that assessment.
+            </p>
+            <p className="article-source">
+              Source:{" "}
+              <a href="https://rockcote.com.au/wp-content/uploads/2020/09/ROCKCOTE_Maintenance_Guide_opt.pdf">
+                Rockcote maintenance guide (PDF)
+              </a>
+              .
+            </p>
           </div>
         </section>
 
@@ -330,6 +589,12 @@ export default function AcrylicVsCementRenderGuidePage() {
                 has cracked or moved before.
               </p>
             </aside>
+            <p>
+              Our{" "}
+              <Link href="/project-planning/">project planning guide</Link>{" "}
+              lists the site details, photographs and documents that are
+              useful to have ready before a render system is quoted.
+            </p>
           </div>
         </section>
 
@@ -381,30 +646,12 @@ export default function AcrylicVsCementRenderGuidePage() {
           <div className="shell prose article-prose">
             <h2 id="render-comparison-faqs">Common questions</h2>
             <dl className="faq-list" aria-labelledby="render-comparison-faqs">
-              <div className="faq-list__item">
-                <dt>Is acrylic render vs cement render really an either/or choice?</dt>
-                <dd>
-                  Not always. Many systems use a cementitious base coat with
-                  a compatible acrylic texture topcoat over it, so the
-                  finished wall benefits from both.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Which render type costs more?</dt>
-                <dd>
-                  It depends on the substrate preparation required, the
-                  specified system and the coverage needed, so it is not a
-                  fair like-for-like comparison unless you are working from
-                  itemised quotes for the same complete scope of work.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Can render go over Hebel or fibre cement sheeting?</dt>
-                <dd>
-                  Yes, with a system matched to that substrate—see our guide
-                  to rendering Hebel panels for panel-specific detail.
-                </dd>
-              </div>
+              {faqs.map((faq) => (
+                <div className="faq-list__item" key={faq.question}>
+                  <dt>{faq.question}</dt>
+                  <dd>{faq.answer}</dd>
+                </div>
+              ))}
             </dl>
 
             <h2 id="sources">Sources and further reading</h2>
@@ -415,10 +662,14 @@ export default function AcrylicVsCementRenderGuidePage() {
                   <a href="https://rockcote.com.au/what-are-the-different-types-of-render-a-homeowners-guide/">
                     What Are The Different Types of Render? A Homeowner&rsquo;s
                     Guide
-                  </a>{" "}
-                  and{" "}
+                  </a>
+                  ,{" "}
                   <a href="https://rockcote.com.au/product/polymer-render-grey/">
                     Polymer Render Grey
+                  </a>{" "}
+                  and the{" "}
+                  <a href="https://rockcote.com.au/wp-content/uploads/2020/09/ROCKCOTE_Maintenance_Guide_opt.pdf">
+                    maintenance guide (PDF)
                   </a>
                 </dd>
               </div>
@@ -447,6 +698,18 @@ export default function AcrylicVsCementRenderGuidePage() {
 
             <nav className="article-related" aria-label="Related website pages">
               <Link href="/render/">Adelaide rendering services</Link>
+              <Link href="/resources/render-finishes-adelaide/">
+                Render finishes and textures
+              </Link>
+              <Link href="/resources/preparing-walls-for-render-adelaide/">
+                Preparing walls for render
+              </Link>
+              <Link href="/resources/render-repair-adelaide/">
+                Render repair or re-render?
+              </Link>
+              <Link href="/resources/repainting-render-adelaide/">
+                Repainting rendered walls
+              </Link>
               <Link href="/projects/two-storey-exterior-render/">
                 Two-storey exterior render project
               </Link>

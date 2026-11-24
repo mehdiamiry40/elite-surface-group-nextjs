@@ -98,7 +98,7 @@ export default function ResourcesPage() {
           <SectionHead
             eyebrow="From the site notebook"
             title="More advice and project guides"
-            intro="Material selection, common wall and render questions, maintenance and pre-construction planning."
+            intro="Material selection, common wall and render questions, repair, maintenance, quotes and pre-construction planning."
             id="all-articles-title"
           />
 

@@ -700,6 +700,9 @@ export default function HebelBoundaryWallsGuidePage() {
             <nav className="article-related" aria-label="Related pages">
               <Link href="/hebel/">Hebel installation Adelaide</Link>
               <Link href="/walling/">Internal and external walling</Link>
+              <Link href="/resources/choosing-a-hebel-installer-adelaide/">
+                Choosing a Hebel installer
+              </Link>
               <Link href="/resources/rendering-hebel-panels-adelaide/">
                 Rendering Hebel panels
               </Link>

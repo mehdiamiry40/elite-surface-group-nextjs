@@ -2,16 +2,16 @@
 
 > Adelaide cladding, render, Hebel and walling specialists serving homes, builders and commercial projects across South Australia.
 
-Elite Surface Group installs and finishes exterior and interior wall systems. Work covers cladding, acrylic and cement render, Hebel panel systems, and coordinated walling packages. Quotes are obligation-free and scoped to the project brief.
+Elite Surface Group installs and finishes exterior and interior wall systems. Work covers cladding and facade installation, internal and external render, Hebel panel systems, and coordinated walling packages. The business is based in Salisbury East; metropolitan Adelaide is the primary service area and other South Australian sites are assessed individually before quoting. Quotes are obligation-free and scoped to the project brief. No price list is published.
 
 ## Primary pages
 
 - [Home](https://elitesurfacegroup.com.au/): Overview of services and process
 - [Services](https://elitesurfacegroup.com.au/services/): Cladding, render, Hebel and walling
-- [Cladding](https://elitesurfacegroup.com.au/cladding/): Cladding and facade installation in Adelaide
-- [Render](https://elitesurfacegroup.com.au/render/): Rendering services in Adelaide
-- [Hebel](https://elitesurfacegroup.com.au/hebel/): Hebel wall systems in Adelaide
-- [Walling](https://elitesurfacegroup.com.au/walling/): Internal and external walling
+- [Cladding](https://elitesurfacegroup.com.au/cladding/): Cladding and facade installation in Adelaide, covering facade versus feature cladding, substrate and fixing details, recladding, exposed sites and how quotes work
+- [Render](https://elitesurfacegroup.com.au/render/): Rendering services in Adelaide for internal and external walls, covering finishes, preparation, repair versus re-render and local conditions
+- [Hebel](https://elitesurfacegroup.com.au/hebel/): Hebel installation in Adelaide, covering installer scope, the specified system, boundary walls, rendering Hebel and the documents needed for a quote
+- [Walling](https://elitesurfacegroup.com.au/walling/): Internal and external walling in Adelaide, covering openings and services, renovations, and walling quoted with render or cladding
 - [Projects](https://elitesurfacegroup.com.au/projects/): Image-backed cladding and render case studies
 - [Project planning](https://elitesurfacegroup.com.au/project-planning/): Information to prepare before requesting a quote
 - [Resources](https://elitesurfacegroup.com.au/resources/): Practical homeowner and project-planning guides, newest first
@@ -23,7 +23,7 @@ Elite Surface Group installs and finishes exterior and interior wall systems. Wo
 - [Fibre cement vs weatherboard cladding](https://elitesurfacegroup.com.au/resources/fibre-cement-vs-weatherboard-cladding-adelaide/): Bushfire zoning, coastal exposure and maintenance questions to confirm before choosing an Adelaide cladding system
 - [Load-bearing wall removal in Adelaide](https://elitesurfacegroup.com.au/resources/load-bearing-wall-removal-adelaide/): Engineering, consent, licensing and reframing questions to confirm before a load-bearing wall comes out
 - [Steel frame vs timber frame walls in Adelaide](https://elitesurfacegroup.com.au/resources/steel-frame-vs-timber-frame-walls-adelaide/): Compliance pathways, termite scope, coastal exposure, footing design and bushfire requirements to confirm before choosing wall framing
-- [Acrylic render vs cement render in Adelaide](https://elitesurfacegroup.com.au/resources/acrylic-render-vs-cement-render-adelaide/): Flexibility, substrate fit and coastal-durability differences to confirm before choosing a render system
+- [Acrylic render vs cement render in Adelaide](https://elitesurfacegroup.com.au/resources/acrylic-render-vs-cement-render-adelaide/): Movement tolerance, substrate fit, Adelaide climate, upkeep and recoating differences to confirm before choosing a render system
 - [Vertical vs horizontal cladding in Adelaide](https://elitesurfacegroup.com.au/resources/vertical-vs-horizontal-cladding-adelaide/): Batten direction, drainage-cavity detailing and coastal exposure questions to confirm before choosing a cladding orientation
 - [Second storey addition in Adelaide](https://elitesurfacegroup.com.au/resources/second-storey-addition-adelaide/): Structural assessment, framing, heritage overlays and approvals to confirm before adding an upper level
 - [Repainting render in Adelaide](https://elitesurfacegroup.com.au/resources/repainting-render-adelaide/): Surface assessment, crack treatment, colour and exposure questions to resolve before a rendered exterior is recoated
@@ -32,11 +32,21 @@ Elite Surface Group installs and finishes exterior and interior wall systems. Wo
 - [Cladding over brick in Adelaide](https://elitesurfacegroup.com.au/resources/cladding-over-brick-adelaide/): How a cladding system is fixed over existing brick veneer or solid masonry, and the substrate, cavity, membrane, junction and approval checks to confirm before boards go up
 - [Replacing asbestos cladding in Adelaide](https://elitesurfacegroup.com.au/resources/asbestos-cladding-replacement-adelaide/): How older fibro sheeting is identified and tested, who is licensed to remove it in South Australia, how it must be disposed of, and what the exposed frame and site exposure decide about the replacement cladding system
 - [Soundproofing walls in Adelaide](https://elitesurfacegroup.com.au/resources/soundproofing-walls-adelaide/): What mass, separation, sealing and flanking paths actually change, the Rw + Ctr requirement the Code sets for a wall between attached dwellings, and what an existing Adelaide home can realistically improve
-- [Cladding vs render in Adelaide](https://elitesurfacegroup.com.au/resources/cladding-vs-render-adelaide/): How a bonded render coating and a fixed cladding layer differ, what the existing substrate rules in or out, and the movement, exposure, upkeep, approval and trade-scope questions to settle before choosing an exterior finish
-- [Render finishes in Adelaide](https://elitesurfacegroup.com.au/resources/render-finishes-adelaide/): How smooth, sand float and coarse texture grades differ, what the substrate and its movement joints allow, and the exposure, colour, cleaning and patching questions to settle before a render finish is specified
+- [Cladding vs render in Adelaide](https://elitesurfacegroup.com.au/resources/cladding-vs-render-adelaide/): How a bonded render coating and a fixed cladding layer differ, what the existing substrate rules in or out, when to combine cladding and render on one facade, and the movement, exposure, upkeep, approval and trade-scope questions to settle before choosing an exterior finish
+- [Render finishes in Adelaide](https://elitesurfacegroup.com.au/resources/render-finishes-adelaide/): How smooth, sand float and coarse textured render differ, where each finish is usually used, what the substrate and its movement joints allow, and the exposure, colour, cleaning and patching questions to settle before a render finish is specified
 - [External wall insulation in Adelaide](https://elitesurfacegroup.com.au/resources/external-wall-insulation-adelaide/): Why a wall's total R-value comes from the whole build-up rather than the insulation product, what brick veneer, lightweight framing, AAC panel and solid masonry each start from, and the climate zone, seven-star, membrane and cavity questions to settle before specifying
-- [Service areas](https://elitesurfacegroup.com.au/locations/): Where the team works across Adelaide and South Australia
-- [Adelaide service area](https://elitesurfacegroup.com.au/locations/adelaide/): Local service coverage
+- [Facade recladding in Adelaide](https://elitesurfacegroup.com.au/resources/facade-recladding-adelaide/): When a facade may need recladding rather than maintenance, what to inspect before the old cladding comes off, and how a replacement system is planned around the existing wall, its openings and the site exposure
+- [Render repair in Adelaide](https://elitesurfacegroup.com.au/resources/render-repair-adelaide/): How a local patch, a partial re-render and a full strip and re-render differ, what to document before a visit, and when cracking, hollow areas or salt damp stop a cosmetic repair
+- [What affects a cladding, render, Hebel or walling quote](https://elitesurfacegroup.com.au/resources/what-affects-cladding-render-quotes-adelaide/): The scope, substrate, system, access, detail and exposure questions that change a quote, and how to compare two quotes fairly; qualitative only, with no prices or rates
+- [Internal rendering in Adelaide](https://elitesurfacegroup.com.au/resources/internal-rendering-adelaide/): Substrate, finish, junction and trade-sequencing questions to confirm before render is applied inside a building
+- [Fibre cement cladding in Adelaide](https://elitesurfacegroup.com.au/resources/fibre-cement-cladding-adelaide/): How a fibre-cement cladding installation is planned around the frame, cavity, junctions, fixings, exposure and upkeep; an installation guide rather than a material comparison
+- [Preparing walls for render in Adelaide](https://elitesurfacegroup.com.au/resources/preparing-walls-for-render-adelaide/): Substrate condition, movement joints, existing coatings, damp and adjoining trades to confirm before render goes on
+- [Choosing a Hebel installer in Adelaide](https://elitesurfacegroup.com.au/resources/choosing-a-hebel-installer-adelaide/): What to confirm about the specified system, the documents, fixings, openings, finishing trades and quote scope before appointing an installer
+- [Service areas](https://elitesurfacegroup.com.au/locations/): Metropolitan Adelaide as the primary service area, three regional planning pages, and how sites elsewhere in South Australia are assessed
+- [Adelaide service area](https://elitesurfacegroup.com.au/locations/adelaide/): Metropolitan Adelaide coverage, local conditions, planning checks and links to every guide
+- [Northern Adelaide](https://elitesurfacegroup.com.au/locations/northern-adelaide/): Wall work near the Salisbury East base, including reactive clay soils, summer heat and the difference between new builds and established homes
+- [Coastal Adelaide](https://elitesurfacegroup.com.au/locations/coastal-adelaide/): How salt and wind change cladding, render, Hebel and walling specifications and upkeep near the gulf
+- [Adelaide Hills](https://elitesurfacegroup.com.au/locations/adelaide-hills/): Bushfire-related design requirements, exposure, climate zone and sloping access, with coverage confirmed case by case
 - [About](https://elitesurfacegroup.com.au/about/): Company background
 - [Contact](https://elitesurfacegroup.com.au/contact-us/): Request a quote
 
@@ -53,5 +63,5 @@ Elite Surface Group installs and finishes exterior and interior wall systems. Wo
 - Base: Salisbury East, Adelaide
 - Phone: 0413 844 912 (+61413844912)
 - Email: elite.surfacegroup@gmail.com
-- Area: Adelaide & South Australia
+- Area: Adelaide & South Australia (metropolitan Adelaide primary; other South Australian sites assessed individually)
 - Hours: Monday–Saturday, 9:00 am–5:00 pm

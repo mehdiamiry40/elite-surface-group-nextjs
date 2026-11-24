@@ -1,10 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import QuoteButton from "@/components/QuoteButton";
+import RichText from "@/components/RichText";
 import ServiceGlyph from "@/components/ServiceGlyph";
 import { ArrowRightIcon, CheckIcon } from "@/components/icons";
 import type { Project } from "@/content/projects";
-import { services } from "@/content/services";
+import {
+  services,
+  type ContentSection,
+  type ServiceFaq,
+} from "@/content/services";
 import { blurProps } from "@/lib/lcp-blur";
 
 function projectServiceName(project: Project) {
@@ -50,6 +55,100 @@ export function TickList({ items }: { items: readonly string[] }) {
         </li>
       ))}
     </ul>
+  );
+}
+
+/* -------------------------------------------------------- content sections */
+
+/**
+ * Long-form sections from a content module, one band per heading.
+ *
+ * Bands alternate between plain and tinted so a page with several sections
+ * reads as distinct topics rather than one unbroken column. `startTinted`
+ * says which the first band is, so the caller can contrast it with whatever
+ * sits above.
+ */
+export function ContentSections({
+  sections,
+  startTinted = false,
+}: {
+  sections: readonly ContentSection[];
+  startTinted?: boolean;
+}) {
+  return (
+    <>
+      {sections.map((section, index) => {
+        const tinted = (index % 2 === 0) === startTinted;
+        return (
+          <section
+            key={section.id}
+            className={tinted ? "section section--tint" : "section"}
+            aria-labelledby={section.id}
+          >
+            <div className="shell prose">
+              <h2 id={section.id}>{section.heading}</h2>
+              {section.paragraphs.map((paragraph) => (
+                <p key={paragraph}>
+                  <RichText text={paragraph} />
+                </p>
+              ))}
+              {section.bullets ? <TickList items={section.bullets} /> : null}
+              {section.closing?.map((paragraph) => (
+                <p key={paragraph}>
+                  <RichText text={paragraph} />
+                </p>
+              ))}
+            </div>
+          </section>
+        );
+      })}
+    </>
+  );
+}
+
+/** "On this page" list for a page built from content sections. */
+export function SectionContents({
+  sections,
+  extra = [],
+}: {
+  sections: readonly ContentSection[];
+  /** Further in-page targets listed after the content sections. */
+  extra?: readonly { id: string; label: string }[];
+}) {
+  return (
+    <nav className="article-toc" aria-label="On this page">
+      <strong>On this page</strong>
+      <ol>
+        {sections.map((section) => (
+          <li key={section.id}>
+            <a href={`#${section.id}`}>
+              {section.navLabel ?? section.heading}
+            </a>
+          </li>
+        ))}
+        {extra.map((item) => (
+          <li key={item.id}>
+            <a href={`#${item.id}`}>{item.label}</a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}
+
+/* --------------------------------------------------------------- FAQ list */
+
+/** Visible question-and-answer list; pair with `FAQPageSchema` for the same data. */
+export function FaqList({ faqs }: { faqs: readonly ServiceFaq[] }) {
+  return (
+    <dl className="faq-list">
+      {faqs.map((faq) => (
+        <div key={faq.question} className="faq-list__item">
+          <dt>{faq.question}</dt>
+          <dd>{faq.answer}</dd>
+        </div>
+      ))}
+    </dl>
   );
 }
 

@@ -492,6 +492,9 @@ export default function CoastalCladdingMaintenanceGuidePage() {
               <Link href="/cladding/">
                 Adelaide cladding and facade installation
               </Link>
+              <Link href="/locations/coastal-adelaide/">
+                Coastal Adelaide sites
+              </Link>
               <Link href="/projects/dark-feature-cladding/">
                 Cladding project case study
               </Link>

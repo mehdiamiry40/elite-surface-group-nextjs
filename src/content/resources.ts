@@ -21,7 +21,14 @@ export type ResourceGuide = {
     | "soundproofing-walls-adelaide"
     | "cladding-vs-render-adelaide"
     | "render-finishes-adelaide"
-    | "external-wall-insulation-adelaide";
+    | "external-wall-insulation-adelaide"
+    | "facade-recladding-adelaide"
+    | "render-repair-adelaide"
+    | "what-affects-cladding-render-quotes-adelaide"
+    | "internal-rendering-adelaide"
+    | "fibre-cement-cladding-adelaide"
+    | "preparing-walls-for-render-adelaide"
+    | "choosing-a-hebel-installer-adelaide";
   serviceSlug: "cladding" | "render" | "hebel" | "walling";
   category: string;
   title: string;
@@ -36,6 +43,11 @@ export type ResourceGuide = {
   published: IsoDate;
   modified: IsoDate;
   publishedDisplay: string;
+  /**
+   * Visible "Updated" date for a guide whose body was substantially rewritten
+   * after publication. Editorial, like `modified` — never a build timestamp.
+   */
+  modifiedDisplay?: string;
   readingTime: string;
 };
 
@@ -236,9 +248,9 @@ export const resourceGuides: readonly ResourceGuide[] = [
     serviceSlug: "render",
     category: "Render selection",
     title: "Acrylic Render vs Cement Render: What Should Adelaide Homes Choose?",
-    metaTitle: "Acrylic vs Cement Render in Adelaide",
+    metaTitle: "Acrylic Render vs Cement Render",
     metaDescription:
-      "Weighing acrylic render against cement render for an Adelaide home? Compare flexibility, substrate fit and coastal durability before you choose a system.",
+      "Acrylic render vs cement render for an Adelaide home: compare movement tolerance, substrate fit, coastal exposure and upkeep before choosing a system.",
     summary:
       "Acrylic and cement render behave differently under Adelaide's clay soils, coastal salt air and dry summers—see what actually separates the two before you commit to a system.",
     image: "/images/v2/service-render-application.webp",
@@ -248,9 +260,10 @@ export const resourceGuides: readonly ResourceGuide[] = [
     imageWidth: 1600,
     imageHeight: 1067,
     published: "2026-08-24",
-    modified: "2026-09-05",
+    modified: "2026-11-25",
     publishedDisplay: "24 August 2026",
-    readingTime: "9 minute read",
+    modifiedDisplay: "25 November 2026",
+    readingTime: "12 minute read",
   },
   {
     slug: "vertical-vs-horizontal-cladding-adelaide",
@@ -444,7 +457,7 @@ export const resourceGuides: readonly ResourceGuide[] = [
       "Cladding or Render? Choosing an Exterior Finish for an Adelaide Home",
     metaTitle: "Cladding vs Render for Adelaide Homes",
     metaDescription:
-      "Cladding vs render on an Adelaide home? See what the wall behind the finish decides, how each handles local conditions and what to confirm first.",
+      "Cladding vs render on an Adelaide home? See what the wall decides, how each handles local conditions and when combining render and cladding works.",
     summary:
       "One finish is bonded to the wall, the other hangs off it, and that single difference drives everything else. See what separates them on an Adelaide site.",
     image: "/images/v2/project-dark-feature-cladding.webp",
@@ -455,9 +468,10 @@ export const resourceGuides: readonly ResourceGuide[] = [
     imageWidth: 1600,
     imageHeight: 1067,
     published: "2026-09-17",
-    modified: "2026-09-17",
+    modified: "2026-11-25",
     publishedDisplay: "17 September 2026",
-    readingTime: "9 minute read",
+    modifiedDisplay: "25 November 2026",
+    readingTime: "12 minute read",
   },
   {
     slug: "render-finishes-adelaide",
@@ -465,9 +479,9 @@ export const resourceGuides: readonly ResourceGuide[] = [
     category: "Render finishes",
     title:
       "Render Finishes in Adelaide: Which Texture Suits the Wall You Have?",
-    metaTitle: "Render Finishes for Adelaide Homes",
+    metaTitle: "Render Finishes & Textures in Adelaide",
     metaDescription:
-      "Choosing render finishes for an Adelaide home? See how texture grade changes crack visibility, cleaning, coastal wear and the coating over it.",
+      "Smooth, sand float or textured render for an Adelaide home? See where each finish suits, what the wall allows and how each one cleans, patches and ages.",
     summary:
       "Smooth, sand float and coarse texture are not only a look. The grade decides how much of the wall behind it disappears, how often the surface needs washing and how a future patch will blend.",
     image: "/images/v2/project-curved-render-detail.webp",
@@ -477,9 +491,10 @@ export const resourceGuides: readonly ResourceGuide[] = [
     imageWidth: 1600,
     imageHeight: 1067,
     published: "2026-09-18",
-    modified: "2026-09-18",
+    modified: "2026-11-25",
     publishedDisplay: "18 September 2026",
-    readingTime: "8 minute read",
+    modifiedDisplay: "25 November 2026",
+    readingTime: "12 minute read",
   },
   {
     slug: "external-wall-insulation-adelaide",
@@ -503,6 +518,166 @@ export const resourceGuides: readonly ResourceGuide[] = [
     modified: "2026-09-22",
     publishedDisplay: "22 September 2026",
     readingTime: "10 minute read",
+  },
+  {
+    slug: "facade-recladding-adelaide",
+    serviceSlug: "cladding",
+    category: "Facade recladding",
+    title:
+      "Facade Recladding in Adelaide: What to Inspect Before Replacing Cladding",
+    metaTitle: "Facade Recladding Adelaide Guide",
+    metaDescription:
+      "When an Adelaide facade may need recladding, what to inspect first, and how replacement cladding is planned around the existing wall and exposure.",
+    summary:
+      "Recladding starts with the wall behind the old facade, not the new board. See what to inspect, what removal can uncover and how a replacement system is planned around the frame, the junctions and the exposure.",
+    image: "/images/v2/homeowner-consultation.webp",
+    imageAlt:
+      "Homeowner and estimator comparing cladding sample boards beside a brick house",
+    imageCaption:
+      "Illustrative consultation image. It does not show a recladding project, a particular cladding product or the condition of any existing wall.",
+    imageWidth: 1600,
+    imageHeight: 900,
+    published: "2026-11-25",
+    modified: "2026-11-25",
+    publishedDisplay: "25 November 2026",
+    readingTime: "11 minute read",
+  },
+  {
+    slug: "render-repair-adelaide",
+    serviceSlug: "render",
+    category: "Render repair",
+    title:
+      "Render Repair in Adelaide: Patch, Partial Re-render or Start Again?",
+    metaTitle: "Render Repair in Adelaide",
+    metaDescription:
+      "How to tell render repair from a full re-render in Adelaide, what to record before a visit, and when cracking, hollow areas or salt damp change the scope.",
+    summary:
+      "A patch, a re-rendered elevation and a full strip-back are three different jobs. See what separates them, what to record before anyone visits and which findings stop a repair until the cause is dealt with.",
+    image: "/images/v2/resource-render-cracking-adelaide.webp",
+    imageAlt:
+      "Illustrative close view of a crack extending from a window corner across a rendered exterior wall",
+    imageCaption:
+      "AI-generated illustration only—not a photograph of an Elite Surface Group project or an actual property. A crack’s appearance cannot show whether a patch, a partial re-render or further assessment is the right scope.",
+    imageWidth: 1536,
+    imageHeight: 1024,
+    published: "2026-11-25",
+    modified: "2026-11-25",
+    publishedDisplay: "25 November 2026",
+    readingTime: "11 minute read",
+  },
+  {
+    slug: "what-affects-cladding-render-quotes-adelaide",
+    serviceSlug: "render",
+    category: "Quotes and scope",
+    title:
+      "What Affects a Cladding, Render, Hebel or Walling Quote in Adelaide?",
+    metaTitle: "What Affects Cladding & Render Quotes",
+    metaDescription:
+      "What typically changes a cladding, render, Hebel or walling quote in Adelaide: scope, access, substrate and finish, explained without price lists.",
+    summary:
+      "No two walls price the same, which is why this guide carries no rates. See what a quote usually needs, which conditions move it and which scope questions to settle so two quotes can be compared fairly.",
+    image: "/images/v2/home-team-site-review.webp",
+    imageAlt:
+      "Construction team reviewing plans beside a rendered wall and scaffold on a building site",
+    imageCaption:
+      "Illustrative site-review image. It does not show a quoted project and does not establish a scope, a price or a programme.",
+    imageWidth: 1600,
+    imageHeight: 1200,
+    published: "2026-11-25",
+    modified: "2026-11-25",
+    publishedDisplay: "25 November 2026",
+    readingTime: "11 minute read",
+  },
+  {
+    slug: "internal-rendering-adelaide",
+    serviceSlug: "render",
+    category: "Internal render",
+    title:
+      "Internal Rendering in Adelaide: What to Confirm Before Work Starts",
+    metaTitle: "Internal Rendering Adelaide Guide",
+    metaDescription:
+      "What to confirm before internal rendering in Adelaide, including substrate, finish, junctions and how the work is coordinated with other trades.",
+    summary:
+      "Rendering inside a building is judged at arm’s length, under raking light, beside joinery and floors that are already finished. See what the wall, the finish and the trade sequence need to settle first.",
+    image: "/images/v2/service-render-application.webp",
+    imageAlt: "Tradesperson applying an even render finish to an exterior wall",
+    imageCaption:
+      "Illustrative rendering image. It shows render being trowelled onto an exterior wall, not an internal room, and does not establish a particular internal render system or finish.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-11-25",
+    modified: "2026-11-25",
+    publishedDisplay: "25 November 2026",
+    readingTime: "10 minute read",
+  },
+  {
+    slug: "fibre-cement-cladding-adelaide",
+    serviceSlug: "cladding",
+    category: "Cladding installation",
+    title:
+      "Fibre Cement Cladding in Adelaide: How an Installation Is Planned",
+    metaTitle: "Fibre Cement Cladding in Adelaide",
+    metaDescription:
+      "How fibre-cement cladding is planned and installed on Adelaide homes, from frame, cavity and junctions to exposure and upkeep. Not a brand catalogue.",
+    summary:
+      "Fibre cement is a family of boards, planks and panels, each with its own installation guide. See how the frame, the cavity, the junctions and the site exposure shape an installation before a profile is chosen.",
+    image: "/images/v2/service-cladding-installation.webp",
+    imageAlt:
+      "Installer aligning charcoal vertical cladding on a residential exterior wall",
+    imageCaption:
+      "Illustrative cladding image. The image does not establish a fibre-cement product, a batten or cavity detail, or a fixing specification.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-11-25",
+    modified: "2026-11-25",
+    publishedDisplay: "25 November 2026",
+    readingTime: "11 minute read",
+  },
+  {
+    slug: "preparing-walls-for-render-adelaide",
+    serviceSlug: "render",
+    category: "Render preparation",
+    title:
+      "Preparing Walls for Render in Adelaide: What Has to Be Right First",
+    metaTitle: "Preparing Walls for Render, Adelaide",
+    metaDescription:
+      "What needs to be confirmed before render goes on in Adelaide, from substrate condition and movement joints to coatings, damp and adjoining finishes.",
+    summary:
+      "Most render problems are decided before the first coat is mixed. See what the substrate, its joints, its old coatings, its moisture history and the trades around it need to confirm before rendering starts.",
+    image: "/images/v2/project-rendered-columns-stone.webp",
+    imageAlt:
+      "In-progress rendered columns and moulded ledges above a stone-faced base",
+    imageCaption:
+      "Elite Surface Group project photograph. It records rendered columns and ledges at an in-progress stage and does not establish the substrate preparation, render system or coating used.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-11-25",
+    modified: "2026-11-25",
+    publishedDisplay: "25 November 2026",
+    readingTime: "11 minute read",
+  },
+  {
+    slug: "choosing-a-hebel-installer-adelaide",
+    serviceSlug: "hebel",
+    category: "Hebel installer selection",
+    title:
+      "Choosing a Hebel Installer in Adelaide: What to Confirm Before You Appoint One",
+    metaTitle: "Choosing a Hebel Installer in Adelaide",
+    metaDescription:
+      "What to confirm when appointing a Hebel installer in Adelaide: system specification, drawings, fixings, openings, finishing trades and quote scope.",
+    summary:
+      "A Hebel wall performs as a documented system, so the useful questions are about documents and scope rather than slogans. See what to ask an installer about the specification, the drawings, the junctions and the quote.",
+    image: "/images/v2/service-hebel-installation.webp",
+    imageAlt:
+      "Installer checking the vertical alignment of AAC wall panels beside steel framing",
+    imageCaption:
+      "Illustrative wall-system image. The image does not establish a particular Hebel system, an installer’s qualifications or suitability for a given site.",
+    imageWidth: 1600,
+    imageHeight: 1067,
+    published: "2026-11-25",
+    modified: "2026-11-25",
+    publishedDisplay: "25 November 2026",
+    readingTime: "11 minute read",
   },
 ];
 
@@ -563,6 +738,23 @@ export const claddingVsRenderGuide = guideBySlug("cladding-vs-render-adelaide");
 export const renderFinishesGuide = guideBySlug("render-finishes-adelaide");
 export const externalWallInsulationGuide = guideBySlug(
   "external-wall-insulation-adelaide",
+);
+export const facadeRecladdingGuide = guideBySlug("facade-recladding-adelaide");
+export const renderRepairGuide = guideBySlug("render-repair-adelaide");
+export const quoteDriversGuide = guideBySlug(
+  "what-affects-cladding-render-quotes-adelaide",
+);
+export const internalRenderingGuide = guideBySlug(
+  "internal-rendering-adelaide",
+);
+export const fibreCementCladdingGuide = guideBySlug(
+  "fibre-cement-cladding-adelaide",
+);
+export const preparingWallsForRenderGuide = guideBySlug(
+  "preparing-walls-for-render-adelaide",
+);
+export const choosingHebelInstallerGuide = guideBySlug(
+  "choosing-a-hebel-installer-adelaide",
 );
 
 /** A short selection for Home; the Resources hub retains every guide. */

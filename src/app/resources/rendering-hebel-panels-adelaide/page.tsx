@@ -581,6 +581,9 @@ export default function RenderingHebelPanelsGuidePage() {
             <nav className="article-related" aria-label="Related pages">
               <Link href="/hebel/">Hebel installation Adelaide</Link>
               <Link href="/render/">Rendering services Adelaide</Link>
+              <Link href="/resources/choosing-a-hebel-installer-adelaide/">
+                Choosing a Hebel installer
+              </Link>
               <Link href="/locations/adelaide/">Adelaide service area</Link>
               <Link href="/project-planning/">Plan a project enquiry</Link>
               <Link href="/resources/">More practical guides</Link>

@@ -6,7 +6,14 @@ import ContactSection from "@/components/ContactSection";
 import PageBanner from "@/components/PageBanner";
 import QuoteButton from "@/components/QuoteButton";
 import { CtaBand } from "@/components/CtaBand";
-import { ProjectLinks, ServiceCards, TickList } from "@/components/sections";
+import {
+  ContentSections,
+  FaqList,
+  ProjectLinks,
+  SectionContents,
+  ServiceCards,
+  TickList,
+} from "@/components/sections";
 import { bannerImages } from "@/content/pages";
 import { projects } from "@/content/projects";
 import { samePhotograph } from "@/lib/photographs";
@@ -69,6 +76,8 @@ export default async function ServicePage({ params }: PageProps) {
   // The service photograph and the banner file are the same shot. The banner
   // keeps it; the intro underneath does not show it again.
   const introRepeatsBanner = samePhotograph(service.image, banner);
+  const sections = service.sections ?? [];
+  const faqsHeading = service.headings?.faqs ?? `${service.name} FAQs`;
 
   const intro = (
     <>
@@ -90,6 +99,12 @@ export default async function ServicePage({ params }: PageProps) {
           </li>
         ))}
       </ul>
+      {sections.length ? (
+        <SectionContents
+          sections={sections}
+          extra={[{ id: "service-faqs", label: faqsHeading }]}
+        />
+      ) : null}
     </>
   );
 
@@ -152,19 +167,39 @@ export default async function ServicePage({ params }: PageProps) {
         id={`${service.slug}-project-details`}
       />
 
-      <section className="section" aria-labelledby="service-faqs">
+      {/* The approach block and the project links above are both tinted, so
+          the first long-form section starts plain and they alternate from
+          there. */}
+      <ContentSections sections={sections} />
+
+      <section
+        className={
+          sections.length % 2 === 1 ? "section section--tint" : "section"
+        }
+        aria-labelledby="service-faqs"
+      >
         <div className="shell prose">
-          <h2 id="service-faqs">
-            {service.headings?.faqs ?? <>{service.name} FAQs</>}
-          </h2>
-          <dl className="faq-list">
-            {service.faqs.map((faq) => (
-              <div key={faq.question} className="faq-list__item">
-                <dt>{faq.question}</dt>
-                <dd>{faq.answer}</dd>
-              </div>
-            ))}
-          </dl>
+          <h2 id="service-faqs">{faqsHeading}</h2>
+          <FaqList faqs={service.faqs} />
+          {service.guides ? (
+            <>
+              <h2 id="service-guides">{service.guides.heading}</h2>
+              <p>{service.guides.intro}</p>
+              <nav
+                className="guide-links"
+                aria-label={service.guides.heading}
+              >
+                {service.guides.links.map((link) => (
+                  <Link href={link.href} key={link.href} prefetch={false}>
+                    {link.label}
+                  </Link>
+                ))}
+                <Link className="guide-links__all" href="/resources/">
+                  View all resources
+                </Link>
+              </nav>
+            </>
+          ) : null}
         </div>
       </section>
 

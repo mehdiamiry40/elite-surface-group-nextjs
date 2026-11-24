@@ -53,6 +53,13 @@ export const enquiryServiceByPath = {
   "/resources/cladding-vs-render-adelaide/": "Cladding",
   "/resources/render-finishes-adelaide/": "Render",
   "/resources/external-wall-insulation-adelaide/": "Walling",
+  "/resources/facade-recladding-adelaide/": "Cladding",
+  "/resources/render-repair-adelaide/": "Render",
+  "/resources/what-affects-cladding-render-quotes-adelaide/": "Render",
+  "/resources/internal-rendering-adelaide/": "Render",
+  "/resources/fibre-cement-cladding-adelaide/": "Cladding",
+  "/resources/preparing-walls-for-render-adelaide/": "Render",
+  "/resources/choosing-a-hebel-installer-adelaide/": "Hebel",
 } as const satisfies Readonly<Record<string, string>>;
 
 export function defaultEnquiryService(pathname: string) {

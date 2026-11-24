@@ -433,6 +433,9 @@ export default function CladdingOrientationGuidePage() {
 
             <nav className="article-related" aria-label="Related website pages">
               <Link href="/cladding/">Cladding installation in Adelaide</Link>
+              <Link href="/resources/fibre-cement-cladding-adelaide/">
+                Fibre cement cladding installation guide
+              </Link>
               <Link href="/projects/dark-feature-cladding/">
                 Feature cladding project case study
               </Link>

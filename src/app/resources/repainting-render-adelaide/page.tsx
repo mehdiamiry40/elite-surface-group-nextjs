@@ -457,6 +457,9 @@ export default function RepaintingRenderGuidePage() {
 
             <nav className="article-related" aria-label="Related website pages">
               <Link href="/render/">Adelaide render services</Link>
+              <Link href="/resources/render-repair-adelaide/">
+                Render repair guide
+              </Link>
               <Link href="/resources/render-cracking-adelaide/">
                 Render cracking guide
               </Link>
