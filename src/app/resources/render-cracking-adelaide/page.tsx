@@ -498,6 +498,9 @@ export default function RenderCrackingGuidePage() {
 
             <nav className="article-related" aria-label="Related website pages">
               <Link href="/render/">Adelaide rendering services</Link>
+              <Link href="/resources/render-repair-adelaide/">
+                Render repair guide
+              </Link>
               <Link href="/projects/">Render project case studies</Link>
               <Link href="/locations/adelaide/">Adelaide service area</Link>
               <Link href="/project-planning/">Plan your project enquiry</Link>

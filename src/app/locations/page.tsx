@@ -6,7 +6,11 @@ import PageBanner from "@/components/PageBanner";
 import { CtaBand, SectionHead, ServiceCards } from "@/components/sections";
 import { BreadcrumbSchema } from "@/components/JsonLd";
 import { bannerImages } from "@/content/pages";
-import { locationPages, locationsHub } from "@/content/locations";
+import {
+  locationPages,
+  locationsHub,
+  type LocationPage,
+} from "@/content/locations";
 import { ogCard, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
@@ -18,6 +22,32 @@ export const metadata: Metadata = pageMetadata({
     "Adelaide service coverage, with wider South Australia assessed by project",
   ),
 });
+
+// Metropolitan Adelaide is the primary area; the rest are regions within it.
+const [primaryLocation, ...regionLocations] = locationPages;
+
+function LocationCard({
+  location,
+  className,
+}: {
+  location: LocationPage;
+  className: string;
+}) {
+  return (
+    <li className={className}>
+      <FeatureIcon name="pin" />
+      <span>{location.hubLabel}</span>
+      <h3>
+        <Link href={`/locations/${location.slug}/`}>{location.hubTitle}</Link>
+      </h3>
+      <p className="locations-directory__summary">{location.hubSummary}</p>
+      <Link className="text-link" href={`/locations/${location.slug}/`}>
+        View {location.name} coverage
+        <ArrowRightIcon />
+      </Link>
+    </li>
+  );
+}
 
 export default function LocationsPage() {
   return (
@@ -43,30 +73,10 @@ export default function LocationsPage() {
 
           <div className="locations-overview__grid">
             <ul className="project-link-grid project-link-grid--1 locations-directory">
-              {locationPages.map((location) => (
-                <li
-                  className="project-link-card locations-directory__item"
-                  key={location.slug}
-                >
-                  <FeatureIcon name="pin" />
-                  <span>Primary service area</span>
-                  <h3>
-                    <Link href={`/locations/${location.slug}/`}>
-                      {location.hubTitle}
-                    </Link>
-                  </h3>
-                  <p className="locations-directory__summary">
-                    {location.hubSummary}
-                  </p>
-                  <Link
-                    className="text-link"
-                    href={`/locations/${location.slug}/`}
-                  >
-                    View {location.name} coverage
-                    <ArrowRightIcon />
-                  </Link>
-                </li>
-              ))}
+              <LocationCard
+                location={primaryLocation}
+                className="project-link-card locations-directory__item"
+              />
             </ul>
 
             <aside
@@ -84,6 +94,29 @@ export default function LocationsPage() {
               </Link>
             </aside>
           </div>
+        </div>
+      </section>
+
+      <section
+        className="section section--tint"
+        aria-labelledby="locations-regions"
+      >
+        <div className="shell">
+          <SectionHead
+            eyebrow="Regional guidance"
+            title={locationsHub.regionsTitle}
+            intro={locationsHub.regionsIntro}
+            id="locations-regions"
+          />
+          <ul className="project-link-grid project-link-grid--3 locations-directory">
+            {regionLocations.map((location) => (
+              <LocationCard
+                key={location.slug}
+                location={location}
+                className="project-link-card locations-directory__item"
+              />
+            ))}
+          </ul>
         </div>
       </section>
 

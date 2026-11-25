@@ -140,10 +140,26 @@ export const bannerImages: Record<string, string> = {
   "/resources/render-finishes-adelaide": "/images/v2/banner-render.webp",
   "/resources/external-wall-insulation-adelaide":
     "/images/v2/banner-services.webp",
+  "/resources/facade-recladding-adelaide": "/images/v2/banner-cladding.webp",
+  "/resources/render-repair-adelaide": "/images/v2/banner-render.webp",
+  "/resources/what-affects-cladding-render-quotes-adelaide":
+    "/images/v2/banner-services.webp",
+  "/resources/internal-rendering-adelaide": "/images/v2/banner-services.webp",
+  "/resources/fibre-cement-cladding-adelaide":
+    "/images/v2/banner-services.webp",
+  "/resources/preparing-walls-for-render-adelaide":
+    "/images/v2/banner-render.webp",
+  "/resources/choosing-a-hebel-installer-adelaide":
+    "/images/v2/banner-services.webp",
   // Not the dark-feature case study: that photograph is already in the gallery.
   "/projects": "/images/v2/home-hero-cladding-render.webp",
   "/locations": "/images/v2/banner-locations.webp",
   "/locations/adelaide": "/images/v2/banner-locations.webp",
+  // Region banners are decorative and reuse existing site photographs; none of
+  // them is presented as a project in that region.
+  "/locations/northern-adelaide": "/images/v2/banner-services.webp",
+  "/locations/coastal-adelaide": "/images/v2/home-hero-cladding-render.webp",
+  "/locations/adelaide-hills": "/images/v2/banner-about.webp",
   "/contact-us": "/images/v2/banner-contact.webp",
   // Not the closing CTA photograph (cta-render-action.webp is the same shot).
   "/privacy-policy": "/images/v2/banner-about.webp",

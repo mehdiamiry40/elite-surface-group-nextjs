@@ -3,11 +3,16 @@ import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
 import { CtaBand } from "@/components/CtaBand";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/JsonLd";
+import {
+  ArticleSchema,
+  BreadcrumbSchema,
+  FAQPageSchema,
+} from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
 import { bannerImages } from "@/content/pages";
 import { renderFinishesGuide } from "@/content/resources";
+import type { ServiceFaq } from "@/content/services";
 import { blurProps } from "@/lib/lcp-blur";
 import { ogCard, pageMetadata } from "@/lib/seo";
 
@@ -20,6 +25,45 @@ export const metadata: Metadata = pageMetadata({
   publishedTime: renderFinishesGuide.published,
   modifiedTime: renderFinishesGuide.modified,
 });
+
+/** Rendered as the visible FAQ list and emitted as FAQPage structured data. */
+const faqs: readonly ServiceFaq[] = [
+  {
+    question: "Will a coarse texture stop the wall cracking?",
+    answer:
+      "No. A heavier profile can disguise fine surface variation, but a crack driven by substrate or footing movement will still come through. The cause needs assessment before the finish is chosen, not after the second repair.",
+  },
+  {
+    question: "Can we change the texture without removing the render?",
+    answer:
+      "Sometimes. It depends on what the existing surface is, how well it is bonded, and whether the new system is documented for that substrate. Going coarser is generally easier than going smoother, because a finer grade inherits the flatness beneath it.",
+  },
+  {
+    question: "Which finish is the cheapest?",
+    answer:
+      "Comparing textures by rate alone tells you little. Preparation, access, the number of coats and the flatness the chosen grade demands usually move the number more than the texture product does.",
+  },
+  {
+    question: "Does a dark colour cost anything later?",
+    answer:
+      "It can. The Rockcote maintenance guide ties repainting frequency to colour choice, exposure, application quality and location, and names dark colours and coastal environments as the combination that may need attention sooner. Some systems also document colour limits over particular substrates, so check the selected colour against the system data.",
+  },
+  {
+    question: "Is textured render harder to clean than a smooth finish?",
+    answer:
+      "Usually a little. A deeper profile gives dust, salt and airborne dirt more surface to settle on, so soiling tends to show sooner on exposed or ground-level walls. Follow the cleaning method documented for the selected system rather than reaching for a pressure washer.",
+  },
+  {
+    question: "Can smooth and textured render be combined on one house?",
+    answer:
+      "Yes. Changing finish between elevations or elements is common, provided the change happens at a natural break such as a corner, a joint, an opening or a change of plane. Each finish still needs to belong to a system documented for the substrate it sits on.",
+  },
+  {
+    question: "Does the finish we choose change the preparation?",
+    answer:
+      "Yes. A smooth finish inherits the flatness of the wall beneath it, so it usually asks more of the substrate and base coats than a textured one. Cracks, damp, weak coatings and missing movement joints need resolving whichever finish is selected.",
+  },
+];
 
 export default function RenderFinishesGuidePage() {
   return (
@@ -34,6 +78,7 @@ export default function RenderFinishesGuidePage() {
         ]}
       />
       <ArticleSchema guide={renderFinishesGuide} />
+      <FAQPageSchema faqs={faqs} />
 
       <article>
         <PageBanner
@@ -55,6 +100,11 @@ export default function RenderFinishesGuidePage() {
               <time dateTime={renderFinishesGuide.published}>
                 Published {renderFinishesGuide.publishedDisplay}
               </time>
+              {renderFinishesGuide.modifiedDisplay ? (
+                <time dateTime={renderFinishesGuide.modified}>
+                  Updated {renderFinishesGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{renderFinishesGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -88,6 +138,9 @@ export default function RenderFinishesGuidePage() {
                   <a href="#grades">The finishes you will be offered</a>
                 </li>
                 <li>
+                  <a href="#where-used">Where each finish is used</a>
+                </li>
+                <li>
                   <a href="#wall">The wall sets the shortlist</a>
                 </li>
                 <li>
@@ -95,6 +148,9 @@ export default function RenderFinishesGuidePage() {
                 </li>
                 <li>
                   <a href="#upkeep">Upkeep, patching and ageing</a>
+                </li>
+                <li>
+                  <a href="#before-choosing">Questions before choosing</a>
                 </li>
                 <li>
                   <a href="#next-steps">Sensible next steps</a>
@@ -197,7 +253,126 @@ export default function RenderFinishesGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="wall">
+        <section className="section" aria-labelledby="where-used">
+          <div className="shell prose article-prose">
+            <h2 id="where-used">Where each render finish is usually used</h2>
+            <p>
+              A finish is rarely chosen for a whole house in one go. It is
+              chosen elevation by elevation and element by element, because a
+              wall that catches low western sun, a column beside the front
+              door and a garden wall next to the driveway do not ask the same
+              thing of a surface. The patterns below are common starting
+              points, not rules&mdash;the substrate and the selected system
+              still have the final say.
+            </p>
+
+            <h3>Contemporary, flat elevations</h3>
+            <p>
+              Smooth render is the usual request on modern box forms, parapet
+              walls and long uninterrupted planes, where the design depends on
+              a crisp edge and an even face. It is also the finish that asks
+              most of the wall. Flatness, straight corners and consistent
+              joints have to be built in beneath it, which is why the
+              preparation matters as much as the top coat. Our guide to{" "}
+              <Link href="/resources/preparing-walls-for-render-adelaide/">
+                preparing walls for render
+              </Link>{" "}
+              covers what has to be right before a smooth finish is realistic.
+            </p>
+
+            <h3>Older or uneven masonry</h3>
+            <p>
+              On an established home where the brickwork has settled, been
+              repointed or been patched over the years, a fine sand or float
+              finish is the common middle ground. The grain softens small
+              variations without reading as heavily textured, and it sits
+              comfortably beside original details. If the wall already carries
+              render that is being patched rather than replaced, the new
+              finish also has to blend with what stays&mdash;our{" "}
+              <Link href="/resources/render-repair-adelaide/">
+                render repair guide
+              </Link>{" "}
+              explains how that changes the scope.
+            </p>
+
+            <h3>Feature walls, columns and reveals</h3>
+            <p>
+              Columns, piers, window reveals, moulded ledges and entry walls
+              are seen at close range and from several angles at once. The
+              finish has to turn corners cleanly and stay consistent across
+              every return, so a grade that can be worked neatly into edges
+              and profiles usually matters more here than the deepest possible
+              texture. The{" "}
+              <Link href="/projects/rendered-column-and-stone-junctions/">
+                rendered columns case study
+              </Link>{" "}
+              shows a light textured finish carried across repeated corners
+              and moulded bases.
+            </p>
+
+            <h3>Ground-level and high-traffic walls</h3>
+            <p>
+              Walls beside paths, driveways, bin stores and garden beds
+              collect scuffs, splashback and dust. A very smooth face shows
+              every mark and every later touch-up; a very coarse one holds
+              dirt in its profile. A moderate texture is often chosen for
+              these positions because it disguises small knocks while still
+              washing down in line with the system&rsquo;s documented cleaning
+              method.
+            </p>
+
+            <h3>Coastal elevations</h3>
+            <p>
+              Facing the gulf, the question shifts from appearance to
+              exposure. Salt and wind-driven sand settle on any surface, and a
+              deeper profile gives them more to hold on to, so texture depth
+              and colour are worth weighing against how often the wall can
+              realistically be washed. The finish still has to belong to a
+              system documented for that exposure. Our{" "}
+              <Link href="/locations/coastal-adelaide/">
+                coastal Adelaide page
+              </Link>{" "}
+              sets out how we plan render and cladding around salt and wind.
+            </p>
+
+            <h3>Internal walls</h3>
+            <p>
+              Inside, a rendered wall is viewed at arm&rsquo;s length, under
+              artificial light and beside joinery, so finer and smoother
+              finishes are the norm and heavier textures are usually kept to a
+              deliberate feature. Junctions with skirtings, door frames,
+              ceilings and floors need agreeing before work starts. The{" "}
+              <Link href="/resources/internal-rendering-adelaide/">
+                internal rendering guide
+              </Link>{" "}
+              covers what to confirm.
+            </p>
+
+            <h3>What textured render does and does not hide</h3>
+            <p>
+              Textured render is often asked for by name because it is
+              forgiving. The grain breaks up reflected light, so slight trowel
+              marks, small changes in plane and minor substrate variation are
+              far less visible than they would be on a smooth wall. That is a
+              real advantage on a wall that is sound but not perfect.
+            </p>
+            <p>
+              It is not a repair. Textured render will not hide a crack that
+              is still moving, a hollow or debonded area, a damp patch or salt
+              coming through from behind, and it cannot stand in for a
+              movement joint that was never formed. Those need to be
+              understood first&mdash;the guides to{" "}
+              <Link href="/resources/render-cracking-adelaide/">
+                render cracking
+              </Link>{" "}
+              and{" "}
+              <Link href="/resources/salt-damp-adelaide/">salt damp</Link>{" "}
+              explain what to record&mdash;and the texture chosen afterwards.
+            </p>
+          </div>
+        </section>
+
+        <section className="section section--tint" aria-labelledby="wall">
           <div className="shell prose article-prose">
             <h2 id="wall">The wall underneath sets the shortlist</h2>
             <p>
@@ -231,7 +406,7 @@ export default function RenderFinishesGuidePage() {
           </div>
         </section>
 
-        <section className="section section--tint" aria-labelledby="adelaide">
+        <section className="section" aria-labelledby="adelaide">
           <div className="shell split article-visual">
             <figure className="split__media article-figure">
               <Image
@@ -292,7 +467,7 @@ export default function RenderFinishesGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="upkeep">
+        <section className="section section--tint" aria-labelledby="upkeep">
           <div className="shell prose article-prose">
             <h2 id="upkeep">Upkeep, patching and how a finish ages</h2>
             <p>
@@ -330,6 +505,72 @@ export default function RenderFinishesGuidePage() {
                 Rockcote maintenance guide (PDF)
               </a>
               .
+            </p>
+          </div>
+        </section>
+
+        <section className="section" aria-labelledby="before-choosing">
+          <div className="shell prose article-prose">
+            <h2 id="before-choosing">
+              Questions to settle before choosing a finish
+            </h2>
+            <p>
+              Most disappointment with a render finish traces back to a
+              decision made from a brochure or a hand sample. These are the
+              questions worth answering on site, before the specification is
+              locked.
+            </p>
+
+            <h3>How does it look at scale, in the light it will live in?</h3>
+            <p>
+              Texture and colour both read differently across a whole
+              elevation than they do on a sample board. Ask for a sample panel
+              on the building and look at it in the morning, at midday and
+              late in the afternoon. Low sun across a wall exaggerates every
+              ripple; flat midday light hides them.
+            </p>
+
+            <h3>Where does the colour sit, and how dark is it?</h3>
+            <p>
+              Decide whether the colour is carried in the render or in a
+              coating over it, and check the chosen colour against the system
+              documents. Darker colours and exposed positions are the
+              combination that tends to bring maintenance forward, so colour
+              is an upkeep decision as well as a design one.
+            </p>
+
+            <h3>Where are the joints and the natural breaks?</h3>
+            <p>
+              Movement joints have to be carried through the finish, and they
+              are visible lines once the wall is done. Mark them on the
+              elevations early, along with the corners, openings and changes
+              of plane where one finish can stop and another can start. A
+              joint that has been planned looks deliberate; one that appears
+              later looks like a defect.
+            </p>
+
+            <h3>Who owns each junction?</h3>
+            <p>
+              Render meets windows, flashings, cladding, paving, roofing and
+              services. Agree in writing which trade forms each bead, sealant
+              line and flashing, and in what order. Where render sits beside a
+              clad element, our{" "}
+              <Link href="/resources/cladding-vs-render-adelaide/">
+                cladding versus render comparison
+              </Link>{" "}
+              explains why that junction needs designing rather than
+              improvising.
+            </p>
+
+            <h3>What does the quote actually cover?</h3>
+            <p>
+              Two quotes for &ldquo;the same finish&rdquo; can cover different
+              amounts of preparation, a different number of coats and
+              different access. Our guide to{" "}
+              <Link href="/resources/what-affects-cladding-render-quotes-adelaide/">
+                what affects a cladding or render quote
+              </Link>{" "}
+              lists the scope questions that make quotes comparable.
             </p>
           </div>
         </section>
@@ -393,45 +634,12 @@ export default function RenderFinishesGuidePage() {
           <div className="shell prose article-prose">
             <h2 id="render-finishes-faqs">Common questions</h2>
             <dl className="faq-list" aria-labelledby="render-finishes-faqs">
-              <div className="faq-list__item">
-                <dt>Will a coarse texture stop the wall cracking?</dt>
-                <dd>
-                  No. A heavier profile can disguise fine surface variation, but
-                  a crack driven by substrate or footing movement will still
-                  come through. The cause needs assessment before the finish is
-                  chosen, not after the second repair.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Can we change the texture without removing the render?</dt>
-                <dd>
-                  Sometimes. It depends on what the existing surface is, how
-                  well it is bonded, and whether the new system is documented
-                  for that substrate. Going coarser is generally easier than
-                  going smoother, because a finer grade inherits the flatness
-                  beneath it.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Which finish is the cheapest?</dt>
-                <dd>
-                  Comparing textures by rate alone tells you little.
-                  Preparation, access, the number of coats and the flatness the
-                  chosen grade demands usually move the number more than the
-                  texture product does.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Does a dark colour cost anything later?</dt>
-                <dd>
-                  It can. The Rockcote maintenance guide ties repainting
-                  frequency to colour choice, exposure, application quality and
-                  location, and names dark colours and coastal environments as
-                  the combination that may need attention sooner. Some systems
-                  also document colour limits over particular substrates, so
-                  check the selected colour against the system data.
-                </dd>
-              </div>
+              {faqs.map((faq) => (
+                <div className="faq-list__item" key={faq.question}>
+                  <dt>{faq.question}</dt>
+                  <dd>{faq.answer}</dd>
+                </div>
+              ))}
             </dl>
 
             <h2 id="sources">Sources and further reading</h2>
@@ -487,6 +695,12 @@ export default function RenderFinishesGuidePage() {
               <Link href="/render/">Adelaide rendering services</Link>
               <Link href="/resources/acrylic-render-vs-cement-render-adelaide/">
                 Acrylic vs cement render
+              </Link>
+              <Link href="/resources/preparing-walls-for-render-adelaide/">
+                Preparing walls for render
+              </Link>
+              <Link href="/resources/render-repair-adelaide/">
+                Render repair or re-render?
               </Link>
               <Link href="/resources/repainting-render-adelaide/">
                 Repainting rendered walls

@@ -443,6 +443,15 @@ export default function CladdingMaterialComparisonGuidePage() {
 
             <nav className="article-related" aria-label="Related website pages">
               <Link href="/cladding/">Cladding installation in Adelaide</Link>
+              <Link href="/resources/fibre-cement-cladding-adelaide/">
+                Fibre cement cladding installation guide
+              </Link>
+              <Link href="/locations/adelaide-hills/">
+                Adelaide Hills projects
+              </Link>
+              <Link href="/locations/coastal-adelaide/">
+                Coastal Adelaide sites
+              </Link>
               <Link href="/projects/dark-feature-cladding/">
                 Feature cladding project case study
               </Link>

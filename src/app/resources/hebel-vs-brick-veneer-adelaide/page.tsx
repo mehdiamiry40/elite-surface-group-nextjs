@@ -534,6 +534,9 @@ export default function HebelVsBrickVeneerGuidePage() {
 
             <nav className="article-related" aria-label="Related website pages">
               <Link href="/hebel/">Adelaide Hebel installation</Link>
+              <Link href="/resources/choosing-a-hebel-installer-adelaide/">
+                Choosing a Hebel installer
+              </Link>
               <Link href="/resources/rendering-hebel-panels-adelaide/">
                 Rendering Hebel panels guide
               </Link>

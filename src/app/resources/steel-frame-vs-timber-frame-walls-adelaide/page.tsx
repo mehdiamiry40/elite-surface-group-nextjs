@@ -504,6 +504,12 @@ export default function SteelVsTimberFramingGuidePage() {
             <nav className="article-related" aria-label="Related website pages">
               <Link href="/walling/">Walling services in Adelaide</Link>
               <Link href="/hebel/">Hebel wall systems</Link>
+              <Link href="/locations/adelaide-hills/">
+                Adelaide Hills projects
+              </Link>
+              <Link href="/locations/coastal-adelaide/">
+                Coastal Adelaide sites
+              </Link>
               <Link href="/projects/">Project case studies</Link>
               <Link href="/locations/adelaide/">Adelaide service area</Link>
               <Link href="/project-planning/">Plan your project enquiry</Link>

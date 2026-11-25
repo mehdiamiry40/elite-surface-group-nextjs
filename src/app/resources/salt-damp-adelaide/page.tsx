@@ -482,6 +482,9 @@ export default function SaltDampGuidePage() {
 
             <nav className="article-related" aria-label="Related website pages">
               <Link href="/render/">Adelaide render services</Link>
+              <Link href="/resources/render-repair-adelaide/">
+                Render repair guide
+              </Link>
               <Link href="/resources/rendering-over-painted-brick-adelaide/">
                 Rendering over painted brick guide
               </Link>

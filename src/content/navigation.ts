@@ -65,6 +65,18 @@ export const mainNav: readonly NavItem[] = [
         href: "/resources/rendering-over-painted-brick-adelaide",
       },
       {
+        label: "Facade recladding",
+        href: "/resources/facade-recladding-adelaide",
+      },
+      {
+        label: "Render repair",
+        href: "/resources/render-repair-adelaide",
+      },
+      {
+        label: "What affects a quote",
+        href: "/resources/what-affects-cladding-render-quotes-adelaide",
+      },
+      {
         label: "Project planning",
         href: "/project-planning",
       },
@@ -81,6 +93,7 @@ export const footerNav = {
     { label: "Projects", href: "/projects" },
     { label: "Resources", href: "/resources" },
     { label: "Project planning", href: "/project-planning" },
+    { label: "Service areas", href: "/locations" },
     { label: "Adelaide service area", href: "/locations/adelaide" },
     { label: "Contact Us", href: "/contact-us" },
   ],

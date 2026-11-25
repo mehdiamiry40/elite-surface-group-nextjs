@@ -587,6 +587,9 @@ export default function AsbestosCladdingReplacementGuidePage() {
 
             <nav className="article-related" aria-label="Related website pages">
               <Link href="/cladding/">Adelaide cladding installation</Link>
+              <Link href="/resources/facade-recladding-adelaide/">
+                Facade recladding guide
+              </Link>
               <Link href="/resources/cladding-over-brick-adelaide/">
                 Cladding over brick guide
               </Link>

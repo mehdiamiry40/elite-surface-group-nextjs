@@ -536,6 +536,9 @@ export default function RenderingPaintedBrickGuidePage() {
 
             <nav className="article-related" aria-label="Related pages">
               <Link href="/render/">Rendering services Adelaide</Link>
+              <Link href="/resources/preparing-walls-for-render-adelaide/">
+                Preparing walls for render
+              </Link>
               <Link href="/resources/render-cracking-adelaide/">
                 Render-cracking guide
               </Link>

@@ -20,11 +20,20 @@ const RELEASE_DATES = {
   serviceAreaHubRefresh: "2026-09-02",
   homeGuideCuration: "2026-09-05",
   claddingFacadeRefresh: "2026-11-19",
+  /**
+   * 25 November content build: all four service pages and the Adelaide page
+   * rewritten at length, three region pages added and the service-area hub
+   * reorganised around them.
+   */
+  serviceAndRegionContentBuild: "2026-11-25",
 } as const;
 
 /** Service pages whose copy changed after the shared content release. */
 const SERVICE_LAST_MODIFIED: Partial<Record<Service["slug"], IsoDate>> = {
-  cladding: RELEASE_DATES.claddingFacadeRefresh,
+  cladding: RELEASE_DATES.serviceAndRegionContentBuild,
+  render: RELEASE_DATES.serviceAndRegionContentBuild,
+  hebel: RELEASE_DATES.serviceAndRegionContentBuild,
+  walling: RELEASE_DATES.serviceAndRegionContentBuild,
 };
 
 /** Keep an aggregate page current when any content it renders becomes newer. */
@@ -82,11 +91,18 @@ export const publicRouteRecords = [
       RELEASE_DATES.verifiedContentRelease,
     ),
   ),
-  publicRoute("/locations/", RELEASE_DATES.serviceAreaHubRefresh),
+  publicRoute("/locations/", RELEASE_DATES.serviceAndRegionContentBuild),
   ...locationPages.map((location) =>
     publicRoute(
       `/locations/${location.slug}/`,
-      RESOURCE_AGGREGATE_LAST_MODIFIED,
+      // A page that lists every guide goes stale when a guide is published; a
+      // region page with a hand-picked guide list only changes with its copy.
+      location.guides
+        ? RELEASE_DATES.serviceAndRegionContentBuild
+        : latestIsoDate(
+            RELEASE_DATES.serviceAndRegionContentBuild,
+            resourceGuides.map((guide) => guide.modified),
+          ),
     ),
   ),
   publicRoute("/project-planning/", RELEASE_DATES.verifiedContentRelease),
