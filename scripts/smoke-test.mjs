@@ -402,6 +402,9 @@ const REGION_LOCATION_SLUGS = [
   "adelaide-hills",
 ];
 const SERVICE_AND_REGION_CONTENT_BUILD = "2026-11-25";
+// 27 November: comparison tables, decision guides, checklists, numbered
+// workflows and glossaries were added to the home, company and project pages.
+const MULTI_FORMAT_CONTENT_BUILD = "2026-11-27";
 const resourceAggregatePaths = [
   "/resources/",
   ...locationSlugs
@@ -409,18 +412,21 @@ const resourceAggregatePaths = [
     .map((slug) => `/locations/${slug}/`),
 ];
 const expectedSitemapDates = new Map([
-  // Home now renders a curated subset, so unrelated guide changes need not
-  // change its editorial date. This release shortened that selection.
-  ["/", "2026-09-05"],
-  ["/about/", "2026-08-13"],
-  ["/services/", "2026-08-10"],
+  // Home renders a curated subset of guides, so unrelated guide changes need
+  // not change its editorial date. Its own copy last changed on 27 November.
+  ["/", MULTI_FORMAT_CONTENT_BUILD],
+  ["/about/", MULTI_FORMAT_CONTENT_BUILD],
+  ["/services/", MULTI_FORMAT_CONTENT_BUILD],
   // All four service pages were rewritten at length on 25 November.
   ...serviceSlugs.map((slug) => [
     `/${slug}/`,
     SERVICE_AND_REGION_CONTENT_BUILD,
   ]),
-  ["/projects/", "2026-08-13"],
-  ...projectSlugs.map((slug) => [`/projects/${slug}/`, "2026-08-13"]),
+  ["/projects/", MULTI_FORMAT_CONTENT_BUILD],
+  ...projectSlugs.map((slug) => [
+    `/projects/${slug}/`,
+    MULTI_FORMAT_CONTENT_BUILD,
+  ]),
   // The hub was reorganised around the three region pages on 25 November.
   ["/locations/", SERVICE_AND_REGION_CONTENT_BUILD],
   ...locationSlugs.map((slug) => [
@@ -429,13 +435,13 @@ const expectedSitemapDates = new Map([
       ? SERVICE_AND_REGION_CONTENT_BUILD
       : latestResourceModified,
   ]),
-  ["/project-planning/", "2026-08-13"],
+  ["/project-planning/", MULTI_FORMAT_CONTENT_BUILD],
   ["/resources/", latestResourceModified],
   ...resourceSlugs.map((slug) => [
     `/resources/${slug}/`,
     resourceModifiedDates.get(slug) ?? "",
   ]),
-  ["/contact-us/", "2026-08-13"],
+  ["/contact-us/", MULTI_FORMAT_CONTENT_BUILD],
   ["/privacy-policy/", "2026-09-05"],
   ["/terms-of-service/", "2026-08-13"],
 ]);

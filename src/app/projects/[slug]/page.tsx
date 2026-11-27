@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Callout, Checklist, Glossary } from "@/components/ContentBlocks";
 import FeatureIcon from "@/components/FeatureIcon";
 import PageBanner from "@/components/PageBanner";
 import QuoteButton from "@/components/QuoteButton";
@@ -155,6 +156,31 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
               <h3>Visible result</h3>
               <p>{project.visibleResult}</p>
             </article>
+          </div>
+
+          <div className="project-case__brief">
+            <div>
+              <h3 id="similar-job">What to confirm for a similar job</h3>
+              <p>
+                Each point comes from a detail this photograph records. The{" "}
+                <Link href="/project-planning/#site-readiness">
+                  site-readiness checklist
+                </Link>{" "}
+                covers the rest of an enquiry.
+              </p>
+              <Checklist items={project.confirm} />
+            </div>
+            <div>
+              {project.terms ? (
+                <>
+                  <h3 id="case-terms">Terms used in this case study</h3>
+                  <Glossary terms={project.terms} />
+                </>
+              ) : null}
+              {project.note ? (
+                <Callout title={project.note.title} body={project.note.body} />
+              ) : null}
+            </div>
           </div>
 
           <nav className="project-case__links" aria-label="Project links">

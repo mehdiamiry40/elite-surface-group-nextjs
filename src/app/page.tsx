@@ -1,16 +1,30 @@
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  Checklist,
+  ComparisonTable,
+  DecisionGuide,
+} from "@/components/ContentBlocks";
 import Hero from "@/components/Hero";
+import { FAQPageSchema } from "@/components/JsonLd";
 import QuoteButton from "@/components/QuoteButton";
 import ScrollStrip from "@/components/ScrollStrip";
 import { ArrowRightIcon } from "@/components/icons";
 import { ServiceCards } from "@/components/sections";
 import { consultation, welcome } from "@/content/home";
-import { projectPlanningPage } from "@/content/project-planning";
+import { getLocation } from "@/content/locations";
+import {
+  enquiryChecklist,
+  projectPlanningPage,
+} from "@/content/project-planning";
 import { projectCards } from "@/content/projects";
 import { featuredResourceGuides } from "@/content/resources";
-import { services } from "@/content/services";
+import {
+  homeServiceDecisions,
+  serviceComparison,
+} from "@/content/service-comparison";
+import { services, type ServiceFaq } from "@/content/services";
 import { blurProps } from "@/lib/lcp-blur";
 import { pageMetadata } from "@/lib/seo";
 
@@ -20,10 +34,15 @@ export const metadata = pageMetadata({
   path: "/",
 });
 
-// One question from each service page, plus the most common planning one.
-const homeFaqs = [
+// One question from each service page, the most common planning one, and the
+// coverage question from the Adelaide page. Each is the published question and
+// answer, unchanged. The same array feeds the accordion and the FAQPage
+// schema, so the markup always matches what is on the page.
+const adelaideCoverageFaq = getLocation("adelaide")?.faqs[0];
+const homeFaqs: readonly ServiceFaq[] = [
   ...services.map((service) => service.faqs[0]),
   projectPlanningPage.faqs[0],
+  ...(adelaideCoverageFaq ? [adelaideCoverageFaq] : []),
 ];
 
 const aboutImages = {
@@ -34,6 +53,7 @@ const aboutImages = {
 export default function HomePage() {
   return (
     <>
+      <FAQPageSchema faqs={homeFaqs} />
       <Hero />
 
       <ServiceCards withCta />
@@ -134,6 +154,68 @@ export default function HomePage() {
               />
             ) : null}
           </div>
+        </div>
+      </section>
+
+      <section
+        className="section section--tint home-compare"
+        aria-labelledby="compare-title"
+      >
+        <div className="shell">
+          <div className="stack-head">
+            <h2 id="compare-title" className="stack-title">
+              Which service fits your wall?
+            </h2>
+            <Link className="btn btn--pill" href="/services/">
+              Compare in detail
+            </Link>
+          </div>
+          <div className="prose">
+            <p>
+              Cladding, render, Hebel and walling are four different jobs that
+              often meet on the same wall. This table shows what each one
+              covers and where it is typically used. It lists no prices,
+              because a price follows the wall rather than a rate card.
+            </p>
+          </div>
+          <ComparisonTable {...serviceComparison} />
+
+          <div className="prose">
+            <h3 id="choose-title">
+              When to choose cladding, render, Hebel or walling
+            </h3>
+            <p>
+              Most enquiries start from a situation rather than a service.
+              These are four common ones, with what usually suits and what
+              still has to be confirmed on the wall itself.
+            </p>
+          </div>
+          <DecisionGuide
+            caption="Common situations and the service that usually suits"
+            rows={homeServiceDecisions}
+          />
+        </div>
+      </section>
+
+      <section className="section home-prequote" aria-labelledby="prequote-title">
+        <div className="shell">
+          <div className="stack-head">
+            <h2 id="prequote-title" className="stack-title">
+              Before you ask for a quote
+            </h2>
+            <Link className="btn btn--pill" href="/project-planning/">
+              Full planning checklist
+            </Link>
+          </div>
+          <div className="prose">
+            <p>
+              Six details give us a clear picture of the job. You do not need
+              all of them to get in touch, and the{" "}
+              <Link href="/project-planning/">project planning page</Link> goes
+              through each one.
+            </p>
+          </div>
+          <Checklist items={enquiryChecklist} columns={2} />
         </div>
       </section>
 

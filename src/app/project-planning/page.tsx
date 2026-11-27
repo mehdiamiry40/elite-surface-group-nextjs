@@ -1,15 +1,27 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  Checklist,
+  ComparisonTable,
+  NumberedSteps,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
-import { BreadcrumbSchema, FAQPageSchema } from "@/components/JsonLd";
+import {
+  BreadcrumbSchema,
+  FAQPageSchema,
+  HowToSchema,
+} from "@/components/JsonLd";
 import FeatureIcon, { type FeatureIconName } from "@/components/FeatureIcon";
 import PageBanner from "@/components/PageBanner";
-import { ServiceCards, TickList } from "@/components/sections";
+import { FaqList, ServiceCards, TickList } from "@/components/sections";
 import { bannerImages } from "@/content/pages";
 import {
   planningGuides,
+  preparationByProjectType,
   projectPlanningPage,
+  quotePreparation,
+  siteReadiness,
 } from "@/content/project-planning";
 import { ogCard, pageMetadata } from "@/lib/seo";
 
@@ -41,6 +53,12 @@ export default function ProjectPlanningPage() {
         ]}
       />
       <FAQPageSchema faqs={projectPlanningPage.faqs} />
+      {/* The same array feeds the visible steps below, so the two cannot drift. */}
+      <HowToSchema
+        name={quotePreparation.name}
+        description={quotePreparation.description}
+        steps={quotePreparation.steps}
+      />
       <PageBanner
         title={projectPlanningPage.bannerTitle}
         image={bannerImages["/project-planning"]}
@@ -56,7 +74,13 @@ export default function ProjectPlanningPage() {
             What to send with your project enquiry
           </h2>
           <p>{projectPlanningPage.lead}</p>
-          <TickList items={projectPlanningPage.enquiryDetails} />
+          <Checklist items={projectPlanningPage.enquiryDetails} />
+          <p>
+            Those six points are enough to start. The{" "}
+            <a href="#site-readiness">site-readiness checklist</a> below goes
+            further for anyone who wants a firmer quote, and the{" "}
+            <a href="#quote-steps">seven-step workflow</a> puts it in order.
+          </p>
 
           <h3 id="planning-guides">Start with the guide that matches your wall</h3>
           <p>
@@ -83,8 +107,52 @@ export default function ProjectPlanningPage() {
             <Link href="/render/">render</Link>,{" "}
             <Link href="/hebel/">Hebel</Link> and{" "}
             <Link href="/walling/">walling</Link> services for the questions we
-            consider for each type of work.
+            consider for each type of work, or{" "}
+            <Link href="/services/">compare the four services</Link> side by
+            side.
           </p>
+        </div>
+      </section>
+
+      <section
+        className="section section--tint"
+        aria-labelledby="site-readiness"
+      >
+        <div className="shell prose">
+          <h2 id="site-readiness">Site-readiness checklist</h2>
+          <p>
+            A quote is only as firm as the information behind it. Work through
+            the five groups below and note what you have, what you do not, and
+            what is still being decided. Gaps are fine: they tell us which
+            questions to ask first.
+          </p>
+          {siteReadiness.map((group) => (
+            <div key={group.id}>
+              <h3 id={group.id}>{group.title}</h3>
+              <Checklist items={group.items} />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="section" aria-labelledby="quote-steps">
+        <div className="shell prose">
+          <h2 id="quote-steps">How to prepare a quote request</h2>
+          <p>
+            The same information, in the order that is easiest to gather. None
+            of it has to be complete before you get in touch.
+          </p>
+          <NumberedSteps steps={quotePreparation.steps} />
+
+          <h2 id="by-project-type">What to have ready, by project type</h2>
+          <p>
+            Different projects lean on different information. A new build is
+            quoted mostly from documents, while a repair is quoted mostly from
+            the wall itself.
+          </p>
+        </div>
+        <div className="shell block-wide">
+          <ComparisonTable {...preparationByProjectType} />
         </div>
       </section>
 
@@ -119,14 +187,7 @@ export default function ProjectPlanningPage() {
           <TickList items={projectPlanningPage.quoteIncludes} />
 
           <h2 id="planning-faqs">Project planning FAQs</h2>
-          <dl className="faq-list" aria-labelledby="planning-faqs">
-            {projectPlanningPage.faqs.map((faq) => (
-              <div key={faq.question} className="faq-list__item">
-                <dt>{faq.question}</dt>
-                <dd>{faq.answer}</dd>
-              </div>
-            ))}
-          </dl>
+          <FaqList faqs={projectPlanningPage.faqs} />
         </div>
       </section>
 

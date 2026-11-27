@@ -1,5 +1,7 @@
 import { absoluteUrl } from "@/lib/seo";
+import type { Step } from "@/content/blocks";
 import { business } from "@/content/business";
+import { howToSteps } from "@/lib/content-blocks";
 import type { Project } from "@/content/projects";
 import type { ResourceGuide } from "@/content/resources";
 import { services, type Service, type ServiceFaq } from "@/content/services";
@@ -85,6 +87,44 @@ export function FAQPageSchema({ faqs }: { faqs: readonly ServiceFaq[] }) {
             "@type": "Answer",
             text: faq.answer,
           },
+        })),
+      }}
+    />
+  );
+}
+
+/**
+ * HowTo schema for a numbered workflow the reader carries out.
+ *
+ * Pass the same `steps` array the page gives `NumberedSteps`, so each step's
+ * name and text are the visible heading and sentence. Use it only for genuine
+ * instructions; a description of how the business works is not a how-to.
+ */
+export function HowToSchema({
+  name,
+  description,
+  steps,
+}: {
+  name: string;
+  description?: string;
+  steps: readonly Step[];
+}) {
+  if (!steps.length) {
+    return null;
+  }
+
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        name,
+        ...(description ? { description } : {}),
+        step: howToSteps(steps).map((step, index) => ({
+          "@type": "HowToStep",
+          position: index + 1,
+          name: step.name,
+          text: step.text,
         })),
       }}
     />

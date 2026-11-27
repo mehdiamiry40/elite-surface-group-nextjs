@@ -7257,3 +7257,399 @@ body {
     aspect-ratio: 4 / 3;
   }
 }
+
+/* ======================================================================
+   Reusable content blocks (src/components/ContentBlocks.tsx)
+
+   Comparison tables, decision guides, compatibility and problem tables,
+   checklists, glossaries and callouts. They sit inside `.prose` columns on
+   service, location and guide pages and in full-width bands on the home and
+   company pages, so each block sets its own type instead of relying on the
+   container it happens to be in.
+   ====================================================================== */
+
+/* A wide table can outgrow its column on a tablet, so this wrapper scrolls
+   instead of the page. Below the site's 768px breakpoint the table stops
+   being a grid altogether (see the phone layout below) and nothing scrolls
+   sideways. */
+.table-scroll {
+  max-width: 100%;
+  margin-block: 28px 1.6em;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-scroll:last-child {
+  margin-bottom: 0;
+}
+
+/* Copy that follows a table starts a new thought, so it gets heading-sized
+   clearance even when its own first heading has had its top margin removed. */
+.table-scroll + .prose {
+  margin-top: 48px;
+}
+
+.data-table {
+  width: 100%;
+  min-width: 540px;
+  border-collapse: collapse;
+  background: var(--white);
+  color: var(--ink);
+  font-family: var(--font-sans), sans-serif;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: 1.55;
+  text-align: left;
+}
+
+/* Each extra column needs room for a readable line before the wrapper has to
+   scroll. */
+.data-table--cols-4 {
+  min-width: 680px;
+}
+
+.data-table--cols-5,
+.data-table--cols-6 {
+  min-width: 860px;
+}
+
+.data-table caption {
+  padding: 0 0 14px;
+  caption-side: top;
+  color: var(--ink-soft);
+  font-family: var(--font-mono), monospace;
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.data-table th,
+.data-table td {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.data-table thead th {
+  border-bottom: 0;
+  background: var(--ink);
+  color: var(--white);
+  font-family: var(--font-mono), monospace;
+  font-size: 12.5px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  vertical-align: bottom;
+}
+
+.data-table tbody th {
+  width: 22%;
+  font-size: 17px;
+  font-stretch: 125%;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+}
+
+/* A decision, compatibility or problem row is headed by a full phrase, not a
+   name, so it is set as bold reading text and given a wider column. */
+.data-table--guide tbody th {
+  width: 30%;
+  font-size: 16px;
+  font-stretch: 100%;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.5;
+}
+
+.data-table a {
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* A table with four or more columns needs more room than the reading column.
+   Use on a `.shell` between two `.shell.prose` blocks. */
+.shell.block-wide {
+  max-width: 1176px;
+}
+
+/* Phone layout: one card per row. The column headings stay in the document
+   for assistive technology and repeat visually as a label on every cell. */
+@media (max-width: 767px) {
+  .table-scroll {
+    overflow-x: visible;
+  }
+
+  .data-table,
+  .data-table caption,
+  .data-table tbody,
+  .data-table tbody tr,
+  .data-table tbody th,
+  .data-table td {
+    display: block;
+  }
+
+  .data-table,
+  .data-table--cols-4,
+  .data-table--cols-5,
+  .data-table--cols-6 {
+    min-width: 0;
+    background: transparent;
+  }
+
+  .data-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .data-table tbody tr {
+    margin-bottom: 14px;
+    border: 1px solid var(--line);
+    background: var(--white);
+  }
+
+  .data-table tbody tr:last-child {
+    margin-bottom: 0;
+  }
+
+  .data-table tbody th,
+  .data-table--guide tbody th {
+    width: auto;
+    padding: 14px 16px;
+    border-bottom: 0;
+    background: var(--ink);
+    color: var(--white);
+  }
+
+  .data-table tbody th a {
+    color: var(--white);
+  }
+
+  .data-table td {
+    padding: 12px 16px 14px;
+    font-size: 15.5px;
+  }
+
+  .data-table td:last-child {
+    border-bottom: 0;
+  }
+
+  .data-table td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 4px;
+    color: var(--ink-soft);
+    font-family: var(--font-mono), monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+}
+
+/* Numbered steps under an h3 use h4 titles; match the existing h3 size. */
+.steps h4 {
+  font-size: 17px;
+}
+
+.prose .steps h4,
+.article-prose .steps h4 {
+  margin: 0;
+}
+
+.steps p {
+  font-family: var(--font-sans), sans-serif;
+  letter-spacing: 0;
+}
+
+/* The last step has no rule under it, so a closing paragraph needs its own
+   clearance. */
+.steps + p {
+  margin-top: 28px;
+}
+
+/* Checklists reuse the tick-list grid. The outlined box marks each item as
+   something to prepare, where the solid tick marks a benefit. */
+.checklist li {
+  align-items: start;
+  font-family: var(--font-sans), sans-serif;
+  letter-spacing: 0;
+}
+
+.checklist svg {
+  background: var(--white);
+  box-shadow: inset 0 0 0 2px var(--ink);
+  color: var(--ink);
+}
+
+/* Centres a single line of text on the 32px box beside it. */
+.checklist__text {
+  padding-top: 3px;
+}
+
+.checklist strong {
+  display: block;
+  font-weight: 700;
+}
+
+.checklist__detail {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.94em;
+  line-height: 1.55;
+}
+
+.checklist a,
+.glossary dd a,
+.callout a {
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.checklist--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 48px;
+}
+
+/* Quick-reference terms: the term beside its definition, ruled like the
+   planning guide index. */
+.glossary {
+  display: grid;
+  gap: 0;
+  margin: 26px 0 1.6em;
+  border-top: 2px solid var(--ink);
+}
+
+.glossary:last-child {
+  margin-bottom: 0;
+}
+
+.glossary__item {
+  display: grid;
+  grid-template-columns: minmax(0, 210px) minmax(0, 1fr);
+  gap: 6px 32px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.glossary dt {
+  color: var(--ink);
+  font-family: var(--font-sans), sans-serif;
+  font-size: 17px;
+  font-stretch: 125%;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+}
+
+.glossary dd {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-sans), sans-serif;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: 1.6;
+}
+
+/* A short note set apart from the running copy. Lighter than the blue
+   `.article-note` band, so a page can carry one beside a table or checklist. */
+.callout {
+  margin: 30px 0;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--blue);
+  padding: 20px 24px 22px;
+  background: var(--white);
+  color: var(--ink);
+  font-family: var(--font-sans), sans-serif;
+  letter-spacing: 0;
+}
+
+.callout:last-child {
+  margin-bottom: 0;
+}
+
+.callout--caution {
+  border-left-color: var(--black);
+}
+
+.callout__title {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 17px;
+  font-stretch: 125%;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+}
+
+.callout p,
+.prose .callout p {
+  margin: 0;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: 1.6;
+}
+
+.callout p + p,
+.prose .callout p + p {
+  margin-top: 0.8em;
+}
+
+@media (max-width: 767px) {
+  .checklist--2,
+  .glossary__item {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Case study: what to confirm for a similar job, beside the terms or note
+   drawn from the same photograph. */
+.project-case__brief {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 40px 72px;
+  align-items: start;
+  margin-top: 56px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 52px;
+}
+
+.project-case__brief h3 {
+  margin-bottom: 14px;
+  font-size: 24px;
+}
+
+.project-case__brief > div > p {
+  max-width: 62ch;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 17px;
+  letter-spacing: 0;
+  line-height: 1.7;
+}
+
+.project-case__brief > div > p a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.project-case__brief .callout:first-child {
+  margin-top: 0;
+}
+
+@media (max-width: 1024px) {
+  .project-case__brief {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -26,6 +26,12 @@ const RELEASE_DATES = {
    * reorganised around them.
    */
   serviceAndRegionContentBuild: "2026-11-25",
+  /**
+   * 27 November multi-format build, first run: comparison tables, decision
+   * guides, checklists, numbered workflows and glossaries added to the home,
+   * about, contact, services hub, project planning and project pages.
+   */
+  multiFormatContentBuild: "2026-11-27",
 } as const;
 
 /** Service pages whose copy changed after the shared content release. */
@@ -48,7 +54,7 @@ function latestIsoDate(
 }
 
 const HOME_LAST_MODIFIED = latestIsoDate(
-  RELEASE_DATES.homeGuideCuration,
+  RELEASE_DATES.multiFormatContentBuild,
   featuredResourceGuides.map((guide) => guide.modified),
 );
 
@@ -75,8 +81,8 @@ const RESOURCE_AGGREGATE_LAST_MODIFIED = latestIsoDate(
  */
 export const publicRouteRecords = [
   publicRoute("/", HOME_LAST_MODIFIED),
-  publicRoute("/about/", RELEASE_DATES.verifiedContentRelease),
-  publicRoute("/services/", RELEASE_DATES.initialServiceHub),
+  publicRoute("/about/", RELEASE_DATES.multiFormatContentBuild),
+  publicRoute("/services/", RELEASE_DATES.multiFormatContentBuild),
   ...services.map((service) =>
     publicRoute(
       `/${service.slug}/`,
@@ -84,11 +90,11 @@ export const publicRouteRecords = [
         RELEASE_DATES.verifiedContentRelease,
     ),
   ),
-  publicRoute("/projects/", RELEASE_DATES.verifiedContentRelease),
+  publicRoute("/projects/", RELEASE_DATES.multiFormatContentBuild),
   ...projects.map((project) =>
     publicRoute(
       `/projects/${project.slug}/`,
-      RELEASE_DATES.verifiedContentRelease,
+      RELEASE_DATES.multiFormatContentBuild,
     ),
   ),
   publicRoute("/locations/", RELEASE_DATES.serviceAndRegionContentBuild),
@@ -105,12 +111,12 @@ export const publicRouteRecords = [
           ),
     ),
   ),
-  publicRoute("/project-planning/", RELEASE_DATES.verifiedContentRelease),
+  publicRoute("/project-planning/", RELEASE_DATES.multiFormatContentBuild),
   publicRoute("/resources/", RESOURCE_AGGREGATE_LAST_MODIFIED),
   ...resourceGuides.map((guide) =>
     publicRoute(`/resources/${guide.slug}/`, guide.modified),
   ),
-  publicRoute("/contact-us/", RELEASE_DATES.verifiedContentRelease),
+  publicRoute("/contact-us/", RELEASE_DATES.multiFormatContentBuild),
   publicRoute("/privacy-policy/", privacyPolicyUpdated),
   publicRoute("/terms-of-service/", RELEASE_DATES.verifiedContentRelease),
 ] satisfies readonly PublicRouteRecord[];
