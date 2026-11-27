@@ -34,12 +34,18 @@ const RELEASE_DATES = {
   multiFormatContentBuild: "2026-11-27",
 } as const;
 
-/** Service pages whose copy changed after the shared content release. */
+/**
+ * Service pages whose copy changed after the shared content release.
+ *
+ * All four were rewritten at length on 25 November, then gained comparison
+ * tables, numbered workflows, problem tables, checklists, glossaries and
+ * further FAQs in the 27 November multi-format build.
+ */
 const SERVICE_LAST_MODIFIED: Partial<Record<Service["slug"], IsoDate>> = {
-  cladding: RELEASE_DATES.serviceAndRegionContentBuild,
-  render: RELEASE_DATES.serviceAndRegionContentBuild,
-  hebel: RELEASE_DATES.serviceAndRegionContentBuild,
-  walling: RELEASE_DATES.serviceAndRegionContentBuild,
+  cladding: RELEASE_DATES.multiFormatContentBuild,
+  render: RELEASE_DATES.multiFormatContentBuild,
+  hebel: RELEASE_DATES.multiFormatContentBuild,
+  walling: RELEASE_DATES.multiFormatContentBuild,
 };
 
 /** Keep an aggregate page current when any content it renders becomes newer. */

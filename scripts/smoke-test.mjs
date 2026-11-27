@@ -411,17 +411,18 @@ const resourceAggregatePaths = [
     .filter((slug) => !REGION_LOCATION_SLUGS.includes(slug))
     .map((slug) => `/locations/${slug}/`),
 ];
+// The four service pages carry their own date, separate from the region
+// pages that shared the 25 November build with them.
+const SERVICE_PAGES_CONTENT_BUILD = "2026-11-27";
 const expectedSitemapDates = new Map([
   // Home renders a curated subset of guides, so unrelated guide changes need
   // not change its editorial date. Its own copy last changed on 27 November.
   ["/", MULTI_FORMAT_CONTENT_BUILD],
   ["/about/", MULTI_FORMAT_CONTENT_BUILD],
   ["/services/", MULTI_FORMAT_CONTENT_BUILD],
-  // All four service pages were rewritten at length on 25 November.
-  ...serviceSlugs.map((slug) => [
-    `/${slug}/`,
-    SERVICE_AND_REGION_CONTENT_BUILD,
-  ]),
+  // All four service pages were rewritten at length on 25 November, then
+  // gained tables, workflows, checklists and glossaries on 27 November.
+  ...serviceSlugs.map((slug) => [`/${slug}/`, SERVICE_PAGES_CONTENT_BUILD]),
   ["/projects/", MULTI_FORMAT_CONTENT_BUILD],
   ...projectSlugs.map((slug) => [
     `/projects/${slug}/`,
