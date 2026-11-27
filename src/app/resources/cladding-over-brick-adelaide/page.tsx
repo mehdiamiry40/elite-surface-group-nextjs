@@ -2,10 +2,25 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  Checklist,
+  CompatibilityMatrix,
+  Glossary,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/JsonLd";
+import {
+  ArticleSchema,
+  BreadcrumbSchema,
+  FAQPageSchema,
+} from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  faqs,
+  glossary,
+  quoteChecklist,
+  wallConditions,
+} from "@/content/guides/cladding-over-brick-adelaide";
 import { bannerImages } from "@/content/pages";
 import { claddingOverBrickGuide } from "@/content/resources";
 import { blurProps } from "@/lib/lcp-blur";
@@ -34,6 +49,7 @@ export default function CladdingOverBrickGuidePage() {
         ]}
       />
       <ArticleSchema guide={claddingOverBrickGuide} />
+      <FAQPageSchema faqs={faqs} />
 
       <article>
         <PageBanner
@@ -55,6 +71,11 @@ export default function CladdingOverBrickGuidePage() {
               <time dateTime={claddingOverBrickGuide.published}>
                 Published {claddingOverBrickGuide.publishedDisplay}
               </time>
+              {claddingOverBrickGuide.modifiedDisplay ? (
+                <time dateTime={claddingOverBrickGuide.modified}>
+                  Updated {claddingOverBrickGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{claddingOverBrickGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -101,6 +122,9 @@ export default function CladdingOverBrickGuidePage() {
                 </li>
                 <li>
                   <a href="#approvals">Approvals, scope and who owns what</a>
+                </li>
+                <li>
+                  <a href="#wall-conditions">Which wall, which approach</a>
                 </li>
                 <li>
                   <a href="#next-steps">Sensible next steps</a>
@@ -399,7 +423,26 @@ export default function CladdingOverBrickGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="next-steps">
+        <section className="section" aria-labelledby="wall-conditions">
+          <div className="shell prose article-prose">
+            <h2 id="wall-conditions">Which wall, which approach</h2>
+            <p>
+              The table brings the earlier sections together: the wall or
+              condition you start with, how cladding over it is usually
+              approached, and what to confirm before a system is locked in.
+              The product&rsquo;s documented method and the assessment of
+              your wall still decide the detail.
+            </p>
+            <CompatibilityMatrix {...wallConditions} />
+            <h3>Terms used in this guide</h3>
+            <Glossary terms={glossary} />
+          </div>
+        </section>
+
+        <section
+          className="section section--tint"
+          aria-labelledby="next-steps"
+        >
           <div className="shell prose article-prose">
             <h2 id="next-steps">Sensible next steps</h2>
             <ol className="steps">
@@ -435,6 +478,13 @@ export default function CladdingOverBrickGuidePage() {
               </li>
             </ol>
 
+            <h3>What to have ready before a quote</h3>
+            <p>
+              Working through those four steps produces most of what a quote
+              needs. Have these seven things to hand when you enquire.
+            </p>
+            <Checklist items={quoteChecklist} />
+
             <aside className="article-note article-note--warning">
               <strong>Cutting and working at height are both regulated.</strong>
               <p>
@@ -461,48 +511,18 @@ export default function CladdingOverBrickGuidePage() {
 
         <section
           id="faqs-and-sources"
-          className="section section--tint"
+          className="section"
           aria-labelledby="cladding-brick-faqs"
         >
           <div className="shell prose article-prose">
             <h2 id="cladding-brick-faqs">Common questions</h2>
             <dl className="faq-list" aria-labelledby="cladding-brick-faqs">
-              <div className="faq-list__item">
-                <dt>Is cladding over brick better than rendering it?</dt>
-                <dd>
-                  They solve different problems. Render bonds to the masonry and
-                  follows its movement; cladding stands off it and changes the
-                  facade&rsquo;s form as well as its colour. For a clean painted
-                  surface on sound brickwork, render is usually simpler. Where
-                  the design calls for profile or shadow lines, cladding earns
-                  the extra build-up.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Can cladding fix a damp or cracking brick wall?</dt>
-                <dd>
-                  No. It covers the symptom and makes the wall harder to
-                  inspect. Have the moisture source or the movement assessed and
-                  addressed first, then treat the cladding as a finish decision.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Can insulation be added at the same time?</dt>
-                <dd>
-                  A new cavity is an opportunity, but it has to be designed
-                  rather than filled opportunistically: membrane, insulation and
-                  drainage interact, and the condensation provisions apply to
-                  the whole assembly.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Does the cladding have to cover the whole house?</dt>
-                <dd>
-                  No. Cladding one elevation or a feature area and rendering the
-                  rest is common, provided the transition between the finishes
-                  is detailed rather than left to the day.
-                </dd>
-              </div>
+              {faqs.map((faq) => (
+                <div className="faq-list__item" key={faq.question}>
+                  <dt>{faq.question}</dt>
+                  <dd>{faq.answer}</dd>
+                </div>
+              ))}
             </dl>
 
             <h2 id="sources">Sources and further reading</h2>

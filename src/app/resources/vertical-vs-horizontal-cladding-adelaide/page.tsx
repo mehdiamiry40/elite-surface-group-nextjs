@@ -2,10 +2,25 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  ComparisonTable,
+  DecisionGuide,
+  Glossary,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/JsonLd";
+import {
+  ArticleSchema,
+  BreadcrumbSchema,
+  FAQPageSchema,
+} from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  comparison,
+  decisions,
+  faqs,
+  glossary,
+} from "@/content/guides/vertical-vs-horizontal-cladding-adelaide";
 import { bannerImages } from "@/content/pages";
 import { claddingOrientationGuide } from "@/content/resources";
 import { blurProps } from "@/lib/lcp-blur";
@@ -34,6 +49,7 @@ export default function CladdingOrientationGuidePage() {
         ]}
       />
       <ArticleSchema guide={claddingOrientationGuide} />
+      <FAQPageSchema faqs={faqs} />
 
       <article>
         <PageBanner
@@ -55,6 +71,11 @@ export default function CladdingOrientationGuidePage() {
               <time dateTime={claddingOrientationGuide.published}>
                 Published {claddingOrientationGuide.publishedDisplay}
               </time>
+              {claddingOrientationGuide.modifiedDisplay ? (
+                <time dateTime={claddingOrientationGuide.modified}>
+                  Updated {claddingOrientationGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{claddingOrientationGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -93,6 +114,9 @@ export default function CladdingOrientationGuidePage() {
                   <a href="#what-differs">What actually differs</a>
                 </li>
                 <li>
+                  <a href="#at-a-glance">The two orientations at a glance</a>
+                </li>
+                <li>
                   <a href="#batten-direction">
                     Batten direction and the drainage cavity
                   </a>
@@ -102,6 +126,9 @@ export default function CladdingOrientationGuidePage() {
                 </li>
                 <li>
                   <a href="#clay-soils">Clay soils and joint lines</a>
+                </li>
+                <li>
+                  <a href="#which-orientation">Which orientation suits</a>
                 </li>
                 <li>
                   <a href="#confirm-first">What to confirm first</a>
@@ -175,7 +202,27 @@ export default function CladdingOrientationGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="batten-direction">
+        <section className="section" aria-labelledby="at-a-glance">
+          <div className="shell prose article-prose">
+            <h2 id="at-a-glance">
+              Vertical and horizontal cladding at a glance
+            </h2>
+            <p>
+              The table sets the two orientations beside each other on the
+              points the rest of this guide explains. It summarises the
+              principle; the installation guide for the product on the
+              drawings sets the dimensions.
+            </p>
+            <ComparisonTable {...comparison} />
+            <h3>Terms used in this guide</h3>
+            <Glossary terms={glossary} />
+          </div>
+        </section>
+
+        <section
+          className="section section--tint"
+          aria-labelledby="batten-direction"
+        >
           <div className="shell prose article-prose">
             <h2 id="batten-direction">
               Batten direction and the drainage cavity
@@ -220,7 +267,7 @@ export default function CladdingOrientationGuidePage() {
           </div>
         </section>
 
-        <section className="section section--tint" aria-labelledby="coastal">
+        <section className="section" aria-labelledby="coastal">
           <div className="shell prose article-prose">
             <h2 id="coastal">Coastal salt exposure near Adelaide&rsquo;s beaches</h2>
             <p>
@@ -252,7 +299,7 @@ export default function CladdingOrientationGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="clay-soils">
+        <section className="section section--tint" aria-labelledby="clay-soils">
           <div className="shell prose article-prose">
             <h2 id="clay-soils">Reactive clay soils, movement and joint lines</h2>
             <p>
@@ -272,6 +319,21 @@ export default function CladdingOrientationGuidePage() {
               and that is a design decision to confirm on the drawings before
               installation begins, not one to adjust on site.
             </p>
+          </div>
+        </section>
+
+        <section className="section" aria-labelledby="which-orientation">
+          <div className="shell prose article-prose">
+            <h2 id="which-orientation">
+              Which orientation suits which situation
+            </h2>
+            <p>
+              Most projects start from one of the situations below. The middle
+              column is what usually suits it, and the last column is what
+              still has to be confirmed on the documents before a batten
+              layout is ordered.
+            </p>
+            <DecisionGuide {...decisions} />
           </div>
         </section>
 
@@ -355,38 +417,12 @@ export default function CladdingOrientationGuidePage() {
               className="faq-list"
               aria-labelledby="cladding-orientation-faqs"
             >
-              <div className="faq-list__item">
-                <dt>Is vertical cladding more expensive than horizontal?</dt>
-                <dd>
-                  Material and labour costs depend on the specific product,
-                  panel size and site access, not the orientation alone. Ask
-                  for a quote against the documented system rather than
-                  assuming one direction costs more.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>
-                  Can vertical and horizontal cladding be combined on the
-                  same house?
-                </dt>
-                <dd>
-                  Yes—many Adelaide fa&ccedil;ades mix orientations as a
-                  design feature, provided each section&rsquo;s cavity,
-                  battens and flashing are detailed for the orientation used
-                  in that section. The junction between the two needs its
-                  own documented flashing detail.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Can Elite Surface Group choose the orientation for us?</dt>
-                <dd>
-                  No. Orientation is a design decision made with the
-                  architect, designer or drafter, usually shown on the
-                  elevations. We install the documented cladding and cavity
-                  system once that decision, and the supporting drawings,
-                  are confirmed.
-                </dd>
-              </div>
+              {faqs.map((faq) => (
+                <div className="faq-list__item" key={faq.question}>
+                  <dt>{faq.question}</dt>
+                  <dd>{faq.answer}</dd>
+                </div>
+              ))}
             </dl>
 
             <h2 id="sources">Sources and further reading</h2>

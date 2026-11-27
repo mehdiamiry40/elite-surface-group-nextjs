@@ -2,10 +2,25 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  Checklist,
+  CompatibilityMatrix,
+  Glossary,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/JsonLd";
+import {
+  ArticleSchema,
+  BreadcrumbSchema,
+  FAQPageSchema,
+} from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  enquiryChecklist,
+  faqs,
+  finishConditions,
+  glossary,
+} from "@/content/guides/rendering-hebel-panels-adelaide";
 import { bannerImages } from "@/content/pages";
 import { renderingHebelGuide } from "@/content/resources";
 import { blurProps } from "@/lib/lcp-blur";
@@ -37,6 +52,7 @@ export default function RenderingHebelPanelsGuidePage() {
         ]}
       />
       <ArticleSchema guide={renderingHebelGuide} />
+      <FAQPageSchema faqs={faqs} />
 
       <article>
         <PageBanner
@@ -58,6 +74,11 @@ export default function RenderingHebelPanelsGuidePage() {
               <time dateTime={renderingHebelGuide.published}>
                 Published {renderingHebelGuide.publishedDisplay}
               </time>
+              {renderingHebelGuide.modifiedDisplay ? (
+                <time dateTime={renderingHebelGuide.modified}>
+                  Updated {renderingHebelGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{renderingHebelGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -92,10 +113,16 @@ export default function RenderingHebelPanelsGuidePage() {
                   <a href="#coating-specification">Specify the finish</a>
                 </li>
                 <li>
+                  <a href="#finish-conditions">Conditions at a glance</a>
+                </li>
+                <li>
                   <a href="#scope-responsibilities">Define responsibilities</a>
                 </li>
                 <li>
                   <a href="#compare-quotes">Compare quote scopes</a>
+                </li>
+                <li>
+                  <a href="#enquiry-checklist">What to have ready</a>
                 </li>
                 <li>
                   <a href="#handover-records">Keep handover records</a>
@@ -269,7 +296,27 @@ export default function RenderingHebelPanelsGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="scope-responsibilities">
+        <section className="section" aria-labelledby="finish-conditions">
+          <div className="shell prose article-prose">
+            <h2 id="finish-conditions">
+              Which Hebel wall, which finish approach
+            </h2>
+            <p>
+              The table gathers the situations this guide covers into one
+              place: how the finish is usually approached in each, and what
+              has to be confirmed before anyone prices it. The system
+              documents and approved drawings still set the detail.
+            </p>
+            <CompatibilityMatrix {...finishConditions} />
+            <h3>Terms used in this guide</h3>
+            <Glossary terms={glossary} />
+          </div>
+        </section>
+
+        <section
+          className="section section--tint"
+          aria-labelledby="scope-responsibilities"
+        >
           <div className="shell prose article-prose">
             <h2 id="scope-responsibilities">
               Define who owns each decision and interface
@@ -347,10 +394,7 @@ export default function RenderingHebelPanelsGuidePage() {
           </div>
         </section>
 
-        <section
-          className="section section--tint"
-          aria-labelledby="compare-quotes"
-        >
+        <section className="section" aria-labelledby="compare-quotes">
           <div className="shell prose article-prose">
             <h2 id="compare-quotes">
               Compare the scope—not only the final price
@@ -401,6 +445,23 @@ export default function RenderingHebelPanelsGuidePage() {
               </a>
               .
             </p>
+          </div>
+        </section>
+
+        <section
+          className="section section--tint"
+          aria-labelledby="enquiry-checklist"
+        >
+          <div className="shell prose article-prose">
+            <h2 id="enquiry-checklist">
+              What to have ready before a Hebel finishing enquiry
+            </h2>
+            <p>
+              The lists above describe a full specification and a comparable
+              quote. A first enquiry needs less: these seven points are enough
+              to start, and anything still unknown is worth saying so.
+            </p>
+            <Checklist items={enquiryChecklist} />
           </div>
         </section>
 
@@ -484,52 +545,12 @@ export default function RenderingHebelPanelsGuidePage() {
 
             <h2 id="hebel-render-faqs">Common questions</h2>
             <dl className="faq-list" aria-labelledby="hebel-render-faqs">
-              <div className="faq-list__item">
-                <dt>Can every Hebel product receive the same render?</dt>
-                <dd>
-                  No universal specification should be assumed. Confirm the
-                  exact Hebel product and application, then follow its current
-                  system documents and the selected coating supplier’s
-                  compatible specification.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Can render cover the panel joints?</dt>
-                <dd>
-                  Joint treatment depends on the selected system and project
-                  details. Do not assume a finish can remove a documented
-                  movement or control joint; resolve its location and finish
-                  with the responsible project team before coating.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Who selects the coating system?</dt>
-                <dd>
-                  The decision may involve the designer, builder, Hebel and
-                  coating suppliers, installer and applicator. The written
-                  project documents should identify the selected compatible
-                  system and who is responsible for each layer.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Are photos enough for a Hebel and render quote?</dt>
-                <dd>
-                  Photos help show access and current conditions, but new work
-                  normally also needs plans, the selected wall system, finish
-                  specification, scope boundaries and programme information.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Can Elite coordinate Hebel installation and rendering?</dt>
-                <dd>
-                  Tell us which system documents and drawings are available and
-                  the proposed finish. We can arrange how to review supporting
-                  files, confirm whether the installation and coating work sit
-                  within our service scope and identify the information still
-                  needed for a quote; project design and certification remain
-                  with the responsible professionals.
-                </dd>
-              </div>
+              {faqs.map((faq) => (
+                <div className="faq-list__item" key={faq.question}>
+                  <dt>{faq.question}</dt>
+                  <dd>{faq.answer}</dd>
+                </div>
+              ))}
             </dl>
 
             <h2 id="sources">Sources and further reading</h2>

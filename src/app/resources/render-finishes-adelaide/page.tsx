@@ -2,6 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  Checklist,
+  ComparisonTable,
+  CompatibilityMatrix,
+  Glossary,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
 import {
   ArticleSchema,
@@ -10,6 +16,12 @@ import {
 } from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  finishMatrix,
+  glossary,
+  quoteChecklist,
+  textureLimits,
+} from "@/content/guides/render-finishes-adelaide";
 import { bannerImages } from "@/content/pages";
 import { renderFinishesGuide } from "@/content/resources";
 import type { ServiceFaq } from "@/content/services";
@@ -138,6 +150,9 @@ export default function RenderFinishesGuidePage() {
                   <a href="#grades">The finishes you will be offered</a>
                 </li>
                 <li>
+                  <a href="#at-a-glance">Render finishes at a glance</a>
+                </li>
+                <li>
                   <a href="#where-used">Where each finish is used</a>
                 </li>
                 <li>
@@ -151,6 +166,9 @@ export default function RenderFinishesGuidePage() {
                 </li>
                 <li>
                   <a href="#before-choosing">Questions before choosing</a>
+                </li>
+                <li>
+                  <a href="#have-ready">What to have ready</a>
                 </li>
                 <li>
                   <a href="#next-steps">Sensible next steps</a>
@@ -253,7 +271,25 @@ export default function RenderFinishesGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="where-used">
+        <section className="section" aria-labelledby="at-a-glance">
+          <div className="shell prose article-prose">
+            <h2 id="at-a-glance">Render finishes at a glance</h2>
+            <p>
+              The table sets the grades above beside each other on the three
+              points the rest of this guide works through. It describes the
+              usual pattern; the wall and the selected system&rsquo;s documents
+              still decide what goes on.
+            </p>
+            <ComparisonTable {...finishMatrix} />
+            <h3>Terms used in this guide</h3>
+            <Glossary terms={glossary} />
+          </div>
+        </section>
+
+        <section
+          className="section section--tint"
+          aria-labelledby="where-used"
+        >
           <div className="shell prose article-prose">
             <h2 id="where-used">Where each render finish is usually used</h2>
             <p>
@@ -369,10 +405,15 @@ export default function RenderFinishesGuidePage() {
               <Link href="/resources/salt-damp-adelaide/">salt damp</Link>{" "}
               explain what to record&mdash;and the texture chosen afterwards.
             </p>
+            <p>
+              The table sets those limits beside the conditions they apply
+              to, with what needs settling before a grade is picked.
+            </p>
+            <CompatibilityMatrix {...textureLimits} />
           </div>
         </section>
 
-        <section className="section section--tint" aria-labelledby="wall">
+        <section className="section" aria-labelledby="wall">
           <div className="shell prose article-prose">
             <h2 id="wall">The wall underneath sets the shortlist</h2>
             <p>
@@ -406,7 +447,7 @@ export default function RenderFinishesGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="adelaide">
+        <section className="section section--tint" aria-labelledby="adelaide">
           <div className="shell split article-visual">
             <figure className="split__media article-figure">
               <Image
@@ -467,7 +508,7 @@ export default function RenderFinishesGuidePage() {
           </div>
         </section>
 
-        <section className="section section--tint" aria-labelledby="upkeep">
+        <section className="section" aria-labelledby="upkeep">
           <div className="shell prose article-prose">
             <h2 id="upkeep">Upkeep, patching and how a finish ages</h2>
             <p>
@@ -509,7 +550,10 @@ export default function RenderFinishesGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="before-choosing">
+        <section
+          className="section section--tint"
+          aria-labelledby="before-choosing"
+        >
           <div className="shell prose article-prose">
             <h2 id="before-choosing">
               Questions to settle before choosing a finish
@@ -572,6 +616,19 @@ export default function RenderFinishesGuidePage() {
               </Link>{" "}
               lists the scope questions that make quotes comparable.
             </p>
+          </div>
+        </section>
+
+        <section className="section" aria-labelledby="have-ready">
+          <div className="shell prose article-prose">
+            <h2 id="have-ready">What to have ready before a finish quote</h2>
+            <p>
+              A finish can only be quoted against a known wall. These are the
+              details worth gathering first; the{" "}
+              <Link href="/project-planning/">project planning guide</Link>{" "}
+              covers the wider information that helps with any enquiry.
+            </p>
+            <Checklist items={quoteChecklist} />
           </div>
         </section>
 

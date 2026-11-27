@@ -2,10 +2,25 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  ComparisonTable,
+  DecisionGuide,
+  Glossary,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/JsonLd";
+import {
+  ArticleSchema,
+  BreadcrumbSchema,
+  FAQPageSchema,
+} from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  comparison,
+  decisions,
+  faqs,
+  glossary,
+} from "@/content/guides/fibre-cement-vs-weatherboard-cladding-adelaide";
 import { bannerImages } from "@/content/pages";
 import { claddingMaterialComparisonGuide } from "@/content/resources";
 import { blurProps } from "@/lib/lcp-blur";
@@ -34,6 +49,7 @@ export default function CladdingMaterialComparisonGuidePage() {
         ]}
       />
       <ArticleSchema guide={claddingMaterialComparisonGuide} />
+      <FAQPageSchema faqs={faqs} />
 
       <article>
         <PageBanner
@@ -57,6 +73,11 @@ export default function CladdingMaterialComparisonGuidePage() {
               <time dateTime={claddingMaterialComparisonGuide.published}>
                 Published {claddingMaterialComparisonGuide.publishedDisplay}
               </time>
+              {claddingMaterialComparisonGuide.modifiedDisplay ? (
+                <time dateTime={claddingMaterialComparisonGuide.modified}>
+                  Updated {claddingMaterialComparisonGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{claddingMaterialComparisonGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -90,6 +111,9 @@ export default function CladdingMaterialComparisonGuidePage() {
                   <a href="#what-differs">What actually differs</a>
                 </li>
                 <li>
+                  <a href="#at-a-glance">The two boards at a glance</a>
+                </li>
+                <li>
                   <a href="#bushfire">Bushfire-prone zoning</a>
                 </li>
                 <li>
@@ -97,6 +121,9 @@ export default function CladdingMaterialComparisonGuidePage() {
                 </li>
                 <li>
                   <a href="#maintenance">Maintenance and repainting</a>
+                </li>
+                <li>
+                  <a href="#which-board">Which board suits</a>
                 </li>
                 <li>
                   <a href="#confirm-first">What to confirm first</a>
@@ -164,7 +191,24 @@ export default function CladdingMaterialComparisonGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="bushfire">
+        <section className="section" aria-labelledby="at-a-glance">
+          <div className="shell prose article-prose">
+            <h2 id="at-a-glance">
+              Fibre cement and timber weatherboard at a glance
+            </h2>
+            <p>
+              The table sets the two families beside each other on the points
+              the rest of this guide explains. It describes general
+              tendencies; the documents for the product on the drawings set
+              what that product can do on a particular site.
+            </p>
+            <ComparisonTable {...comparison} />
+            <h3>Terms used in this guide</h3>
+            <Glossary terms={glossary} />
+          </div>
+        </section>
+
+        <section className="section section--tint" aria-labelledby="bushfire">
           <div className="shell prose article-prose">
             <h2 id="bushfire">
               Bushfire-prone zoning changes what the cladding must be
@@ -217,7 +261,7 @@ export default function CladdingMaterialComparisonGuidePage() {
           </div>
         </section>
 
-        <section className="section section--tint" aria-labelledby="coastal">
+        <section className="section" aria-labelledby="coastal">
           <div className="shell prose article-prose">
             <h2 id="coastal">Coastal salt exposure near Adelaide&rsquo;s beaches</h2>
             <p>
@@ -250,7 +294,10 @@ export default function CladdingMaterialComparisonGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="maintenance">
+        <section
+          className="section section--tint"
+          aria-labelledby="maintenance"
+        >
           <div className="shell prose article-prose">
             <h2 id="maintenance">Maintenance and repainting expectations</h2>
             <p>
@@ -273,6 +320,19 @@ export default function CladdingMaterialComparisonGuidePage() {
               for the product before installation, not after a problem
               appears.
             </p>
+          </div>
+        </section>
+
+        <section className="section" aria-labelledby="which-board">
+          <div className="shell prose article-prose">
+            <h2 id="which-board">Which board suits which situation</h2>
+            <p>
+              Most projects start from one of the situations below. The middle
+              column is what usually suits it, and the last column is what
+              still has to be confirmed on the documents before material is
+              ordered.
+            </p>
+            <DecisionGuide {...decisions} />
           </div>
         </section>
 
@@ -356,40 +416,12 @@ export default function CladdingMaterialComparisonGuidePage() {
           <div className="shell prose article-prose">
             <h2 id="cladding-comparison-faqs">Common questions</h2>
             <dl className="faq-list" aria-labelledby="cladding-comparison-faqs">
-              <div className="faq-list__item">
-                <dt>Is fibre cement always the safer bushfire choice?</dt>
-                <dd>
-                  It is documented as compliant across a wider range of BAL
-                  ratings than most timber weatherboard, but the assessed BAL
-                  rating for the actual site still needs to be confirmed
-                  before any product is chosen or assumed suitable.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>
-                  Does engineered timber weatherboard need less maintenance
-                  than solid timber?
-                </dt>
-                <dd>
-                  Manufacturers generally market engineered boards on
-                  improved dimensional stability, but both still rely on a
-                  maintained coating system. Confirm the specific product
-                  data rather than assuming either timber option is
-                  maintenance-free.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>
-                  Can Elite Surface Group choose the cladding product for us?
-                </dt>
-                <dd>
-                  No. Product selection depends on bushfire zoning, coastal
-                  exposure, budget and design intent, which sit with the
-                  project&rsquo;s designer or the homeowner. We install the
-                  documented system and can discuss coordination once that
-                  selection is confirmed.
-                </dd>
-              </div>
+              {faqs.map((faq) => (
+                <div className="faq-list__item" key={faq.question}>
+                  <dt>{faq.question}</dt>
+                  <dd>{faq.answer}</dd>
+                </div>
+              ))}
             </dl>
 
             <h2 id="sources">Sources and further reading</h2>

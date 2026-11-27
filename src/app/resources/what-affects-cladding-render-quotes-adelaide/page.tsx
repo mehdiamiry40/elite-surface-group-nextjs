@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  Checklist,
+  DecisionGuide,
+  Glossary,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
 import {
   ArticleSchema,
@@ -10,6 +15,11 @@ import {
 } from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  acceptChecklist,
+  glossary,
+  quoteDrivers,
+} from "@/content/guides/what-affects-cladding-render-quotes-adelaide";
 import { bannerImages } from "@/content/pages";
 import { quoteDriversGuide } from "@/content/resources";
 import type { ServiceFaq } from "@/content/services";
@@ -32,6 +42,11 @@ const faqs: readonly ServiceFaq[] = [
     question: "Why doesn’t this site publish prices or rates?",
     answer:
       "Because a rate without the wall behind it is a guess. Substrate condition, access, the specified system, the number of junctions and the site’s exposure all change the work involved, and they differ on every project. A quote prepared from the actual details is more useful than a published figure that fits none of them.",
+  },
+  {
+    question: "Which factor affects a quote the most?",
+    answer:
+      "None of them has a fixed weight. On one job access decides most of the scope; on the next it is the condition of the wall. What holds across every project is that anything a quote does not know, it has to assume, so the more of the details that are known, the fewer assumptions the quote carries.",
   },
   {
     question: "Can I get a quote from photos alone?",
@@ -90,6 +105,11 @@ export default function QuoteDriversGuidePage() {
               <time dateTime={quoteDriversGuide.published}>
                 Published {quoteDriversGuide.publishedDisplay}
               </time>
+              {quoteDriversGuide.modifiedDisplay ? (
+                <time dateTime={quoteDriversGuide.modified}>
+                  Updated {quoteDriversGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{quoteDriversGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -217,6 +237,12 @@ export default function QuoteDriversGuidePage() {
               wall. They are set out so you can see which ones apply to your
               project.
             </p>
+            <p>
+              The table is the short version: each driver, why it moves a quote
+              and what the quote needs to know about it. The detail follows
+              underneath.
+            </p>
+            <DecisionGuide {...quoteDrivers} />
 
             <h3>Scope and area</h3>
             <p>
@@ -439,6 +465,9 @@ export default function QuoteDriversGuidePage() {
               scope, material responsibilities, key assumptions and known
               exclusions.
             </p>
+
+            <h3>Quote terms in plain language</h3>
+            <Glossary terms={glossary} />
           </div>
         </section>
 
@@ -563,6 +592,13 @@ export default function QuoteDriversGuidePage() {
                 </p>
               </li>
             </ol>
+
+            <h3>Before you accept a quote</h3>
+            <p>
+              Whoever prepared it, a quote is ready to compare or accept when
+              you can tick each of these from the document itself.
+            </p>
+            <Checklist items={acceptChecklist} />
             <p>
               When you are ready,{" "}
               <Link href="/contact-us/#contact">tell us about the project</Link>{" "}

@@ -2,10 +2,25 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  ComparisonTable,
+  DecisionGuide,
+  Glossary,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/JsonLd";
+import {
+  ArticleSchema,
+  BreadcrumbSchema,
+  FAQPageSchema,
+} from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  comparison,
+  decisions,
+  faqs,
+  glossary,
+} from "@/content/guides/hebel-vs-brick-veneer-adelaide";
 import { bannerImages } from "@/content/pages";
 import { hebelVsBrickVeneerGuide } from "@/content/resources";
 import { blurProps } from "@/lib/lcp-blur";
@@ -37,6 +52,7 @@ export default function HebelVsBrickVeneerGuidePage() {
         ]}
       />
       <ArticleSchema guide={hebelVsBrickVeneerGuide} />
+      <FAQPageSchema faqs={faqs} />
 
       <article>
         <PageBanner
@@ -58,6 +74,11 @@ export default function HebelVsBrickVeneerGuidePage() {
               <time dateTime={hebelVsBrickVeneerGuide.published}>
                 Published {hebelVsBrickVeneerGuide.publishedDisplay}
               </time>
+              {hebelVsBrickVeneerGuide.modifiedDisplay ? (
+                <time dateTime={hebelVsBrickVeneerGuide.modified}>
+                  Updated {hebelVsBrickVeneerGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{hebelVsBrickVeneerGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -100,6 +121,9 @@ export default function HebelVsBrickVeneerGuidePage() {
                 </li>
                 <li>
                   <a href="#approvals">Approvals, warranties and trade scope</a>
+                </li>
+                <li>
+                  <a href="#which-wall">Which wall suits which situation</a>
                 </li>
                 <li>
                   <a href="#next-steps">Sensible next steps</a>
@@ -157,6 +181,8 @@ export default function HebelVsBrickVeneerGuidePage() {
               </a>
               .
             </p>
+            <h3>Terms used in this guide</h3>
+            <Glossary terms={glossary} />
           </div>
         </section>
 
@@ -187,6 +213,14 @@ export default function HebelVsBrickVeneerGuidePage() {
               figures from the certification for the specific assembly rather
               than a comparison table.
             </p>
+            <h3>The two walls side by side</h3>
+            <p>
+              The table below sets the same differences beside each other,
+              along with how each wall is built and what its scope has to
+              name. Like the list, it leaves performance figures to the
+              certification for the assembly.
+            </p>
+            <ComparisonTable {...comparison} />
           </div>
         </section>
 
@@ -346,7 +380,20 @@ export default function HebelVsBrickVeneerGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="next-steps">
+        <section className="section" aria-labelledby="which-wall">
+          <div className="shell prose article-prose">
+            <h2 id="which-wall">Which wall suits which situation</h2>
+            <p>
+              Most comparisons start from one of the situations below. The
+              middle column is what usually suits it, and the last column is
+              what the engineer, the designer or the documents still have to
+              confirm before a system is locked in.
+            </p>
+            <DecisionGuide {...decisions} />
+          </div>
+        </section>
+
+        <section className="section section--tint" aria-labelledby="next-steps">
           <div className="shell prose article-prose">
             <h2 id="next-steps">Sensible next steps</h2>
             <ol className="steps">
@@ -409,52 +456,18 @@ export default function HebelVsBrickVeneerGuidePage() {
 
         <section
           id="faqs-and-sources"
-          className="section section--tint"
+          className="section"
           aria-labelledby="hebel-brick-faqs"
         >
           <div className="shell prose article-prose">
             <h2 id="hebel-brick-faqs">Common questions</h2>
             <dl className="faq-list" aria-labelledby="hebel-brick-faqs">
-              <div className="faq-list__item">
-                <dt>Is one system warmer than the other?</dt>
-                <dd>
-                  Thermal performance comes from the whole assembly, and in
-                  both systems most of the insulation sits in the frame.
-                  Compare the R-Value the documented build-up achieves against
-                  the climate zone 5 requirement, not the two skins against
-                  each other.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Can Hebel be used on an upper level over an existing house?</dt>
-                <dd>
-                  Sometimes—it is one reason lighter systems come up in
-                  addition projects—but the existing footings and frame have to
-                  be assessed for the added load first. Our{" "}
-                  <Link href="/resources/second-storey-addition-adelaide/">
-                    second-storey addition guide
-                  </Link>{" "}
-                  covers that assessment.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Will a Hebel wall look different to rendered brick?</dt>
-                <dd>
-                  Finished well, the difference is hard to pick from the
-                  street. Where you do see it is in the joint layout and the
-                  reveal depths, because the two walls are different
-                  thicknesses.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Which one is cheaper?</dt>
-                <dd>
-                  It depends on the design, site access, frame, finish and
-                  programme. The honest answer comes from two comparable quotes
-                  on the same documented scope; treat a figure quoted without
-                  your drawings as a guess.
-                </dd>
-              </div>
+              {faqs.map((faq) => (
+                <div className="faq-list__item" key={faq.question}>
+                  <dt>{faq.question}</dt>
+                  <dd>{faq.answer}</dd>
+                </div>
+              ))}
             </dl>
 
             <h2 id="sources">Sources and further reading</h2>
@@ -542,6 +555,9 @@ export default function HebelVsBrickVeneerGuidePage() {
               </Link>
               <Link href="/resources/hebel-boundary-walls-adelaide/">
                 Hebel boundary walls guide
+              </Link>
+              <Link href="/resources/second-storey-addition-adelaide/">
+                Second-storey addition guide
               </Link>
               <Link href="/locations/adelaide/">Adelaide service area</Link>
               <Link href="/contact-us/#contact">

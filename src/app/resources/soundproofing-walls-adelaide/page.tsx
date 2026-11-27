@@ -2,10 +2,27 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  Checklist,
+  ComparisonTable,
+  DecisionGuide,
+  Glossary,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/JsonLd";
+import {
+  ArticleSchema,
+  BreadcrumbSchema,
+  FAQPageSchema,
+} from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  faqs,
+  glossary,
+  measures,
+  noiseDecisions,
+  quoteChecklist,
+} from "@/content/guides/soundproofing-walls-adelaide";
 import { bannerImages } from "@/content/pages";
 import { soundproofingWallsGuide } from "@/content/resources";
 import { blurProps } from "@/lib/lcp-blur";
@@ -34,6 +51,7 @@ export default function SoundproofingWallsGuidePage() {
         ]}
       />
       <ArticleSchema guide={soundproofingWallsGuide} />
+      <FAQPageSchema faqs={faqs} />
 
       <article>
         <PageBanner
@@ -55,6 +73,11 @@ export default function SoundproofingWallsGuidePage() {
               <time dateTime={soundproofingWallsGuide.published}>
                 Published {soundproofingWallsGuide.publishedDisplay}
               </time>
+              {soundproofingWallsGuide.modifiedDisplay ? (
+                <time dateTime={soundproofingWallsGuide.modified}>
+                  Updated {soundproofingWallsGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{soundproofingWallsGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -94,6 +117,9 @@ export default function SoundproofingWallsGuidePage() {
                 </li>
                 <li>
                   <a href="#adelaide">Why Adelaide walls differ</a>
+                </li>
+                <li>
+                  <a href="#match-the-noise">Matching the measure to the noise</a>
                 </li>
                 <li>
                   <a href="#existing-home">Improving an existing wall</a>
@@ -189,6 +215,14 @@ export default function SoundproofingWallsGuidePage() {
               </a>
               .
             </p>
+
+            <h3>The four measures side by side</h3>
+            <p>
+              Each measure does one job and stops somewhere, which is why a
+              tested build-up combines them. The table sets what each one
+              changes beside where it runs out.
+            </p>
+            <ComparisonTable {...measures} />
           </div>
         </section>
 
@@ -226,6 +260,8 @@ export default function SoundproofingWallsGuidePage() {
               </a>
               .
             </p>
+            <h3>Terms used in this guide</h3>
+            <Glossary terms={glossary} />
           </div>
         </section>
 
@@ -337,8 +373,21 @@ export default function SoundproofingWallsGuidePage() {
 
         <section
           className="section section--tint"
-          aria-labelledby="existing-home"
+          aria-labelledby="match-the-noise"
         >
+          <div className="shell prose article-prose">
+            <h2 id="match-the-noise">Matching the measure to the noise</h2>
+            <p>
+              What you hear, and where it seems to come from, points to which
+              part of the building is carrying it. The table pairs the common
+              complaints with what usually changes them and what has to be
+              confirmed before money is spent on the wall.
+            </p>
+            <DecisionGuide {...noiseDecisions} />
+          </div>
+        </section>
+
+        <section className="section" aria-labelledby="existing-home">
           <div className="shell prose article-prose">
             <h2 id="existing-home">
               Soundproofing walls in an existing Adelaide home
@@ -391,7 +440,10 @@ export default function SoundproofingWallsGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="what-to-confirm">
+        <section
+          className="section section--tint"
+          aria-labelledby="what-to-confirm"
+        >
           <div className="shell prose article-prose">
             <h2 id="what-to-confirm">What to confirm before requesting a quote</h2>
             <p>
@@ -399,16 +451,7 @@ export default function SoundproofingWallsGuidePage() {
               <Link href="/project-planning/">project planning guide</Link>{" "}
               covers the rest.
             </p>
-            <TickList
-              items={[
-                "Whether the wall separates two dwellings or two rooms in one dwelling",
-                "What the noise is—voices, television, footsteps, traffic, plant—and when you hear it",
-                "The existing construction, lining thickness and whether the cavity is insulated",
-                "What sits above the wall: a ceiling and roof space, a floor, or continuous framing",
-                "Whether evaporative cooling, downlights or exhaust fans penetrate the ceiling both sides",
-                "Any acoustic report, tested system number, approved drawings or certifier requirement",
-              ]}
-            />
+            <Checklist items={quoteChecklist} />
             <p>
               Where a documented system already exists, our{" "}
               <Link href="/walling/">Adelaide walling installation</Link> scope
@@ -418,10 +461,7 @@ export default function SoundproofingWallsGuidePage() {
           </div>
         </section>
 
-        <section
-          className="section section--tint"
-          aria-labelledby="who-does-what"
-        >
+        <section className="section" aria-labelledby="who-does-what">
           <div className="shell prose article-prose">
             <h2 id="who-does-what">Who does what</h2>
             <dl className="faq-list professional-list">
@@ -460,32 +500,20 @@ export default function SoundproofingWallsGuidePage() {
 
             <h2 id="soundproofing-faqs">Common questions</h2>
             <dl className="faq-list" aria-labelledby="soundproofing-faqs">
-              <div className="faq-list__item">
-                <dt>Can an existing wall be brought up to the separating-wall standard?</dt>
-                <dd>
-                  Sometimes, but it has to be assessed rather than assumed. The
-                  requirement covers the complete construction including the
-                  junction at the roof, so a retrofit that cannot address the
-                  ceiling line rarely gets there.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Who do I contact about noise from a neighbouring property?</dt>
-                <dd>
-                  In South Australia it depends on the source. Councils handle
-                  neighbourhood nuisance such as construction noise, pool pumps
-                  and air conditioners; SAPOL handles domestic noise such as
-                  parties; the EPA deals with licensed commercial and industrial
-                  premises. That is a separate matter from building work on your
-                  own wall. Where the external wall is still being chosen,
-                  compare systems on{" "}
-                  <Link href="/resources/hebel-vs-brick-veneer-adelaide/">
-                    Hebel versus brick veneer
-                  </Link>
-                  .
-                </dd>
-              </div>
+              {faqs.map((faq) => (
+                <div className="faq-list__item" key={faq.question}>
+                  <dt>{faq.question}</dt>
+                  <dd>{faq.answer}</dd>
+                </div>
+              ))}
             </dl>
+            <p>
+              Where the external wall is still being chosen, compare systems on{" "}
+              <Link href="/resources/hebel-vs-brick-veneer-adelaide/">
+                Hebel versus brick veneer
+              </Link>
+              .
+            </p>
 
             <h2 id="sources">Sources and further reading</h2>
             <dl className="source-list">

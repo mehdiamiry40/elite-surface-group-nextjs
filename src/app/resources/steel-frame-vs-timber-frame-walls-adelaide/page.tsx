@@ -2,10 +2,25 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  ComparisonTable,
+  DecisionGuide,
+  Glossary,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/JsonLd";
+import {
+  ArticleSchema,
+  BreadcrumbSchema,
+  FAQPageSchema,
+} from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  comparison,
+  decisions,
+  faqs,
+  glossary,
+} from "@/content/guides/steel-frame-vs-timber-frame-walls-adelaide";
 import { bannerImages } from "@/content/pages";
 import { steelVsTimberFramingGuide } from "@/content/resources";
 import { blurProps } from "@/lib/lcp-blur";
@@ -34,6 +49,7 @@ export default function SteelVsTimberFramingGuidePage() {
         ]}
       />
       <ArticleSchema guide={steelVsTimberFramingGuide} />
+      <FAQPageSchema faqs={faqs} />
 
       <article>
         <PageBanner
@@ -55,6 +71,11 @@ export default function SteelVsTimberFramingGuidePage() {
               <time dateTime={steelVsTimberFramingGuide.published}>
                 Published {steelVsTimberFramingGuide.publishedDisplay}
               </time>
+              {steelVsTimberFramingGuide.modifiedDisplay ? (
+                <time dateTime={steelVsTimberFramingGuide.modified}>
+                  Updated {steelVsTimberFramingGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{steelVsTimberFramingGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -88,6 +109,9 @@ export default function SteelVsTimberFramingGuidePage() {
                   <a href="#what-differs">Steel vs timber: what differs</a>
                 </li>
                 <li>
+                  <a href="#at-a-glance">The two frames at a glance</a>
+                </li>
+                <li>
                   <a href="#termites">Termite exposure</a>
                 </li>
                 <li>
@@ -98,6 +122,9 @@ export default function SteelVsTimberFramingGuidePage() {
                 </li>
                 <li>
                   <a href="#bushfire">Bushfire-prone zoning</a>
+                </li>
+                <li>
+                  <a href="#which-frame">Which frame suits</a>
                 </li>
                 <li>
                   <a href="#confirm-first">What to confirm first</a>
@@ -160,7 +187,22 @@ export default function SteelVsTimberFramingGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="termites">
+        <section className="section" aria-labelledby="at-a-glance">
+          <div className="shell prose article-prose">
+            <h2 id="at-a-glance">Timber and steel framing at a glance</h2>
+            <p>
+              The table sets the two materials beside each other on the points
+              the rest of this guide explains. It summarises what each
+              section says; the engineering and the approved drawings decide
+              what a particular frame has to be.
+            </p>
+            <ComparisonTable {...comparison} />
+            <h3>Terms used in this guide</h3>
+            <Glossary terms={glossary} />
+          </div>
+        </section>
+
+        <section className="section section--tint" aria-labelledby="termites">
           <div className="shell prose article-prose">
             <h2 id="termites">Termite exposure across Adelaide</h2>
             <p>
@@ -192,10 +234,7 @@ export default function SteelVsTimberFramingGuidePage() {
           </div>
         </section>
 
-        <section
-          className="section section--tint"
-          aria-labelledby="coastal-corrosion"
-        >
+        <section className="section" aria-labelledby="coastal-corrosion">
           <div className="shell prose article-prose">
             <h2 id="coastal-corrosion">
               Coastal corrosion class matters for steel framing
@@ -241,7 +280,10 @@ export default function SteelVsTimberFramingGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="reactive-clay">
+        <section
+          className="section section--tint"
+          aria-labelledby="reactive-clay"
+        >
           <div className="shell prose article-prose">
             <h2 id="reactive-clay">
               Reactive clay and footing movement are a separate question
@@ -275,7 +317,7 @@ export default function SteelVsTimberFramingGuidePage() {
           </div>
         </section>
 
-        <section className="section section--tint" aria-labelledby="bushfire">
+        <section className="section" aria-labelledby="bushfire">
           <div className="shell prose article-prose">
             <h2 id="bushfire">
               Bushfire-prone zoning in the Hills and hinterland
@@ -324,6 +366,22 @@ export default function SteelVsTimberFramingGuidePage() {
               </a>
               .
             </p>
+          </div>
+        </section>
+
+        <section
+          className="section section--tint"
+          aria-labelledby="which-frame"
+        >
+          <div className="shell prose article-prose">
+            <h2 id="which-frame">Which frame suits which situation</h2>
+            <p>
+              Most projects start from one of the situations below. The middle
+              column is what usually suits it, and the last column is what the
+              designer, engineer or building surveyor still has to confirm
+              before the framing material is locked in.
+            </p>
+            <DecisionGuide {...decisions} />
           </div>
         </section>
 
@@ -399,40 +457,12 @@ export default function SteelVsTimberFramingGuidePage() {
           <div className="shell prose article-prose">
             <h2 id="framing-faqs">Common questions</h2>
             <dl className="faq-list" aria-labelledby="framing-faqs">
-              <div className="faq-list__item">
-                <dt>Is steel framing always better than timber in Adelaide?</dt>
-                <dd>
-                  Not automatically. Steel framing is not subject to termite
-                  attack and can suit exposed or termite-prone sites well,
-                  but the design standard, coating class, cost and trade
-                  availability still need to be confirmed against timber
-                  framing for the specific project.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>
-                  Does steel framing avoid reactive-clay problems?
-                </dt>
-                <dd>
-                  No. Footing movement on reactive clay is managed through
-                  site classification and footing design, not the wall
-                  framing material. A geotechnical or structural assessment
-                  should still confirm the footing system regardless of
-                  which framing is chosen.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>
-                  Can Elite Surface Group choose the framing material for
-                  us?
-                </dt>
-                <dd>
-                  No. Framing material selection is a design and engineering
-                  decision made before installation. We install the wall
-                  system to the approved drawings and specification, and can
-                  discuss coordination once that documentation is in place.
-                </dd>
-              </div>
+              {faqs.map((faq) => (
+                <div className="faq-list__item" key={faq.question}>
+                  <dt>{faq.question}</dt>
+                  <dd>{faq.answer}</dd>
+                </div>
+              ))}
             </dl>
 
             <h2 id="sources">Sources and further reading</h2>

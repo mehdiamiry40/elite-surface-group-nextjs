@@ -2,10 +2,20 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  Checklist,
+  CompatibilityMatrix,
+  Glossary,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
 import { ArticleSchema, BreadcrumbSchema } from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  glossary,
+  installerBrief,
+  situations,
+} from "@/content/guides/hebel-boundary-walls-adelaide";
 import { bannerImages } from "@/content/pages";
 import { hebelBoundaryWallsGuide } from "@/content/resources";
 import { blurProps } from "@/lib/lcp-blur";
@@ -58,6 +68,11 @@ export default function HebelBoundaryWallsGuidePage() {
               <time dateTime={hebelBoundaryWallsGuide.published}>
                 Published {hebelBoundaryWallsGuide.publishedDisplay}
               </time>
+              {hebelBoundaryWallsGuide.modifiedDisplay ? (
+                <time dateTime={hebelBoundaryWallsGuide.modified}>
+                  Updated {hebelBoundaryWallsGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{hebelBoundaryWallsGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -90,10 +105,16 @@ export default function HebelBoundaryWallsGuidePage() {
                   <a href="#terms">Separate the wall terms</a>
                 </li>
                 <li>
+                  <a href="#at-a-glance">Situations at a glance</a>
+                </li>
+                <li>
                   <a href="#approval-path">Confirm the approval pathway</a>
                 </li>
                 <li>
                   <a href="#system-documents">Identify the exact system</a>
+                </li>
+                <li>
+                  <a href="#installer-brief">What to tell an installer</a>
                 </li>
                 <li>
                   <a href="#quote-documents">Prepare the quote documents</a>
@@ -192,7 +213,25 @@ export default function HebelBoundaryWallsGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="approval-path">
+        <section className="section" aria-labelledby="at-a-glance">
+          <div className="shell prose article-prose">
+            <h2 id="at-a-glance">Boundary-wall situations at a glance</h2>
+            <p>
+              Most boundary-wall enquiries start from one of the situations
+              below. The table sets out how each is usually handled and what
+              has to be confirmed first. It summarises the sections that
+              follow; it does not choose a system for a project.
+            </p>
+            <CompatibilityMatrix {...situations} />
+            <h3>Terms used in this guide</h3>
+            <Glossary terms={glossary} />
+          </div>
+        </section>
+
+        <section
+          className="section section--tint"
+          aria-labelledby="approval-path"
+        >
           <div className="shell prose article-prose">
             <h2 id="approval-path">
               Confirm the Adelaide approval and design pathway first
@@ -264,10 +303,7 @@ export default function HebelBoundaryWallsGuidePage() {
           </div>
         </section>
 
-        <section
-          className="section section--tint"
-          aria-labelledby="system-documents"
-        >
+        <section className="section" aria-labelledby="system-documents">
           <div className="shell prose article-prose">
             <h2 id="system-documents">
               Identify the exact Hebel system and current evidence
@@ -335,6 +371,23 @@ export default function HebelBoundaryWallsGuidePage() {
               </a>
               .
             </p>
+          </div>
+        </section>
+
+        <section
+          className="section section--tint"
+          aria-labelledby="installer-brief"
+        >
+          <div className="shell prose article-prose">
+            <h2 id="installer-brief">
+              Seven things to be able to tell an installer
+            </h2>
+            <p>
+              A first conversation is more useful when these seven points are
+              already known. They are answers, not files; the documents behind
+              them are listed in the next section.
+            </p>
+            <Checklist items={installerBrief} />
           </div>
         </section>
 

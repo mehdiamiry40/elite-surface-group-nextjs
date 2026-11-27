@@ -2,10 +2,25 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  Checklist,
+  CompatibilityMatrix,
+  Glossary,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/JsonLd";
+import {
+  ArticleSchema,
+  BreadcrumbSchema,
+  FAQPageSchema,
+} from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  faqs,
+  glossary,
+  settledFirst,
+  wallConditions,
+} from "@/content/guides/rendering-over-painted-brick-adelaide";
 import { bannerImages } from "@/content/pages";
 import { renderingPaintedBrickGuide } from "@/content/resources";
 import { blurProps } from "@/lib/lcp-blur";
@@ -37,6 +52,7 @@ export default function RenderingPaintedBrickGuidePage() {
         ]}
       />
       <ArticleSchema guide={renderingPaintedBrickGuide} />
+      <FAQPageSchema faqs={faqs} />
 
       <article>
         <PageBanner
@@ -58,6 +74,11 @@ export default function RenderingPaintedBrickGuidePage() {
               <time dateTime={renderingPaintedBrickGuide.published}>
                 Published {renderingPaintedBrickGuide.publishedDisplay}
               </time>
+              {renderingPaintedBrickGuide.modifiedDisplay ? (
+                <time dateTime={renderingPaintedBrickGuide.modified}>
+                  Updated {renderingPaintedBrickGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{renderingPaintedBrickGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -94,10 +115,16 @@ export default function RenderingPaintedBrickGuidePage() {
                   <a href="#assessment-signs">Conditions to assess</a>
                 </li>
                 <li>
+                  <a href="#wall-conditions">Conditions at a glance</a>
+                </li>
+                <li>
                   <a href="#system-path">Define the complete system</a>
                 </li>
                 <li>
                   <a href="#safety-planning">Safety and planning checks</a>
+                </li>
+                <li>
+                  <a href="#settled-first">Before preparation starts</a>
                 </li>
                 <li>
                   <a href="#compare-quotes">Compare quote scopes</a>
@@ -270,7 +297,27 @@ export default function RenderingPaintedBrickGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="system-path">
+        <section className="section" aria-labelledby="wall-conditions">
+          <div className="shell prose article-prose">
+            <h2 id="wall-conditions">
+              Painted-brick conditions at a glance
+            </h2>
+            <p>
+              The table pairs each condition with the approach that usually
+              follows and the point to confirm before a finish is chosen. It
+              is a planning summary; the assessed wall and the current system
+              documents decide the specification.
+            </p>
+            <CompatibilityMatrix {...wallConditions} />
+            <h3>Terms used in this guide</h3>
+            <Glossary terms={glossary} />
+          </div>
+        </section>
+
+        <section
+          className="section section--tint"
+          aria-labelledby="system-path"
+        >
           <div className="shell prose article-prose">
             <h2 id="system-path">
               The written specification should define the complete system
@@ -322,10 +369,7 @@ export default function RenderingPaintedBrickGuidePage() {
           </div>
         </section>
 
-        <section
-          className="section section--tint"
-          aria-labelledby="safety-planning"
-        >
+        <section className="section" aria-labelledby="safety-planning">
           <div className="shell prose article-prose">
             <h2 id="safety-planning">
               Older paint, silica and planning checks belong in the scope
@@ -396,6 +440,23 @@ export default function RenderingPaintedBrickGuidePage() {
           </div>
         </section>
 
+        <section
+          className="section section--tint"
+          aria-labelledby="settled-first"
+        >
+          <div className="shell prose article-prose">
+            <h2 id="settled-first">
+              What should be settled before preparation starts
+            </h2>
+            <p>
+              These are points to have agreed with the contractor and
+              specifier, not tasks to carry out yourself. If one is still
+              open, it is a reason to pause before the wall is disturbed.
+            </p>
+            <Checklist items={settledFirst} />
+          </div>
+        </section>
+
         <section className="section" aria-labelledby="compare-quotes">
           <div className="shell prose article-prose">
             <h2 id="compare-quotes">
@@ -442,50 +503,12 @@ export default function RenderingPaintedBrickGuidePage() {
 
             <h2 id="painted-brick-faqs">Common questions</h2>
             <dl className="faq-list" aria-labelledby="painted-brick-faqs">
-              <div className="faq-list__item">
-                <dt>Does all paint need to be removed before rendering?</dt>
-                <dd>
-                  There is no universal answer. Some documented systems allow
-                  properly prepared painted surfaces, while unsuitable or
-                  unstable layers may require a different approach. The wall
-                  and selected system must be assessed together.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Can a photo confirm whether the paint is sound?</dt>
-                <dd>
-                  No. Photos can show visible condition and access, but cannot
-                  establish the bond between hidden layers, identify every
-                  coating or rule out moisture and masonry issues.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Will new render stop existing wall cracks?</dt>
-                <dd>
-                  A finish should not be treated as a structural repair. The
-                  crack and underlying movement need an appropriate assessment
-                  before a finish or repair system is selected.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Does rendering painted brick need council approval?</dt>
-                <dd>
-                  It depends on the address, applicable overlays and proposed
-                  change. Use PlanSA’s address-based tools and seek advice from
-                  the relevant planning authority, especially for heritage or
-                  historic places and areas.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>What should I tell Elite Surface Group?</dt>
-                <dd>
-                  Tell us the suburb, property age if known, coating history,
-                  affected elevations, access notes, proposed finish and what
-                  dated photos are available. We can arrange how to review
-                  supporting files, then identify what else is needed to
-                  confirm whether the work sits within our scope.
-                </dd>
-              </div>
+              {faqs.map((faq) => (
+                <div className="faq-list__item" key={faq.question}>
+                  <dt>{faq.question}</dt>
+                  <dd>{faq.answer}</dd>
+                </div>
+              ))}
             </dl>
 
             <h2 id="sources">Sources and further reading</h2>

@@ -2,6 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  Checklist,
+  CompatibilityMatrix,
+  Glossary,
+  ProblemsTable,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
 import {
   ArticleSchema,
@@ -10,6 +16,12 @@ import {
 } from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  glossary,
+  quoteChecklist,
+  substrates,
+  wallSigns,
+} from "@/content/guides/preparing-walls-for-render-adelaide";
 import { bannerImages } from "@/content/pages";
 import { preparingWallsForRenderGuide } from "@/content/resources";
 import type { ServiceFaq } from "@/content/services";
@@ -47,6 +59,11 @@ const faqs: readonly ServiceFaq[] = [
     question: "How dry does a wall need to be before it is rendered?",
     answer:
       "Dry enough to meet the selected system’s requirements, and dry because the moisture source has been dealt with rather than because it happens to be summer. Where salt damp or a leak is suspected, that is assessed first.",
+  },
+  {
+    question: "Can new brickwork be rendered straight away?",
+    answer:
+      "Not until it has had the curing its own documents call for. New masonry and new concrete both need that before they are rendered, and each render coat then cures as its data sheet requires. It is a programme item, and better preparation cannot shorten it.",
   },
   {
     question: "Who is responsible for preparation, the builder or the renderer?",
@@ -92,6 +109,11 @@ export default function PreparingWallsForRenderGuidePage() {
               <time dateTime={preparingWallsForRenderGuide.published}>
                 Published {preparingWallsForRenderGuide.publishedDisplay}
               </time>
+              {preparingWallsForRenderGuide.modifiedDisplay ? (
+                <time dateTime={preparingWallsForRenderGuide.modified}>
+                  Updated {preparingWallsForRenderGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{preparingWallsForRenderGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -143,6 +165,9 @@ export default function PreparingWallsForRenderGuidePage() {
                 </li>
                 <li>
                   <a href="#weather">Weather and curing</a>
+                </li>
+                <li>
+                  <a href="#wall-signs">Signs that change the preparation</a>
                 </li>
                 <li>
                   <a href="#next-steps">Sensible next steps</a>
@@ -221,6 +246,14 @@ export default function PreparingWallsForRenderGuidePage() {
               </Link>{" "}
               explains how those findings change the scope.
             </p>
+
+            <h3>The substrates side by side</h3>
+            <p>
+              The table sets those substrates, and three conditions that cut
+              across them, beside what each usually needs and what to confirm
+              before preparation is priced.
+            </p>
+            <CompatibilityMatrix {...substrates} />
             <p className="article-source">
               Sources:{" "}
               <a href="https://www.dulux.com.au/specifier/products/acratex/substrate-guides/">
@@ -282,6 +315,9 @@ export default function PreparingWallsForRenderGuidePage() {
               remaining paint&mdash;needs that evened out, which is one of the
               jobs a sealer, primer or key coat is specified to do.
             </p>
+
+            <h3>Terms used in this guide</h3>
+            <Glossary terms={glossary} />
             <p className="article-source">
               Sources:{" "}
               <a href="https://rockcote.com.au/resources/preparing-brick-substrates-for-render/">
@@ -559,7 +595,22 @@ export default function PreparingWallsForRenderGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="next-steps">
+        <section className="section" aria-labelledby="wall-signs">
+          <div className="shell prose article-prose">
+            <h2 id="wall-signs">
+              Signs on the wall that change the preparation
+            </h2>
+            <p>
+              Most of what this guide covers can be seen from the ground before
+              anyone quotes. The table lists what to look for, what each sign
+              can point to and what should happen before render is scoped. It
+              is a prompt for what to record, not a diagnosis.
+            </p>
+            <ProblemsTable {...wallSigns} />
+          </div>
+        </section>
+
+        <section className="section section--tint" aria-labelledby="next-steps">
           <div className="shell prose article-prose">
             <h2 id="next-steps">Sensible next steps</h2>
             <ol className="steps">
@@ -598,15 +649,9 @@ export default function PreparingWallsForRenderGuidePage() {
             </ol>
 
             <p>Useful to have ready before asking for a quote:</p>
-            <TickList
-              items={[
-                "The suburb or postcode and the elevations in scope",
-                "What each wall is built from, and its age if known",
-                "The coating history and any previous repairs",
-                "Elevations or details showing joints, openings and adjoining materials, where they exist",
-                "The finish and colour you have in mind, or a reference for it",
-                "Site access, working height and any programme constraints",
-              ]}
+            <Checklist
+              items={quoteChecklist}
+              label="Useful to have ready before asking for a quote"
             />
             <p>
               Our <Link href="/project-planning/">project planning guide</Link>{" "}
@@ -645,7 +690,7 @@ export default function PreparingWallsForRenderGuidePage() {
 
         <section
           id="faqs-and-sources"
-          className="section section--tint"
+          className="section"
           aria-labelledby="preparing-walls-faqs"
         >
           <div className="shell prose article-prose">
