@@ -412,7 +412,6 @@ const REGION_LOCATION_SLUGS = [
   "coastal-adelaide",
   "adelaide-hills",
 ];
-const SERVICE_AND_REGION_CONTENT_BUILD = "2026-11-25";
 // 27 November: comparison tables, decision guides, checklists, numbered
 // workflows and glossaries were added to the home, company and project pages.
 const MULTI_FORMAT_CONTENT_BUILD = "2026-11-27";
