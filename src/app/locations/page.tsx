@@ -1,14 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Checklist, ComparisonTable } from "@/components/ContentBlocks";
 import { ArrowRightIcon } from "@/components/icons";
 import FeatureIcon from "@/components/FeatureIcon";
 import PageBanner from "@/components/PageBanner";
+import RichText from "@/components/RichText";
 import { CtaBand, SectionHead, ServiceCards } from "@/components/sections";
 import { BreadcrumbSchema } from "@/components/JsonLd";
 import { bannerImages } from "@/content/pages";
 import {
+  areaComparison,
   locationPages,
   locationsHub,
+  siteChecklist,
   type LocationPage,
 } from "@/content/locations";
 import { ogCard, pageMetadata } from "@/lib/seo";
@@ -117,6 +121,41 @@ export default function LocationsPage() {
               />
             ))}
           </ul>
+        </div>
+      </section>
+
+      <section className="section" aria-labelledby="locations-compare">
+        <div className="shell">
+          <h2 id="locations-compare" className="section-title">
+            {locationsHub.comparisonTitle}
+          </h2>
+          <div className="prose">
+            <p>{locationsHub.comparisonIntro}</p>
+          </div>
+          <ComparisonTable {...areaComparison} />
+          <div className="prose">
+            <p>{locationsHub.comparisonNote}</p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        className="section section--tint"
+        aria-labelledby="locations-site-checklist"
+      >
+        <div className="shell">
+          <h2 id="locations-site-checklist" className="section-title">
+            {locationsHub.siteChecklistTitle}
+          </h2>
+          <div className="prose">
+            <p>{locationsHub.siteChecklistIntro}</p>
+          </div>
+          <Checklist items={siteChecklist} columns={2} />
+          <div className="prose">
+            <p>
+              <RichText text={locationsHub.siteChecklistClosing} />
+            </p>
+          </div>
         </div>
       </section>
 
