@@ -1,12 +1,15 @@
+import { Fragment } from "react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon } from "@/components/icons";
+import { Checklist, DecisionGuide } from "@/components/ContentBlocks";
 import { BreadcrumbSchema, GuideListSchema } from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { CtaBand } from "@/components/CtaBand";
 import { SectionHead } from "@/components/sections";
 import { bannerImages } from "@/content/pages";
+import { guideFinder, guideUseChecklist } from "@/content/resource-finder";
 import { resourceGuides, resourcesHub } from "@/content/resources";
 import { blurProps } from "@/lib/lcp-blur";
 import { ogCard, pageMetadata } from "@/lib/seo";
@@ -93,7 +96,45 @@ export default function ResourcesPage() {
         </div>
       </section>
 
-      <section className="section" aria-labelledby="all-articles-title">
+      <section className="section" aria-labelledby="choose-a-guide">
+        <div className="shell">
+          <SectionHead
+            eyebrow="Guide finder"
+            title="Choose the guide that matches your question"
+            intro="Start from the problem you can see or the decision you are weighing. Each row points to one guide and says what it helps you settle before you ask for advice or a quote."
+            id="choose-a-guide"
+          />
+          {guideFinder.map((group, index) => (
+            <Fragment key={group.id}>
+              <div className="prose">
+                {index === 0 ? (
+                  <p>
+                    Jump to the guides for{" "}
+                    <a href="#finder-existing-walls">an existing wall</a>,{" "}
+                    <a href="#finder-choices">a choice between systems</a>,{" "}
+                    <a href="#finder-installations">an installation</a> or{" "}
+                    <a href="#finder-planning">
+                      quotes and bigger building changes
+                    </a>
+                    , or{" "}
+                    <a href="#all-articles-title">
+                      browse every guide, newest first
+                    </a>
+                    .
+                  </p>
+                ) : null}
+                <h3 id={group.id}>{group.title}</h3>
+              </div>
+              <DecisionGuide {...group.table} />
+            </Fragment>
+          ))}
+        </div>
+      </section>
+
+      <section
+        className="section section--tint"
+        aria-labelledby="all-articles-title"
+      >
         <div className="shell">
           <SectionHead
             eyebrow="From the site notebook"
@@ -178,6 +219,13 @@ export default function ResourcesPage() {
 
       <section className="section" aria-labelledby="resource-boundary-title">
         <div className="shell prose">
+          <h2 id="using-the-guides">How to use these guides</h2>
+          <p>
+            A guide is most useful when it is read against your own wall and
+            your own documents. Five habits make the difference.
+          </p>
+          <Checklist items={guideUseChecklist} />
+
           <h2 id="resource-boundary-title">Guidance, not a remote diagnosis</h2>
           <p>
             Buildings, substrates and wall systems differ. These resources help

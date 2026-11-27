@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  ComparisonTable,
+  DecisionGuide,
+  Glossary,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
 import {
   ArticleSchema,
@@ -10,6 +15,11 @@ import {
 } from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  comparison,
+  decisions,
+  glossary,
+} from "@/content/guides/cladding-vs-render-adelaide";
 import { bannerImages } from "@/content/pages";
 import { claddingVsRenderGuide } from "@/content/resources";
 import type { ServiceFaq } from "@/content/services";
@@ -146,6 +156,9 @@ export default function CladdingVsRenderGuidePage() {
                   <a href="#upkeep">Upkeep, repair and how each ages</a>
                 </li>
                 <li>
+                  <a href="#which-finish">Which finish suits which wall</a>
+                </li>
+                <li>
                   <a href="#combining">When to combine both</a>
                 </li>
                 <li>
@@ -170,55 +183,7 @@ export default function CladdingVsRenderGuidePage() {
               on the right wall. These are the differences that change a
               drawing, a scope or a maintenance plan.
             </p>
-            <dl className="faq-list professional-list">
-              <div className="faq-list__item">
-                <dt>How it is attached</dt>
-                <dd>
-                  Render is applied wet and bonds to the wall. Cladding is fixed
-                  mechanically over a frame or battens, with a cavity and a
-                  membrane behind it.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>What it needs behind it</dt>
-                <dd>
-                  Render needs masonry, an AAC panel system or a documented
-                  render base sheet. Cladding needs a frame or a battened
-                  substrate it can be fixed to.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>How it handles movement</dt>
-                <dd>
-                  Render shows substrate movement as cracking. Cladding conceals
-                  more of it and tends to show it at the joints and junctions
-                  instead.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Where water is managed</dt>
-                <dd>
-                  On a rendered wall the coating is the exposed layer. On a clad
-                  wall the flashings, membrane and cavity do that work out of
-                  sight.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>How it looks</dt>
-                <dd>
-                  Render gives one continuous plane in a chosen texture.
-                  Cladding gives an expressed pattern of boards, panels and
-                  joints that has to be set out.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>How it is repaired</dt>
-                <dd>
-                  Render is patched and matched into a continuous texture. A
-                  damaged board is replaced individually.
-                </dd>
-              </div>
-            </dl>
+            <ComparisonTable {...comparison} />
             <p>
               If you have already settled on one, our guides to{" "}
               <Link href="/resources/fibre-cement-cladding-adelaide/">
@@ -232,6 +197,8 @@ export default function CladdingVsRenderGuidePage() {
               all&mdash;see{" "}
               <a href="#combining">when to combine cladding and render</a>.
             </p>
+            <h3>Terms used in this guide</h3>
+            <Glossary terms={glossary} />
           </div>
         </section>
 
@@ -486,7 +453,20 @@ export default function CladdingVsRenderGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="combining">
+        <section className="section" aria-labelledby="which-finish">
+          <div className="shell prose article-prose">
+            <h2 id="which-finish">Which finish suits which wall</h2>
+            <p>
+              Most enquiries start from one of the situations below. The
+              middle column is what usually suits it, and the last column is
+              what still has to be confirmed before either finish is priced.
+              It is a starting point, not an assessment of your wall.
+            </p>
+            <DecisionGuide {...decisions} />
+          </div>
+        </section>
+
+        <section className="section section--tint" aria-labelledby="combining">
           <div className="shell prose article-prose">
             <h2 id="combining">When to combine cladding and render</h2>
             <p>
@@ -572,7 +552,7 @@ export default function CladdingVsRenderGuidePage() {
           </div>
         </section>
 
-        <section className="section section--tint" aria-labelledby="approvals">
+        <section className="section" aria-labelledby="approvals">
           <div className="shell prose article-prose">
             <h2 id="approvals">Approvals, scope and who carries the finish</h2>
             <p>
@@ -629,7 +609,7 @@ export default function CladdingVsRenderGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="next-steps">
+        <section className="section section--tint" aria-labelledby="next-steps">
           <div className="shell prose article-prose">
             <h2 id="next-steps">Sensible next steps</h2>
             <ol className="steps">
@@ -693,7 +673,7 @@ export default function CladdingVsRenderGuidePage() {
 
         <section
           id="faqs-and-sources"
-          className="section section--tint"
+          className="section"
           aria-labelledby="cladding-render-faqs"
         >
           <div className="shell prose article-prose">

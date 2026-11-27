@@ -2,10 +2,25 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  Checklist,
+  ComparisonTable,
+  CompatibilityMatrix,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/JsonLd";
+import {
+  ArticleSchema,
+  BreadcrumbSchema,
+  FAQPageSchema,
+} from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  faqs,
+  quoteChecklist,
+  replacementScope,
+  responsibilities,
+} from "@/content/guides/asbestos-cladding-replacement-adelaide";
 import { bannerImages } from "@/content/pages";
 import { asbestosCladdingReplacementGuide } from "@/content/resources";
 import { blurProps } from "@/lib/lcp-blur";
@@ -34,6 +49,7 @@ export default function AsbestosCladdingReplacementGuidePage() {
         ]}
       />
       <ArticleSchema guide={asbestosCladdingReplacementGuide} />
+      <FAQPageSchema faqs={faqs} />
 
       <article>
         <PageBanner
@@ -57,6 +73,11 @@ export default function AsbestosCladdingReplacementGuidePage() {
               <time dateTime={asbestosCladdingReplacementGuide.published}>
                 Published {asbestosCladdingReplacementGuide.publishedDisplay}
               </time>
+              {asbestosCladdingReplacementGuide.modifiedDisplay ? (
+                <time dateTime={asbestosCladdingReplacementGuide.modified}>
+                  Updated {asbestosCladdingReplacementGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{asbestosCladdingReplacementGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -98,7 +119,15 @@ export default function AsbestosCladdingReplacementGuidePage() {
                   <a href="#substrate">What the wall underneath decides</a>
                 </li>
                 <li>
+                  <a href="#replacement-scope">
+                    From cleared wall to replacement scope
+                  </a>
+                </li>
+                <li>
                   <a href="#approvals">Approvals, scope and sequencing</a>
+                </li>
+                <li>
+                  <a href="#who-carries-what">Who carries each part</a>
                 </li>
                 <li>
                   <a href="#next-steps">Sensible next steps</a>
@@ -318,7 +347,22 @@ export default function AsbestosCladdingReplacementGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="approvals">
+        <section className="section" aria-labelledby="replacement-scope">
+          <div className="shell prose article-prose">
+            <h2 id="replacement-scope">
+              From cleared wall to replacement scope
+            </h2>
+            <p>
+              Each of those findings moves the replacement in a different
+              direction. The table pairs what the cleared wall or the site
+              shows with what usually follows, and with what still has to be
+              confirmed before a system is chosen.
+            </p>
+            <CompatibilityMatrix {...replacementScope} />
+          </div>
+        </section>
+
+        <section className="section section--tint" aria-labelledby="approvals">
           <div className="shell prose article-prose">
             <h2 id="approvals">Approvals, scope and sequencing</h2>
             <p>
@@ -371,6 +415,19 @@ export default function AsbestosCladdingReplacementGuidePage() {
           </div>
         </section>
 
+        <section className="section" aria-labelledby="who-carries-what">
+          <div className="shell prose article-prose">
+            <h2 id="who-carries-what">Who carries each part of the job</h2>
+            <p>
+              Testing, removal, clearance, disposal, frame repair and the new
+              cladding are separate pieces of work, and most of them are not
+              ours. Read across each row for who it sits with and what you
+              should be holding when that part is finished.
+            </p>
+            <ComparisonTable {...responsibilities} />
+          </div>
+        </section>
+
         <section className="section section--tint" aria-labelledby="next-steps">
           <div className="shell prose article-prose">
             <h2 id="next-steps">Sensible next steps</h2>
@@ -409,6 +466,15 @@ export default function AsbestosCladdingReplacementGuidePage() {
               </li>
             </ol>
 
+            <h3>What to have ready for a replacement quote</h3>
+            <p>
+              A replacement quote is only as firm as what it is priced from.
+              Once the wall is cleared, have these ready; our{" "}
+              <Link href="/project-planning/">project planning notes</Link>{" "}
+              cover the wider details.
+            </p>
+            <Checklist items={quoteChecklist} />
+
             <aside className="article-note article-note--warning">
               <strong>
                 The replacement work has its own dust and height risks.
@@ -443,43 +509,12 @@ export default function AsbestosCladdingReplacementGuidePage() {
           <div className="shell prose article-prose">
             <h2 id="asbestos-cladding-faqs">Common questions</h2>
             <dl className="faq-list" aria-labelledby="asbestos-cladding-faqs">
-              <div className="faq-list__item">
-                <dt>Can new cladding just go over the top of the old sheeting?</dt>
-                <dd>
-                  Covering asbestos sheeting leaves it in the building, where it
-                  still has to be managed, disclosed and eventually removed, and
-                  fixing through it disturbs the material. Where encapsulation
-                  is considered at all, it is a decision for a licensed assessor
-                  about that wall&mdash;not a way to avoid removal.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Do we have to do the whole house at once?</dt>
-                <dd>
-                  Not necessarily. Staging elevation by elevation spreads the
-                  cost, but it means paying scaffold and removal mobilisation
-                  more than once and living with two finishes in between.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Will the replacement look like the original?</dt>
-                <dd>
-                  Profiles close to mid-century flat sheet and cover strip are
-                  available, as are weatherboard and panel systems that change
-                  the character entirely. In a heritage or character overlay the
-                  external appearance may be assessed, so check that before
-                  choosing.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Who tells the neighbours?</dt>
-                <dd>
-                  A licensed removalist manages notification, signage and
-                  exclusion zones. Telling adjoining neighbours what is
-                  happening and when is still worth doing yourself, especially
-                  on a narrow allotment.
-                </dd>
-              </div>
+              {faqs.map((faq) => (
+                <div className="faq-list__item" key={faq.question}>
+                  <dt>{faq.question}</dt>
+                  <dd>{faq.answer}</dd>
+                </div>
+              ))}
             </dl>
 
             <h2 id="sources">Sources and further reading</h2>

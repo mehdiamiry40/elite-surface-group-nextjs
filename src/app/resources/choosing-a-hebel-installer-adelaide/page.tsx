@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  Checklist,
+  DecisionGuide,
+  Glossary,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
 import {
   ArticleSchema,
@@ -10,6 +15,11 @@ import {
 } from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  glossary,
+  installerQuestions,
+  quoteChecklist,
+} from "@/content/guides/choosing-a-hebel-installer-adelaide";
 import { bannerImages } from "@/content/pages";
 import { choosingHebelInstallerGuide } from "@/content/resources";
 import type { ServiceFaq } from "@/content/services";
@@ -43,6 +53,11 @@ const faqs: readonly ServiceFaq[] = [
     question: "Should the same company install the panels and apply the render?",
     answer:
       "It can simplify the hand-over between the two scopes, but it is not a requirement. What matters is that the written scope names who accepts the panel surface, who applies each layer of the specified coating system and who details the joints, whichever businesses hold those roles.",
+  },
+  {
+    question: "Is the manufacturer’s warranty the same as the installer’s?",
+    answer:
+      "No. CSR’s published warranty information describes conditional product cover for eligible products and systems. It is a manufacturer’s document with its own terms, not an installer’s warranty, a coating warranty or a building approval. Ask each party for the actual document that names the selected product and system, and for the installation, coating and maintenance conditions it sets.",
   },
   {
     question:
@@ -87,6 +102,11 @@ export default function ChoosingHebelInstallerGuidePage() {
               <time dateTime={choosingHebelInstallerGuide.published}>
                 Published {choosingHebelInstallerGuide.publishedDisplay}
               </time>
+              {choosingHebelInstallerGuide.modifiedDisplay ? (
+                <time dateTime={choosingHebelInstallerGuide.modified}>
+                  Updated {choosingHebelInstallerGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{choosingHebelInstallerGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -136,6 +156,9 @@ export default function ChoosingHebelInstallerGuidePage() {
                   <a href="#quote-and-warranty">Quotes and warranty paperwork</a>
                 </li>
                 <li>
+                  <a href="#installer-questions">Questions for every installer</a>
+                </li>
+                <li>
                   <a href="#next-steps">Sensible next steps</a>
                 </li>
                 <li>
@@ -179,6 +202,9 @@ export default function ChoosingHebelInstallerGuidePage() {
               explains how a panel-and-coating wall differs from masonry veneer
               before an installer is involved at all.
             </p>
+
+            <h3>Terms used in this guide</h3>
+            <Glossary terms={glossary} />
             <p className="article-source">
               Source:{" "}
               <a href="https://hebel.com.au/resources/technical-documents/">
@@ -501,7 +527,26 @@ export default function ChoosingHebelInstallerGuidePage() {
           </div>
         </section>
 
-        <section className="section section--tint" aria-labelledby="next-steps">
+        <section
+          className="section section--tint"
+          aria-labelledby="installer-questions"
+        >
+          <div className="shell prose article-prose">
+            <h2 id="installer-questions">
+              The questions to put to every installer
+            </h2>
+            <p>
+              The sections above come down to a short list you can put to each
+              installer in the same words. You do not need to judge the
+              technical detail of the reply. Listen for whether it comes from
+              the system guide and the drawings, and compare what each
+              installer puts in writing.
+            </p>
+            <DecisionGuide {...installerQuestions} />
+          </div>
+        </section>
+
+        <section className="section" aria-labelledby="next-steps">
           <div className="shell prose article-prose">
             <h2 id="next-steps">Sensible next steps</h2>
             <ol className="steps">
@@ -538,6 +583,14 @@ export default function ChoosingHebelInstallerGuidePage() {
                 </p>
               </li>
             </ol>
+
+            <h3>What to have ready before you ask for prices</h3>
+            <p>
+              An installer can only price what the documents describe. Having
+              these together before the first conversation keeps every quote on
+              the same footing.
+            </p>
+            <Checklist items={quoteChecklist} />
             <p>
               Our{" "}
               <Link href="/hebel/">Hebel installation in Adelaide</Link> page
@@ -550,7 +603,7 @@ export default function ChoosingHebelInstallerGuidePage() {
 
         <section
           id="faqs-and-sources"
-          className="section"
+          className="section section--tint"
           aria-labelledby="hebel-installer-faqs"
         >
           <div className="shell prose article-prose">

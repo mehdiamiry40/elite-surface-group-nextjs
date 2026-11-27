@@ -1728,7 +1728,8 @@ check(
     renderCrackingJsonLd?.mainEntityOfPage?.["@id"] ===
       "https://elitesurfacegroup.com.au/resources/render-cracking-adelaide/" &&
     renderCrackingJsonLd?.datePublished === "2026-08-13" &&
-    renderCrackingJsonLd?.dateModified === "2026-08-13" &&
+    renderCrackingJsonLd?.dateModified ===
+      resourceModifiedDates.get("render-cracking-adelaide") &&
     renderCrackingJsonLd?.image?.contentUrl ===
       "https://elitesurfacegroup.com.au/images/v2/resource-render-cracking-adelaide.webp" &&
     renderCrackingJsonLd?.image?.width === 1536 &&
@@ -2031,7 +2032,8 @@ check(
     hebelBoundaryWallsJsonLd?.mainEntityOfPage?.["@id"] ===
       "https://elitesurfacegroup.com.au/resources/hebel-boundary-walls-adelaide/" &&
     hebelBoundaryWallsJsonLd?.datePublished === "2026-08-13" &&
-    hebelBoundaryWallsJsonLd?.dateModified === "2026-08-31" &&
+    hebelBoundaryWallsJsonLd?.dateModified ===
+      resourceModifiedDates.get("hebel-boundary-walls-adelaide") &&
     hebelBoundaryWallsJsonLd?.image?.contentUrl ===
       "https://elitesurfacegroup.com.au/images/v2/resource-hebel-boundary-walls-adelaide.webp" &&
     hebelBoundaryWallsJsonLd?.image?.width === 1536 &&
@@ -2112,7 +2114,8 @@ check(
     renderingPaintedBrickJsonLd?.mainEntityOfPage?.["@id"] ===
       "https://elitesurfacegroup.com.au/resources/rendering-over-painted-brick-adelaide/" &&
     renderingPaintedBrickJsonLd?.datePublished === "2026-08-13" &&
-    renderingPaintedBrickJsonLd?.dateModified === "2026-08-13" &&
+    renderingPaintedBrickJsonLd?.dateModified ===
+      resourceModifiedDates.get("rendering-over-painted-brick-adelaide") &&
     renderingPaintedBrickJsonLd?.image?.contentUrl ===
       "https://elitesurfacegroup.com.au/images/v2/resource-rendering-painted-brick.webp" &&
     renderingPaintedBrickJsonLd?.image?.width === 1536 &&

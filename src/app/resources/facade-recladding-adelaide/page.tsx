@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  DecisionGuide,
+  Glossary,
+  ProblemsTable,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
 import {
   ArticleSchema,
@@ -10,6 +15,11 @@ import {
 } from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  glossary,
+  recordFindings,
+  scopeDecisions,
+} from "@/content/guides/facade-recladding-adelaide";
 import { bannerImages } from "@/content/pages";
 import { facadeRecladdingGuide } from "@/content/resources";
 import type { ServiceFaq } from "@/content/services";
@@ -90,6 +100,11 @@ export default function FacadeRecladdingGuidePage() {
               <time dateTime={facadeRecladdingGuide.published}>
                 Published {facadeRecladdingGuide.publishedDisplay}
               </time>
+              {facadeRecladdingGuide.modifiedDisplay ? (
+                <time dateTime={facadeRecladdingGuide.modified}>
+                  Updated {facadeRecladdingGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{facadeRecladdingGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -128,7 +143,13 @@ export default function FacadeRecladdingGuidePage() {
                   <a href="#when">Recladding, repair or maintenance?</a>
                 </li>
                 <li>
+                  <a href="#scope-guide">Which scope fits which facade</a>
+                </li>
+                <li>
                   <a href="#inspect">What to inspect first</a>
+                </li>
+                <li>
+                  <a href="#record-findings">What the record can point to</a>
                 </li>
                 <li>
                   <a href="#removal">What removal can uncover</a>
@@ -215,6 +236,14 @@ export default function FacadeRecladdingGuidePage() {
               </a>
               .
             </p>
+
+            <h3 id="scope-guide">Which scope fits which facade</h3>
+            <p>
+              Read across from what the facade shows to the scope that usually
+              fits it. The last column is what still has to be confirmed
+              before that scope is priced.
+            </p>
+            <DecisionGuide {...scopeDecisions} />
           </div>
         </section>
 
@@ -277,6 +306,14 @@ export default function FacadeRecladdingGuidePage() {
               a suitably qualified professional who can open the wall up
               safely.
             </p>
+
+            <h3 id="record-findings">What the record can point to</h3>
+            <p>
+              Once the record exists, the table helps sort what it shows. Each
+              row pairs an observation with what it can indicate and the next
+              step, without standing in for an assessment of the wall.
+            </p>
+            <ProblemsTable {...recordFindings} />
           </div>
         </section>
 
@@ -434,6 +471,9 @@ export default function FacadeRecladdingGuidePage() {
               </a>
               .
             </p>
+
+            <h3>Terms used in this guide</h3>
+            <Glossary terms={glossary} />
           </div>
         </section>
 

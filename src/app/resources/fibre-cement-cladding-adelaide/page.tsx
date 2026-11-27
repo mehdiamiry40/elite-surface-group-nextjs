@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  Checklist,
+  ComparisonTable,
+  CompatibilityMatrix,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
 import {
   ArticleSchema,
@@ -10,6 +15,11 @@ import {
 } from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  conditions,
+  quoteChecklist,
+  wallLayers,
+} from "@/content/guides/fibre-cement-cladding-adelaide";
 import { bannerImages } from "@/content/pages";
 import { fibreCementCladdingGuide } from "@/content/resources";
 import type { ServiceFaq } from "@/content/services";
@@ -32,6 +42,11 @@ const faqs: readonly ServiceFaq[] = [
     question: "Is fibre cement cladding suitable for coastal Adelaide sites?",
     answer:
       "Many fibre-cement systems are used near the coast, but suitability belongs to the specific product, its fixings and its finish, set against the site’s exposure. Check the manufacturer’s coastal conditions against the property’s actual position rather than the suburb name, and make sure the fixings, flashings and trims are specified for the same exposure as the boards.",
+  },
+  {
+    question: "Is fibre cement cladding suitable for bushfire-prone sites?",
+    answer:
+      "Manufacturers document fibre cement as meeting the fire-performance requirements for a wide range of bushfire ratings, with specific board, jointing and fixing details for each. A site-specific Bushfire Attack Level assessment may be needed before the external wall is finalised, and that assessed rating and the manufacturer’s bushfire documents decide the detail. We install the documented system and do not assess or certify a rating.",
   },
   {
     question: "Can fibre cement cladding be installed over existing brick?",
@@ -90,6 +105,11 @@ export default function FibreCementCladdingGuidePage() {
               <time dateTime={fibreCementCladdingGuide.published}>
                 Published {fibreCementCladdingGuide.publishedDisplay}
               </time>
+              {fibreCementCladdingGuide.modifiedDisplay ? (
+                <time dateTime={fibreCementCladdingGuide.modified}>
+                  Updated {fibreCementCladdingGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{fibreCementCladdingGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -142,6 +162,9 @@ export default function FibreCementCladdingGuidePage() {
                 </li>
                 <li>
                   <a href="#finish-upkeep">Cutting, coating and upkeep</a>
+                </li>
+                <li>
+                  <a href="#site-conditions">What the wall and site change</a>
                 </li>
                 <li>
                   <a href="#next-steps">Sensible next steps</a>
@@ -201,6 +224,14 @@ export default function FibreCementCladdingGuidePage() {
               </Link>{" "}
               covers the wider choice of exterior finish.
             </p>
+
+            <h3>The layers at a glance</h3>
+            <p>
+              Each layer below has its own job and its own decision to make
+              before material is ordered. The sections that follow take them in
+              turn.
+            </p>
+            <ComparisonTable {...wallLayers} />
             <p className="article-source">
               Sources:{" "}
               <a href="https://www.jameshardie.com.au/fibre-cement">
@@ -529,7 +560,26 @@ export default function FibreCementCladdingGuidePage() {
           </div>
         </section>
 
-        <section className="section section--tint" aria-labelledby="next-steps">
+        <section
+          className="section section--tint"
+          aria-labelledby="site-conditions"
+        >
+          <div className="shell prose article-prose">
+            <h2 id="site-conditions">
+              What changes with the wall and the site
+            </h2>
+            <p>
+              The same board is a different installation on a new frame, over
+              old brickwork, near the coast or in the Hills. The table gathers
+              the conditions this guide has covered, the approach each usually
+              takes and what to confirm first. The product guide and the
+              project documents set the detail.
+            </p>
+            <CompatibilityMatrix {...conditions} />
+          </div>
+        </section>
+
+        <section className="section" aria-labelledby="next-steps">
           <div className="shell prose article-prose">
             <h2 id="next-steps">Sensible next steps</h2>
             <ol className="steps">
@@ -576,17 +626,7 @@ export default function FibreCementCladdingGuidePage() {
             </ol>
 
             <h3>What to have ready for a quote</h3>
-            <TickList
-              items={[
-                "The suburb or postcode and the type of project",
-                "Elevations or plans showing which walls are clad and how high they are",
-                "The specified product, profile and finish, or the look you are aiming for",
-                "What the wall is framed in, or what the existing wall is built from",
-                "Whether the cladding, membrane and battens are supplied by you, the builder or the installer",
-                "Site access, scaffold arrangements and the programme",
-                "Any exposure information already confirmed for the site",
-              ]}
-            />
+            <Checklist items={quoteChecklist} />
             <p>
               Our guide to{" "}
               <Link href="/resources/what-affects-cladding-render-quotes-adelaide/">
@@ -612,7 +652,7 @@ export default function FibreCementCladdingGuidePage() {
 
         <section
           id="faqs-and-sources"
-          className="section"
+          className="section section--tint"
           aria-labelledby="fibre-cement-faqs"
         >
           <div className="shell prose article-prose">
