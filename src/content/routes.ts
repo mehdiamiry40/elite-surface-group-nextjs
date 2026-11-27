@@ -64,6 +64,14 @@ const RESOURCE_AGGREGATE_LAST_MODIFIED = latestIsoDate(
 );
 
 /**
+ * Service-area hub and all four area pages. Their copy last changed in the
+ * 27 November multi-format build, which added the area comparison and site
+ * checklist to the hub and condition tables, problem tables, checklists, an
+ * access workflow and further FAQs to the area pages.
+ */
+const LOCATION_LAST_MODIFIED: IsoDate = RELEASE_DATES.multiFormatContentBuild;
+
+/**
  * Canonical public route inventory.
  *
  * The sitemap and contact-form source attribution both consume this list so a
@@ -97,16 +105,16 @@ export const publicRouteRecords = [
       RELEASE_DATES.multiFormatContentBuild,
     ),
   ),
-  publicRoute("/locations/", RELEASE_DATES.serviceAndRegionContentBuild),
+  publicRoute("/locations/", LOCATION_LAST_MODIFIED),
   ...locationPages.map((location) =>
     publicRoute(
       `/locations/${location.slug}/`,
       // A page that lists every guide goes stale when a guide is published; a
       // region page with a hand-picked guide list only changes with its copy.
       location.guides
-        ? RELEASE_DATES.serviceAndRegionContentBuild
+        ? LOCATION_LAST_MODIFIED
         : latestIsoDate(
-            RELEASE_DATES.serviceAndRegionContentBuild,
+            LOCATION_LAST_MODIFIED,
             resourceGuides.map((guide) => guide.modified),
           ),
     ),

@@ -393,6 +393,17 @@ const latestResourceModified = [...resourceModifiedDates.values()].reduce(
   (latest, candidate) => (candidate > latest ? candidate : latest),
   "0000-00-00",
 );
+// 27 November: the service-area hub gained an area comparison and a site
+// checklist, and all four area pages gained condition tables, problem tables,
+// checklists and further FAQs. The locations have their own constant so the
+// service pages can carry a different date.
+const LOCATION_MULTI_FORMAT_BUILD = "2026-11-27";
+// The metropolitan Adelaide page also lists every guide, so its date is the
+// later of its own copy date and the newest guide.
+const adelaideLocationModified =
+  latestResourceModified > LOCATION_MULTI_FORMAT_BUILD
+    ? latestResourceModified
+    : LOCATION_MULTI_FORMAT_BUILD;
 // Only the metropolitan Adelaide page lists every guide. The region pages
 // carry a hand-picked guide list, so a newly published guide does not change
 // them and their date stays with their own copy.
@@ -427,13 +438,14 @@ const expectedSitemapDates = new Map([
     `/projects/${slug}/`,
     MULTI_FORMAT_CONTENT_BUILD,
   ]),
-  // The hub was reorganised around the three region pages on 25 November.
-  ["/locations/", SERVICE_AND_REGION_CONTENT_BUILD],
+  // The hub and the area pages gained their tables and checklists on
+  // 27 November.
+  ["/locations/", LOCATION_MULTI_FORMAT_BUILD],
   ...locationSlugs.map((slug) => [
     `/locations/${slug}/`,
     REGION_LOCATION_SLUGS.includes(slug)
-      ? SERVICE_AND_REGION_CONTENT_BUILD
-      : latestResourceModified,
+      ? LOCATION_MULTI_FORMAT_BUILD
+      : adelaideLocationModified,
   ]),
   ["/project-planning/", MULTI_FORMAT_CONTENT_BUILD],
   ["/resources/", latestResourceModified],
@@ -474,9 +486,15 @@ check(
       route === "/"
         ? "https://elitesurfacegroup.com.au/"
         : `https://elitesurfacegroup.com.au${route}`;
-    return sitemapLastModified.get(loc) === latestResourceModified;
+    // An aggregate page is never older than the newest guide it lists. The
+    // Adelaide page is newer than that only while its own copy is.
+    const expected = route.startsWith("/locations/")
+      ? adelaideLocationModified
+      : latestResourceModified;
+    const actual = sitemapLastModified.get(loc) ?? "";
+    return actual === expected && actual >= latestResourceModified;
   }),
-  `expected ${latestResourceModified} for ${resourceAggregatePaths.join(", ")}`,
+  `expected ${latestResourceModified} for /resources/ and ${adelaideLocationModified} for the Adelaide page (${resourceAggregatePaths.join(", ")})`,
 );
 check(
   "sitemap uses truthful dates for every route",
