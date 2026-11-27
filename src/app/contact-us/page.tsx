@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import { Checklist } from "@/components/ContentBlocks";
 import PageBanner from "@/components/PageBanner";
 import { CtaBand } from "@/components/CtaBand";
+import { FaqList } from "@/components/sections";
 import { business } from "@/content/business";
+import { contactFaqs } from "@/content/company";
 import { bannerImages, contactPage } from "@/content/pages";
-import { BreadcrumbSchema } from "@/components/JsonLd";
+import { enquiryChecklist } from "@/content/project-planning";
+import { BreadcrumbSchema, FAQPageSchema } from "@/components/JsonLd";
 import { ogCard, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
@@ -18,6 +23,7 @@ export default function ContactPage() {
   return (
     <>
       <BreadcrumbSchema trail={[{ label: "Contact Us", href: "/contact-us" }]} />
+      <FAQPageSchema faqs={contactFaqs} />
       <PageBanner
         title={contactPage.bannerTitle}
         image={bannerImages["/contact-us"]}
@@ -56,6 +62,25 @@ export default function ContactPage() {
       {/* The WordPress version of this page had no form and no contact details
           at all — only the banner and the closing CTA. Both are added here. */}
       <ContactSection withDetails intro={contactPage.intro} />
+
+      <section className="section" aria-labelledby="contact-checklist">
+        <div className="shell prose">
+          <h2 id="contact-checklist">Before you get in touch</h2>
+          <p>
+            An enquiry does not need to be complete. These six details are the
+            ones we ask about first, so it helps to have them to hand.
+          </p>
+          <Checklist items={enquiryChecklist} />
+          <p>
+            The <Link href="/project-planning/">project planning page</Link> has
+            the full site-readiness checklist, and sets out what to have ready
+            for a new build, a renovation or a repair.
+          </p>
+
+          <h2 id="contact-faqs">Contact FAQs</h2>
+          <FaqList faqs={contactFaqs} />
+        </div>
+      </section>
 
       <CtaBand />
     </>

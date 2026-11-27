@@ -2,10 +2,25 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  Checklist,
+  Glossary,
+  ProblemsTable,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/JsonLd";
+import {
+  ArticleSchema,
+  BreadcrumbSchema,
+  FAQPageSchema,
+} from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  enquiryChecklist,
+  faqs,
+  glossary,
+  surfaceSigns,
+} from "@/content/guides/repainting-render-adelaide";
 import { bannerImages } from "@/content/pages";
 import { repaintingRenderGuide } from "@/content/resources";
 import { blurProps } from "@/lib/lcp-blur";
@@ -34,6 +49,7 @@ export default function RepaintingRenderGuidePage() {
         ]}
       />
       <ArticleSchema guide={repaintingRenderGuide} />
+      <FAQPageSchema faqs={faqs} />
 
       <article>
         <PageBanner
@@ -55,6 +71,11 @@ export default function RepaintingRenderGuidePage() {
               <time dateTime={repaintingRenderGuide.published}>
                 Published {repaintingRenderGuide.publishedDisplay}
               </time>
+              {repaintingRenderGuide.modifiedDisplay ? (
+                <time dateTime={repaintingRenderGuide.modified}>
+                  Updated {repaintingRenderGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{repaintingRenderGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -90,12 +111,20 @@ export default function RepaintingRenderGuidePage() {
                   <a href="#cracks">Cracks, patches and preparation</a>
                 </li>
                 <li>
+                  <a href="#surface-signs">Surface signs and next steps</a>
+                </li>
+                <li>
                   <a href="#adelaide-conditions">
                     What Adelaide exposure does to a recoat
                   </a>
                 </li>
                 <li>
                   <a href="#coating">Choosing the coating system</a>
+                </li>
+                <li>
+                  <a href="#enquiry-checklist">
+                    What to have ready before an enquiry
+                  </a>
                 </li>
                 <li>
                   <a href="#next-steps">Sensible next steps</a>
@@ -190,6 +219,17 @@ export default function RepaintingRenderGuidePage() {
               </a>
               .
             </p>
+
+            <h3 id="surface-signs">Surface signs and what to do next</h3>
+            <p>
+              The table brings the assessment and the crack checks together:
+              what the wall shows, what that can point to and the step that
+              follows before a coating is chosen.
+            </p>
+            <ProblemsTable {...surfaceSigns} />
+
+            <h3>Terms used in this guide</h3>
+            <Glossary terms={glossary} />
           </div>
         </section>
 
@@ -290,6 +330,16 @@ export default function RepaintingRenderGuidePage() {
               </a>
               .
             </p>
+
+            <h3 id="enquiry-checklist">
+              What to have ready before a repaint enquiry
+            </h3>
+            <p>
+              None of this needs a ladder or a scraper. It is what lets a
+              recoat be scoped against the wall that is there, not a guess at
+              it.
+            </p>
+            <Checklist items={enquiryChecklist} />
           </div>
         </section>
 
@@ -364,34 +414,12 @@ export default function RepaintingRenderGuidePage() {
           <div className="shell prose article-prose">
             <h2 id="repaint-faqs">Common questions</h2>
             <dl className="faq-list" aria-labelledby="repaint-faqs">
-              <div className="faq-list__item">
-                <dt>How often does render need repainting?</dt>
-                <dd>
-                  There is no single interval. It depends on the coating system,
-                  the colour, the exposure and how well the original application
-                  was done. Manufacturers publish expectations for their own
-                  systems—use the one that is actually on your wall.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Can we just paint over the cracks?</dt>
-                <dd>
-                  Fine hairline cracking can often be covered by a flexible
-                  crack-bridging system. Cracking that is active, widening or
-                  following a structural path needs assessment and repair first,
-                  because a coating will conceal it rather than resolve it.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Is normal exterior house paint good enough?</dt>
-                <dd>
-                  Render coating systems are specified for water management and,
-                  on refurbishment work, crack bridging and stain resistance.
-                  Check what the manufacturer&rsquo;s system requires for your
-                  substrate rather than assuming a general exterior paint
-                  covers it.
-                </dd>
-              </div>
+              {faqs.map((faq) => (
+                <div className="faq-list__item" key={faq.question}>
+                  <dt>{faq.question}</dt>
+                  <dd>{faq.answer}</dd>
+                </div>
+              ))}
             </dl>
 
             <h2 id="sources">Sources and further reading</h2>

@@ -2,10 +2,25 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  DecisionGuide,
+  Glossary,
+  ProblemsTable,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/JsonLd";
+import {
+  ArticleSchema,
+  BreadcrumbSchema,
+  FAQPageSchema,
+} from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  crackSigns,
+  faqs,
+  glossary,
+  repairDecisions,
+} from "@/content/guides/render-cracking-adelaide";
 import { bannerImages } from "@/content/pages";
 import { renderCrackingGuide } from "@/content/resources";
 import { blurProps } from "@/lib/lcp-blur";
@@ -37,6 +52,7 @@ export default function RenderCrackingGuidePage() {
         ]}
       />
       <ArticleSchema guide={renderCrackingGuide} />
+      <FAQPageSchema faqs={faqs} />
 
       <article>
         <PageBanner
@@ -58,6 +74,11 @@ export default function RenderCrackingGuidePage() {
               <time dateTime={renderCrackingGuide.published}>
                 Published {renderCrackingGuide.publishedDisplay}
               </time>
+              {renderCrackingGuide.modifiedDisplay ? (
+                <time dateTime={renderCrackingGuide.modified}>
+                  Updated {renderCrackingGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{renderCrackingGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -90,6 +111,9 @@ export default function RenderCrackingGuidePage() {
                   <a href="#adelaide-conditions">Adelaide conditions</a>
                 </li>
                 <li>
+                  <a href="#crack-signs">Crack signs and next steps</a>
+                </li>
+                <li>
                   <a href="#what-to-record">What to record</a>
                 </li>
                 <li>
@@ -100,6 +124,9 @@ export default function RenderCrackingGuidePage() {
                 </li>
                 <li>
                   <a href="#repair-or-rerender">Repair or re-render?</a>
+                </li>
+                <li>
+                  <a href="#render-cracking-faqs">Common questions</a>
                 </li>
               </ol>
             </nav>
@@ -249,8 +276,23 @@ export default function RenderCrackingGuidePage() {
 
         <section
           className="section section--tint"
-          aria-labelledby="what-to-record"
+          aria-labelledby="crack-signs"
         >
+          <div className="shell prose article-prose">
+            <h2 id="crack-signs">Crack signs and what to do next</h2>
+            <p>
+              The table pairs what is visible on the wall with what it can
+              point to and the sensible next step. It sorts a crack into the
+              right conversation; it does not replace an assessment of the
+              wall itself.
+            </p>
+            <ProblemsTable {...crackSigns} />
+            <h3>Terms used in this guide</h3>
+            <Glossary terms={glossary} />
+          </div>
+        </section>
+
+        <section className="section" aria-labelledby="what-to-record">
           <div className="shell prose article-prose">
             <h2 id="what-to-record">What to record before requesting advice</h2>
             <p>
@@ -285,7 +327,7 @@ export default function RenderCrackingGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="next-steps">
+        <section className="section section--tint" aria-labelledby="next-steps">
           <div className="shell prose article-prose">
             <h2 id="next-steps">Sensible next steps</h2>
             <ol className="steps">
@@ -335,10 +377,7 @@ export default function RenderCrackingGuidePage() {
           </div>
         </section>
 
-        <section
-          className="section section--tint"
-          aria-labelledby="who-to-call"
-        >
+        <section className="section" aria-labelledby="who-to-call">
           <div className="shell prose article-prose">
             <h2 id="who-to-call">Who should assess the crack?</h2>
             <dl className="faq-list professional-list">
@@ -386,7 +425,10 @@ export default function RenderCrackingGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="repair-or-rerender">
+        <section
+          className="section section--tint"
+          aria-labelledby="repair-or-rerender"
+        >
           <div className="shell prose article-prose">
             <h2 id="repair-or-rerender">Local repair or broader re-render?</h2>
             <p>
@@ -404,36 +446,19 @@ export default function RenderCrackingGuidePage() {
               needs to be resolved before either option is treated as a durable
               repair.
             </p>
+            <p>
+              The same conditions, set out by what an assessment finds:
+            </p>
+            <DecisionGuide {...repairDecisions} />
 
             <h2 id="render-cracking-faqs">Common questions</h2>
             <dl className="faq-list" aria-labelledby="render-cracking-faqs">
-              <div className="faq-list__item">
-                <dt>Can I simply fill a hairline render crack?</dt>
-                <dd>
-                  Not safely as a universal rule. A fine line may be limited to
-                  the coating, but appearance alone cannot show whether the
-                  substrate is moving. Record it, check the context and confirm
-                  the cause and stability before choosing a repair.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Why does the same crack return after painting?</dt>
-                <dd>
-                  Paint or filler may cover the visible line without addressing
-                  movement, moisture, failed adhesion or joint detailing beneath
-                  it. If the underlying condition remains active, the symptom
-                  can reappear.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Can Elite diagnose the cause from one photograph?</dt>
-                <dd>
-                  No. Photos are useful for initial context, but the wall,
-                  substrate, history and surrounding building conditions may
-                  need on-site or independent assessment before a repair scope
-                  is appropriate.
-                </dd>
-              </div>
+              {faqs.map((faq) => (
+                <div className="faq-list__item" key={faq.question}>
+                  <dt>{faq.question}</dt>
+                  <dd>{faq.answer}</dd>
+                </div>
+              ))}
             </dl>
 
             <h2 id="sources">Sources and further reading</h2>

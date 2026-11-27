@@ -6,8 +6,8 @@ import ContactSection from "@/components/ContactSection";
 import PageBanner from "@/components/PageBanner";
 import QuoteButton from "@/components/QuoteButton";
 import { CtaBand } from "@/components/CtaBand";
+import ServiceSections from "@/components/ServiceSections";
 import {
-  ContentSections,
   FaqList,
   ProjectLinks,
   SectionContents,
@@ -170,7 +170,7 @@ export default async function ServicePage({ params }: PageProps) {
       {/* The approach block and the project links above are both tinted, so
           the first long-form section starts plain and they alternate from
           there. */}
-      <ContentSections sections={sections} />
+      <ServiceSections sections={sections} />
 
       <section
         className={

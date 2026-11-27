@@ -1,3 +1,8 @@
+import type {
+  CalloutNote,
+  ChecklistItem,
+  GlossaryTerm,
+} from "@/content/blocks";
 import type { Service } from "@/content/services";
 
 export type Project = {
@@ -13,6 +18,15 @@ export type Project = {
   detailFocus: string;
   visibleResult: string;
   features: readonly string[];
+  /**
+   * What to settle before a similar job. Each point comes from a detail this
+   * case study already records; none adds a fact about the project itself.
+   */
+  confirm: readonly string[];
+  /** Terms this case study's own copy uses, in plain language. */
+  terms?: readonly GlossaryTerm[];
+  /** One short note on the finish or junction the photograph records. */
+  note?: CalloutNote;
   image: string;
   alt: string;
   imageCaption: string;
@@ -57,6 +71,17 @@ export const projects: readonly Project[] = [
       "Clean rectangular openings",
       "Contrast with dark roofline and trims",
     ],
+    confirm: [
+      "Which wall planes and levels are included, and where the render stops",
+      "The render finish and colour, agreed against a sample before it goes onto large wall planes",
+      "How the edges of each opening are to be finished",
+      "Where the render meets the roofline, the trims and the external stair",
+      "How the upper-level walls will be reached",
+    ],
+    note: {
+      title: "Large wall planes show everything",
+      body: "Large uninterrupted surfaces make changes in texture and colour easy to see. On a job like this, agree the finish against a sample first. The [render finishes guide](/resources/render-finishes-adelaide/) explains how each texture reads on a wall.",
+    },
     image: "/images/v2/project-two-storey-exterior-render.webp",
     alt: "Two-storey residence with a consistent light render finish across the exterior walls",
     imageCaption:
@@ -86,6 +111,30 @@ export const projects: readonly Project[] = [
       "Continuous light finish",
       "Transition from radius to straight parapet",
       "Junction beside a glazed opening",
+    ],
+    confirm: [
+      "The line of the curve, and where it runs into the straight parapet",
+      "That one finish is carried around the radius as a continuous surface",
+      "How the render meets the glazed opening beside it",
+      "How the surface will read in direct sunlight, which shows the transition clearly",
+      "How the upper wall will be reached",
+    ],
+    terms: [
+      {
+        term: "Radius",
+        definition:
+          "The curve of a rounded wall edge. Here it is the main visual feature.",
+      },
+      {
+        term: "Parapet",
+        definition:
+          "The upper part of a wall that continues above the roof edge. In this view the curve runs into a straight parapet line.",
+      },
+      {
+        term: "Glazed opening",
+        definition:
+          "A window or glass wall. The rendered edge in this photograph sits beside one.",
+      },
     ],
     image: "/images/v2/project-curved-render-detail.webp",
     alt: "Curved rendered upper wall with an even light finish",
@@ -117,6 +166,30 @@ export const projects: readonly Project[] = [
       "Clad garage projection",
       "Contrast with light exterior walls",
     ],
+    confirm: [
+      "Which areas are feature cladding and which keep the lighter wall finish",
+      "How the panel joints are set out around the window",
+      "How the cladding turns the outer corner and finishes under the eaves",
+      "The cladding product, profile and colour",
+      "What the wall behind the cladding is built from",
+    ],
+    terms: [
+      {
+        term: "Feature cladding",
+        definition:
+          "A smaller clad element set against another wall finish, such as the upper-level window surround and garage projection shown here.",
+      },
+      {
+        term: "Panel joints",
+        definition:
+          "The visible lines between cladding panels. Here the horizontal and vertical joints form a grid around the window.",
+      },
+      {
+        term: "Outer corner",
+        definition:
+          "Where two clad faces meet and project outwards. The dark finish continues around it in this view.",
+      },
+    ],
     image: "/images/v2/project-dark-feature-cladding.webp",
     alt: "Two-storey residence with dark panel cladding around the upper window and garage projection",
     imageCaption:
@@ -146,6 +219,30 @@ export const projects: readonly Project[] = [
       "Long horizontal parapet edge",
       "Defined outside corner",
       "Light finish beside dark glazing",
+    ],
+    confirm: [
+      "How deep the return is at the top and sides of the opening",
+      "How straight and continuous the parapet edge has to read",
+      "How the outside corner is formed",
+      "How the render meets the dark glazing",
+      "The finish, given that the detail is seen at close range",
+    ],
+    terms: [
+      {
+        term: "Return",
+        definition:
+          "The surface that turns in from the face of the wall to the window, also called a reveal. This one is deep and rendered.",
+      },
+      {
+        term: "Parapet",
+        definition:
+          "The upper part of a wall that continues above the roof edge. Its long horizontal edge runs above the opening in this view.",
+      },
+      {
+        term: "Outside corner",
+        definition:
+          "Where two wall faces meet and project outwards. The line of the corner is easy to read at close range.",
+      },
     ],
     image: "/images/v2/project-rendered-window-reveal.webp",
     alt: "Deep light-rendered reveal around a large dark-framed glazed opening",
@@ -177,12 +274,107 @@ export const projects: readonly Project[] = [
       "Long rendered ledge",
       "Junction above a stone-faced base",
     ],
+    confirm: [
+      "How the render meets the stone-faced base, and which trade finishes that junction",
+      "The profile of the moulded ledges and stepped bases, and how closely each repeat has to match",
+      "The texture to be carried across the columns and ledges",
+      "Which corners and profiles will be seen at close range",
+      "What else is still under way on site, and the order the work runs in",
+    ],
+    note: {
+      title: "This photograph shows work in progress",
+      body: "The columns and ledges carry their textured finish while wider ground works are still under way. On a similar job, agree the order of work around the rendered elements, and how they are protected, before it starts.",
+    },
     image: "/images/v2/project-rendered-columns-stone.webp",
     alt: "Textured rendered columns and ledges meeting a stone-faced base during exterior works",
     imageCaption:
       "In-progress exterior view of rendered columns and ledges above a stone-faced base.",
     width: 1600,
     height: 1067,
+  },
+];
+
+/**
+ * "How to brief a similar job" on the projects hub. It points at the planning
+ * page for the full checklist rather than restating it.
+ */
+export const projectBriefChecklist: readonly ChecklistItem[] = [
+  {
+    label: "Name the case study closest to your job",
+    detail:
+      "Tell us which photographed finish or detail you have in mind, and what is different about your building.",
+  },
+  {
+    label: "Describe the wall",
+    detail:
+      "What it is built from, roughly how large it is, and whether it has been coated or clad before.",
+  },
+  {
+    label: "Point out the details that matter",
+    detail:
+      "Curves, returns, corners, panel joints, or a junction with another material.",
+  },
+  {
+    label: "Say what is selected and what is still open",
+    detail: "The system, finish or colour, if one has been chosen.",
+  },
+  {
+    label: "Add the site basics",
+    detail:
+      "The suburb, the property type, your target dates and the site access. The [project planning page](/project-planning/) has the full checklist.",
+  },
+];
+
+/**
+ * Finish and junction terms the five case studies use. Each definition is
+ * plain language plus the case study where the detail is photographed; no
+ * entry describes work that is not already published above.
+ */
+export const projectGlossary: readonly GlossaryTerm[] = [
+  {
+    term: "Wall plane",
+    definition:
+      "One continuous flat face of a wall. Large uninterrupted planes make changes in texture and colour easy to see, as in the [two-storey exterior render](/projects/two-storey-exterior-render/) case study.",
+  },
+  {
+    term: "Radius",
+    definition:
+      "The curve of a rounded wall edge. The [curved rendered wall](/projects/curved-rendered-wall-detail/) case study shows one finish carried around it.",
+  },
+  {
+    term: "Parapet",
+    definition:
+      "The upper part of a wall that continues above the roof edge. Its long edge reads as a single line, which the [rendered window reveal](/projects/rendered-window-reveal-detail/) case study records.",
+  },
+  {
+    term: "Return or reveal",
+    definition:
+      "The surface that turns in from the face of the wall to a window or door. The same case study shows a deep rendered return around dark glazing.",
+  },
+  {
+    term: "Outside corner",
+    definition:
+      "Where two wall faces meet and project outwards. Both the line and the surface finish show at close range.",
+  },
+  {
+    term: "Feature cladding",
+    definition:
+      "A smaller clad element set against another wall finish. The [dark feature cladding](/projects/dark-feature-cladding/) case study shows it around an upper window and a garage projection.",
+  },
+  {
+    term: "Panel joints",
+    definition:
+      "The visible lines between cladding panels. In the same case study, horizontal and vertical joints form a grid around the window.",
+  },
+  {
+    term: "Junction",
+    definition:
+      "Where one material or finish meets another. The [rendered columns and stone junctions](/projects/rendered-column-and-stone-junctions/) case study shows render meeting a stone-faced base.",
+  },
+  {
+    term: "Textured finish",
+    definition:
+      "A render finish with a visible surface texture rather than a smooth trowelled face. The columns in that case study carry one.",
   },
 ];
 

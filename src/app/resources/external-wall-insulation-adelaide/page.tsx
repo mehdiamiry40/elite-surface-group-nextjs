@@ -2,10 +2,27 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  Checklist,
+  CompatibilityMatrix,
+  Glossary,
+  ProblemsTable,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/JsonLd";
+import {
+  ArticleSchema,
+  BreadcrumbSchema,
+  FAQPageSchema,
+} from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  enquiryChecklist,
+  faqs,
+  glossary,
+  siteLosses,
+  wallTypes,
+} from "@/content/guides/external-wall-insulation-adelaide";
 import { bannerImages } from "@/content/pages";
 import { externalWallInsulationGuide } from "@/content/resources";
 import { blurProps } from "@/lib/lcp-blur";
@@ -34,6 +51,7 @@ export default function ExternalWallInsulationGuidePage() {
         ]}
       />
       <ArticleSchema guide={externalWallInsulationGuide} />
+      <FAQPageSchema faqs={faqs} />
 
       <article>
         <PageBanner
@@ -55,6 +73,11 @@ export default function ExternalWallInsulationGuidePage() {
               <time dateTime={externalWallInsulationGuide.published}>
                 Published {externalWallInsulationGuide.publishedDisplay}
               </time>
+              {externalWallInsulationGuide.modifiedDisplay ? (
+                <time dateTime={externalWallInsulationGuide.modified}>
+                  Updated {externalWallInsulationGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{externalWallInsulationGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -97,6 +120,12 @@ export default function ExternalWallInsulationGuidePage() {
                 </li>
                 <li>
                   <a href="#moisture">The layer behind the insulation</a>
+                </li>
+                <li>
+                  <a href="#on-site">Where a wall loses its R-value</a>
+                </li>
+                <li>
+                  <a href="#have-ready">What to have ready</a>
                 </li>
                 <li>
                   <a href="#next-steps">Sensible next steps</a>
@@ -158,6 +187,8 @@ export default function ExternalWallInsulationGuidePage() {
               </a>
               .
             </p>
+            <h3>Terms used in this guide</h3>
+            <Glossary terms={glossary} />
           </div>
         </section>
 
@@ -223,6 +254,15 @@ export default function ExternalWallInsulationGuidePage() {
               condense within the build-up, which is a question for a suitably
               qualified professional and not a rule of thumb.
             </p>
+
+            <h3>The four walls side by side</h3>
+            <p>
+              The table puts each wall type beside where an upgrade usually
+              sits and what has to be confirmed before one is specified. It
+              is a starting point for the conversation with your designer and
+              assessor, not a specification.
+            </p>
+            <CompatibilityMatrix {...wallTypes} />
             <p className="article-source">
               Sources: YourHome,{" "}
               <a href="https://www.yourhome.gov.au/materials/brickwork-and-blockwork">
@@ -359,6 +399,35 @@ export default function ExternalWallInsulationGuidePage() {
           </div>
         </section>
 
+        <section className="section section--tint" aria-labelledby="on-site">
+          <div className="shell prose article-prose">
+            <h2 id="on-site">
+              Where a wall loses the R&#8209;value it was specified for
+            </h2>
+            <p>
+              Most of the gap between a specified wall and a built one opens
+              up on site. The table gathers the installation outcomes this
+              guide describes, with the question each one raises before
+              material is ordered.
+            </p>
+            <ProblemsTable {...siteLosses} />
+          </div>
+        </section>
+
+        <section className="section" aria-labelledby="have-ready">
+          <div className="shell prose article-prose">
+            <h2 id="have-ready">What to have ready before a wall enquiry</h2>
+            <p>
+              An installation scope follows from the wall, its location and
+              the documents behind it. These are the details worth gathering
+              first; the{" "}
+              <Link href="/project-planning/">project planning guide</Link>{" "}
+              covers the wider information that helps with any enquiry.
+            </p>
+            <Checklist items={enquiryChecklist} />
+          </div>
+        </section>
+
         <section className="section section--tint" aria-labelledby="next-steps">
           <div className="shell prose article-prose">
             <h2 id="next-steps">Sensible next steps</h2>
@@ -422,48 +491,12 @@ export default function ExternalWallInsulationGuidePage() {
               className="faq-list"
               aria-labelledby="external-wall-insulation-faqs"
             >
-              <div className="faq-list__item">
-                <dt>
-                  Can insulation be added to an existing brick veneer wall
-                  without opening it up?
-                </dt>
-                <dd>
-                  Sometimes, and it depends entirely on what is in the cavity
-                  and what the wall is doing with moisture. The cavity in a
-                  brick veneer wall is there partly to drain, so filling it is
-                  not a neutral act. Have the wall assessed before assuming a
-                  blow-in product is suitable for it.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Does render or cladding add much insulation value?</dt>
-                <dd>
-                  On its own, very little. A finish is a thin layer with modest
-                  thermal resistance. What can matter is what goes on with
-                  it&mdash;a continuous insulating board behind the finish, or a
-                  properly formed and maintained cavity behind cladding.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Does my renovation have to meet the 7-star standard?</dt>
-                <dd>
-                  The seven-star requirement PlanSA describes applies to newly
-                  constructed homes from 1&nbsp;October 2024. How the
-                  requirements apply to alterations and additions depends on
-                  the work and is a question for your designer and the relevant
-                  authority, not something to read off a website.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Is more insulation always better?</dt>
-                <dd>
-                  Past a point the wall stops being the constraint. Thermal
-                  bridging, air leakage, glazing and the sealing of the
-                  building all cap what another layer of batt returns, and
-                  adding insulation without resolving the vapour and drainage
-                  path can create a problem the old wall did not have.
-                </dd>
-              </div>
+              {faqs.map((faq) => (
+                <div className="faq-list__item" key={faq.question}>
+                  <dt>{faq.question}</dt>
+                  <dd>{faq.answer}</dd>
+                </div>
+              ))}
             </dl>
 
             <h2 id="sources">Sources and further reading</h2>

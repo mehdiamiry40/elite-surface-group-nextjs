@@ -26,14 +26,26 @@ const RELEASE_DATES = {
    * reorganised around them.
    */
   serviceAndRegionContentBuild: "2026-11-25",
+  /**
+   * 27 November multi-format build, first run: comparison tables, decision
+   * guides, checklists, numbered workflows and glossaries added to the home,
+   * about, contact, services hub, project planning and project pages.
+   */
+  multiFormatContentBuild: "2026-11-27",
 } as const;
 
-/** Service pages whose copy changed after the shared content release. */
+/**
+ * Service pages whose copy changed after the shared content release.
+ *
+ * All four were rewritten at length on 25 November, then gained comparison
+ * tables, numbered workflows, problem tables, checklists, glossaries and
+ * further FAQs in the 27 November multi-format build.
+ */
 const SERVICE_LAST_MODIFIED: Partial<Record<Service["slug"], IsoDate>> = {
-  cladding: RELEASE_DATES.serviceAndRegionContentBuild,
-  render: RELEASE_DATES.serviceAndRegionContentBuild,
-  hebel: RELEASE_DATES.serviceAndRegionContentBuild,
-  walling: RELEASE_DATES.serviceAndRegionContentBuild,
+  cladding: RELEASE_DATES.multiFormatContentBuild,
+  render: RELEASE_DATES.multiFormatContentBuild,
+  hebel: RELEASE_DATES.multiFormatContentBuild,
+  walling: RELEASE_DATES.multiFormatContentBuild,
 };
 
 /** Keep an aggregate page current when any content it renders becomes newer. */
@@ -48,7 +60,7 @@ function latestIsoDate(
 }
 
 const HOME_LAST_MODIFIED = latestIsoDate(
-  RELEASE_DATES.homeGuideCuration,
+  RELEASE_DATES.multiFormatContentBuild,
   featuredResourceGuides.map((guide) => guide.modified),
 );
 
@@ -56,6 +68,14 @@ const RESOURCE_AGGREGATE_LAST_MODIFIED = latestIsoDate(
   RELEASE_DATES.verifiedContentRelease,
   resourceGuides.map((guide) => guide.modified),
 );
+
+/**
+ * Service-area hub and all four area pages. Their copy last changed in the
+ * 27 November multi-format build, which added the area comparison and site
+ * checklist to the hub and condition tables, problem tables, checklists, an
+ * access workflow and further FAQs to the area pages.
+ */
+const LOCATION_LAST_MODIFIED: IsoDate = RELEASE_DATES.multiFormatContentBuild;
 
 /**
  * Canonical public route inventory.
@@ -75,8 +95,8 @@ const RESOURCE_AGGREGATE_LAST_MODIFIED = latestIsoDate(
  */
 export const publicRouteRecords = [
   publicRoute("/", HOME_LAST_MODIFIED),
-  publicRoute("/about/", RELEASE_DATES.verifiedContentRelease),
-  publicRoute("/services/", RELEASE_DATES.initialServiceHub),
+  publicRoute("/about/", RELEASE_DATES.multiFormatContentBuild),
+  publicRoute("/services/", RELEASE_DATES.multiFormatContentBuild),
   ...services.map((service) =>
     publicRoute(
       `/${service.slug}/`,
@@ -84,33 +104,33 @@ export const publicRouteRecords = [
         RELEASE_DATES.verifiedContentRelease,
     ),
   ),
-  publicRoute("/projects/", RELEASE_DATES.verifiedContentRelease),
+  publicRoute("/projects/", RELEASE_DATES.multiFormatContentBuild),
   ...projects.map((project) =>
     publicRoute(
       `/projects/${project.slug}/`,
-      RELEASE_DATES.verifiedContentRelease,
+      RELEASE_DATES.multiFormatContentBuild,
     ),
   ),
-  publicRoute("/locations/", RELEASE_DATES.serviceAndRegionContentBuild),
+  publicRoute("/locations/", LOCATION_LAST_MODIFIED),
   ...locationPages.map((location) =>
     publicRoute(
       `/locations/${location.slug}/`,
       // A page that lists every guide goes stale when a guide is published; a
       // region page with a hand-picked guide list only changes with its copy.
       location.guides
-        ? RELEASE_DATES.serviceAndRegionContentBuild
+        ? LOCATION_LAST_MODIFIED
         : latestIsoDate(
-            RELEASE_DATES.serviceAndRegionContentBuild,
+            LOCATION_LAST_MODIFIED,
             resourceGuides.map((guide) => guide.modified),
           ),
     ),
   ),
-  publicRoute("/project-planning/", RELEASE_DATES.verifiedContentRelease),
+  publicRoute("/project-planning/", RELEASE_DATES.multiFormatContentBuild),
   publicRoute("/resources/", RESOURCE_AGGREGATE_LAST_MODIFIED),
   ...resourceGuides.map((guide) =>
     publicRoute(`/resources/${guide.slug}/`, guide.modified),
   ),
-  publicRoute("/contact-us/", RELEASE_DATES.verifiedContentRelease),
+  publicRoute("/contact-us/", RELEASE_DATES.multiFormatContentBuild),
   publicRoute("/privacy-policy/", privacyPolicyUpdated),
   publicRoute("/terms-of-service/", RELEASE_DATES.verifiedContentRelease),
 ] satisfies readonly PublicRouteRecord[];

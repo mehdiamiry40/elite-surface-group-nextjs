@@ -2,10 +2,25 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  Checklist,
+  Glossary,
+  ProblemsTable,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/JsonLd";
+import {
+  ArticleSchema,
+  BreadcrumbSchema,
+  FAQPageSchema,
+} from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  dampSigns,
+  faqs,
+  finishReadiness,
+  glossary,
+} from "@/content/guides/salt-damp-adelaide";
 import { bannerImages } from "@/content/pages";
 import { saltDampGuide } from "@/content/resources";
 import { blurProps } from "@/lib/lcp-blur";
@@ -34,6 +49,7 @@ export default function SaltDampGuidePage() {
         ]}
       />
       <ArticleSchema guide={saltDampGuide} />
+      <FAQPageSchema faqs={faqs} />
 
       <article>
         <PageBanner
@@ -55,6 +71,11 @@ export default function SaltDampGuidePage() {
               <time dateTime={saltDampGuide.published}>
                 Published {saltDampGuide.publishedDisplay}
               </time>
+              {saltDampGuide.modifiedDisplay ? (
+                <time dateTime={saltDampGuide.modified}>
+                  Updated {saltDampGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{saltDampGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -90,6 +111,9 @@ export default function SaltDampGuidePage() {
                   <a href="#recognise">What it looks like</a>
                 </li>
                 <li>
+                  <a href="#damp-signs">Signs, other causes and next steps</a>
+                </li>
+                <li>
                   <a href="#why-render-fails">
                     Why render over salt damp fails
                   </a>
@@ -99,6 +123,11 @@ export default function SaltDampGuidePage() {
                 </li>
                 <li>
                   <a href="#what-helps">What actually helps</a>
+                </li>
+                <li>
+                  <a href="#finish-readiness">
+                    What to have ready before a finish
+                  </a>
                 </li>
                 <li>
                   <a href="#next-steps">Sensible next steps</a>
@@ -149,6 +178,14 @@ export default function SaltDampGuidePage() {
               </a>
               .
             </p>
+
+            <h3 id="damp-signs">Signs, other causes and what to do next</h3>
+            <p>
+              The table sets each sign beside what it can point to and the
+              step that follows. It helps you describe the wall to an
+              assessor; it is not a diagnosis.
+            </p>
+            <ProblemsTable {...dampSigns} />
           </div>
         </section>
 
@@ -193,6 +230,9 @@ export default function SaltDampGuidePage() {
               </a>
               .
             </p>
+
+            <h3>Terms used in this guide</h3>
+            <Glossary terms={glossary} />
           </div>
         </section>
 
@@ -306,6 +346,16 @@ export default function SaltDampGuidePage() {
               </a>
               .
             </p>
+
+            <h3 id="finish-readiness">
+              What to have ready before a finish is discussed
+            </h3>
+            <p>
+              Once the source has been dealt with and the wall has dried,
+              these are the details that let a render conversation start from
+              the remediation rather than from the symptom.
+            </p>
+            <Checklist items={finishReadiness} />
           </div>
         </section>
 
@@ -385,34 +435,12 @@ export default function SaltDampGuidePage() {
           <div className="shell prose article-prose">
             <h2 id="salt-damp-faqs">Common questions</h2>
             <dl className="faq-list" aria-labelledby="salt-damp-faqs">
-              <div className="faq-list__item">
-                <dt>Will rendering the wall stop the damp?</dt>
-                <dd>
-                  No. A coating changes where the moisture leaves the wall, not
-                  whether it arrives. On a wall without a working damp-proof
-                  course, a dense render commonly pushes the problem higher and
-                  then fails along the same band.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Do we have to remove the existing render?</dt>
-                <dd>
-                  Sometimes, and it depends on what is behind it and what the
-                  remediation design calls for. On a heritage place, removal
-                  may itself need approval. That decision belongs in the
-                  assessment, not in a rendering quote.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>How long before the wall can be finished?</dt>
-                <dd>
-                  A wall that has been wet for years does not dry in a
-                  fortnight, and the drying time depends on the thickness, the
-                  masonry, the salt load and the weather. The specialist doing
-                  the remediation should set the interval; treat a fixed number
-                  offered without an inspection as a warning sign.
-                </dd>
-              </div>
+              {faqs.map((faq) => (
+                <div className="faq-list__item" key={faq.question}>
+                  <dt>{faq.question}</dt>
+                  <dd>{faq.answer}</dd>
+                </div>
+              ))}
             </dl>
 
             <h2 id="sources">Sources and further reading</h2>

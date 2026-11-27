@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  ComparisonTable,
+  DecisionGuide,
+  Glossary,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
 import {
   ArticleSchema,
@@ -10,6 +15,11 @@ import {
 } from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  comparison,
+  decisions,
+  glossary,
+} from "@/content/guides/acrylic-render-vs-cement-render-adelaide";
 import { bannerImages } from "@/content/pages";
 import { acrylicVsCementRenderGuide } from "@/content/resources";
 import type { ServiceFaq } from "@/content/services";
@@ -155,6 +165,9 @@ export default function AcrylicVsCementRenderGuidePage() {
                   <a href="#upkeep">Upkeep, repair and recoating</a>
                 </li>
                 <li>
+                  <a href="#which-system">Which system suits which wall</a>
+                </li>
+                <li>
                   <a href="#next-steps">Sensible next steps</a>
                 </li>
                 <li>
@@ -177,73 +190,7 @@ export default function AcrylicVsCementRenderGuidePage() {
               manufacturer&rsquo;s technical data sheet decides what a
               particular system can do on a particular wall.
             </p>
-            <dl className="faq-list professional-list">
-              <div className="faq-list__item">
-                <dt>What it is</dt>
-                <dd>
-                  Cement render is cement, sand and water, mixed and applied
-                  over masonry in one or more coats. Acrylic render is a
-                  pre-mixed, polymer-based coating, usually applied as one
-                  layer of a coordinated system.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Movement tolerance</dt>
-                <dd>
-                  Cement render sets hard and rigid, so it is more likely to
-                  show hairline cracking when the wall behind it moves.
-                  Acrylic render has some flexibility and copes better with
-                  minor movement. Neither bridges structural cracking or
-                  stands in for a movement joint.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Substrates it suits</dt>
-                <dd>
-                  Cement render was developed for bare masonry such as brick,
-                  block and stone. Acrylic systems are formulated for a wider
-                  range of prepared surfaces, including fibre cement sheeting
-                  and some previously painted walls, where the system
-                  documents allow it.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Application and curing</dt>
-                <dd>
-                  Cement render is mixed on site and has to cure, so the mix,
-                  the coat thickness and the curing conditions all shape the
-                  result. Acrylic render arrives pre-mixed and dries rather
-                  than cures, inside the temperature and weather limits on its
-                  data sheet.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Finish and colour</dt>
-                <dd>
-                  A cement render is commonly finished with a separate texture
-                  coat or paint system over the top. Acrylic texture coats
-                  come in grades from smooth to coarse and can carry the
-                  colour in the coating itself.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Upkeep</dt>
-                <dd>
-                  Both need periodic washing and eventual recoating, on a
-                  cycle set by the system, the colour and the exposure rather
-                  than by the render type alone.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Used together</dt>
-                <dd>
-                  Often. A cementitious base coat levelled over masonry with a
-                  compatible acrylic texture coat on top is a common
-                  documented combination, so the real question is usually
-                  which system, not which material.
-                </dd>
-              </div>
-            </dl>
+            <ComparisonTable {...comparison} />
             <p>
               The texture itself is a separate decision that sits on top of
               the system. Our guide to{" "}
@@ -258,6 +205,8 @@ export default function AcrylicVsCementRenderGuidePage() {
               explains why preparation and access usually move a quote more
               than the product does.
             </p>
+            <h3>Terms used in this guide</h3>
+            <Glossary terms={glossary} />
           </div>
         </section>
 
@@ -529,7 +478,20 @@ export default function AcrylicVsCementRenderGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="next-steps">
+        <section className="section" aria-labelledby="which-system">
+          <div className="shell prose article-prose">
+            <h2 id="which-system">Which system suits which wall</h2>
+            <p>
+              The wall usually narrows the choice before the product does.
+              Find the situation closest to yours: the middle column is what
+              usually suits it, and the last column is what still has to be
+              confirmed before a system is specified.
+            </p>
+            <DecisionGuide {...decisions} />
+          </div>
+        </section>
+
+        <section className="section section--tint" aria-labelledby="next-steps">
           <div className="shell prose article-prose">
             <h2 id="next-steps">Sensible next steps</h2>
             <ol className="steps">
@@ -598,7 +560,7 @@ export default function AcrylicVsCementRenderGuidePage() {
           </div>
         </section>
 
-        <section className="section section--tint" aria-labelledby="who-to-call">
+        <section className="section" aria-labelledby="who-to-call">
           <div className="shell prose article-prose">
             <h2 id="who-to-call">Who should be involved</h2>
             <dl className="faq-list professional-list">
@@ -640,7 +602,7 @@ export default function AcrylicVsCementRenderGuidePage() {
 
         <section
           id="faqs-and-sources"
-          className="section"
+          className="section section--tint"
           aria-labelledby="render-comparison-faqs"
         >
           <div className="shell prose article-prose">

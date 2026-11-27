@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  Checklist,
+  ComparisonTable,
+  CompatibilityMatrix,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
 import {
   ArticleSchema,
@@ -10,6 +15,11 @@ import {
 } from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  junctionDecisions,
+  quoteChecklist,
+  substrates,
+} from "@/content/guides/internal-rendering-adelaide";
 import { bannerImages } from "@/content/pages";
 import { internalRenderingGuide } from "@/content/resources";
 import type { ServiceFaq } from "@/content/services";
@@ -90,6 +100,11 @@ export default function InternalRenderingGuidePage() {
               <time dateTime={internalRenderingGuide.published}>
                 Published {internalRenderingGuide.publishedDisplay}
               </time>
+              {internalRenderingGuide.modifiedDisplay ? (
+                <time dateTime={internalRenderingGuide.modified}>
+                  Updated {internalRenderingGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{internalRenderingGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -283,6 +298,14 @@ export default function InternalRenderingGuidePage() {
               explains why the cause has to be assessed and dealt with first. We
               apply finishes; we do not diagnose or treat damp.
             </p>
+
+            <h3>Internal substrates at a glance</h3>
+            <p>
+              The table gathers those substrates, and two that come up
+              elsewhere in this guide, into one view: what each usually needs
+              and what to confirm before a finish is specified.
+            </p>
+            <CompatibilityMatrix {...substrates} />
             <p className="article-source">
               Sources:{" "}
               <a href="https://rockcote.com.au/resources/choosing-the-best-paint-for-rendered-homes/">
@@ -440,6 +463,14 @@ export default function InternalRenderingGuidePage() {
               in place before rendering, so the render is worked neatly around
               them once instead of being cut and patched afterwards.
             </p>
+
+            <h3>Junction decisions at a glance</h3>
+            <p>
+              Each of those meetings comes down to a decision to make before
+              work starts. The table lists what to decide at each junction and
+              why it matters.
+            </p>
+            <ComparisonTable {...junctionDecisions} />
             <p className="article-source">
               Sources:{" "}
               <a href="https://rockcote.com.au/resources/structural-movement/">
@@ -506,18 +537,7 @@ export default function InternalRenderingGuidePage() {
               You do not need every decision made before asking. A useful first
               conversation covers:
             </p>
-            <TickList
-              items={[
-                "The suburb, the type of property and whether it will be occupied during the work",
-                "Which walls or rooms are involved, with drawings or approximate dimensions if you have them",
-                "What each wall is built from and what is on it now",
-                "The finish you have in mind, and any system already specified",
-                "How you want the render to meet skirtings, reveals and ceilings",
-                "The stage of the build or renovation and which trades come before and after",
-                "Wall heights, stairwells and anything that limits access",
-                "Any history of cracking, patching or damp in those walls",
-              ]}
-            />
+            <Checklist items={quoteChecklist} />
             <p>
               The <Link href="/project-planning/">project planning guide</Link>{" "}
               lists what helps with any enquiry, and our guide to{" "}

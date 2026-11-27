@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  DecisionGuide,
+  Glossary,
+  ProblemsTable,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
 import {
   ArticleSchema,
@@ -10,6 +15,11 @@ import {
 } from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  glossary,
+  inspectionFindings,
+  scopeDecisions,
+} from "@/content/guides/render-repair-adelaide";
 import { bannerImages } from "@/content/pages";
 import { renderRepairGuide } from "@/content/resources";
 import type { ServiceFaq } from "@/content/services";
@@ -90,6 +100,11 @@ export default function RenderRepairGuidePage() {
               <time dateTime={renderRepairGuide.published}>
                 Published {renderRepairGuide.publishedDisplay}
               </time>
+              {renderRepairGuide.modifiedDisplay ? (
+                <time dateTime={renderRepairGuide.modified}>
+                  Updated {renderRepairGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{renderRepairGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -122,10 +137,16 @@ export default function RenderRepairGuidePage() {
                   <a href="#scopes">The three repair scopes</a>
                 </li>
                 <li>
+                  <a href="#scope-guide">Which scope fits which wall</a>
+                </li>
+                <li>
                   <a href="#document">What to document first</a>
                 </li>
                 <li>
                   <a href="#findings">What changes the scope</a>
+                </li>
+                <li>
+                  <a href="#findings-table">Findings at a glance</a>
                 </li>
                 <li>
                   <a href="#causes">When the cause comes first</a>
@@ -209,6 +230,14 @@ export default function RenderRepairGuidePage() {
                 "Every scope: the cause of the damage understood and stopped before the finish is rebuilt",
               ]}
             />
+
+            <h3 id="scope-guide">Which scope fits which wall</h3>
+            <p>
+              Read across from what the wall shows to the scope that usually
+              fits it. The last column is what an inspection still has to
+              settle before that scope is priced.
+            </p>
+            <DecisionGuide {...scopeDecisions} />
           </div>
         </section>
 
@@ -321,6 +350,17 @@ export default function RenderRepairGuidePage() {
               </a>
               .
             </p>
+
+            <h3 id="findings-table">Findings and next steps at a glance</h3>
+            <p>
+              The table gathers those findings, and the simpler ones either
+              side of them, with the step each one calls for. A finding sorts
+              the conversation; it does not confirm a cause.
+            </p>
+            <ProblemsTable {...inspectionFindings} />
+
+            <h3>Terms used in this guide</h3>
+            <Glossary terms={glossary} />
           </div>
         </section>
 

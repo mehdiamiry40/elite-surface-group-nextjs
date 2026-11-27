@@ -2,11 +2,17 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PageBanner from "@/components/PageBanner";
+import {
+  Checklist,
+  ComparisonTable,
+  CompatibilityMatrix,
+  NumberedSteps,
+  ProblemsTable,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
 import ContactSection from "@/components/ContactSection";
 import RichText from "@/components/RichText";
 import {
-  ContentSections,
   FaqList,
   ProjectLinks,
   SectionContents,
@@ -17,6 +23,8 @@ import { bannerImages } from "@/content/pages";
 import {
   getLocation,
   locationPages,
+  type LocationBlock,
+  type LocationSection,
 } from "@/content/locations";
 import { projects } from "@/content/projects";
 import { resourceGuides } from "@/content/resources";
@@ -65,6 +73,91 @@ const guidesByService = services
   }))
   .filter((group) => group.guides.length > 0);
 
+/** One multi-format block, on the shared content-block components. */
+function LocationBlockView({ block }: { block: LocationBlock }) {
+  switch (block.kind) {
+    case "comparison":
+      return <ComparisonTable {...block.table} />;
+    case "conditions":
+      return (
+        <CompatibilityMatrix
+          caption={block.caption}
+          columns={block.columns}
+          rows={block.rows}
+        />
+      );
+    case "problems":
+      return <ProblemsTable caption={block.caption} rows={block.rows} />;
+    case "checklist":
+      return <Checklist items={block.items} />;
+    case "steps":
+      return <NumberedSteps steps={block.steps} />;
+  }
+}
+
+function isWide(block: LocationBlock) {
+  return block.kind === "comparison" && block.wide === true;
+}
+
+/**
+ * The long-form location sections, one band per heading.
+ *
+ * Same markup and band rhythm as `ContentSections`, with each section's
+ * tables, checklists and steps set between its paragraphs and its closing
+ * copy. A table marked `wide` leaves the reading column for the wider shell
+ * and so closes its section.
+ */
+function LocationSections({
+  sections,
+}: {
+  sections: readonly LocationSection[];
+}) {
+  return (
+    <>
+      {sections.map((section, index) => {
+        const blocks = section.blocks ?? [];
+        const wideBlocks = blocks.filter(isWide);
+
+        return (
+          <section
+            key={section.id}
+            // The intro band above is plain, so the first of these is tinted.
+            className={index % 2 === 0 ? "section section--tint" : "section"}
+            aria-labelledby={section.id}
+          >
+            <div className="shell prose">
+              <h2 id={section.id}>{section.heading}</h2>
+              {section.paragraphs.map((paragraph) => (
+                <p key={paragraph}>
+                  <RichText text={paragraph} />
+                </p>
+              ))}
+              {section.bullets ? <TickList items={section.bullets} /> : null}
+              {blocks
+                .filter((block) => !isWide(block))
+                .map((block, blockIndex) => (
+                  <LocationBlockView key={blockIndex} block={block} />
+                ))}
+              {section.closing?.map((paragraph) => (
+                <p key={paragraph}>
+                  <RichText text={paragraph} />
+                </p>
+              ))}
+            </div>
+            {wideBlocks.length > 0 ? (
+              <div className="shell block-wide">
+                {wideBlocks.map((block, blockIndex) => (
+                  <LocationBlockView key={blockIndex} block={block} />
+                ))}
+              </div>
+            ) : null}
+          </section>
+        );
+      })}
+    </>
+  );
+}
+
 export default async function LocationPage({ params }: PageProps) {
   const { slug } = await params;
   const location = getLocation(slug);
@@ -77,7 +170,7 @@ export default async function LocationPage({ params }: PageProps) {
     (candidate) => candidate.slug !== location.slug,
   );
   // The intro band is plain, so the first long-form section is tinted and the
-  // bands alternate from there.
+  // bands alternate from there (see `LocationSections`).
   const guidesTinted = location.sections.length % 2 === 0;
 
   return (
@@ -134,7 +227,7 @@ export default async function LocationPage({ params }: PageProps) {
         </div>
       </section>
 
-      <ContentSections sections={location.sections} startTinted />
+      <LocationSections sections={location.sections} />
 
       <section
         className={guidesTinted ? "section section--tint" : "section"}

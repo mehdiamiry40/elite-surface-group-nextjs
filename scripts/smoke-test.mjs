@@ -393,6 +393,17 @@ const latestResourceModified = [...resourceModifiedDates.values()].reduce(
   (latest, candidate) => (candidate > latest ? candidate : latest),
   "0000-00-00",
 );
+// 27 November: the service-area hub gained an area comparison and a site
+// checklist, and all four area pages gained condition tables, problem tables,
+// checklists and further FAQs. The locations have their own constant so the
+// service pages can carry a different date.
+const LOCATION_MULTI_FORMAT_BUILD = "2026-11-27";
+// The metropolitan Adelaide page also lists every guide, so its date is the
+// later of its own copy date and the newest guide.
+const adelaideLocationModified =
+  latestResourceModified > LOCATION_MULTI_FORMAT_BUILD
+    ? latestResourceModified
+    : LOCATION_MULTI_FORMAT_BUILD;
 // Only the metropolitan Adelaide page lists every guide. The region pages
 // carry a hand-picked guide list, so a newly published guide does not change
 // them and their date stays with their own copy.
@@ -401,41 +412,48 @@ const REGION_LOCATION_SLUGS = [
   "coastal-adelaide",
   "adelaide-hills",
 ];
-const SERVICE_AND_REGION_CONTENT_BUILD = "2026-11-25";
+// 27 November: comparison tables, decision guides, checklists, numbered
+// workflows and glossaries were added to the home, company and project pages.
+const MULTI_FORMAT_CONTENT_BUILD = "2026-11-27";
 const resourceAggregatePaths = [
   "/resources/",
   ...locationSlugs
     .filter((slug) => !REGION_LOCATION_SLUGS.includes(slug))
     .map((slug) => `/locations/${slug}/`),
 ];
+// The four service pages carry their own date, separate from the region
+// pages that shared the 25 November build with them.
+const SERVICE_PAGES_CONTENT_BUILD = "2026-11-27";
 const expectedSitemapDates = new Map([
-  // Home now renders a curated subset, so unrelated guide changes need not
-  // change its editorial date. This release shortened that selection.
-  ["/", "2026-09-05"],
-  ["/about/", "2026-08-13"],
-  ["/services/", "2026-08-10"],
-  // All four service pages were rewritten at length on 25 November.
-  ...serviceSlugs.map((slug) => [
-    `/${slug}/`,
-    SERVICE_AND_REGION_CONTENT_BUILD,
+  // Home renders a curated subset of guides, so unrelated guide changes need
+  // not change its editorial date. Its own copy last changed on 27 November.
+  ["/", MULTI_FORMAT_CONTENT_BUILD],
+  ["/about/", MULTI_FORMAT_CONTENT_BUILD],
+  ["/services/", MULTI_FORMAT_CONTENT_BUILD],
+  // All four service pages were rewritten at length on 25 November, then
+  // gained tables, workflows, checklists and glossaries on 27 November.
+  ...serviceSlugs.map((slug) => [`/${slug}/`, SERVICE_PAGES_CONTENT_BUILD]),
+  ["/projects/", MULTI_FORMAT_CONTENT_BUILD],
+  ...projectSlugs.map((slug) => [
+    `/projects/${slug}/`,
+    MULTI_FORMAT_CONTENT_BUILD,
   ]),
-  ["/projects/", "2026-08-13"],
-  ...projectSlugs.map((slug) => [`/projects/${slug}/`, "2026-08-13"]),
-  // The hub was reorganised around the three region pages on 25 November.
-  ["/locations/", SERVICE_AND_REGION_CONTENT_BUILD],
+  // The hub and the area pages gained their tables and checklists on
+  // 27 November.
+  ["/locations/", LOCATION_MULTI_FORMAT_BUILD],
   ...locationSlugs.map((slug) => [
     `/locations/${slug}/`,
     REGION_LOCATION_SLUGS.includes(slug)
-      ? SERVICE_AND_REGION_CONTENT_BUILD
-      : latestResourceModified,
+      ? LOCATION_MULTI_FORMAT_BUILD
+      : adelaideLocationModified,
   ]),
-  ["/project-planning/", "2026-08-13"],
+  ["/project-planning/", MULTI_FORMAT_CONTENT_BUILD],
   ["/resources/", latestResourceModified],
   ...resourceSlugs.map((slug) => [
     `/resources/${slug}/`,
     resourceModifiedDates.get(slug) ?? "",
   ]),
-  ["/contact-us/", "2026-08-13"],
+  ["/contact-us/", MULTI_FORMAT_CONTENT_BUILD],
   ["/privacy-policy/", "2026-09-05"],
   ["/terms-of-service/", "2026-08-13"],
 ]);
@@ -468,9 +486,15 @@ check(
       route === "/"
         ? "https://elitesurfacegroup.com.au/"
         : `https://elitesurfacegroup.com.au${route}`;
-    return sitemapLastModified.get(loc) === latestResourceModified;
+    // An aggregate page is never older than the newest guide it lists. The
+    // Adelaide page is newer than that only while its own copy is.
+    const expected = route.startsWith("/locations/")
+      ? adelaideLocationModified
+      : latestResourceModified;
+    const actual = sitemapLastModified.get(loc) ?? "";
+    return actual === expected && actual >= latestResourceModified;
   }),
-  `expected ${latestResourceModified} for ${resourceAggregatePaths.join(", ")}`,
+  `expected ${latestResourceModified} for /resources/ and ${adelaideLocationModified} for the Adelaide page (${resourceAggregatePaths.join(", ")})`,
 );
 check(
   "sitemap uses truthful dates for every route",
@@ -1703,7 +1727,8 @@ check(
     renderCrackingJsonLd?.mainEntityOfPage?.["@id"] ===
       "https://elitesurfacegroup.com.au/resources/render-cracking-adelaide/" &&
     renderCrackingJsonLd?.datePublished === "2026-08-13" &&
-    renderCrackingJsonLd?.dateModified === "2026-08-13" &&
+    renderCrackingJsonLd?.dateModified ===
+      resourceModifiedDates.get("render-cracking-adelaide") &&
     renderCrackingJsonLd?.image?.contentUrl ===
       "https://elitesurfacegroup.com.au/images/v2/resource-render-cracking-adelaide.webp" &&
     renderCrackingJsonLd?.image?.width === 1536 &&
@@ -2006,7 +2031,8 @@ check(
     hebelBoundaryWallsJsonLd?.mainEntityOfPage?.["@id"] ===
       "https://elitesurfacegroup.com.au/resources/hebel-boundary-walls-adelaide/" &&
     hebelBoundaryWallsJsonLd?.datePublished === "2026-08-13" &&
-    hebelBoundaryWallsJsonLd?.dateModified === "2026-08-31" &&
+    hebelBoundaryWallsJsonLd?.dateModified ===
+      resourceModifiedDates.get("hebel-boundary-walls-adelaide") &&
     hebelBoundaryWallsJsonLd?.image?.contentUrl ===
       "https://elitesurfacegroup.com.au/images/v2/resource-hebel-boundary-walls-adelaide.webp" &&
     hebelBoundaryWallsJsonLd?.image?.width === 1536 &&
@@ -2087,7 +2113,8 @@ check(
     renderingPaintedBrickJsonLd?.mainEntityOfPage?.["@id"] ===
       "https://elitesurfacegroup.com.au/resources/rendering-over-painted-brick-adelaide/" &&
     renderingPaintedBrickJsonLd?.datePublished === "2026-08-13" &&
-    renderingPaintedBrickJsonLd?.dateModified === "2026-08-13" &&
+    renderingPaintedBrickJsonLd?.dateModified ===
+      resourceModifiedDates.get("rendering-over-painted-brick-adelaide") &&
     renderingPaintedBrickJsonLd?.image?.contentUrl ===
       "https://elitesurfacegroup.com.au/images/v2/resource-rendering-painted-brick.webp" &&
     renderingPaintedBrickJsonLd?.image?.width === 1536 &&

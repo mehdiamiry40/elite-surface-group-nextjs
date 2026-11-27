@@ -2,10 +2,25 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import {
+  Checklist,
+  Glossary,
+  ProblemsTable,
+} from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/JsonLd";
+import {
+  ArticleSchema,
+  BreadcrumbSchema,
+  FAQPageSchema,
+} from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  beforeCleaning,
+  faqs,
+  findings,
+  glossary,
+} from "@/content/guides/cladding-maintenance-coastal-adelaide";
 import { bannerImages } from "@/content/pages";
 import { claddingMaintenanceGuide } from "@/content/resources";
 import { blurProps } from "@/lib/lcp-blur";
@@ -37,6 +52,7 @@ export default function CoastalCladdingMaintenanceGuidePage() {
         ]}
       />
       <ArticleSchema guide={claddingMaintenanceGuide} />
+      <FAQPageSchema faqs={faqs} />
 
       <article>
         <PageBanner
@@ -58,6 +74,11 @@ export default function CoastalCladdingMaintenanceGuidePage() {
               <time dateTime={claddingMaintenanceGuide.published}>
                 Published {claddingMaintenanceGuide.publishedDisplay}
               </time>
+              {claddingMaintenanceGuide.modifiedDisplay ? (
+                <time dateTime={claddingMaintenanceGuide.modified}>
+                  Updated {claddingMaintenanceGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{claddingMaintenanceGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -90,7 +111,13 @@ export default function CoastalCladdingMaintenanceGuidePage() {
                   <a href="#identify-system">Identify the system</a>
                 </li>
                 <li>
+                  <a href="#before-cleaning">Before you clean</a>
+                </li>
+                <li>
                   <a href="#inspection-checklist">Ground-level checks</a>
+                </li>
+                <li>
+                  <a href="#findings">What a finding can mean</a>
                 </li>
                 <li>
                   <a href="#maker-guidance">Manufacturer examples</a>
@@ -143,6 +170,8 @@ export default function CoastalCladdingMaintenanceGuidePage() {
               </a>
               .
             </p>
+            <h3>Terms used in this guide</h3>
+            <Glossary terms={glossary} />
           </div>
         </section>
 
@@ -197,8 +226,21 @@ export default function CoastalCladdingMaintenanceGuidePage() {
 
         <section
           className="section section--tint"
-          aria-labelledby="inspection-checklist"
+          aria-labelledby="before-cleaning"
         >
+          <div className="shell prose article-prose">
+            <h2 id="before-cleaning">What to confirm before you clean</h2>
+            <p>
+              Cleaning starts with the records, not the hose. Work through
+              this list before choosing a cleaner or a method; a line that
+              cannot be answered is the point to stop and seek
+              product-specific advice.
+            </p>
+            <Checklist items={beforeCleaning} />
+          </div>
+        </section>
+
+        <section className="section" aria-labelledby="inspection-checklist">
           <div className="shell prose article-prose">
             <h2 id="inspection-checklist">
               A safe ground-level inspection checklist
@@ -230,6 +272,19 @@ export default function CoastalCladdingMaintenanceGuidePage() {
               membrane, cavity, flashing, substrate and internal moisture—not
               just the surface mark.
             </p>
+          </div>
+        </section>
+
+        <section className="section section--tint" aria-labelledby="findings">
+          <div className="shell prose article-prose">
+            <h2 id="findings">What a finding can mean, and what to do next</h2>
+            <p>
+              A mark on the surface rarely names its own cause. The table
+              pairs what the ground-level check commonly turns up with what
+              it can indicate and the sensible next step, without replacing
+              the product guidance or an on-site assessment.
+            </p>
+            <ProblemsTable {...findings} />
           </div>
         </section>
 
@@ -398,50 +453,12 @@ export default function CoastalCladdingMaintenanceGuidePage() {
 
             <h2 id="cladding-maintenance-faqs">Common questions</h2>
             <dl className="faq-list" aria-labelledby="cladding-maintenance-faqs">
-              <div className="faq-list__item">
-                <dt>How often should coastal cladding be washed?</dt>
-                <dd>
-                  There is no universal interval. Use the current guidance for
-                  the confirmed product, coating and exposure. A frequency
-                  published by one manufacturer should not be applied to a
-                  different system.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Can I pressure-wash exterior cladding?</dt>
-                <dd>
-                  Only if the exact product and finish instructions permit it
-                  and you can follow their limits safely. If the instructions
-                  do not expressly permit it, do not assume it is suitable.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Does “low maintenance” mean maintenance-free?</dt>
-                <dd>
-                  No. The need may be lower than for another material, but
-                  cleaning, finish care and checks of joints, fixings and water
-                  management can still apply.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Does a rust-coloured stain prove the cladding is failing?</dt>
-                <dd>
-                  No. Appearance alone does not identify the source, extent or
-                  significance of corrosion. Record the context and have the
-                  relevant materials and interfaces assessed before covering or
-                  repairing the stain.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Can Elite diagnose an existing facade from photographs?</dt>
-                <dd>
-                  Photographs and product records help with initial context, but
-                  they cannot establish the condition of concealed layers or
-                  identify every cause. Some issues need on-site or independent
-                  assessment before an installation or replacement scope is
-                  appropriate.
-                </dd>
-              </div>
+              {faqs.map((faq) => (
+                <div className="faq-list__item" key={faq.question}>
+                  <dt>{faq.question}</dt>
+                  <dd>{faq.answer}</dd>
+                </div>
+              ))}
             </dl>
 
             <h2 id="sources">Sources and further reading</h2>

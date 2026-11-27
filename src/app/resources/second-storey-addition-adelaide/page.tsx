@@ -2,10 +2,20 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import { Checklist, CompatibilityMatrix } from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/JsonLd";
+import {
+  ArticleSchema,
+  BreadcrumbSchema,
+  FAQPageSchema,
+} from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  faqs,
+  houseAndSite,
+  quoteChecklist,
+} from "@/content/guides/second-storey-addition-adelaide";
 import { bannerImages } from "@/content/pages";
 import { secondStoreyAdditionGuide } from "@/content/resources";
 import { blurProps } from "@/lib/lcp-blur";
@@ -34,6 +44,7 @@ export default function SecondStoreyAdditionGuidePage() {
         ]}
       />
       <ArticleSchema guide={secondStoreyAdditionGuide} />
+      <FAQPageSchema faqs={faqs} />
 
       <article>
         <PageBanner
@@ -55,6 +66,11 @@ export default function SecondStoreyAdditionGuidePage() {
               <time dateTime={secondStoreyAdditionGuide.published}>
                 Published {secondStoreyAdditionGuide.publishedDisplay}
               </time>
+              {secondStoreyAdditionGuide.modifiedDisplay ? (
+                <time dateTime={secondStoreyAdditionGuide.modified}>
+                  Updated {secondStoreyAdditionGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{secondStoreyAdditionGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -94,10 +110,18 @@ export default function SecondStoreyAdditionGuidePage() {
                   <a href="#adelaide-conditions">Why Adelaide conditions matter</a>
                 </li>
                 <li>
+                  <a href="#house-and-site">
+                    What the house and site change
+                  </a>
+                </li>
+                <li>
                   <a href="#approvals">Approvals and licensing</a>
                 </li>
                 <li>
                   <a href="#next-steps">Sensible next steps</a>
+                </li>
+                <li>
+                  <a href="#before-a-quote">Before a walling quote</a>
                 </li>
                 <li>
                   <a href="#faqs-and-sources">Questions and sources</a>
@@ -265,7 +289,22 @@ export default function SecondStoreyAdditionGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="approvals">
+        <section className="section" aria-labelledby="house-and-site">
+          <div className="shell prose article-prose">
+            <h2 id="house-and-site">
+              What the existing house and the site change
+            </h2>
+            <p>
+              The sections above come down to a handful of conditions, each
+              with someone whose job it is to confirm it. The table sets them
+              side by side: what the house or the site shows, what that can
+              mean for the addition, and what settles the question.
+            </p>
+            <CompatibilityMatrix {...houseAndSite} />
+          </div>
+        </section>
+
+        <section className="section section--tint" aria-labelledby="approvals">
           <div className="shell prose article-prose">
             <h2 id="approvals">Approvals and licensing for the addition</h2>
             <p>
@@ -304,7 +343,7 @@ export default function SecondStoreyAdditionGuidePage() {
           </div>
         </section>
 
-        <section className="section section--tint" aria-labelledby="next-steps">
+        <section className="section" aria-labelledby="next-steps">
           <div className="shell prose article-prose">
             <h2 id="next-steps">Sensible next steps</h2>
             <ol className="steps">
@@ -355,7 +394,7 @@ export default function SecondStoreyAdditionGuidePage() {
           </div>
         </section>
 
-        <section className="section" aria-labelledby="who-to-call">
+        <section className="section section--tint" aria-labelledby="who-to-call">
           <div className="shell prose article-prose">
             <h2 id="who-to-call">Who should be involved</h2>
             <dl className="faq-list professional-list">
@@ -403,6 +442,22 @@ export default function SecondStoreyAdditionGuidePage() {
           </div>
         </section>
 
+        <section className="section" aria-labelledby="before-a-quote">
+          <div className="shell prose article-prose">
+            <h2 id="before-a-quote">
+              What to have ready before a walling quote
+            </h2>
+            <p>
+              We install the walling for the new level once the addition is
+              designed and approved, so a useful quote starts from those
+              documents. Have the following ready; our{" "}
+              <Link href="/project-planning/">project-planning guide</Link>{" "}
+              covers the wider details for any enquiry.
+            </p>
+            <Checklist items={quoteChecklist} />
+          </div>
+        </section>
+
         <section
           id="faqs-and-sources"
           className="section section--tint"
@@ -411,39 +466,12 @@ export default function SecondStoreyAdditionGuidePage() {
           <div className="shell prose article-prose">
             <h2 id="second-storey-faqs">Common questions</h2>
             <dl className="faq-list" aria-labelledby="second-storey-faqs">
-              <div className="faq-list__item">
-                <dt>
-                  Can our existing walls definitely carry a second storey?
-                </dt>
-                <dd>
-                  Not without assessment. Only a structural engineer working
-                  from the drawings and an on-site inspection can confirm
-                  whether the existing walls and footings can carry the added
-                  load, or what strengthening they need first.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>
-                  Do we need planning consent as well as building consent?
-                </dt>
-                <dd>
-                  It depends on the property, height and any heritage,
-                  character or bushfire overlay. Use PlanSA&rsquo;s approval
-                  check or ask the relevant council before design work is
-                  finalised.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>
-                  Can Elite Surface Group design the second storey addition?
-                </dt>
-                <dd>
-                  No. Structural design and planning approval sit with the
-                  engineer, designer and certifier. Once that design is
-                  approved, we install the engineered walling for the new
-                  level and coordinate with the finishing trades.
-                </dd>
-              </div>
+              {faqs.map((faq) => (
+                <div className="faq-list__item" key={faq.question}>
+                  <dt>{faq.question}</dt>
+                  <dd>{faq.answer}</dd>
+                </div>
+              ))}
             </dl>
 
             <h2 id="sources">Sources and further reading</h2>

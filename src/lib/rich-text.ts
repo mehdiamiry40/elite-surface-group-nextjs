@@ -33,6 +33,16 @@ export function parseRichText(source: string): RichTextSegment[] {
   return segments;
 }
 
+/**
+ * The copy as a reader sees it: link labels kept, link syntax dropped. Used
+ * where the same string also feeds structured data.
+ */
+export function richTextPlain(source: string): string {
+  return parseRichText(source)
+    .map((segment) => (segment.type === "link" ? segment.label : segment.value))
+    .join("");
+}
+
 /** Every site-relative path linked from a piece of copy. */
 export function richTextLinks(source: string): string[] {
   return parseRichText(source).flatMap((segment) =>

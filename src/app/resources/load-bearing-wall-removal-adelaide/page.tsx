@@ -2,10 +2,20 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ContactSection from "@/components/ContactSection";
+import { Checklist, ComparisonTable } from "@/components/ContentBlocks";
 import { CtaBand } from "@/components/CtaBand";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/JsonLd";
+import {
+  ArticleSchema,
+  BreadcrumbSchema,
+  FAQPageSchema,
+} from "@/components/JsonLd";
 import PageBanner from "@/components/PageBanner";
 import { TickList } from "@/components/sections";
+import {
+  assessmentChecklist,
+  faqs,
+  stages,
+} from "@/content/guides/load-bearing-wall-removal-adelaide";
 import { bannerImages } from "@/content/pages";
 import { loadBearingWallRemovalGuide } from "@/content/resources";
 import { blurProps } from "@/lib/lcp-blur";
@@ -34,6 +44,7 @@ export default function LoadBearingWallRemovalGuidePage() {
         ]}
       />
       <ArticleSchema guide={loadBearingWallRemovalGuide} />
+      <FAQPageSchema faqs={faqs} />
 
       <article>
         <PageBanner
@@ -55,6 +66,11 @@ export default function LoadBearingWallRemovalGuidePage() {
               <time dateTime={loadBearingWallRemovalGuide.published}>
                 Published {loadBearingWallRemovalGuide.publishedDisplay}
               </time>
+              {loadBearingWallRemovalGuide.modifiedDisplay ? (
+                <time dateTime={loadBearingWallRemovalGuide.modified}>
+                  Updated {loadBearingWallRemovalGuide.modifiedDisplay}
+                </time>
+              ) : null}
               <span>{loadBearingWallRemovalGuide.readingTime}</span>
               <span>
                 Prepared by <Link href="/about/">Elite Surface Group</Link>
@@ -90,6 +106,9 @@ export default function LoadBearingWallRemovalGuidePage() {
                 </li>
                 <li>
                   <a href="#before-you-start">What the removal usually needs</a>
+                </li>
+                <li>
+                  <a href="#stage-by-stage">The removal, stage by stage</a>
                 </li>
                 <li>
                   <a href="#adelaide-conditions">Why Adelaide conditions matter</a>
@@ -151,6 +170,14 @@ export default function LoadBearingWallRemovalGuidePage() {
               </a>
               .
             </p>
+
+            <h3>What to gather before the engineer&rsquo;s assessment</h3>
+            <p>
+              None of this replaces the assessment. It gives the engineer a
+              faster start, and it is the same background the trades that
+              follow will ask for.
+            </p>
+            <Checklist items={assessmentChecklist} />
           </div>
         </section>
 
@@ -221,6 +248,25 @@ export default function LoadBearingWallRemovalGuidePage() {
               beforehand, and adjoining rooms, floors and finishes need
               protecting while the structural stage is underway.
             </p>
+          </div>
+        </section>
+
+        <section
+          className="section section--tint"
+          aria-labelledby="stage-by-stage"
+        >
+          <div className="shell prose article-prose">
+            <h2 id="stage-by-stage">The removal, stage by stage</h2>
+            <p>
+              Put in order, those requirements become a sequence in which each
+              stage waits on the one before it. The table names who or what
+              settles each stage and what should be in hand before the next
+              one starts. Our{" "}
+              <Link href="/project-planning/">project-planning guide</Link>{" "}
+              lists what to have ready for the walling enquiry at the end of
+              it.
+            </p>
+            <ComparisonTable {...stages} />
           </div>
         </section>
 
@@ -383,30 +429,12 @@ export default function LoadBearingWallRemovalGuidePage() {
           <div className="shell prose article-prose">
             <h2 id="load-bearing-wall-faqs">Common questions</h2>
             <dl className="faq-list" aria-labelledby="load-bearing-wall-faqs">
-              <div className="faq-list__item">
-                <dt>Can Elite Surface Group tell me if a wall is load-bearing?</dt>
-                <dd>
-                  No. Appearance and general rules of thumb can suggest it,
-                  but only a structural engineer working from the drawings
-                  and, where needed, an on-site inspection can confirm it.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Do I need council approval to remove an internal wall?</dt>
-                <dd>
-                  It depends on the property and the scope of work. Use
-                  PlanSA&rsquo;s approval check or ask the relevant council or
-                  a certifier before demolition is scheduled.
-                </dd>
-              </div>
-              <div className="faq-list__item">
-                <dt>Can the old wall come out before the new beam is fitted?</dt>
-                <dd>
-                  Not safely. The wall is usually propped and left in place
-                  until the engineered beam and posts are installed and able
-                  to carry the load on their own.
-                </dd>
-              </div>
+              {faqs.map((faq) => (
+                <div className="faq-list__item" key={faq.question}>
+                  <dt>{faq.question}</dt>
+                  <dd>{faq.answer}</dd>
+                </div>
+              ))}
             </dl>
 
             <h2 id="sources">Sources and further reading</h2>
